@@ -49,8 +49,11 @@ Textmining analysis take the following steps to reduce dimensionality to a manag
 
 1. **Represent Text as Data** Bag-of-words model, n-grams, Text-preprocessing
 	 
-2. **Statistical Methods** Map $\boldsymbol{C}$ to predict values $\boldsymbol{\hat{V}}$ of unknown outcomes $\boldsymbol{V}$. 
-	E.g. the variable of interest $\boldsymbol{V}$ is an indicator whether the email is spam. The prediction $\boldsymbol{\hat{V}}$ determines whether or not to send the email to a spam filter. Sometimes the attribute of interest is latent, such as the topics of a newspaper article.
+2. **Statistical Methods** 
+
+  - Map $\boldsymbol{C}$ to predict values $\boldsymbol{\hat{V}}$ of unknown outcomes $\boldsymbol{V}$. 
+	- E.g. the variable of interest $\boldsymbol{V}$ is an indicator whether the email is spam. The prediction $\boldsymbol{\hat{V}}$ determines whether or not to send the email to a spam filter. 
+	- Sometimes the attribute of interest is latent (e.g. topics of a newspaper article)
 	
 3. Use $\boldsymbol{\hat{V}}$ in subsequent **descriptive or causal analysis.**
 
