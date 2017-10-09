@@ -198,7 +198,7 @@ Street Journal* columns, defined along a number of dimensions such as “positiv
 
 - Any generic regression technique can be applied, depending upon the nature of $v_i$
 
-- high-dimensionality of $c_i$, ($p > n^{train}), requires use of regression techniques appropriate (e.g. $L1$ regularized linear or logistic regression)
+- high-dimensionality of $c_i$, ($p > n^{train}$), requires use of regression techniques appropriate (e.g. $L1$ regularized linear or logistic regression)
 
 ## Generative Model
 
