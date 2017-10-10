@@ -8,10 +8,10 @@ Treating this text-data quantitatively is of increasing interest to economic res
 
 In this repository I collect any kind of information regarding text mining in economics.
 
-[##Slides](textm.html)
+[**Slides**](textm.html)
 
-[##Academic research](acad_research.md)
+[**Academic research**](acad_research.md)
 
-[##Blogs & Tutorial](blogs.md)
+[**Blogs & Tutorial**](blogs.md)
 
-[##Libraries](libraries.md)
+[**Libraries**](libraries.md)
