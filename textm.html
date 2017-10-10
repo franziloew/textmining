@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Text as Data</title>
+  <title>Textmining in Economics</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,7 +20,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Text as Data',
+                title: 'Textmining in Economics',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
@@ -101,62 +101,61 @@
 
 <slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Introduction</h2></hgroup><article  id="introduction">
 
-</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+</article></slide><slide class=''><hgroup><h2>Introduction</h2></hgroup><article  id="introduction-1">
 
 <ul>
-<li>Most empirical work in economics relies on inherently quantitative data: prices, demand, votes, etc.</li>
-<li>But a large amount of unstructured text is also generated in economic environments:
+<li>In economics, empirical work is largely based on quantitative data (e.g. prices, demand, votes, etc.)</li>
+<li>But a large amount of unstructured text is also generated in economic environments (e.g. company reports, court decisions, media articles, etc.)</li>
+<li>At an abstract level, text is simply a string of characters.
 
 <ul>
-<li>company reports,</li>
-<li>policy committee deliberations,</li>
-<li>court decisions,</li>
-<li>media articles,</li>
-<li>political speeches, etc.</li>
-</ul></li>
-<li>One can use such data qualitatively, but increasing interest in treating text quantitatively.</li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>What is Text?</h2></hgroup><article  id="what-is-text">
-
-<p>At an abstract level, text is simply a string of characters.</p>
-
-<ul>
-<li>Some of these may be from the Latin alphabet (&#39;a&#39;, &#39;A&#39;, &#39;p&#39; and so on) but there may also be:
-
-<ul>
+<li>Latin alphabet (&#39;a&#39;, &#39;A&#39;, &#39;p&#39; and so on)</li>
 <li>Punctuation (e.g. !),</li>
 <li>Numbers,</li>
 <li>Non-alphanumerical characters (e.g. @)</li>
 </ul></li>
 </ul>
 
-<p><strong>Key Question:</strong> How can we obtain an informative, quantitative representation of these character strings? This is the goal of text mining.</p>
+<p><strong>Key Question:</strong> How can we obtain an informative, quantitative representation of these character strings?</p>
 
-</article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Representing Text as Data</h2></hgroup><article  id="representing-text-as-data">
-
-</article></slide><slide class=''><hgroup><h2>Textual Database</h2></hgroup><article  id="textual-database">
+</article></slide><slide class=''><hgroup><h2>Concepts</h2></hgroup><article  id="concepts">
 
 <ul>
-<li><p>A single observation in a textual database is called a document \(D\).</p></li>
-<li><p>The set of documents that make up the dataset is called a corpus.</p></li>
-<li><p>We often have covariates associated with each document that are sometimes called metadata.</p></li>
+<li><p>A single observation in a textual database is called a <em>document</em>.</p></li>
+<li><p>The set of documents that make up the dataset is called a <em>corpus</em>.</p></li>
+<li><p>Covariates associated with each document are called <em>metadata</em>.</p></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Reduce Dimensionality</h2></hgroup><article  id="reduce-dimensionality">
+</article></slide><slide class=''><hgroup><h2>Example</h2></hgroup><article  id="example">
 
-<p>Textmining analysis take the following steps to reduce dimensionality to a managable size:</p>
+<p>In the text analysis <a href='https://franziloew.github.io/politsentiment/election.html' title=''>&quot;Bundestagswahl 2017&quot;</a> we use a corpus of Tweets containing one of the parliamentary parties during the german parliamentary elections 2017:</p>
+
+<ul>
+<li><p>151930 Tweets (without retweets) from 12am to 12pm on the 24-10-2017</p></li>
+<li><p>A document is a single Tweet</p></li>
+<li><p>Associated Metadata: time, user name, if the user is a news outlet or a &quot;privat&quot; twitter-user, etc.</p></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
+
+<p>Text data is inherently high-dimensional, so an analysis of text usually tries to reduce this dimensionality following these steps:</p>
 
 <ol>
-<li><p><strong>Represent Text as Data</strong> Bag-of-words model, n-grams, Text-preprocessing</p></li>
-<li><p><strong>Statistical Methods</strong></p></li>
+<li>Represent the textual database \(D\) (<strong>document</strong>) as a numerical array \(\boldsymbol{C}\) (<strong>corpus</strong>)</li>
+</ol>
+
+<ul>
+<li><em>Text-preprocessing, Bag-of-words model</em></li>
+</ul>
+
+<ol>
+<li><strong>Statistical Methods</strong></li>
 </ol>
 
 <ul>
 <li>Map \(\boldsymbol{C}\) to predict values \(\boldsymbol{\hat{V}}\) of unknown outcomes \(\boldsymbol{V}\).
 
 <ul>
-<li>E.g. the variable of interest \(\boldsymbol{V}\) is an indicator whether the email is spam. The prediction \(\boldsymbol{\hat{V}}\) determines whether or not to send the email to a spam filter.</li>
 <li>Sometimes the attribute of interest is latent (e.g. topics of a newspaper article)</li>
 </ul></li>
 </ul>
@@ -167,9 +166,233 @@
 
 </article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Represent text as Data</h2></hgroup><article  id="represent-text-as-data">
 
-</article></slide><slide class=''><hgroup><h2>Represent text as Data</h2></hgroup><article  id="represent-text-as-data-1">
+</article></slide><slide class=''><hgroup><h2>Text Pre-Processing</h2></hgroup><article  id="text-pre-processing">
 
-<p>Convert raw text \(D\) to a numerical array \(\boldsymbol{C}\): A basic quantitative representation of a corpus is the bag-of-words model:</p>
+<ol>
+<li><p><strong>Tokenization</strong> splitting of a raw character string into individual elements of interest: words, numbers, punctuation.</p></li>
+<li><p><strong>Stopword Removal</strong> Stopwords (highly frequent terms) are stripped out of token lists as they do not help distinguish one document from another.</p></li>
+<li><p><strong>Linguistic Roots</strong> For many applications, the relevant information in tokens is their linguistic root, not their grammatical form (e.g. treat &quot;looking&quot;, &quot;look&quot;, &quot;looks&quot; as equivalent tokens)</p></li>
+<li><p><strong>Multi-Word Phrases</strong> Sometimes groups of individual tokens like “United Kingdom” have a specific meaning (Use Ngrams)</p></li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>Cleaning Data</h2></hgroup><article  id="cleaning-data">
+
+<table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey;'> </th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>text</th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>text_cleaned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='text-align: left;'>1</td>
+<td style='text-align: left;'>WK 179 Wiesbaden: Direkt gewählt: Ingmar Jung (CDU) mit 34,3% der Stimmen;
+Stimmenvorsprung: 7.916 https://t.co/bJ9Fl4VtjM #btw17</td>
+<td style='text-align: left;'>wk     wiesbaden  direkt gewählt  ingmar jung  cdu          stimmen  stimmenvorsprung       </td>
+</tr>
+<tr>
+<td style='text-align: left;'>2</td>
+<td style='text-align: left;'>#GroßeKoalition oder nicht große Koalition. Ist die große Frage. Gute Nacht und schlaff gut. #SPD #CDU… https://t.co/BABrzFXfkk</td>
+<td style='text-align: left;'> großekoalition   große koalition    große frage  gute nacht  schlaff gut   spd  cdu </td>
+</tr>
+<tr>
+<td style='text-align: left;'>3</td>
+<td style='text-align: left;'>@SARANALUNGA CSU/CDU</td>
+<td style='text-align: left;'>csu cdu</td>
+</tr>
+<tr>
+<td style='border-bottom: 2px solid grey; text-align: left;'>4</td>
+<td style='border-bottom: 2px solid grey; text-align: left;'>Wenn ihr denkt die nächsten 4 Jahre werden schlimm, wartet ab bis bei der #CDU die Hemmungen fallen und Nazis  koalitionsfähig werden.</td>
+<td style='border-bottom: 2px solid grey; text-align: left;'>  denkt  nächsten   jahre  schlimm  wartet ab     cdu  hemmungen fallen  naziskoalitionsfähig  </td>
+</tr>
+</tbody>
+</table>
+
+</article></slide><slide class=''><hgroup><h2>Tokenization</h2></hgroup><article  id="tokenization">
+
+<table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey;'> </th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>word</th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='text-align: left;'>1</td>
+<td style='text-align: center;'>btw</td>
+<td style='text-align: center;'>47572</td>
+</tr>
+<tr>
+<td style='text-align: left;'>2</td>
+<td style='text-align: center;'>merkel</td>
+<td style='text-align: center;'>11297</td>
+</tr>
+<tr>
+<td style='text-align: left;'>3</td>
+<td style='text-align: center;'>bundestagswahl</td>
+<td style='text-align: center;'>7262</td>
+</tr>
+<tr>
+<td style='text-align: left;'>4</td>
+<td style='text-align: center;'>opposition</td>
+<td style='text-align: center;'>7078</td>
+</tr>
+<tr>
+<td style='text-align: left;'>5</td>
+<td style='text-align: center;'>wähler</td>
+<td style='text-align: center;'>6524</td>
+</tr>
+<tr>
+<td style='text-align: left;'>6</td>
+<td style='text-align: center;'>mehr</td>
+<td style='text-align: center;'>5803</td>
+</tr>
+<tr>
+<td style='text-align: left;'>7</td>
+<td style='text-align: center;'>gewählt</td>
+<td style='text-align: center;'>5753</td>
+</tr>
+<tr>
+<td style='text-align: left;'>8</td>
+<td style='text-align: center;'>prognose</td>
+<td style='text-align: center;'>5750</td>
+</tr>
+<tr>
+<td style='text-align: left;'>9</td>
+<td style='text-align: center;'>mal</td>
+<td style='text-align: center;'>5654</td>
+</tr>
+<tr>
+<td style='text-align: left;'>10</td>
+<td style='text-align: center;'>wahl</td>
+<td style='text-align: center;'>5431</td>
+</tr>
+<tr>
+<td style='text-align: left;'>11</td>
+<td style='text-align: center;'>partei</td>
+<td style='text-align: center;'>5330</td>
+</tr>
+<tr>
+<td style='text-align: left;'>12</td>
+<td style='text-align: center;'>bundestag</td>
+<td style='text-align: center;'>5008</td>
+</tr>
+<tr>
+<td style='text-align: left;'>13</td>
+<td style='text-align: center;'>ja</td>
+<td style='text-align: center;'>5000</td>
+</tr>
+<tr>
+<td style='text-align: left;'>14</td>
+<td style='text-align: center;'>hochrechnung</td>
+<td style='text-align: center;'>4837</td>
+</tr>
+<tr>
+<td style='border-bottom: 2px solid grey; text-align: left;'>15</td>
+<td style='border-bottom: 2px solid grey; text-align: center;'>ergebnis</td>
+<td style='border-bottom: 2px solid grey; text-align: center;'>4819</td>
+</tr>
+</tbody>
+</table>
+
+</article></slide><slide class=''><hgroup><h2>Tokenization (Bigrams)</h2></hgroup><article  id="tokenization-bigrams">
+
+<table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey;'> </th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>bigram</th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='text-align: left;'>1</td>
+<td style='text-align: center;'>btw btw</td>
+<td style='text-align: center;'>3730</td>
+</tr>
+<tr>
+<td style='text-align: left;'>2</td>
+<td style='text-align: center;'>exit poll</td>
+<td style='text-align: center;'>1695</td>
+</tr>
+<tr>
+<td style='text-align: left;'>3</td>
+<td style='text-align: center;'>drittstärkste kraft</td>
+<td style='text-align: center;'>1674</td>
+</tr>
+<tr>
+<td style='text-align: left;'>4</td>
+<td style='text-align: center;'>exit polls</td>
+<td style='text-align: center;'>1586</td>
+</tr>
+<tr>
+<td style='text-align: left;'>5</td>
+<td style='text-align: center;'>greens left</td>
+<td style='text-align: center;'>1568</td>
+</tr>
+<tr>
+<td style='text-align: left;'>6</td>
+<td style='text-align: center;'>angela merkel</td>
+<td style='text-align: center;'>1543</td>
+</tr>
+<tr>
+<td style='text-align: left;'>7</td>
+<td style='text-align: center;'>german election</td>
+<td style='text-align: center;'>1486</td>
+</tr>
+<tr>
+<td style='text-align: left;'>8</td>
+<td style='text-align: center;'>left party</td>
+<td style='text-align: center;'>1412</td>
+</tr>
+<tr>
+<td style='text-align: left;'>9</td>
+<td style='text-align: center;'>election exit</td>
+<td style='text-align: center;'>1234</td>
+</tr>
+<tr>
+<td style='text-align: left;'>10</td>
+<td style='text-align: center;'>erste prognose</td>
+<td style='text-align: center;'>1224</td>
+</tr>
+<tr>
+<td style='text-align: left;'>11</td>
+<td style='text-align: center;'>merkel s</td>
+<td style='text-align: center;'>1204</td>
+</tr>
+<tr>
+<td style='text-align: left;'>12</td>
+<td style='text-align: center;'>geht opposition</td>
+<td style='text-align: center;'>973</td>
+</tr>
+<tr>
+<td style='text-align: left;'>13</td>
+<td style='text-align: center;'>polls angela</td>
+<td style='text-align: center;'>945</td>
+</tr>
+<tr>
+<td style='text-align: left;'>14</td>
+<td style='text-align: center;'>s greens</td>
+<td style='text-align: center;'>932</td>
+</tr>
+<tr>
+<td style='border-bottom: 2px solid grey; text-align: left;'>15</td>
+<td style='border-bottom: 2px solid grey; text-align: center;'>stärkste kraft</td>
+<td style='border-bottom: 2px solid grey; text-align: center;'>913</td>
+</tr>
+</tbody>
+</table>
+
+</article></slide><slide class=''><hgroup><h2>What is the data?</h2></hgroup><article  id="what-is-the-data">
+
+<p>After pre-processing, each document is a finite list of terms.</p>
+
+<p>A basic quantitative representation of a corpus is the <strong>bag-of-words model</strong></p>
 
 <ul>
 <li>Index each unique term in the corpus by some \(v \in {1,...,V}\) where \(V\) is the number of unique terms.</li>
@@ -177,7 +400,7 @@
 <li>The \(D x V\) matrix \(\boldsymbol{X}\) of all such counts is called the document-term matrix.</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Example</h2></hgroup><article  id="example">
+</article></slide><slide class=''><hgroup><h2>Example</h2></hgroup><article  id="example-1">
 
 <pre class = 'prettyprint lang-r'>Doc1 &lt;- 
   c(&quot;text&quot;, &quot;mining&quot;, &quot;is&quot;, &quot;more&quot;, &quot;fun&quot;, &quot;than&quot;, &quot;coal&quot;, &quot;mining&quot;)</pre>
@@ -195,7 +418,7 @@
 <pre class = 'prettyprint lang-r'>Doc1 &lt;- 
   c(&quot;coal&quot;, &quot;mining&quot;, &quot;is&quot;, &quot;more&quot;, &quot;fun&quot;, &quot;than&quot;, &quot;text&quot;, &quot;mining&quot;)</pre>
 
-</article></slide><slide class=''><hgroup><h2>Text Mining and Information</h2></hgroup><article  id="text-mining-and-information">
+</article></slide><slide class=''><hgroup><h2>bag-of-words model</h2></hgroup><article  id="bag-of-words-model">
 
 <p>The bag-of-words model is useful for describing content, but we lose all information about sentence structure.</p>
 
@@ -204,49 +427,9 @@
 <li><p>The question is whether we are keeping the relevant information for our needs, and getting rid of the extraneous information.</p></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Text Pre-Processing</h2></hgroup><article  id="text-pre-processing">
+</article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Term Frequency</h2></hgroup><article  id="term-frequency">
 
-<p>Pre-process strings to obtain a cleaner representation:</p>
-
-<ol>
-<li><p><strong>Tokenization</strong> splitting of a raw character string into individual elements of interest.</p></li>
-<li><p><strong>Stopword Removal</strong> The frequency distribution of words in natural languages is highly skewed.</p></li>
-<li><p><strong>Linguistic Roots</strong> For many applications, the relevant information in tokens is their linguistic root, not their grammatical form. (Stemming or Lemmatizing)</p></li>
-<li><p><strong>Multi-Word Phrases</strong> Sometimes groups of individual tokens like “donald trump” or “fc bayern” have a specific meaning.</p></li>
-</ol>
-
-</article></slide><slide class=''><hgroup><h2>Example: Twitter</h2></hgroup><article  id="example-twitter">
-
-<p>Tweets after Stopword Removal.</p>
-
-<table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
-<thead>
-<tr>
-<th style='border-bottom: 1px solid grey; border-top: 2px solid grey;'> </th>
-<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>text</th>
-<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'>text_cleaned</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style='text-align: left;'>1</td>
-<td style='text-align: left;'>RT @ChristophorusX8: Dass sich CDU'ler und Linke unter #87Prozent gleichermaßen wiederfinden, zeigt, dass AfD einzige Alternative ist.</td>
-<td style='text-align: left;'>    cdu ler  linke     prozent gleichermaßen wiederfinden  zeigt   afd einzige alternative  </td>
-</tr>
-<tr>
-<td style='text-align: left;'>2</td>
-<td style='text-align: left;'>CDU: FDP und Grüne können bei Jamaika nicht die Bestimmer sein https://t.co/rIyVRpymTC</td>
-<td style='text-align: left;'>cdu  fdp  grüne   jamaika   bestimmer </td>
-</tr>
-<tr>
-<td style='border-bottom: 2px solid grey; text-align: left;'>3</td>
-<td style='border-bottom: 2px solid grey; text-align: left;'>RT @ChristophorusX8: Dass sich CDU'ler und Linke unter #87Prozent gleichermaßen wiederfinden, zeigt, dass AfD einzige Alternative ist.</td>
-<td style='border-bottom: 2px solid grey; text-align: left;'>    cdu ler  linke     prozent gleichermaßen wiederfinden  zeigt   afd einzige alternative  </td>
-</tr>
-</tbody>
-</table>
-
-</article></slide><slide class=''><hgroup><h2>Tokenization &amp; Term Frequency</h2></hgroup><article  id="tokenization-term-frequency">
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <p>How to reflect the importance of a term? 3 concepts:</p>
 
@@ -260,20 +443,19 @@
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
 <pre ># A tibble: 10 x 6
-# Groups:   partei [3]
-       partei                  word     n           tf       idf
-        &lt;chr&gt;                 &lt;chr&gt; &lt;int&gt;        &lt;dbl&gt;     &lt;dbl&gt;
- 1 Die Grünen             aufmarsch   381 0.0028190065 0.6931472
- 2        AfD        telefonnummern  3895 0.0008339798 1.7917595
- 3 Die Grünen            gruenevers   110 0.0008138864 1.7917595
- 4 Die Grünen verschleierungsverbot   167 0.0012356275 1.0986123
- 5        AfD          chefredakteu  3244 0.0006945906 1.7917595
- 6  DIE LINKE            überwindet  2483 0.0029410859 0.4054651
- 7 Die Grünen           grueneverse   388 0.0028707992 0.4054651
- 8        AfD                 fives  2916 0.0006243607 1.7917595
- 9 Die Grünen       kinderschützern   129 0.0009544668 1.0986123
-10 Die Grünen           täterschutz   129 0.0009544668 1.0986123
-# ... with 1 more variables: tf_idf &lt;dbl&gt;</pre>
+# Groups:   partei [4]
+       partei         word     n          tf       idf      tf_idf
+        &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+ 1 Die Grünen   gruenevers    34 0.001346215 1.7917595 0.002412093
+ 2        AfD        fives  2485 0.001260290 1.7917595 0.002258136
+ 3  DIE LINKE   überwindet  2041 0.005292309 0.4054651 0.002145846
+ 4  DIE LINKE        zusam  2037 0.005281937 0.4054651 0.002141641
+ 5 Die Grünen schwarzgelbe    62 0.002454862 0.6931472 0.001701581
+ 6 Die Grünen unbegrenzten    62 0.002454862 0.6931472 0.001701581
+ 7  DIE LINKE    ostberlin  1520 0.003941357 0.4054651 0.001598083
+ 8 Die Grünen merkwürdiges    34 0.001346215 1.0986123 0.001478968
+ 9 Die Grünen         plak    33 0.001306620 1.0986123 0.001435469
+10        FDP       greens  5102 0.007639966 0.1823216 0.001392931</pre>
 
 </article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Statistical Methods</h2></hgroup><article  id="statistical-methods">
 

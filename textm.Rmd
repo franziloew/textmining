@@ -1,5 +1,5 @@
 ---
-title: "Text as Data"
+title: "Textmining in Economics"
 author: "Franziska Löw"
 date: "08. Oktober 2017"
 output: ioslides_presentation
@@ -9,59 +9,130 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm",
+          "plyr","dplyr","class","knitr","kableExtra","cldr",'network', 'sna', 'qdap',
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales")
+lapply(libs, library, character.only = TRUE)
+```
+
 # Introduction
 
-***
-- Most empirical work in economics relies on inherently quantitative data: prices, demand, votes, etc.
-- But a large amount of unstructured text is also generated in economic environments: 
-    - company reports, 
-    - policy committee deliberations, 
-    - court decisions, 
-    - media articles, 
-    - political speeches, etc. 
-- One can use such data qualitatively, but increasing interest in treating text quantitatively.
+## Introduction
 
-
-## What is Text?
-
-At an abstract level, text is simply a string of characters.
-
-- Some of these may be from the Latin alphabet ('a', 'A', 'p' and so on) but there may also be: 
+- In economics, empirical work is largely based on quantitative data (e.g. prices, demand, votes, etc.)
+- But a large amount of unstructured text is also generated in economic environments (e.g. company reports, court decisions, media articles, etc.)
+- At an abstract level, text is simply a string of characters.
+    - Latin alphabet ('a', 'A', 'p' and so on)
     - Punctuation (e.g. !), 
     - Numbers, 
     - Non-alphanumerical characters (e.g. @)
 
-**Key Question:** How can we obtain an informative, quantitative representation of these character strings? This is the goal of text mining.
+**Key Question:** How can we obtain an informative, quantitative representation of these character strings?
 
-# Representing Text as Data
+## Concepts
 
-## Textual Database
+- A single observation in a textual database is called a *document*.
 
-- A single observation in a textual database is called a document $D$.
+- The set of documents that make up the dataset is called a *corpus*.
 
-- The set of documents that make up the dataset is called a corpus.
+- Covariates associated with each document are called *metadata*.
 
-- We often have covariates associated with each document that are sometimes called metadata.
+## Example
 
-## Reduce Dimensionality
+In the text analysis ["Bundestagswahl 2017"](https://franziloew.github.io/politsentiment/election.html) we use a corpus of Tweets containing one of the parliamentary parties during the german parliamentary elections 2017:
 
-Textmining analysis take the following steps to reduce dimensionality to a managable size:
+- 151930 Tweets (without retweets) from 12am to 12pm on the 24-10-2017
 
-1. **Represent Text as Data** Bag-of-words model, n-grams, Text-preprocessing
+- A document is a single Tweet 
+
+- Associated Metadata: time, user name, if the user is a news outlet or a "privat" twitter-user, etc.
+
+```{r, include=FALSE}
+rm(list = ls())
+load(file = "~/GitHub/politsentiment_data/out/tweets_18_24.rda")
+# during and after elecction
+tweets <- tweets[which(tweets$day == "24"),]
+tweets <- with(tweets, tweets[hour(date) >= 12 & hour(date) <= 23, ])
+```
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# get the tweets that are retweeted 
+tweets$isretweet <- ifelse(grepl('^RT', tweets$text),TRUE,FALSE)
+
+# Extract the retweets
+tweets %>%
+  distinct(text,name, .keep_all = TRUE) %>%
+  filter(isretweet == TRUE) -> rt
+
+# pull the original author's name
+rt$sender <- substr(rt$text, 5, regexpr(':', rt$text) - 1)
+
+# Extract the retweets
+orig <-  tweets[which(tweets$isretweet==FALSE),]
+```
+
+***
+
+Text data is inherently high-dimensional, so an analysis of text usually tries to reduce this dimensionality following these steps:
+
+1. Represent the textual database $D$ (**document**) as a numerical array $\boldsymbol{C}$ (**corpus**)
+  - *Text-preprocessing, Bag-of-words model*
 	 
 2. **Statistical Methods** 
-
   - Map $\boldsymbol{C}$ to predict values $\boldsymbol{\hat{V}}$ of unknown outcomes $\boldsymbol{V}$. 
-	- E.g. the variable of interest $\boldsymbol{V}$ is an indicator whether the email is spam. The prediction $\boldsymbol{\hat{V}}$ determines whether or not to send the email to a spam filter. 
 	- Sometimes the attribute of interest is latent (e.g. topics of a newspaper article)
 	
 3. Use $\boldsymbol{\hat{V}}$ in subsequent **descriptive or causal analysis.**
 
 # Represent text as Data
 
-## Represent text as Data
-Convert raw text $D$ to a numerical array $\boldsymbol{C}$:
-A basic quantitative representation of a corpus is the bag-of-words model:
+## Text Pre-Processing
+
+1. **Tokenization** splitting of a raw character string into individual elements of interest: words, numbers, punctuation.
+
+2. **Stopword Removal** Stopwords (highly frequent terms) are stripped out of token lists as they do not help distinguish one document from another.
+
+3. **Linguistic Roots** For many applications, the relevant information in tokens is their linguistic root, not their grammatical form (e.g. treat "looking", "look", "looks" as equivalent tokens)
+
+4. **Multi-Word Phrases** Sometimes groups of individual tokens like “United Kingdom”  have a specific meaning (Use Ngrams)
+  
+## Cleaning Data
+
+```{r, echo=FALSE}
+htmlTable(orig[1:4,c("text","text_cleaned")], align = "l")
+```
+
+## Tokenization
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+orig$text_cleaned <- removeWords(orig$text_cleaned, c("cdu","csu","union","spd","fdp","grüne","grünen","linke","afd"))
+
+orig %>%
+  #group_by(partei) %>%
+  unnest_tokens(word, text_cleaned) %>%
+  count(word, sort = TRUE)  %>%
+  top_n(15) %>%
+  htmlTable()
+```
+
+## Tokenization (Bigrams)
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+orig %>%
+  #group_by(partei) %>%
+  unnest_tokens(bigram, text_cleaned, token="ngrams", n=2) %>%
+  count(bigram, sort = TRUE)  %>%
+  top_n(15) %>%
+  htmlTable()
+```
+
+## What is the data?
+
+After pre-processing, each document is a finite list of terms.
+
+A basic quantitative representation of a corpus is the **bag-of-words model**
 
 - Index each unique term in the corpus by some $v \in {1,...,V}$ where $V$ is the number of unique terms.
 - For each document $d \in {1,...,D}$ compute the count $x_{d,v}$ as the number of occurrences of term $v$ in document $d$.
@@ -85,7 +156,7 @@ Doc1 <-
   c("coal", "mining", "is", "more", "fun", "than", "text", "mining")
 ```
 
-## Text Mining and Information
+## bag-of-words model
 
 The bag-of-words model is useful for describing content, but we lose all information about sentence structure.
 
@@ -93,31 +164,10 @@ The bag-of-words model is useful for describing content, but we lose all informa
 
 - The question is whether we are keeping the relevant information for our needs, and getting rid of the extraneous information.
 
-## Text Pre-Processing
 
-Pre-process strings to obtain a cleaner representation:
+# Term Frequency 
 
-1. **Tokenization** splitting of a raw character string into individual elements of interest.
-
-2. **Stopword Removal** The frequency distribution of words in natural languages is highly skewed.
-  
-3. **Linguistic Roots** For many applications, the relevant information in tokens is their linguistic root, not their grammatical form. (Stemming or Lemmatizing) 
-  
-4. **Multi-Word Phrases** Sometimes groups of individual tokens like “donald trump” or “fc bayern” have a specific meaning.
-
-## Example: Twitter
-
-Tweets after Stopword Removal.
-
-```{r, echo=FALSE}
-rm(list = ls())
-load(file = "~/GitHub/politsentiment_data/out/tweets_18_24.rda")
-
-htmlTable::htmlTable(tweets[1:3,c("text","text_cleaned")], align="l")
-```
-
-## Tokenization & Term Frequency 
-
+***
 How to reflect the importance of a term? 3 concepts:
 
 - TF: Term-Frenquency $tf_{v,d}$ for term $v$ and document $d$
@@ -126,34 +176,6 @@ How to reflect the importance of a term? 3 concepts:
   - Gives prominence to words that occur many times in few documents.
   
 ***
-```{r, include=FALSE}
-# load the packages
-libs <- c("tidytext","tidyr",
-          "plyr","dplyr",
-          "htmlTable")
-lapply(libs, library, character.only = TRUE)
-```
-
-```{r, include=FALSE}
-rm(list = ls())
-load(file = "~/GitHub/politsentiment_data/out/tweets_18_24.rda")
-```
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-# get the tweets that are retweeted 
-tweets$isretweet <- ifelse(grepl('^RT', tweets$text),TRUE,FALSE)
-
-# Extract the retweets
-tweets %>%
-  distinct(text,name, .keep_all = TRUE) %>%
-  filter(isretweet == TRUE) -> rt
-
-# pull the original author's name
-rt$sender <- substr(rt$text, 5, regexpr(':', rt$text) - 1)
-
-# Extract the retweets
-orig <-  tweets[which(tweets$isretweet==FALSE),]
-```
 
 ```{r, include=FALSE}
 news.token <- tweets %>%
