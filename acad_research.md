@@ -1,4 +1,4 @@
-# Academic Research on Text Mining
+# Academic Paper on Text Mining
 
 ### Text as Data: A general overview
 
