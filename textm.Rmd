@@ -239,8 +239,65 @@ Street Journal* columns, defined along a number of dimensions such as “positiv
   
   - The outputs of algorithms for unsupervised machine learning can be used as inputs into econometric models for predicting some variable of interest, but this is a different approach from intentionally choosing the dimensions of content based on their predictive ability.
   
-  - E.g.: Principal Component Analysis, latent Dirichlet Allocation
+  - E.g.: Principal Component Analysis, Topic Modeling (latent Dirichlet Allocation)
+  
+# Topic Modeling
+## Topic Modeling
 
+method for finding a group of words (i.e topic) from a collection of documents that best represents the information in the collection.
+
+  - Discovering hidden topical patterns that are present across the collection
+  - Annotating documents according to these topics
+  - Using these annotations to organize, search and summarize texts
+
+There are many techniques that are used to obtain topic models: Latent Dirichlet allocation
+
+## Latent Dirichlet Allocation (LDA)
+
+consider the following set of documents as the corpus:
+```{r}
+doc1 <- "I had a peanut butter sandwich for breakfast"
+doc2 <- "I like to eat almonds, peanut and walnuts."
+doc3 <- "My neighbor got a little dog yesterday."
+doc4 <- "Cats and dogs are mortal enemies."
+doc5 <- "You must not feed peanuts to your dog."
+```
+
+This gives the following Document-Term-Matrix
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tm)
+
+# Build corpus 
+corpus <- rbind(doc1, doc2, doc3, doc4, doc5)
+
+# clean corpus
+corpus <- tolower(corpus)
+corpus <- removeWords(corpus, stopwords("english"))
+corpus <- gsub( "[^[:alnum:]]", " ", corpus)
+corpus <- gsub("^\\s+|\\s+$", "", corpus) 
+
+#Create document-term matrix
+dtm <- Corpus(VectorSource(corpus))
+dtm <- DocumentTermMatrix(dtm)
+
+inspect(dtm)
+```
+
+***
+Now we set the model parameter
+
+```{r, include=FALSE}
+library(lda)
+
+corpusLDA <- lexicalize(corpus)
+```
+
+```{r, echo=FALSE}
+ldaModel <- lda.collapsed.gibbs.sampler(corpusLDA$documents,K=2,vocab=corpusLDA$vocab,burnin=9999,num.iterations=100000,alpha=0.8,eta=0.1)
+
+top.words <- top.topic.words(ldaModel$topics, 3, by.score=TRUE)
+print(top.words)
+```
 
 
 
