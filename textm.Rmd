@@ -292,13 +292,13 @@ inspect(dtm)
 ```
 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, include=FALSE}
 library(lda)
 
 corpusLDA <- lexicalize(corpus)
 ```
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, include=FALSE}
 ldaModel <- lda.collapsed.gibbs.sampler(corpusLDA$documents,K=2,vocab=corpusLDA$vocab,burnin=9999,num.iterations=100000,alpha=0.8,eta=0.1)
 
 top.words <- top.topic.words(ldaModel$topics, 3, by.score=TRUE)
