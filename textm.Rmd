@@ -23,11 +23,8 @@ lapply(libs, library, character.only = TRUE)
 
 - In economics, empirical work is largely based on quantitative data (e.g. prices, demand, votes, etc.)
 - But a large amount of unstructured text is also generated in economic environments (e.g. company reports, court decisions, media articles, etc.)
-- At an abstract level, text is simply a string of characters.
-    - Latin alphabet ('a', 'A', 'p' and so on)
-    - Punctuation (e.g. !), 
-    - Numbers, 
-    - Non-alphanumerical characters (e.g. @)
+- At an abstract level, text is simply a string of characters 
+    - Latin alphabet ('a', 'A', 'p' and so on), Punctuation (e.g. !), Numbers,Non-alphanumerical characters (e.g. @)
 
 **Key Question:** How can we obtain an informative, quantitative representation of these character strings?
 
@@ -48,6 +45,8 @@ In the text analysis ["Bundestagswahl 2017"](https://franziloew.github.io/polits
 - A document is a single Tweet 
 
 - Associated Metadata: time, user name, if the user is a news outlet or a "privat" twitter-user, etc.
+
+***
 
 ```{r, include=FALSE}
 rm(list = ls())
@@ -73,12 +72,20 @@ rt$sender <- substr(rt$text, 5, regexpr(':', rt$text) - 1)
 orig <-  tweets[which(tweets$isretweet==FALSE),]
 ```
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(tweets, aes(date, fill = partei)) + 
+    geom_histogram(alpha = .8, adjust = .25, binwidth = 500) +
+    scale_fill_manual(name = "", values = c("deepskyblue1", "black","limegreen", "darkorchid2","gold", "red2")) +
+    xlab("") +
+    ylab("Anzahl der Tweets") +
+    scale_x_datetime(breaks = date_breaks("2 hour"), labels=date_format("%a-%d\n%H:%M", tz="CET"))
+```
+
 ***
 
 Text data is inherently high-dimensional, so an analysis of text usually tries to reduce this dimensionality following these steps:
 
-1. Represent the textual database $D$ (**document**) as a numerical array $\boldsymbol{C}$ (**corpus**)
-  - *Text-preprocessing, Bag-of-words model*
+1. Pre-process the text (Stopword removal, tokenization, stemming) and Represent(**document** $D$ as a numerical array $\boldsymbol{C}$ (e.g. *bag-of-words model*)
 	 
 2. **Statistical Methods** 
   - Map $\boldsymbol{C}$ to predict values $\boldsymbol{\hat{V}}$ of unknown outcomes $\boldsymbol{V}$. 
