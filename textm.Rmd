@@ -270,6 +270,7 @@ doc4 <- "Cats and dogs are mortal enemies."
 doc5 <- "You must not feed peanuts to your dog."
 ```
 
+***
 This gives the following Document-Term-Matrix
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(tm)
@@ -290,16 +291,14 @@ dtm <- DocumentTermMatrix(dtm)
 inspect(dtm)
 ```
 
-***
-Now we set the model parameter
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 library(lda)
 
 corpusLDA <- lexicalize(corpus)
 ```
 
-```{r, echo=FALSE}
+```{r, eval=FALSE}
 ldaModel <- lda.collapsed.gibbs.sampler(corpusLDA$documents,K=2,vocab=corpusLDA$vocab,burnin=9999,num.iterations=100000,alpha=0.8,eta=0.1)
 
 top.words <- top.topic.words(ldaModel$topics, 3, by.score=TRUE)
