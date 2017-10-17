@@ -1,0 +1,367 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+
+```
+
+# Load and prepare Dataframe
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+rm(list = ls())
+
+# create a character vector, with each file name represented by an entry
+#june <- list.files("~/CloudStation/textmining/data/webhoseio/2017-06", pattern="*.json", full.names=TRUE) 
+#july <- list.files("~/CloudStation/textmining/data/webhoseio/2017-07", pattern="*.json", full.names=TRUE) 
+aug <- list.files("~/CloudStation/textmining/data/webhoseio/2017-08", pattern="*.json", full.names=TRUE) 
+#sep <- list.files("~/CloudStation/textmining/data/webhoseio/2017-09", pattern="*.json", full.names=TRUE) 
+
+
+# a list in which each element is one of your original JSON files
+#myJSON <- lapply(c(june,july,aug,sep), function(x) fromJSON(file=x)) 
+myJSON <- lapply(aug, function(x) fromJSON(file=x)) 
+
+length(myJSON)
+```
+
+## Convert List to Dataframe
+
+```{r, eval=FALSE, include=FALSE}
+site <- NULL
+title <- NULL
+text <- NULL
+published <- NULL
+fb_shares <- NULL
+fb_likes <- NULL
+section <- NULL
+external_links <- NULL
+
+for (i in 1:length(myJSON)){
+  site <- append(site, myJSON[[i]]["thread"][[1]]["site"][[1]])
+  title <- append(title, myJSON[[i]]["title"][[1]])
+  text <- append(text, myJSON[[i]]["text"][[1]])
+  published <- append(published, myJSON[[i]]["published"][[1]])
+  
+  fb_shares <- append(fb_shares, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["shares"]])
+  fb_likes <- append(fb_likes, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["likes"]])
+  
+  section <- append(section, myJSON[[i]]["thread"][[1]]["section_title"][[1]])
+  external_links <- append(external_links, length(myJSON[[i]]["external_links"][[1]]))
+  
+}
+
+
+df <- cbind(site, title, text, published, fb_shares, fb_likes, section, external_links)
+df <- data.frame(df, stringsAsFactors = FALSE)
+
+rm(site, title, text, published, fb_shares, fb_likes, section, external_links)
+```
+
+
+## Define private and public service operators
+
+```{r, eval=FALSE, include=FALSE}
+private <- c("bild.de","focus.de","handelsblatt.com","spiegel.de","stern.de","welt.de","zeit.de")
+
+df %>%
+  mutate(owned = ifelse(site %in% private, "private", "public")) -> df
+```
+
+## Subset by
+```{r, eval=FALSE, include=FALSE}
+# .... date
+df$date <- substr(df$published, 1,10)
+df$date <- as.POSIXct(df$date, format ="%Y-%m-%d")
+
+df <- subset(df, df$date > "2017-09-01")
+```
+
+```{r, eval=FALSE, include=FALSE}
+# ... content
+content <- c("Bundestagswahl","Merkel","Schulz","Wagenknecht","Lindner","Gauland","Özdemir",
+             "CDU","SPD","FDP","AfD","Die Grünen","Die Linke")
+
+btw <- df[which(grepl(paste(content, collapse = "|"), df$title)),]
+
+# Save file
+write.csv(btw, file="~/CloudStation/textmining/R/output/btw.csv")
+```
+
+## Load Data
+
+```{r}
+rm(list = ls())
+df <- read.csv("output/btw.csv")
+```
+
+
+### Number of published Articels by News Source 
+
+```{r}
+col <- brewer.pal(12, name = "Paired")
+
+df %>%
+  group_by(site) %>%
+  tally(sort = TRUE) %>%
+  ggplot(aes(site, n)) +
+  geom_col(fill = col, alpha = .8) +
+  xlab("") +
+  ylab("") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+
+### Number of published Articels by Ownership 
+
+```{r}
+df %>%
+  group_by(owned) %>%
+  tally(sort = TRUE) %>%
+  ggplot(aes(owned, n)) +
+  geom_col(fill = col[c(6,2)], alpha = .8) +
+  geom_text(aes(label=n), position = position_stack(vjust = 0.5)) +
+  xlab("") +
+  ylab("") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+
+# Pre-Process Text
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+clean.text = function(x)
+  {
+  x = gsub("[[:punct:]]", " ", x)  # replace punctuation with space
+  
+  x = gsub("DIE WELT", "", x)
+  x = gsub("SPIEGEL ONLINE", "", x)
+  x = gsub("FOCUS Online", "", x)
+  x = gsub("ZEIT ONLINE", "", x)
+  x = gsub("stern de", "", x)
+  x = gsub("Handelsblatt", "", x)
+  x = gsub("Politik Inland Bild de", "", x)
+  x = gsub("BILDplus Inhalt", "", x)
+  x = gsub("Bild de", "", x)
+  x = gsub("SWR Aktuell", "", x)
+  x = gsub("SWR de", "", x)
+  x = gsub("[ ]NDR[ ]", "", x)
+  x = gsub('ZDF \"\"Morgenmagazin\"\"', "", x)
+  x = gsub("ZDFmediathek", "", x)
+  x = gsub("[ ]ZDF[ ]", "", x)
+  x = gsub("[ ]ARD[ ]", "", x)
+  
+  x = gsub("die neuesten Nachrichten", "", x)
+  x = gsub("RSS Feed", "", x)
+  x = gsub("Der Überblick   7 mal 17   Alle Artikel", "", x)
+  x = gsub("Der Tag im Überblick", "", x)
+  x = gsub("Inhalt Seite 1", "", x)
+  x = gsub("Seite 2", "", x)
+  x = gsub("dpa", "", x)
+  x = gsub("Twitter Anzeige", "", x)
+  x = gsub("Anzeige", "", x)
+  x = gsub("Foto  \\w+", "", x)
+  x = gsub("Video", "", x)
+  x = gsub("Quelle \\w+", "", x)
+  x = gsub("\\w+ \\w+ Getty Images", "", x)
+  x = gsub("AFP", "", x)
+  x = gsub("August", "", x)
+  x = gsub("Live-Ticker", "", x)
+  x = gsub("Deutsche Presse Agentur GmbH   Nachrichtenagentur Alle Beiträge von  anzeigen", "", x)
+  x = gsub("Deutsche Presse Agentur", "", x)
+  
+  x = gsub("[[:punct:]]", " ", x)  # replace punctuation with space
+  x = gsub("[[:cntrl:]]", " ", x)  # replace control characters with space
+  x = gsub("[[:digit:]]", "", x)  # remove numbers
+  x = gsub("^[[:space:]]+", "", x) # remove whitespace at beginning of documents
+  x = gsub("[[:space:]]+$", "", x) # remove whitespace at end of documents 
+  x = gsub("[\n{2,}]", "", x)
+  x = tolower(x)
+  return(x)
+}
+
+# apply function to the "orig" dataframe
+df$text_cleaned <- clean.text(df$text)
+
+df %>%
+  filter(grepl("Getty Images", text)) %>%
+  select(text, text_cleaned) %>%
+  htmlTable(align = "l")
+```
+
+```{r}
+# get stopwords from online dict and add costum stopwords
+#exceptions   <- c("nicht")
+#my_stopwords <- setdiff(stopwords("german"), exceptions)
+my_stopwords <- c(stopwords("german"), "spon","zeitmagazin","sz", "seitennavigation","startseite","gibt","immer","uhr","dass","mehr","sagte","sei","wurde","twitterfacebookgoogle","whatsappteilen","kartengeschichte","elbvertiefung","econa","prozent","freepik","colourbox")
+
+# Remove stopwords
+df$text_cleaned<- removeWords(df$text_cleaned, my_stopwords)
+
+# save file
+write.csv(df, file = "/Users/Franzi/CloudStation/textmining/data/news_cleaned.csv")
+```
+
+
+## Tokenize terms
+```{r}
+news.token <- df %>%
+  group_by(site) %>%
+  unnest_tokens(word, text_cleaned) %>%
+  count(site, word, sort = TRUE)  %>%
+  bind_tf_idf(word, site, n) %>%
+  arrange(desc(tf_idf)) 
+```
+
+# Topic Modeling
+## LDA
+```{r}
+# Build corpus
+btw.lda <- Corpus(VectorSource(df$text_cleaned))
+# Create document-term matrix
+dtm <- DocumentTermMatrix(btw.lda)
+```
+
+```{r}
+# Run LDA using Gibbs sampling
+library(topicmodels)
+
+k = 20 # Topics
+
+t1 <- Sys.time()
+lda20 <-LDA(dtm, 20, method="Gibbs", control=list(nstart=5, iter = 10000))
+t2 <- Sys.time()
+t2 - t1
+```
+
+## Structural Topic Model
+
+```{r, eval=FALSE, include=FALSE}
+# Process data
+processed <- textProcessor(df$text_cleaned, metadata = df[,c("date","site","text_cleaned","text")],
+                           wordLengths = c(2,Inf),
+                           lowercase = F,
+                           removestopwords = F,
+                           removenumbers = F,
+                           removepunctuation = F,
+                           stem = F)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+```
+
+### Run the Model 
+```{r}
+
+t1 <- Sys.time()
+stm <- stm(documents = out$documents, 
+           vocab = out$vocab, 
+           K=25, 
+           prevalence = ~site, 
+           content = ~site, 
+           data=out$meta, 
+           init.type = "Spectral")
+t2 <- Sys.time()
+t2 - t1
+
+save(stm, out, file = "stm.RDa")
+#load(file = "stm.RDa")
+
+```
+
+### Interpret the results
+
+#### Wordclouds by topic
+```{r}
+cloud(stm, topic =8, scale = c(5,.25))
+```
+
+```{r}
+# get document - topic distribution 
+theta <- as.data.frame(stm$theta)
+theta$source <- out$meta$source
+theta$date <- out$meta$date
+```
+
+#### get the mean distribution of topics  ...
+##### ... by date
+```{r}
+theta %>% 
+  select(- source) %>%
+  group_by(date) %>% 
+  summarise_all(funs(mean)) -> date_mean
+
+# plot 
+melt1 = melt(date_mean, id = "date")
+
+ggplot(melt1, aes(x=date, y = variable)) +   
+  geom_raster(aes(fill=value)) + 
+  scale_fill_gradient(low = "light blue", high = "dark blue") +
+  labs(x="Date", y="Topics", title="Average Topic Weights") + 
+  theme_bw() 
+
+```
+
+##### ... by source
+```{r, message=FALSE, warning=TRUE}
+theta %>% 
+  select(- date) %>%
+  group_by(source) %>% 
+  summarise_all(funs(mean)) -> source_mean
+
+# plot 
+melt2 = melt(source_mean, id = "source")
+
+ggplot(melt2, aes(x=source, y = variable)) +   
+  geom_raster(aes(fill=value)) + 
+  scale_fill_gradient(low = "light blue", high = "dark blue") +
+  labs(x="Source", y="Topics", title="Average Topic Weights") + 
+  theme_bw() 
+
+```
+
+### compute cosine similarity
+
+```{r, message=FALSE}
+library(proxy)
+cosine_dist <- as.matrix(dist(as.matrix(source_mean[,1:20]), method = "cosine"))
+colnames(cosine_dist) <- unique(out$meta$source)
+rownames(cosine_dist) <- unique(out$meta$source)
+```
+
+### Correlogram
+```{r, message=FALSE}
+devtools::install_github("sinhrks/ggfortify")
+library("ggfortify")
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+library("ggthemes")
+
+ggcorrplot(cosine_dist, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           #colors = c("tomato2", "white", "springgreen3"), 
+           title="", 
+           ggtheme=theme_bw)
+```
+
+### correlations between topics
+```{r}
+mod.out.corr <- topicCorr(stm)
+plot(mod.out.corr)
+```
+
+### stmBrowser
+```{r}
+library(stmBrowser)
+setwd(tempdir())
+stmBrowser(stm, data=out$meta, c("source","date"), text="text_cleaned")
+
+```
+

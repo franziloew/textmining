@@ -54,6 +54,9 @@ load(file = "~/GitHub/politsentiment_data/out/tweets_18_24.rda")
 # during and after elecction
 tweets <- tweets[which(tweets$day == "24"),]
 tweets <- with(tweets, tweets[hour(date) >= 12 & hour(date) <= 23, ])
+
+col <- c("deepskyblue1", "black","limegreen", "darkorchid2","gold", "red2")
+names(col) <- levels(tweets$partei)
 ```
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
@@ -85,11 +88,11 @@ ggplot(tweets, aes(date, fill = partei)) +
 
 Text data is inherently high-dimensional, so an analysis of text usually tries to reduce this dimensionality following these steps:
 
-1. Pre-process the text (Stopword removal, tokenization, stemming) and Represent(**document** $D$ as a numerical array $\boldsymbol{C}$ (e.g. *bag-of-words model*)
+1. **Pre-process** the text (Stopword removal, tokenization, stemming) and represent document $D$ as a numerical array $\boldsymbol{C}$ (e.g. bag-of-words model)
 	 
 2. **Statistical Methods** 
-  - Map $\boldsymbol{C}$ to predict values $\boldsymbol{\hat{V}}$ of unknown outcomes $\boldsymbol{V}$. 
-	- Sometimes the attribute of interest is latent (e.g. topics of a newspaper article)
+    - Map $\boldsymbol{C}$ to predict values $\boldsymbol{\hat{V}}$ of unknown outcomes $\boldsymbol{V}$. 
+	  - Sometimes the attribute of interest is latent (e.g. topics of a newspaper article)
 	
 3. Use $\boldsymbol{\hat{V}}$ in subsequent **descriptive or causal analysis.**
 
@@ -105,35 +108,99 @@ Text data is inherently high-dimensional, so an analysis of text usually tries t
 
 4. **Multi-Word Phrases** Sometimes groups of individual tokens like “United Kingdom”  have a specific meaning (Use Ngrams)
   
-## Cleaning Data
+## Cleaning Data (Example)
 
 ```{r, echo=FALSE}
-htmlTable(orig[1:4,c("text","text_cleaned")], align = "l")
+orig$retweet_count <- as.numeric(orig$retweet_count)
+
+orig %>%
+  arrange(desc(retweet_count)) -> orig
+
+htmlTable(orig[c(1,4,5,7),c("text","text_cleaned")], align = "l")
 ```
 
 ## Tokenization
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-orig$text_cleaned <- removeWords(orig$text_cleaned, c("cdu","csu","union","spd","fdp","grüne","grünen","linke","afd"))
+orig$text_cleaned <- removeWords(orig$text_cleaned, c("cdu","csu","union","spd","fdp","grüne","grünen","linke","afd","btw"))
 
 orig %>%
   #group_by(partei) %>%
   unnest_tokens(word, text_cleaned) %>%
-  count(word, sort = TRUE)  %>%
-  top_n(15) %>%
-  htmlTable()
-```
+  count(word, sort = TRUE) -> tokens
 
-## Tokenization (Bigrams)
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
 orig %>%
   #group_by(partei) %>%
   unnest_tokens(bigram, text_cleaned, token="ngrams", n=2) %>%
-  count(bigram, sort = TRUE)  %>%
-  top_n(15) %>%
-  htmlTable()
+  count(bigram, sort = TRUE) -> bigrams
 ```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+tokens %>%
+  top_n(20) %>%
+  ggplot() +
+  aes(x= reorder(word, n), y=n) +
+  geom_col() +
+  labs(title = "Tokens") +
+  xlab("") +
+  coord_flip() -> p1
+
+bigrams %>%
+  top_n(20) %>%
+  ggplot() +
+  aes(x= reorder(bigram, n), y=n) +
+  geom_col() +
+  labs(title = "Bigrams") +
+  xlab("") +
+  coord_flip() -> p2
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Wordclouds
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(wordcloud)
+# WordClouds ####
+# get text
+cdu <- orig[which(orig$partei=="CDU"),]
+spd <- orig[which(orig$partei=="SPD"),]
+fdp <- orig[which(orig$partei=="FDP"),]
+gruene <- orig[which(orig$partei=="Die Grünen"),]
+linke <- orig[which(orig$partei=="DIE LINKE"),]
+afd <- orig[which(orig$partei=="AfD"),]
+
+# Join texts in a vector 
+cdu <- paste(cdu$text_cleaned, collapse = " ")
+spd <- paste(spd$text_cleaned, collapse = " ")
+fdp <- paste(fdp$text_cleaned, collapse = " ")
+gruene <- paste(gruene$text_cleaned, collapse = " ")
+linke <- paste(linke$text_cleaned, collapse = " ")
+afd <- paste(afd$text_cleaned, collapse = " ")
+
+# put everything in a single vector
+all <- c(cdu, spd, fdp,gruene, linke, afd)
+
+ignore <- paste(c("cdu","bündnis", "spd","fdp","gruene","grüne","grünen", "linke","dielinke","afd","gen","merkel","schulz","csu","union"), collapse = "|")
+all <- gsub(ignore,"", all)
+
+# Step 2: Corpus and term-docs_cleaned matrix ####
+# create corpus
+corp <- Corpus(VectorSource(all))
+
+# create term-docs_cleaned matrix
+tdm <- TermDocumentMatrix(corp)
+
+# convert as matrix
+tdm <- as.matrix(tdm)
+
+# add column names
+colnames(tdm) <- c("CDU","SPD","FDP","Die Grünen", "DIE LINKE","AfD")
+
+# Step 3: Plot comparison wordcloud ####
+comparison.cloud(tdm, random.order=FALSE, colors = c("black","red2", "gold","limegreen", "darkorchid2","deepskyblue1"), scale=c(3,.5),
+                 title.size=1.2, max.words=100)
+```
+
 
 ## What is the data?
 
@@ -174,29 +241,47 @@ The bag-of-words model is useful for describing content, but we lose all informa
 
 # Term Frequency 
 
-***
+## Term Frequency 
+
 How to reflect the importance of a term? 3 concepts:
 
-- TF: Term-Frenquency $tf_{v,d}$ for term $v$ and document $d$
-- IDF: Inverse Document Frequency $idf_v = log(D/df_v)$, where $df_v$ is the number of documents that contain term $v$ and $D$ ist die number of Documents
-- TF-IDF: $tf-idf_{d,v}=tf_{d,v} * idf_v$
+- **TF** Term-Frenquency $tf_{v,d}$ for term $v$ and document $d$
+- **IDF** Inverse Document Frequency $idf_v = log(\frac{D}{df_v})$, where $df_v$ is the number of documents that contain term $v$ and $D$ ist die number of Documents
+- **TF-IDF** $tf-idf_{d,v}=tf_{d,v} * idf_v$
   - Gives prominence to words that occur many times in few documents.
   
-***
+## Term Frequency (Example)
 
 ```{r, include=FALSE}
-news.token <- tweets %>%
+tokens <- orig %>%
   group_by(partei) %>%
   unnest_tokens(word, text_cleaned) %>%
   count(partei, word, sort = TRUE)  %>%
-  bind_tf_idf(word, partei, n) %>%
-  arrange(desc(tf_idf))
+  bind_tf_idf(word, partei, n)
 ```
 
-```{r, echo=FALSE, comment = ""}
-news.token[1:10,]
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+tokens %>%
+  top_n(5) %>%
+  ggplot() +
+  aes(x= reorder(word, tf_idf), y=tf_idf, fill = partei) +
+  geom_col(alpha=.8, show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  scale_fill_manual(name="", values=col) +
+  coord_flip() -> p1
+
+tokens %>%
+  top_n(5) %>%
+  ggplot() +
+  aes(x= reorder(word, tf), y=tf, fill = partei) +
+  geom_col(alpha=.8, show.legend = FALSE) +
+  labs(x = NULL, y = "tf") +
+  scale_fill_manual(name="", values=col) +
+  coord_flip() -> p2
+
+grid.arrange(p1, p2, ncol = 2)
 ```
-  
+
 # Statistical Methods 
 
 ***
@@ -241,23 +326,25 @@ Street Journal* columns, defined along a number of dimensions such as “positiv
 
 ***
 **2. Latent attributes** (unsupervised methods): 
+
+  - **Starting Point** The true value of $v_i$ is unobserved -> The function relating $\boldsymbol{c}_i$ to $\boldsymbol{v}_i$ is unknown
   
-  - The function relating $\boldsymbol{c}_i$ to $\boldsymbol{v}_i$ is unknown, as we cannot observe the true value of $v_i$. Unsupervised machine learning involves taking unclassified observations and uncovering hidden patterns that structure them in some meaningful way. 
+  - **Idea** Uncover hidden patterns that structure the observations in some meaningful way.
   
-  - The outputs of algorithms for unsupervised machine learning can be used as inputs into econometric models for predicting some variable of interest, but this is a different approach from intentionally choosing the dimensions of content based on their predictive ability.
+  - **Use** The outputs of algorithms can be used as inputs into econometric models for predicting some variable of interest.
   
-  - E.g.: Principal Component Analysis, Topic Modeling (latent Dirichlet Allocation)
+  - **E.g.** Principal Component Analysis, Topic Modeling (latent Dirichlet Allocation)
   
 # Topic Modeling
 ## Topic Modeling
 
-method for finding a group of words (i.e topic) from a collection of documents that best represents the information in the collection.
+A method for finding a group of words (i.e topic) from a collection of documents that best represents the information in the collection.
 
-  - Discovering hidden topical patterns that are present across the collection
+  - Discovering **hidden topical patterns** that are present across the collection
   - Annotating documents according to these topics
   - Using these annotations to organize, search and summarize texts
 
-There are many techniques that are used to obtain topic models: Latent Dirichlet allocation
+Very popular topic model is the **Latent Dirichlet allocation**
 
 ## Latent Dirichlet Allocation (LDA)
 
