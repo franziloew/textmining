@@ -1,0 +1,5 @@
+[0] Config.pm:324> INFO - This is Biber 2.1
+[0] Config.pm:327> INFO - Logfile is '/Users/Franzi/CloudStation/textmining/doc/.texpadtmp/doc.blg'
+[121] biber-darwin:276> INFO - === Thu Oct 12, 2017, 17:42:42
+[122] Biber.pm:333> INFO - Reading '/Users/Franzi/CloudStation/textmining/doc/.texpadtmp/doc.bcf'
+[269] Utils.pm:146> WARN - No data sources defined!
