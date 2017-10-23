@@ -39,7 +39,7 @@ df %>%
             external_links.mean = mean(external_links),
             external_links.max = max(external_links),
             text_length.mean = mean(text_lenght),
-            text_length.max = max(text_lenght))
+            text_length.max = max(text_lenght)) %>%
   htmlTable(align = "l")
 ```
 
@@ -59,6 +59,10 @@ ggplot(df, aes(x=as.factor(site), y=fb_likes)) +
   labs(title = "") +
   labs(x="", y="Sum of Facebook Likes") +
   theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+
+```{r}
+save(df, file="../output/news_cleaned.Rda")
 ```
 
 
