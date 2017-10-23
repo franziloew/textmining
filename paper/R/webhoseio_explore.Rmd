@@ -18,13 +18,7 @@ lapply(libs, library, character.only = TRUE)
 rm(list = ls())
 load("../output/news_cleaned.Rda")
 
-df %>% filter(site != "zdf.de") -> df
 col <- brewer.pal(12, name = "Paired")
-```
-
-## Count number of terms in a string
-```{r}
-df$text_lenght <- sapply(gregexpr("\\S+", df$text), length)
 ```
 
 ## Summary Stats
@@ -59,46 +53,6 @@ ggplot(df, aes(x=as.factor(site), y=fb_likes)) +
   labs(title = "") +
   labs(x="", y="Sum of Facebook Likes") +
   theme(axis.text.x = element_text(angle = 40, hjust = 1))
-```
-
-```{r}
-save(df, file="../output/news_cleaned.Rda")
-```
-
-
-```{r}
-df$btw <- ifelse(grepl("Bundestagswahl", df$text, ignore.case = TRUE), 1,0)
-```
-
-### Number of published Articels by News Source 
-
-```{r}
-ggplot(df, aes(site)) +
-  geom_bar(fill="blue", alpha = .5) +
-  xlab("") +
-  ylab("Number of Articles") +
-  theme(axis.text.x = element_text(angle = 40, hjust = 1))
-```
-
-### Share of Articles mentioning Bundestagwahl
-```{r}
-df %>%
-  group_by(site, btw) %>%
-  tally() %>%
-  group_by(site) %>%
-  mutate(n_total = sum(n)) -> count
-
-count %>%
-  filter(btw == 1) %>%
-  ggplot(aes(site, n/n_total)) +
-  geom_col(fill="blue", alpha=.5) +
-  xlab("") +
-  ylab("Share of Articles mentioning Bundestagwahl") +
-  theme(axis.text.x = element_text(angle = 40, hjust = 1))
-```
-
-```{r}
-btw <- df[which(df$btw == 1),]
 ```
 
 # Pre-Process Text
@@ -158,13 +112,13 @@ btw$text_cleaned <- clean.text(btw$text)
 
 ## Remove Stopwords
 ```{r}
-btw$text_cleaned<- removeWords(btw$text_cleaned, stopwords("german"))
+df$text_cleaned<- removeWords(df$text, stopwords("german"))
 ```
 
 ## Tokenize terms
 ```{r}
-news_words <- btw %>%
-  unnest_tokens(word, text_cleaned) %>%
+news_words <- df %>%
+  unnest_tokens(word, text) %>%
   count(site, word, sort = TRUE)
 
 ## TF-IDF
@@ -395,5 +349,5 @@ library(stmBrowser)
 setwd(tempdir())
 stmBrowser(stm, data=out$meta, c("source","date"), text="text_cleaned")
 
-```
+```.
 

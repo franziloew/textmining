@@ -96,6 +96,13 @@ df$date <- as.POSIXct(df$date, format ="%Y-%m-%d")
 #df <- subset(df, df$date > "2017-09-01")
 ```
 
+## Count number of terms in a string
+```{r}
+df %>% filter(site != "zdf.de") -> df
+
+df$text_lenght <- sapply(gregexpr("\\S+", df$text), length)
+```
+
 ```{r, eval=FALSE, include=FALSE}
 # Save file
 save(df, linkedin_shares, file="../output/news_cleaned.Rda")
