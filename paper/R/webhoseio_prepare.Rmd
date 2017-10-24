@@ -107,3 +107,32 @@ df$text_lenght <- sapply(gregexpr("\\S+", df$text), length)
 # Save file
 save(df, linkedin_shares, file="../output/news_cleaned.Rda")
 ```
+
+## Save by Site
+```{r}
+df %>% filter(site=="stern.de") %>% write.csv(.,file = "../output/stern.csv")
+df %>% filter(site=="focus.de") %>% write.csv(.,file = "../output/focus.csv")
+df %>% filter(site=="zeit.de") %>% write.csv(.,file = "../output/zeit.csv")
+df %>% filter(site=="wdr.de") %>% write.csv(.,file = "../output/wdr.csv")
+df %>% filter(site=="spiegel.de") %>% write.csv(.,file = "../output/spiegel.csv")
+df %>% filter(site=="welt.de") %>% write.csv(.,file = "../output/welt.csv")
+df %>% filter(site=="handelsblatt.com") %>% write.csv(.,file = "../output/handelsblatt.csv")
+df %>% filter(site=="tagesschau.de") %>% write.csv(.,file = "../output/tagesschau.csv")
+df %>% filter(site=="swr.de") %>% write.csv(.,file = "../output/swr.csv")
+df %>% filter(site=="bild.de") %>% write.csv(.,file = "../output/bild.csv")
+df %>% filter(site=="ndr.de") %>% write.csv(.,file = "../output/ndr.csv")
+```
+
+## Load by site
+```{r}
+focus <- read.csv("../output/focus.csv")
+#spiegel <- read.csv("../output/spiegel.csv")
+#bild <- read.csv("../output/bild.csv")
+
+df_reduced <- rbind(focus, spiegel, bild)
+```
+
+```{r}
+save(df_reduced, file="../output/df_reduced")
+```
+
