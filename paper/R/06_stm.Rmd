@@ -1,0 +1,163 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer","topicmodels",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+## Load Data
+```{r}
+rm(list = ls())
+
+load("../output/news_cleaned2.Rda")
+write.csv(btw, file="../output/btw.csv")
+
+df$date <- as.Date(df$date)
+
+#col <- brewer.pal(12, name = "Paired")
+```
+
+## Reduce Dataframe
+```{r}
+df %>%
+  filter(fb_shares > 0) %>%
+  filter(!site %in% c("ndr.de","wdr.de")) %>%
+  filter(grepl("bundestagswahl", text_cleaned)) -> btw
+
+```
+
+# Topic Modeling
+
+## Structural Topic Model
+
+```{r, eval=FALSE, include=FALSE}
+# Process data
+processed <- textProcessor(df$text_cleaned, metadata = df[,c("date","site","text_cleaned","text")],
+                           wordLengths = c(2,Inf),
+                           lowercase = F,
+                           removestopwords = F,
+                           removenumbers = F,
+                           removepunctuation = F,
+                           stem = F)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+```
+
+### Run the Model 
+```{r}
+
+t1 <- Sys.time()
+stm <- stm(documents = out$documents, 
+           vocab = out$vocab, 
+           K=25, 
+           prevalence = ~site, 
+           content = ~site, 
+           data=out$meta, 
+           init.type = "Spectral")
+t2 <- Sys.time()
+t2 - t1
+
+save(stm, out, file = "stm.RDa")
+#load(file = "stm.RDa")
+
+```
+
+### Interpret the results
+
+#### Wordclouds by topic
+```{r}
+cloud(stm, topic =8, scale = c(5,.25))
+```
+
+```{r}
+# get document - topic distribution 
+theta <- as.data.frame(stm$theta)
+theta$source <- out$meta$source
+theta$date <- out$meta$date
+```
+
+#### get the mean distribution of topics  ...
+##### ... by date
+```{r}
+theta %>% 
+  select(- source) %>%
+  group_by(date) %>% 
+  summarise_all(funs(mean)) -> date_mean
+
+# plot 
+melt1 = melt(date_mean, id = "date")
+
+ggplot(melt1, aes(x=date, y = variable)) +   
+  geom_raster(aes(fill=value)) + 
+  scale_fill_gradient(low = "light blue", high = "dark blue") +
+  labs(x="Date", y="Topics", title="Average Topic Weights") + 
+  theme_bw() 
+
+```
+
+##### ... by source
+```{r, message=FALSE, warning=TRUE}
+theta %>% 
+  select(- date) %>%
+  group_by(source) %>% 
+  summarise_all(funs(mean)) -> source_mean
+
+# plot 
+melt2 = melt(source_mean, id = "source")
+
+ggplot(melt2, aes(x=source, y = variable)) +   
+  geom_raster(aes(fill=value)) + 
+  scale_fill_gradient(low = "light blue", high = "dark blue") +
+  labs(x="Source", y="Topics", title="Average Topic Weights") + 
+  theme_bw() 
+
+```
+
+### compute cosine similarity
+
+```{r, message=FALSE}
+library(proxy)
+cosine_dist <- as.matrix(dist(as.matrix(source_mean[,1:20]), method = "cosine"))
+colnames(cosine_dist) <- unique(out$meta$source)
+rownames(cosine_dist) <- unique(out$meta$source)
+```
+
+### Correlogram
+```{r, message=FALSE}
+devtools::install_github("sinhrks/ggfortify")
+library("ggfortify")
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+library("ggthemes")
+
+ggcorrplot(cosine_dist, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           #colors = c("tomato2", "white", "springgreen3"), 
+           title="", 
+           ggtheme=theme_bw)
+```
+
+### correlations between topics
+```{r}
+mod.out.corr <- topicCorr(stm)
+plot(mod.out.corr)
+```
+
+### stmBrowser
+```{r}
+library(stmBrowser)
+setwd(tempdir())
+stmBrowser(stm, data=out$meta, c("source","date"), text="text_cleaned")
+
+```.
+

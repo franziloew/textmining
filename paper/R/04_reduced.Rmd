@@ -1,0 +1,331 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer","topicmodels",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+## Load Data
+```{r}
+rm(list = ls())
+
+load("../output/news_cleaned2.Rda")
+write.csv(btw, file="../output/btw.csv")
+
+df$date <- as.Date(df$date)
+
+#col <- brewer.pal(12, name = "Paired")
+```
+
+## Reduce Dataframe
+```{r}
+df %>%
+  filter(fb_shares > 0) %>%
+  filter(!site %in% c("ndr.de","wdr.de")) %>%
+  filter(grepl("bundestagswahl", text_cleaned)) -> btw
+
+```
+
+## Summary Stats
+```{r}
+btw %>%
+  group_by(site) %>%
+  summarise(obs = n(),
+    fb_shares.mean = mean(fb_shares),
+            fb_shares.max = max(fb_shares),
+            fb_likes.mean = mean(fb_likes),
+            fb_likes.max = max(fb_likes),
+            external_links.mean = mean(external_links),
+            external_links.max = max(external_links),
+            text_length.mean = mean(text_lenght),
+            text_length.max = max(text_lenght)) %>%
+  htmlTable(align = "l")
+```
+
+### Text Length
+```{r}
+ggplot(btw, aes(x=as.factor(site), y=text_lenght)) +
+  stat_summary(fun.y="median", geom="bar", fill = "blue", alpha = .5) +
+  labs(title = "") +
+  labs(x="", y="Median Text Length") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+
+### Facebook Likes
+```{r}
+ggplot(btw, aes(x=as.factor(site), y=fb_likes)) +
+  stat_summary(fun.y="median", geom="bar", fill = "blue", alpha = .5) +
+  labs(title = "") +
+  labs(x="", y="Median of Facebook Likes") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+
+## What are the news with the highest fb-shares?
+```{r}
+btw %>%
+  filter(site == "tagesschau.de") %>%
+  arrange(desc(fb_shares)) %>%
+  select(text) %>%
+  .[1,]
+```
+
+```{r}
+btw %>%
+  ggplot(aes(date, fill = site)) +
+  geom_histogram(bins = 100, alpha = .8)
+```
+
+## Tokenize
+```{r}
+btw %>%
+  unnest_tokens(word, text_cleaned) %>%
+  count(site, word, sort = TRUE) -> news_count
+
+## TF-IDF
+news_count <- news_count %>%
+  bind_tf_idf(word, site, n)
+
+### Terms with high tf-idf
+news_count %>%
+  #filter(site == "spiegel.de") %>%
+  arrange(desc(tf_idf))
+```
+
+### Bigrams
+```{r}
+btw %>%
+  unnest_tokens(bigram, text_cleaned, token="ngrams", n=2) %>%
+  count(site, bigram, sort = TRUE) -> news_bigrams
+
+news_bigrams
+```
+
+# Topic Modeling
+## Build Corpus
+```{r}
+btw %>%
+  filter(nchar(text_cleaned) > 5) -> btw
+```
+
+```{r}
+# Build corpus
+df.lda <- Corpus(VectorSource(btw$text_cleaned))
+# Create document-term matrix
+dtm <- DocumentTermMatrix(df.lda)
+
+inspect(dtm)
+```
+
+## Select Number of K Topics
+(http://davidmeza1.github.io/2015/07/20/topic-modeling-in-R.html)
+
+```{r}
+seqk <- seq(30, 100, 5) #
+burnin <- 1000
+iter <- 1000
+keep <- 50
+system.time(fitted_many <- lapply(seqk, function(k) topicmodels::LDA(dtm, k = k,
+                                                     method = "Gibbs",control = list(burnin = burnin,
+                                                                         iter = iter, keep = keep) )))
+```
+
+### The harmonic mean function
+```{r}
+harmonicMean <- function(logLikelihoods, precision = 2000L) {
+  llMed <- median(logLikelihoods)
+  as.double(llMed - log(mean(exp(-mpfr(logLikelihoods,
+                                       prec = precision) + llMed))))
+}
+```
+
+# Run LDA using Gibbs sampling
+```{r}
+#Set parameters for Gibbs sampling (see https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-topic-modeling-using-r/)
+burnin <- 1000
+iter <- 1000
+keep <- 50
+
+k = 50 # Topics
+```
+
+```{r}
+t1 <- Sys.time()
+lda50 <-LDA(dtm, k, method="Gibbs", control=list(burnin=burnin, iter = iter, keep = keep))
+t2 <- Sys.time()
+t2 - t1
+
+save(ldaOut, file=paste("../output/models/LDAGibbs",k,".Rda"))
+```
+
+```{r}
+#write out results (docs to topics)
+ldaOut.topics <- as.matrix(topics(ldaOut))
+write.csv(ldaOut.topics,file=paste("../output/models/LDAGibbs",k,"DocsToTopics.csv"))
+```
+
+```{r}
+#top 6 terms in each topic
+ldaOut.terms <- as.matrix(terms(ldaOut,6))
+write.csv(ldaOut.terms,file=paste("../output/models/LDAGibbs",k,"TopicsToTerms.csv"))
+```
+
+```{r}
+#probabilities associated with each topic assignment
+topicProbabilities <- as.data.frame(ldaOut@gamma)
+rownames(topicProbabilities) <- make.unique(btw$title)
+
+write.csv(topicProbabilities,file=paste("../output/models/LDAGibbs",k,"TopicProbabilities.csv"))
+```
+
+```{r}
+#Find relative importance of top 2 topics
+topic1ToTopic2 <- lapply(1:nrow(dtm),function(x)
+sort(topicProbabilities[x,])[k]/sort(topicProbabilities[x,])[k-1])
+```
+
+```{r}
+#Find relative importance of second and third most important topics
+topic2ToTopic3 <- lapply(1:nrow(dtm),function(x)
+sort(topicProbabilities[x,])[k-1]/sort(topicProbabilities[x,])[k-2])
+```
+
+```{r}
+#write to file
+write.csv(topic1ToTopic2,file=paste("../output/models/LDAGibbs",k,"Topic1ToTopic2.csv"))
+write.csv(topic2ToTopic3,file=paste("../output/models/LDAGibbs",k,"Topic2ToTopic3.csv"))
+```
+
+
+## Structural Topic Model
+
+```{r, eval=FALSE, include=FALSE}
+# Process data
+processed <- textProcessor(df$text_cleaned, metadata = df[,c("date","site","text_cleaned","text")],
+                           wordLengths = c(2,Inf),
+                           lowercase = F,
+                           removestopwords = F,
+                           removenumbers = F,
+                           removepunctuation = F,
+                           stem = F)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+```
+
+### Run the Model 
+```{r}
+
+t1 <- Sys.time()
+stm <- stm(documents = out$documents, 
+           vocab = out$vocab, 
+           K=25, 
+           prevalence = ~site, 
+           content = ~site, 
+           data=out$meta, 
+           init.type = "Spectral")
+t2 <- Sys.time()
+t2 - t1
+
+save(stm, out, file = "stm.RDa")
+#load(file = "stm.RDa")
+
+```
+
+### Interpret the results
+
+#### Wordclouds by topic
+```{r}
+cloud(stm, topic =8, scale = c(5,.25))
+```
+
+```{r}
+# get document - topic distribution 
+theta <- as.data.frame(stm$theta)
+theta$source <- out$meta$source
+theta$date <- out$meta$date
+```
+
+#### get the mean distribution of topics  ...
+##### ... by date
+```{r}
+theta %>% 
+  select(- source) %>%
+  group_by(date) %>% 
+  summarise_all(funs(mean)) -> date_mean
+
+# plot 
+melt1 = melt(date_mean, id = "date")
+
+ggplot(melt1, aes(x=date, y = variable)) +   
+  geom_raster(aes(fill=value)) + 
+  scale_fill_gradient(low = "light blue", high = "dark blue") +
+  labs(x="Date", y="Topics", title="Average Topic Weights") + 
+  theme_bw() 
+
+```
+
+##### ... by source
+```{r, message=FALSE, warning=TRUE}
+theta %>% 
+  select(- date) %>%
+  group_by(source) %>% 
+  summarise_all(funs(mean)) -> source_mean
+
+# plot 
+melt2 = melt(source_mean, id = "source")
+
+ggplot(melt2, aes(x=source, y = variable)) +   
+  geom_raster(aes(fill=value)) + 
+  scale_fill_gradient(low = "light blue", high = "dark blue") +
+  labs(x="Source", y="Topics", title="Average Topic Weights") + 
+  theme_bw() 
+
+```
+
+### compute cosine similarity
+
+```{r, message=FALSE}
+library(proxy)
+cosine_dist <- as.matrix(dist(as.matrix(source_mean[,1:20]), method = "cosine"))
+colnames(cosine_dist) <- unique(out$meta$source)
+rownames(cosine_dist) <- unique(out$meta$source)
+```
+
+### Correlogram
+```{r, message=FALSE}
+devtools::install_github("sinhrks/ggfortify")
+library("ggfortify")
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+library("ggthemes")
+
+ggcorrplot(cosine_dist, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           #colors = c("tomato2", "white", "springgreen3"), 
+           title="", 
+           ggtheme=theme_bw)
+```
+
+### correlations between topics
+```{r}
+mod.out.corr <- topicCorr(stm)
+plot(mod.out.corr)
+```
+
+### stmBrowser
+```{r}
+library(stmBrowser)
+setwd(tempdir())
+stmBrowser(stm, data=out$meta, c("source","date"), text="text_cleaned")
+
+```.
+

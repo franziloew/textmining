@@ -1,0 +1,160 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+
+```
+
+# Load and prepare Dataframe
+
+```{r}
+rm(list =ls())
+
+load("../output/news_cleaned.Rda")
+```
+
+# Pre-Process Text
+
+```{r}
+df %>%
+  distinct(text, .keep_all = TRUE) -> df
+```
+
+
+```{r}
+pat <- 'Hinweis.+?(?=(einfügen))'
+btw %>%
+  filter(grepl(pat, text, perl = TRUE)) %>%
+  group_by(site) %>%
+  tally(sort = TRUE)
+```
+```{r}
+as.data.frame(str_match(btw$text, pat)) ->test
+test %>%
+  filter(!is.na(test)) %>%
+  .[1]
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+clean.text <- function(x)
+  {
+  # All
+  x = gsub("Getty Images", "", x)
+
+  # Bild.de
+  x = gsub("Shopübersicht Top Gutscheine", "", x)
+
+  # Handelsblatt.com
+  x = gsub("RSS Feed", "", x)
+  x = gsub("Deutsche Presse Agentur", "", x)
+
+  # FOCUS.de
+  x = gsub("FOCUS Online/Wochit", "", x)
+  x = gsub("Vielen Dank! Ihr Kommentar wurde abgeschickt.", "", x)
+  x = gsub('Im Interesse unserer User[^"]*', "", x, perl = TRUE)
+  x = gsub('Sie haben noch 800[^"]*', "", x, perl = TRUE)
+  x = gsub('Erzählen Sie auf FOCUS Online über Ihren Heimatort Teilen Sie Ihren Artikel und Ihr Foto', "", x, perl = TRUE)
+  x = gsub("Bericht schreiben", "", x)
+  x = gsub("Vielen Dank! Ihr Kommentar wurde abgeschickt.", "", x)
+  x = gsub("Hier können Sie selbst Artikel verfassen:","", x)
+  x = gsub("Live-Ticker", "", x)
+
+  # Spiegel.de
+  x = gsub("7 mal 17", "", x)
+  x = gsub("Zur Startseite Diesen Artikel... Drucken Feedback Nutzungsrechte", "", x)
+  x = gsub('Liebe Leserin, lieber Leser,\num diesen[^"]*', "", x)
+  x = gsub('Liebe Leserin, lieber Leser, um diesen[^"]*', "", x)
+  x = gsub('ejf[^"]*', "", x)
+  x = gsub('tjf[^"]*', "", x)
+
+  # Zeit.de
+  x = gsub("Inhalt Seite", "", x)
+  
+  # Tagesschau
+  x = gsub('Hinweis.+?(?=(einfügen))', "", x, perl = TRUE)
+  
+  return(x)
+}
+
+# apply function to dataframe
+df$text_cleaned <- clean.text(df$text)
+```
+
+```{r}
+df$text_cleaned <- gsub("[[:punct:]]", " ", df$text_cleaned)
+df$text_cleaned <- gsub("[[:cntrl:]]", " ", df$text_cleaned)
+df$text_cleaned <- gsub("[[:digit:]]", " ", df$text_cleaned)
+df$text_cleaned <- gsub("^[[:space:]]+", " ", df$text_cleaned)
+df$text_cleaned <- gsub("[[:space:]]+$", " ", df$text_cleaned)
+df$text_cleaned <- tolower(df$text_cleaned)
+```
+
+## Remove Stopwords
+```{r}
+df$text_cleaned<- removeWords(df$text_cleaned, stopwords("german"))
+```
+
+### Remove customized stopwords
+```{r}
+mystopwords <- c("focus","online","spiegel", "stern", "handelsblatt", "de", "bild","bildplus", "zeit", "ersten", "tagesschau", "wdr", "ndr", "ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e", "uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv", "nwmi", "nwnoa", "polizei","beim","dpa","video","quelle","afp","witters","fotogalerie", "registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen", "datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
+
+mystopwords <- distinct(as.data.frame(mystopwords))
+
+df$text_cleaned<- removeWords(df$text_cleaned, mystopwords$mystopwords)
+```
+
+```{r}
+save(df, file="../output/news_cleaned2.Rda")
+```
+
+## Save by Site
+```{r}
+save_by_site <- function(DF) {
+  write.csv(DF, paste0("../output/single/",as.character(DF),".csv"))
+  return(DF)
+}
+
+df %>%
+  group_by(site) %>%
+  do(save_by_site(.))
+```
+
+```{r}
+df %>% filter(site=="stern.de") %>% write.csv(.,file = "../output/single/stern.csv")
+df %>% filter(site=="focus.de") %>% write.csv(.,file = "../output/single/focus.csv")
+df %>% filter(site=="zeit.de") %>% write.csv(.,file = "../output/single/zeit.csv")
+df %>% filter(site=="wdr.de") %>% write.csv(.,file = "../output/single/wdr.csv")
+df %>% filter(site=="spiegel.de") %>% write.csv(.,file = "../output/single/spiegel.csv")
+df %>% filter(site=="welt.de") %>% write.csv(.,file = "../output/single/welt.csv")
+df %>% filter(site=="handelsblatt.com") %>% write.csv(.,file = "../output/single/handelsblatt.csv")
+df %>% filter(site=="tagesschau.de") %>% write.csv(.,file = "../output/single/tagesschau.csv")
+df %>% filter(site=="swr.de") %>% write.csv(.,file = "../output/single/swr.csv")
+df %>% filter(site=="bild.de") %>% write.csv(.,file = "../output/single/bild.csv")
+df %>% filter(site=="ndr.de") %>% write.csv(.,file = "../output/single/ndr.csv")
+```
+
+## Load by site
+```{r}
+focus <- read.csv("../output/focus.csv")
+spiegel <- read.csv("../output/spiegel.csv")
+bild <- read.csv("../output/bild.csv")
+
+df_reduced <- rbind(focus, spiegel, bild)
+```
+
+
+
+```{r}
+save(df_reduced, file="../output/df_reduced.Rda")
+```
+
