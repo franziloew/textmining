@@ -1,0 +1,112 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer","topicmodels",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+## Load Data
+```{r}
+rm(list = ls())
+
+load("../output/news_cleaned2.Rda")
+write.csv(btw, file="../output/btw.csv")
+
+df$date <- as.Date(df$date)
+
+#col <- brewer.pal(12, name = "Paired")
+```
+
+## Reduce Dataframe
+```{r}
+df %>%
+  filter(fb_shares > 0) %>%
+  filter(!site %in% c("ndr.de","wdr.de")) %>%
+  filter(grepl("bundestagswahl", text_cleaned)) -> btw
+
+```
+
+# Topic Modeling
+## Build Corpus
+```{r}
+btw %>%
+  filter(nchar(text_cleaned) > 5) -> btw
+```
+
+```{r}
+# Build corpus
+df.lda <- Corpus(VectorSource(btw$text_cleaned))
+# Create document-term matrix
+dtm <- DocumentTermMatrix(df.lda)
+# Assign name to docs
+rownames(dtm) <- make.unique(btw$title)
+
+inspect(dtm)
+```
+
+## Run LDA using Gibbs sampling
+```{r}
+#Set parameters for Gibbs sampling (see https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-topic-modeling-using-r/)
+burnin <- 1000
+iter <- 1000
+keep <- 50
+
+k = 50 # Topics
+```
+
+```{r}
+t1 <- Sys.time()
+lda50 <-LDA(dtm, k, method="Gibbs", control=list(burnin=burnin, iter = iter, keep = keep))
+t2 <- Sys.time()
+t2 - t1
+
+save(ldaOut, file=paste("../output/models/LDAGibbs",k,".Rda"))
+```
+
+```{r}
+#write out results (docs to topics)
+ldaOut.topics <- as.matrix(topics(ldaOut))
+write.csv(ldaOut.topics,file=paste("../output/models/LDAGibbs",k,"DocsToTopics.csv"))
+```
+
+```{r}
+#top 6 terms in each topic
+ldaOut.terms <- as.matrix(terms(ldaOut,6))
+write.csv(ldaOut.terms,file=paste("../output/models/LDAGibbs",k,"TopicsToTerms.csv"))
+```
+
+```{r}
+#probabilities associated with each topic assignment
+topicProbabilities <- as.data.frame(ldaOut@gamma)
+#rownames(topicProbabilities) <- make.unique(btw$title)
+
+write.csv(topicProbabilities,file=paste("../output/models/LDAGibbs",k,"TopicProbabilities.csv"))
+```
+
+```{r}
+#Find relative importance of top 2 topics
+topic1ToTopic2 <- lapply(1:nrow(dtm),function(x)
+sort(topicProbabilities[x,])[k]/sort(topicProbabilities[x,])[k-1])
+```
+
+```{r}
+#Find relative importance of second and third most important topics
+topic2ToTopic3 <- lapply(1:nrow(dtm),function(x)
+sort(topicProbabilities[x,])[k-1]/sort(topicProbabilities[x,])[k-2])
+```
+
+```{r}
+#write to file
+write.csv(topic1ToTopic2,file=paste("../output/models/LDAGibbs",k,"Topic1ToTopic2.csv"))
+write.csv(topic2ToTopic3,file=paste("../output/models/LDAGibbs",k,"Topic2ToTopic3.csv"))
+```
+
+
