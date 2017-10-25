@@ -55,6 +55,69 @@ ggplot(df, aes(x=as.factor(site), y=fb_likes)) +
   theme(axis.text.x = element_text(angle = 40, hjust = 1))
 ```
 
+<<<<<<< HEAD:paper/R/03_explore.Rmd
+=======
+# Pre-Process Text
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+clean.text = function(x)
+  {
+  x = gsub("DIE WELT", "", x)
+  x = gsub("SPIEGEL ONLINE", "", x)
+  x = gsub("FOCUS Online", "", x)
+  x = gsub("ZEIT ONLINE", "", x)
+  x = gsub("stern de", "", x)
+  x = gsub("Handelsblatt", "", x)
+  x = gsub("Politik Inland Bild de", "", x)
+  x = gsub("BILDplus Inhalt", "", x)
+  x = gsub("Bild de", "", x)
+  x = gsub("SWR Aktuell", "", x)
+  x = gsub("SWR de", "", x)
+  x = gsub("[ ]NDR[ ]", "", x)
+  x = gsub('ZDF \"\"Morgenmagazin\"\"', "", x)
+  x = gsub("ZDFmediathek", "", x)
+  x = gsub("[ ]ZDF[ ]", "", x)
+  x = gsub("[ ]ARD[ ]", "", x)
+  
+  x = gsub("die neuesten Nachrichten", "", x)
+  x = gsub("RSS Feed", "", x)
+  x = gsub("Der Überblick   7 mal 17   Alle Artikel", "", x)
+  x = gsub("Der Tag im Überblick", "", x)
+  x = gsub("Inhalt Seite 1", "", x)
+  x = gsub("Seite 2", "", x)
+  x = gsub("dpa", "", x)
+  x = gsub("Twitter Anzeige", "", x)
+  x = gsub("Anzeige", "", x)
+  x = gsub("Foto  \\w+", "", x)
+  x = gsub("Video", "", x)
+  x = gsub("Quelle \\w+", "", x)
+  x = gsub("\\w+ \\w+ Getty Images", "", x)
+  x = gsub("AFP", "", x)
+  x = gsub("August", "", x)
+  x = gsub("Live-Ticker", "", x)
+  x = gsub("Deutsche Presse Agentur GmbH   Nachrichtenagentur Alle Beiträge von  anzeigen", "", x)
+  x = gsub("Deutsche Presse Agentur", "", x)
+  
+  x = gsub("[[:punct:]]", " ", x)  # replace punctuation with space
+  x = gsub("[[:cntrl:]]", " ", x)  # replace control characters with space
+  x = gsub("[[:digit:]]", "", x)  # remove numbers
+  x = gsub("^[[:space:]]+", "", x) # remove whitespace at beginning of documents
+  x = gsub("[[:space:]]+$", "", x) # remove whitespace at end of documents 
+  x = gsub("[\n{2,}]", "", x)
+  x = tolower(x)
+  return(x)
+}
+
+# apply function to the "orig" dataframe
+btw$text_cleaned <- clean.text(btw$text)
+```
+
+## Remove Stopwords
+```{r}
+df$text_cleaned<- removeWords(df$text, stopwords("german"))
+```
+
+>>>>>>> 6e9393926b53efda476092cd255e25d51e09c2e9:paper/R/webhoseio_explore.Rmd
 ## Tokenize terms
 ```{r}
 news_words <- df %>%
