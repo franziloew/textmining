@@ -18,7 +18,6 @@ lapply(libs, library, character.only = TRUE)
 rm(list = ls())
 
 load("../output/news_cleaned2.Rda")
-write.csv(btw, file="../output/btw.csv")
 
 df$date <- as.Date(df$date)
 
@@ -109,4 +108,79 @@ write.csv(topic1ToTopic2,file=paste("../output/models/LDAGibbs",k,"Topic1ToTopic
 write.csv(topic2ToTopic3,file=paste("../output/models/LDAGibbs",k,"Topic2ToTopic3.csv"))
 ```
 
+## Explore the model
+```{r}
+load(file ="../output/models/LDAGibbs 50 .Rda")
+```
+
+### Most likely Topics per Article
+```{r}
+# The topics function from the package is used to extract the most likely topic for each document 
+btw.topics <- topics(ldaOut, 3)
+
+# Create Dataframe
+doctopics.df <- as.data.frame(t(btw.topics))
+
+doctopics.df %>%
+  transmute(ArticleID = rownames(.),
+            Topic1 = V1,
+            Topic2 = V2,
+            Topic3 = V3) -> doctopics.df
+
+doctopics.df$ArticleID <- as.integer(doctopics.df$ArticleID)
+doctopics.df[1:10,]
+
+# Add Topic to origian DF
+```
+
+### Most likely Words per Topic
+```{r}
+## Return the top 30 terms.
+btw.terms <- as.data.frame(terms(ldaOut, 30), stringAsFactors = FALSE)
+btw.terms[1:5,1:10]
+```
+
+### Create Topic Labels
+As part of the visualization I will construct later, a topic label needs be used to created. The terms are gathered in rank order and then the label is created by concatenating the first three terms.
+
+```{r}
+topicTerms <- btw.terms %>% gather(Topic)
+topicTerms <- cbind(topicTerms, Rank = rep(1:30))
+topicTerms <- topicTerms %>% filter(Rank < 5)
+
+topicTerms <- topicTerms %>% mutate(Topic = stringr::word(Topic, 2))
+topicTerms$Topic <- as.numeric(topicTerms$Topic)
+
+topicLabel <- data.frame()
+for (i in 1:50){
+  z <- dplyr::filter(topicTerms, Topic==i)
+  l <- as.data.frame(paste(z[1,2], z[2,2], z[3,2], z[4,2], sep = " "), stringAsFactors = FALSE)
+  topicLabel <- rbind(topicLabel, l)
+}
+colnames(topicLabel) <- c("Label")
+
+topicLabel
+```
+
+### Working with Theta (Topic prevalence)
+```{r}
+theta <- as.data.frame(posterior(ldaOut)$topics)
+head(theta)
+```
+
+
+```{r}
+x <- as.data.frame(row.names(theta), stringsAsFactors = FALSE)
+#colnames(x) <- c("ArticleID")
+#x$ArticleID <- as.numeric(x$ArticleID)
+
+#theta2 <- cbind(x,theta)
+```
+
+```{r}
+library(corrplot)
+
+c <- cor(theta)
+corrplot(c, method = "circle")
+```
 

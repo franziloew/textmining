@@ -16,7 +16,7 @@ lapply(libs, library, character.only = TRUE)
 
 # Load and prepare Dataframe
 
-```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r}
 rm(list = ls())
 
 # create a character vector, with each file name represented by an entry
@@ -28,14 +28,11 @@ sep <- list.files("../data/webhoseio/2017-09", pattern="*.json", full.names=TRUE
 
 # a list in which each element is one of your original JSON files
 myJSON <- lapply(c(june,july,aug,sep), function(x) fromJSON(file=x)) 
-#myJSON <- lapply(june, function(x) fromJSON(file=x)) 
-
-length(myJSON)
 ```
 
 ## Convert List to Dataframe
 
-```{r, eval=FALSE, include=FALSE}
+```{r}
 site <- NULL
 title <- NULL
 text <- NULL
@@ -45,9 +42,6 @@ section <- NULL
 fb_shares <- NULL
 fb_likes <- NULL
 fb_comments <- NULL
-gplus_shares <- NULL
-linkedin_shares <- NULL
-stumbledupon_shares <- NULL
 
 #external_links <- NULL
 
@@ -62,20 +56,14 @@ for (i in 1:length(myJSON)){
   fb_likes <- append(fb_likes, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["likes"]])
   fb_comments <- append(fb_likes, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["comments"]])
   
-  gplus_shares <- append(gplus_shares, myJSON[[i]]["thread"][[1]]["social"][[1]]["gplus"][[1]][["shares"]])
-  linkedin_shares <- append(gplus_shares, myJSON[[i]]["thread"][[1]]["social"][[1]]["linkedin"][[1]][["shares"]])
-  stumbledupon_shares <- append(stumbledupon_shares, myJSON[[i]]["thread"][[1]]["social"][[1]]["stumbledupon"][[1]]["shares"][[1]])
-  
-  external_links <- append(external_links, length(myJSON[[i]]["external_links"][[1]]))
-  
 }
 
-df <- cbind(site, title, text, published, section, fb_shares, fb_likes, gplus_shares, external_links)
+df <- cbind(site, title, text, published, section, fb_shares, fb_likes, fb_comments)
 df <- data.frame(df, stringsAsFactors = FALSE)
 ```
 
 ```{r}
-rm(site, title, text, published, fb_shares, fb_likes, section, external_links)
+rm(site, title, text, published, fb_shares, fb_likes, section, fb_comments)
 ```
 
 ## Clean Data
@@ -83,8 +71,7 @@ rm(site, title, text, published, fb_shares, fb_likes, section, external_links)
 df %>%
   mutate(fb_shares = as.numeric(fb_shares),
          fb_likes = as.numeric(fb_likes),
-         gplus_shares = as.numeric(gplus_shares),
-         external_links = as.numeric(external_links)) -> df
+         fb_comments = as.numeric(fb_comments)) -> df
 ```
 
 ### Date
@@ -103,36 +90,7 @@ df %>% filter(site != "zdf.de") -> df
 df$text_lenght <- sapply(gregexpr("\\S+", df$text), length)
 ```
 
-```{r, eval=FALSE, include=FALSE}
+```{r}
 # Save file
-save(df, linkedin_shares, file="../output/news_cleaned.Rda")
+save(df, file="../output/news_cleaned.Rda")
 ```
-
-## Save by Site
-```{r}
-df %>% filter(site=="stern.de") %>% write.csv(.,file = "../output/stern.csv")
-df %>% filter(site=="focus.de") %>% write.csv(.,file = "../output/focus.csv")
-df %>% filter(site=="zeit.de") %>% write.csv(.,file = "../output/zeit.csv")
-df %>% filter(site=="wdr.de") %>% write.csv(.,file = "../output/wdr.csv")
-df %>% filter(site=="spiegel.de") %>% write.csv(.,file = "../output/spiegel.csv")
-df %>% filter(site=="welt.de") %>% write.csv(.,file = "../output/welt.csv")
-df %>% filter(site=="handelsblatt.com") %>% write.csv(.,file = "../output/handelsblatt.csv")
-df %>% filter(site=="tagesschau.de") %>% write.csv(.,file = "../output/tagesschau.csv")
-df %>% filter(site=="swr.de") %>% write.csv(.,file = "../output/swr.csv")
-df %>% filter(site=="bild.de") %>% write.csv(.,file = "../output/bild.csv")
-df %>% filter(site=="ndr.de") %>% write.csv(.,file = "../output/ndr.csv")
-```
-
-## Load by site
-```{r}
-focus <- read.csv("../output/focus.csv")
-#spiegel <- read.csv("../output/spiegel.csv")
-#bild <- read.csv("../output/bild.csv")
-
-df_reduced <- rbind(focus, spiegel, bild)
-```
-
-```{r}
-save(df_reduced, file="../output/df_reduced")
-```
-
