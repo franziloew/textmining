@@ -1,1 +1,2 @@
 *.Rda
+LDAGibbs 50 .Rda
