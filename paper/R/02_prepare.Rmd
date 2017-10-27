@@ -31,7 +31,7 @@ df %>%
 
 
 ```{r}
-pat <- 'Hinweis.+?(?=(einfügen))'
+pat <- 'Aus unserem Netzwerk[^"]*'
 btw %>%
   filter(grepl(pat, text, perl = TRUE)) %>%
   group_by(site) %>%
@@ -68,6 +68,7 @@ clean.text <- function(x)
   x = gsub("Vielen Dank! Ihr Kommentar wurde abgeschickt.", "", x)
   x = gsub("Hier können Sie selbst Artikel verfassen:","", x)
   x = gsub("Live-Ticker", "", x)
+  x = gsub('Aus unserem Netzwerk[^"]*', "", x, perl = TRUE)
 
   # Spiegel.de
   x = gsub("7 mal 17", "", x)
@@ -99,6 +100,11 @@ df$text_cleaned <- gsub("[[:space:]]+$", " ", df$text_cleaned)
 df$text_cleaned <- tolower(df$text_cleaned)
 ```
 
+```{r}
+# Save file
+save(df, file="../output/news_cleaned2.Rda")
+```
+
 ## Remove Stopwords
 ```{r}
 df$text_cleaned<- removeWords(df$text_cleaned, stopwords("german"))
@@ -117,44 +123,21 @@ df$text_cleaned<- removeWords(df$text_cleaned, mystopwords$mystopwords)
 save(df, file="../output/news_cleaned2.Rda")
 ```
 
-## Save by Site
+## Generate new variables 
 ```{r}
-save_by_site <- function(DF) {
-  write.csv(DF, paste0("../output/single/",as.character(DF),".csv"))
-  return(DF)
-}
+df$video <- ifelse(grepl("video", df$title, ignore.case = TRUE),1,0)
+df$date <- as.Date(df$date)
+```
 
+## Reduce Dataframe
+```{r}
 df %>%
-  group_by(site) %>%
-  do(save_by_site(.))
+  filter(!site %in% c("ndr.de","wdr.de", "swr.de","tagessschau.de")) %>%
+  filter(grepl("bundestagswahl", text, ignore.case = TRUE)) -> btw
+
+btw$ArticleID <- rownames(btw)
 ```
 
 ```{r}
-df %>% filter(site=="stern.de") %>% write.csv(.,file = "../output/single/stern.csv")
-df %>% filter(site=="focus.de") %>% write.csv(.,file = "../output/single/focus.csv")
-df %>% filter(site=="zeit.de") %>% write.csv(.,file = "../output/single/zeit.csv")
-df %>% filter(site=="wdr.de") %>% write.csv(.,file = "../output/single/wdr.csv")
-df %>% filter(site=="spiegel.de") %>% write.csv(.,file = "../output/single/spiegel.csv")
-df %>% filter(site=="welt.de") %>% write.csv(.,file = "../output/single/welt.csv")
-df %>% filter(site=="handelsblatt.com") %>% write.csv(.,file = "../output/single/handelsblatt.csv")
-df %>% filter(site=="tagesschau.de") %>% write.csv(.,file = "../output/single/tagesschau.csv")
-df %>% filter(site=="swr.de") %>% write.csv(.,file = "../output/single/swr.csv")
-df %>% filter(site=="bild.de") %>% write.csv(.,file = "../output/single/bild.csv")
-df %>% filter(site=="ndr.de") %>% write.csv(.,file = "../output/single/ndr.csv")
+save(df, btw, file="../output/news_btw.Rda")
 ```
-
-## Load by site
-```{r}
-focus <- read.csv("../output/focus.csv")
-spiegel <- read.csv("../output/spiegel.csv")
-bild <- read.csv("../output/bild.csv")
-
-df_reduced <- rbind(focus, spiegel, bild)
-```
-
-
-
-```{r}
-save(df_reduced, file="../output/df_reduced.Rda")
-```
-

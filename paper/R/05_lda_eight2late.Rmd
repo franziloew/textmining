@@ -31,6 +31,7 @@ df %>%
   filter(!site %in% c("ndr.de","wdr.de")) %>%
   filter(grepl("bundestagswahl", text_cleaned)) -> btw
 
+btw$ArticleID <- rownames(btw)
 ```
 
 # Topic Modeling
@@ -67,7 +68,7 @@ lda50 <-LDA(dtm, k, method="Gibbs", control=list(burnin=burnin, iter = iter, kee
 t2 <- Sys.time()
 t2 - t1
 
-save(ldaOut, file=paste("../output/models/LDAGibbs",k,".Rda"))
+save(ldaOut, btw, file=paste("../output/models/LDAGibbs",k,".Rda"))
 ```
 
 ```{r}
@@ -141,8 +142,6 @@ btw.terms[1:5,1:10]
 ```
 
 ### Create Topic Labels
-As part of the visualization I will construct later, a topic label needs be used to created. The terms are gathered in rank order and then the label is created by concatenating the first three terms.
-
 ```{r}
 topicTerms <- btw.terms %>% gather(Topic)
 topicTerms <- cbind(topicTerms, Rank = rep(1:30))

@@ -1,0 +1,47 @@
+---
+title: "Data Description"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: pdf_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer","topicmodels",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+```{r, include=FALSE}
+#Load Data
+rm(list = ls())
+
+load("../output/news_btw.Rda")
+
+df$date <- as.Date(df$date)
+```
+
+```{r, include=FALSE}
+df %>%
+  #filter(fb_shares > 0) %>%
+  filter(!site %in% c("ndr.de","wdr.de","swr.de","tagesschau.de")) %>%
+  filter(grepl("bundestagswahl", text_cleaned)) -> btw
+
+btw 
+```
+
+To explore the effect of topic prevalence of an article on the times this article is shared on Facebook, we analyze a sample of 1768 news articles containing the term "Bundestagswahl" (Federal Election) dated from 01.06.2017 to 30.09.2017\footnote{German federal elections took place on 24th of September 2017.} and originated from seven different german news sources.\footnote{Bild.de, Focus.de, Handelsblatt.com, Spiegel.de, Stern.de, Tagesschau.de, Welt.de, Zeit.de} For each document in our sample, we observe the day it was written, the number of shares on Facebook and the newswire service publishing the report. We include the news agency as covariates on topical prevalence. We also include news agency as a covariate affecting topical content to estimate how topics are discussed in different ways by different news agencies.
+
+Figure -- shows the total sum of all Facebook S, that most of the documents in our corpus 
+
+```{r echo=FALSE}
+btw %>%
+  filter(!grepl("video", title, ignore.case = TRUE)) %>%
+  ggplot(aes(x=as.factor(site), y=fb_shares)) +
+  stat_summary(fun.y="sum", geom="bar", fill = "blue", alpha = .5) +
+  labs(title = "") +
+  labs(x="", y="Sum of Facebook Shares") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+

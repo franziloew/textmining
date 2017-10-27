@@ -1,0 +1,158 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer","topicmodels",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+## Load Data
+```{r}
+rm(list=ls())
+
+load(file ="../output/models/LDAGibbs 50 .Rda")
+```
+
+### Most likely Topics per Article
+```{r}
+# The topics function from the package is used to extract the most likely topic for each document 
+btw.topics <- topics(ldaOut, 3)
+
+# Create Dataframe
+doctopics.df <- as.data.frame(t(btw.topics))
+
+doctopics.df %>%
+  transmute(ArticleID = rownames(.),
+            Topic1 = V1,
+            Topic2 = V2,
+            Topic3 = V3) -> doctopics.df
+
+doctopics.df$ArticleID <- as.integer(doctopics.df$ArticleID)
+
+# Add Topic to origian DF
+btw <- btw %>%
+  mutate(ArticleID = as.integer(ArticleID)) %>%
+  inner_join(.,doctopics.df, by="ArticleID")
+```
+
+### Most likely Words per Topic
+```{r}
+## Return the top 30 terms.
+btw.terms <- as.data.frame(terms(ldaOut, 30), stringAsFactors = FALSE)
+btw.terms[1:10,10:12]
+```
+
+### Create Topic Labels
+```{r}
+topicTerms <- btw.terms %>% gather(Topic)
+topicTerms <- cbind(topicTerms, Rank = rep(1:30))
+topicTerms <- topicTerms %>% filter(Rank < 5)
+
+topicTerms <- topicTerms %>% mutate(Topic = stringr::word(Topic, 2))
+topicTerms$Topic <- as.numeric(topicTerms$Topic)
+
+topicLabel <- data.frame()
+for (i in 1:50){
+  z <- dplyr::filter(topicTerms, Topic==i)
+  l <- as.data.frame(paste(z[1,2], z[2,2], z[3,2], z[4,2], sep = " "), stringAsFactors = FALSE)
+  topicLabel <- rbind(topicLabel, l)
+}
+colnames(topicLabel) <- c("Label")
+
+topicLabel
+```
+
+### Working with Theta (Topic prevalence)
+```{r}
+theta <- as.data.frame(posterior(ldaOut)$topics)
+head(theta)
+```
+
+Correlate the topic by news source of the documents. The column means of theta, grouped by news source is calculated.
+
+```{r}
+x <- as.data.frame(row.names(theta), stringsAsFactors = FALSE)
+colnames(x) <- c("ArticleID")
+x$ArticleID <- as.numeric(x$ArticleID)
+
+theta2 <- cbind(x,theta)
+theta2 <- dplyr::left_join(theta2, btw[,c("site", "ArticleID")], by="ArticleID")
+
+## Column means grouped by news outlet
+theta.mean.by <- by(theta2[,2:51], theta2$site, colMeans)
+theta.mean <- do.call("rbind", theta.mean.by)
+```
+
+```{r}
+library(corrplot)
+
+c <- cor(theta.mean)
+corrplot(c, method = "circle")
+```
+
+Using the categories mean theta, it is possible to select the most diagnostic topic for each of the categories.
+
+```{r}
+theta.mean.ratios <- theta.mean
+for (ii in 1:nrow(theta.mean)) {
+  for (jj in 1:ncol(theta.mean)) {
+    theta.mean.ratios[ii,jj] <-
+      theta.mean[ii,jj] / sum(theta.mean[ii,-jj])
+  }
+}
+
+topics.by.ratio <- apply(theta.mean.ratios, 1, function(x) sort(x, decreasing = TRUE, index.return = TRUE)$ix)
+
+# the most diagnostic topics per news source are found in the thea 1st row of index matrix
+topics.by.ratio[1:10,]
+```
+
+### compute cosine similarity
+
+```{r, message=FALSE}
+library(proxy)
+cosine_dist <- as.matrix(dist(topics.by.ratio, by_rows = FALSE, method = "cosine"))
+```
+
+### Correlogram
+```{r, message=FALSE}
+devtools::install_github("sinhrks/ggfortify")
+library("ggfortify")
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+library("ggthemes")
+
+ggcorrplot(cosine_dist, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           #colors = c("tomato2", "white", "springgreen3"), 
+           title="", 
+           ggtheme=theme_bw)
+```
+
+## Regression
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+#library(GGally)
+
+btw_reduced <- btw[,c(1,6,10,13,14,15)]
+
+ggpairs(btw_reduced, aes(color = site, alpha=.5))
+```
+
+
+```{r}
+library(plm)
+
+lm1 <- lm(fb_shares ~ Topic1 * site, data = btw)
+summary(lm1)
+```
+

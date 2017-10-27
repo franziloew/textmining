@@ -18,7 +18,6 @@ lapply(libs, library, character.only = TRUE)
 rm(list = ls())
 
 load("../output/news_cleaned2.Rda")
-write.csv(btw, file="../output/btw.csv")
 
 df$date <- as.Date(df$date)
 
@@ -32,6 +31,7 @@ df %>%
   filter(!site %in% c("ndr.de","wdr.de")) %>%
   filter(grepl("bundestagswahl", text_cleaned)) -> btw
 
+btw$ArticleID <- rownames(btw)
 ```
 
 # Topic Modeling
@@ -40,7 +40,7 @@ df %>%
 
 ```{r, eval=FALSE, include=FALSE}
 # Process data
-processed <- textProcessor(df$text_cleaned, metadata = df[,c("date","site","text_cleaned","text")],
+processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("date","site","text_cleaned","text")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
@@ -52,11 +52,12 @@ out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 ### Run the Model 
 ```{r}
+k = 50 # Topics
 
 t1 <- Sys.time()
-stm <- stm(documents = out$documents, 
+stmOut <- stm(documents = out$documents, 
            vocab = out$vocab, 
-           K=25, 
+           K=k, 
            prevalence = ~site, 
            content = ~site, 
            data=out$meta, 
@@ -64,8 +65,8 @@ stm <- stm(documents = out$documents,
 t2 <- Sys.time()
 t2 - t1
 
-save(stm, out, file = "stm.RDa")
-#load(file = "stm.RDa")
+save(stmOut, btw, file=paste("../output/models/STM",k,".Rda"))
+
 
 ```
 
@@ -120,33 +121,6 @@ ggplot(melt2, aes(x=source, y = variable)) +
 
 ```
 
-### compute cosine similarity
-
-```{r, message=FALSE}
-library(proxy)
-cosine_dist <- as.matrix(dist(as.matrix(source_mean[,1:20]), method = "cosine"))
-colnames(cosine_dist) <- unique(out$meta$source)
-rownames(cosine_dist) <- unique(out$meta$source)
-```
-
-### Correlogram
-```{r, message=FALSE}
-devtools::install_github("sinhrks/ggfortify")
-library("ggfortify")
-devtools::install_github("kassambara/ggcorrplot")
-library(ggcorrplot)
-library("ggthemes")
-
-ggcorrplot(cosine_dist, hc.order = TRUE, 
-           type = "lower", 
-           lab = TRUE, 
-           lab_size = 3, 
-           method="circle", 
-           #colors = c("tomato2", "white", "springgreen3"), 
-           title="", 
-           ggtheme=theme_bw)
-```
-
 ### correlations between topics
 ```{r}
 mod.out.corr <- topicCorr(stm)
@@ -159,5 +133,4 @@ library(stmBrowser)
 setwd(tempdir())
 stmBrowser(stm, data=out$meta, c("source","date"), text="text_cleaned")
 
-```.
-
+```
