@@ -3,6 +3,9 @@
 ## 1. Theory
 - **Stephen Hansen** is an Associate Professor in the Economics Department at the University of Oxford. [On his website](https://sekhansen.github.io/) you can find course materials to his courses in text mining and machine learning.
 
+## 2. Blogs
+
+- **Ryan Wesslen** is a PhD candidate in Computing and Information Systems at UNC Charlotte. In his Blog [Digital Footprints](https://wesslen.github.io/) he uses text mining techniques *"to analyze the abundant troves of digital footprints in social media, text and social networks."*
 
 ## 2. Practical Tutorials
 
@@ -22,4 +25,6 @@
 
 - A comprehensive **explanation of the LDA** was written by Ted Underwood in [this](https://tedunderwood.com/2012/04/07/topic-modeling-made-just-simple-enough/) article. He also created a [github folder](https://github.com/tedunderwood/BrowseLDA) containing few examples of complete topic models on collections of 18/19c volumes (with R scripts to load them).
 
-- A way to implement the unsupervised LDA as a **semi-supervised GuidedLDA** was developed by Vikash Singh [here](https://medium.freecodecamp.org/how-we-changed-unsupervised-lda-to-semi-supervised-guidedlda-e36a95f3a164). 
+- A way to implement the unsupervised LDA as a **semi-supervised GuidedLDA** was developed by Vikash Singh [here](https://medium.freecodecamp.org/how-we-changed-unsupervised-lda-to-semi-supervised-guidedlda-e36a95f3a164).
+
+- An application of the **Structural Topic Model (STM)** on the [public Facebook posts of North Carolina state senators](https://wesslen.github.io/social%20media/nc-state-senator-facebook-posts/) was posted by [Ryan Wesslen](https://wesslen.github.io/).
