@@ -10,7 +10,7 @@ This website gives an overview about recent trends of text mining in economics.
 
 [**Academic paper**](acad_research.md)
 
-[**Blogs & Tutorial**](blogs.md)
+[**Blogs & Tutorials**](blogs.md)
 
 [**Libraries**](libraries.md)
 

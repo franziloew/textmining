@@ -7,7 +7,7 @@
 
 - **Ryan Wesslen** is a PhD candidate in Computing and Information Systems at UNC Charlotte. In his Blog [Digital Footprints](https://wesslen.github.io/) he uses text mining techniques *"to analyze the abundant troves of digital footprints in social media, text and social networks."*
 
-## 2. Practical Tutorials
+## 3. Tutorials
 
 ### Basics on text mining
 
