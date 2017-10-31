@@ -69,9 +69,9 @@ rm(site, title, text, published, fb_shares, fb_likes, section, fb_comments)
 ## Clean Data
 ```{r}
 df %>%
-  mutate(fb_shares = as.numeric(fb_shares),
-         fb_likes = as.numeric(fb_likes),
-         fb_comments = as.numeric(fb_comments)) -> df
+  mutate(fb_shares = as.integer(fb_shares),
+         fb_likes = as.integer(fb_likes),
+         fb_comments = as.integer(fb_comments)) -> df
 ```
 
 ### Date
@@ -85,9 +85,7 @@ df$date <- as.POSIXct(df$date, format ="%Y-%m-%d")
 
 ## Count number of terms in a string
 ```{r}
-df %>% filter(site != "zdf.de") -> df
-
-df$text_lenght <- sapply(gregexpr("\\S+", df$text), length)
+df$text_length <- sapply(gregexpr("\\S+", df$text), length)
 ```
 
 ```{r}

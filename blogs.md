@@ -7,7 +7,13 @@
 
 - **Ryan Wesslen** is a PhD candidate in Computing and Information Systems at UNC Charlotte. In his Blog [Digital Footprints](https://wesslen.github.io/) he uses text mining techniques *"to analyze the abundant troves of digital footprints in social media, text and social networks."*
 
-## 3. Tutorials
+## 3. Talks
+
+- [Christine Doigs talk](https://www.youtube.com/watch?v=BuMu-bdoVrU) gives a great introduction to **topic modeling** and one of it's most widely used algorithms called LDA (Latent Dirichlet Allocation).
+
+- Detailed [video](https://www.youtube.com/watch?v=3mHy4OSyRf0) **explanation of the LDA algorithm** (https://www.youtube.com/watch?v=3mHy4OSyRf0)
+
+## 4. Tutorials
 
 ### Basics on text mining
 
@@ -16,8 +22,6 @@
 - [Text Mining with R - a Tidy Approach](http://tidytextmining.com/index.html) is a website that contains a comprehensive overview of the [tidytext](https://github.com/juliasilge/tidytext) (Silge and Robinson [2016](https://www.researchgate.net/publication/305219559_tidytext_Text_Mining_and_Analysis_Using_Tidy_Data_Principles_in_R)) R package. It also contains a section about topic modeling (using the [topicmodels](https://cran.r-project.org/web/packages/topicmodels/vignettes/topicmodels.pdf) library in R.)
 
 ### Topic Modeling
-
-- [Christine Doigs talk](https://www.youtube.com/watch?v=BuMu-bdoVrU) gives a great introduction to **topic modeling** and one of it's most widely used algorithms called LDA (Latent Dirichlet Allocation).
 
 - [A gentle introduction to topic modeling using R](https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-topic-modeling-using-r/) by Kailash Awati ([Eight to Late](https://eight2late.wordpress.com/)) The tutorial includes an intuitive explanation of **how LDA works** before moving on to a practical example which uses the [topicmodels](https://cran.r-project.org/web/packages/topicmodels/vignettes/topicmodels.pdf) library in R. He uses a collection of 30 posts from his blog as an example corpus, which can be freely downloaded.
 
@@ -28,3 +32,5 @@
 - A way to implement the unsupervised LDA as a **semi-supervised GuidedLDA** was developed by Vikash Singh [here](https://medium.freecodecamp.org/how-we-changed-unsupervised-lda-to-semi-supervised-guidedlda-e36a95f3a164).
 
 - An application of the **Structural Topic Model (STM)** on the [public Facebook posts of North Carolina state senators](https://wesslen.github.io/social%20media/nc-state-senator-facebook-posts/) was posted by [Ryan Wesslen](https://wesslen.github.io/).
+
+- [Facebook Topic Modeling](https://github.com/tjpalanca/facebook-news-analysis)

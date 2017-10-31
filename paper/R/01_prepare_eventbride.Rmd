@@ -1,0 +1,165 @@
+---
+title: "Topic Modeling of News"
+author: "Franziska Löw"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer",
+          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+# Load and prepare Dataframe
+
+```{r}
+rm(list =ls())
+
+df <- read_csv("../data/eventbride/eventbride_okt_18.csv")
+```
+
+# Generate new variables 
+```{r}
+## Extract site
+df$site <- str_extract(df$source, "(?<='uri': ')[A-z][^']*")
+
+# Is video
+df$video <- ifelse(grepl("video", df$title, ignore.case = TRUE),1,0)
+
+# number of Facebook shares
+df$fb_shares <- str_extract(df$shares, "(?<='facebook': )[0-9]*")
+df$fb_shares <- ifelse(is.na(df$fb_shares),0, df$fb_shares)
+df$fb_shares <- as.integer(df$fb_shares)
+
+# Text Length
+names(df) <- gsub("body", "text", names(df))
+df$text_length <- sapply(gregexpr("\\S+", df$text), length)
+```
+
+```{r}
+ggplot(df, aes(site, fill=as.factor(isDuplicate))) +
+  geom_bar(alpha=.6) +
+  labs(x="", y="", fill="is Duplicate") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
+```
+
+```{r}
+# Save file
+save(df, file="../output/news_cleaned_eventbride.Rda")
+```
+
+```{r}
+pat <- 'ejf[^"]*'
+df %>%
+  filter(grepl(pat, text, perl = TRUE)) %>%
+  group_by(site) %>%
+  tally(sort = TRUE)
+```
+
+```{r}
+as.data.frame(str_match(df$text, pat)) ->test
+test %>%
+  filter(!is.na(test)) %>%
+  .[1]
+```
+
+# Pre-Process Text
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+clean.text <- function(x)
+  {
+  # All
+  x = gsub("Getty Images", "", x)
+
+  # Bild.de
+  x = gsub("Shopübersicht Top Gutscheine", "", x)
+
+  # Handelsblatt.com
+  x = gsub("RSS Feed", "", x)
+  x = gsub("Deutsche Presse Agentur", "", x)
+
+  # FOCUS.de
+  x = gsub("FOCUS Online/Wochit", "", x)
+  x = gsub("Vielen Dank! Ihr Kommentar wurde abgeschickt.", "", x)
+  x = gsub('Im Interesse unserer User[^"]*', "", x, perl = TRUE)
+  x = gsub('Sie haben noch 800[^"]*', "", x, perl = TRUE)
+  x = gsub('Erzählen Sie auf FOCUS Online über Ihren Heimatort Teilen Sie Ihren Artikel und Ihr Foto', "", x, perl = TRUE)
+  x = gsub("Bericht schreiben", "", x)
+  x = gsub("Vielen Dank! Ihr Kommentar wurde abgeschickt.", "", x)
+  x = gsub("Hier können Sie selbst Artikel verfassen:","", x)
+  x = gsub("Live-Ticker", "", x)
+  x = gsub('Aus unserem Netzwerk[^"]*', "", x, perl = TRUE)
+
+  # Spiegel.de
+  x = gsub("7 mal 17", "", x)
+  x = gsub("Zur Startseite Diesen Artikel... Drucken Feedback Nutzungsrechte", "", x)
+  x = gsub('Liebe Leserin, lieber Leser,\num diesen[^"]*', "", x)
+  x = gsub('Liebe Leserin, lieber Leser, um diesen[^"]*', "", x)
+  x = gsub('ejf[^"]*', "", x)
+  x = gsub('tjf[^"]*', "", x)
+
+  # Zeit.de
+  x = gsub("Inhalt Seite", "", x)
+  
+  # Tagesschau
+  x = gsub('Hinweis.+?(?=(einfügen))', "", x, perl = TRUE)
+  
+  return(x)
+}
+
+# apply function to dataframe
+df$text_cleaned <- clean.text(df$text)
+```
+
+```{r}
+df$text_cleaned <- gsub("[[:punct:]]", " ", df$text_cleaned)
+df$text_cleaned <- gsub("[[:cntrl:]]", " ", df$text_cleaned)
+df$text_cleaned <- gsub("[[:digit:]]", " ", df$text_cleaned)
+df$text_cleaned <- gsub("^[[:space:]]+", " ", df$text_cleaned)
+df$text_cleaned <- gsub("[[:space:]]+$", " ", df$text_cleaned)
+df$text_cleaned <- tolower(df$text_cleaned)
+```
+
+```{r}
+# Save file
+save(df, file="../output/news_cleaned_eventbride.Rda")
+```
+
+## Remove Stopwords
+```{r}
+df$text_cleaned<- removeWords(df$text_cleaned, stopwords("german"))
+```
+
+### Remove customized stopwords
+```{r}
+mystopwords <- c("focus","online","spiegel", "stern", "handelsblatt", "de", "bild","bildplus", "zeit", "ersten", "tagesschau", "wdr", "ndr", "ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e", "uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv", "nwmi", "nwnoa", "polizei","beim","dpa","video","quelle","afp","witters","fotogalerie", "registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen", "datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
+
+mystopwords <- distinct(as.data.frame(mystopwords))
+
+df$text_cleaned<- removeWords(df$text_cleaned, mystopwords$mystopwords)
+```
+
+```{r}
+df -> df2
+```
+
+```{r}
+save(df2, file="../output/news_cleaned_eventbride.Rda")
+```
+
+## Reduce Dataframe
+```{r}
+keeps <- c( "welt.de","spiegel.de","stern.de","focus.de","zeit.de","bild.de" )
+
+df2 %>%
+  filter(isDuplicate == "False") %>%
+  filter(site %in% keeps) %>%
+  filter(grepl("bundestagswahl", text, ignore.case = TRUE)) -> btw2
+```
+
+```{r}
+save(df2, btw2, file="../output/news_btw2.Rda")
+```
