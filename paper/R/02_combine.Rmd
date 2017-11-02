@@ -76,7 +76,16 @@ btw %>%
 ```
 
 ```{r}
-pat <- 'Aus unserem Netzwerk[^"]*'
+btw %>%
+  # remove articles that contain a daily overview
+  filter(!grepl("News des Tages", title.text)) %>%
+  # remove articles that dont contain text
+  filter(!grepl('</div>', title.text)) -> btw
+```
+
+
+```{r}
+pat <- '</div>'
 btw %>%
   filter(grepl(pat, text, perl = TRUE)) %>%
   group_by(site) %>%
@@ -152,7 +161,7 @@ btw$text_cleaned<- removeWords(btw$text_cleaned, stopwords("german"))
 
 ### Remove customized stopwords
 ```{r}
-mystopwords <- c("focus","online","spiegel", "stern", "handelsblatt", "de", "bild","bildplus", "zeit", "ersten", "tagesschau", "wdr", "ndr", "ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e", "uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv", "nwmi", "nwnoa", "polizei","beim","dpa","video","quelle","afp","witters","fotogalerie","wurden","worden","wegen","sagt","immer","gibt","geht", "registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen", "datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
+mystopwords <- c("focus","online","spiegel", "stern", "handelsblatt", "de", "bild","bildplus", "zeit", "ersten", "tagesschau", "wdr", "ndr", "ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e","seien", "uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv", "nwmi", "nwnoa", "polizei","beim","dpa","video","quelle","afp","witters","fotogalerie","wurden","worden","wegen","sagt","immer","gibt","geht", "registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen", "datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
 
 mystopwords <- distinct(as.data.frame(mystopwords))
 

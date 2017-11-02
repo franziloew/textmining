@@ -78,11 +78,11 @@ source("func/02-topic-modelling-functions.R")
 ```
 
 ```{r caching, echo = FALSE}
-load("../output/models/LDAGibbs 40 .Rda")
-#load("../output/btw_combined.Rda")
+#load("../output/models/LDAGibbs 40 .Rda")
+load("../output/btw_combined.Rda")
 knitr::opts_chunk$set(eval = TRUE, warning = FALSE)
 
-btw$articleID <- rownames(btw)
+btw$articleID <- as.integer(rownames(btw))
 ```
 
 ## Introduction
@@ -147,15 +147,9 @@ posts_tokenized.dt %>%
 
 ```{r eval=FALSE, include=FALSE}
 # Build Corpus
-btw %>%
-  filter(nchar(text_cleaned) > 5) -> btw
-
-# Build corpus
 df.lda <- Corpus(VectorSource(btw$text_cleaned))
 # Create document-term matrix
 dtm <- DocumentTermMatrix(df.lda)
-# Assign name to docs
-rownames(dtm) <- make.unique(btw$title)
 ```
 
 We then train the LDA on the full dataset, with $k = 40$.
@@ -236,19 +230,17 @@ btw.topics <- topics(ldaOut, 2)
 doctopics.df <- as.data.frame(t(btw.topics))
 
 doctopics.df %>%
-  transmute(title = rownames(.),
-            topic = V1) -> doctopics.df
-
+  transmute(topic = V1) -> doctopics.df
 doctopics.df$articleID <- as.integer(rownames(doctopics.df))
 
 # Add Topic to origian DF
-topics_mapping.dt <- btw %>%
-  mutate(articleID = as.integer(articleID)) %>%
-  inner_join(.,doctopics.df, by="articleID") %>%
-  
+btw %>%
+  inner_join(.,doctopics.df, by="articleID") -> btw
+
+topics_mapping.dt <- btw %>%  
   group_by(topic) %>%
   slice(1) %>%
-  select(topic, title.text, articleID) 
+  select(topic,title, title.text, articleID) 
 ```
 
 ```{r message=FALSE, warning=FALSE}
@@ -256,7 +248,6 @@ topics_mapping.dt <- btw %>%
 
 ## Return the top 30 terms.
 btw.terms <- as.data.frame(terms(ldaOut, 30), stringAsFactors = FALSE)
-
 
 topicTerms <- btw.terms %>% gather(Topic)
 topicTerms <- cbind(topicTerms, Rank = rep(1:30))
@@ -291,21 +282,22 @@ Now that we have labelled each topic, we produce sample documents classified to 
 ```{r Document classification}
 
 set.seed(9272)
+
+posts_classification.sdt <-
 posts.dtp %>% 
-  group_by(title = document) %>% 
+  group_by(articleID = as.numeric(document)) %>% 
   summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
-  ungroup() %>% 
-  inner_join(btw %>% select(title, articleID), by = "title") %>% 
-  inner_join(topics_mapping.dt, by = "topic") %>% 
+  ungroup()  %>%
+  inner_join(btw %>% select(title, articleID), by = "articleID") %>%
+  inner_join(topics_mapping.dt %>% select(topic, topic_name), by = "topic") %>% 
   mutate(topic_title = 
            paste0("Topic ", formatC(topic, flag = "0", width = 2), 
                   " - ", topic_name)) %>% 
   group_by(topic_name) %>% 
   top_n(300, gamma) %>%
-  sample_n(5, replace = TRUE) %>% 
+  sample_n(7, replace = TRUE) %>% 
   mutate(row = row_number()) %>% 
-  ungroup() ->
-  posts_classification.sdt
+  ungroup() 
 
 ```
 
@@ -359,6 +351,30 @@ CHART NOTES:
 ```
 
 ![Facebook news samples](../figs/02-topic-classification-sample.png)
+
+#### Topic-Media Distribution
+
+```{r}
+ggsave(
+  plot = {
+    btw %>%
+      ggplot(aes(as.factor(topic), fill =site)) +
+      geom_bar() +
+      scale_x_discrete(labels = paste0(topicLabel$topic,":",topicLabel$topic_name)) +
+      theme(axis.text.x = element_text(size=8, angle=90),
+        legend.text = element_text(size = 8)) +
+      labs(x = "", fill = "", 
+           title    = "Topic Frequency by Media",
+        subtitle = "") 
+
+  },
+  
+  filename = "../figs/01-topic-distribution.png",
+  device = "png",
+  dpi = 600
+    )
+```
+![Facebook news samples](../figs/01-topic-distribution.png)
 
 ### News landscape 
 
@@ -458,7 +474,8 @@ posts.dtp %>%
   group_by(document) %>% 
   filter(gamma == max(gamma)) %>% 
   mutate(allocation = 1/n()) %>% 
-  ungroup() ->
+  ungroup() %>%
+  mutate(document = as.numeric(document)) ->
   posts_classification.dt
 
 ```
@@ -472,7 +489,7 @@ posts_classification.dt %>%
   # Add post information
   inner_join(
     btw %>% 
-      select(document = title, date, 
+      select(document = articleID, date, 
              title, articleID) %>% 
       mutate(post_period = 
                date %>% 
@@ -481,15 +498,15 @@ posts_classification.dt %>%
     by = "document"
   ) %>%
   # Add topic information
-  left_join(topics_mapping.dt, by = "topic") %>%
+  left_join(topics_mapping.dt %>% select(topic, topic_name), by = "topic") %>%
   # Summarise into tidy dataframe
   group_by(post_period, topic_name) %>% 
   summarise(
     articles = sum(allocation),
     sample_articles = 
-      paste0("<li>", sample(document, 3, replace = TRUE ), "</li>", collapse = "<br>")
+      paste0("<li>", sample(title, 3, replace = TRUE ), "</li>", collapse = "<br>")
   ) %>% 
-  ungroup() %>% 
+  ungroup() %>%
   mutate(
     tooltip_text = 
       paste0(
@@ -671,7 +688,7 @@ posts_classification.dt %>%
   inner_join(
     btw %>% 
       select(
-        document = title, 
+        document = articleID, 
         news_page = site, 
         title, 
         date
@@ -681,7 +698,7 @@ posts_classification.dt %>%
   inner_join(topics_mapping.dt, by = "topic") %>% 
   inner_join(
     btw %>% 
-      group_by(document = title) %>%
+      group_by(document = articleID) %>%
       summarise(reactions = sum(fb_shares)) %>%
       ungroup(),
     by = "document"
@@ -821,7 +838,7 @@ A common accusation leveled against traditional news media is the amount of bias
 set.seed(7292)
 posts_classification.dt %>% 
   inner_join(
-    btw %>% select(document = title, news_page = site, title),
+    btw %>% select(document = articleID, news_page = site, title),
     by = "document"
   ) %>%
   inner_join(topics_mapping.dt, by = "topic") %>% 
@@ -923,90 +940,5 @@ chart_topic_distribution.wdgt
 ```
 
 
-#### Topic Concentration
 
-A common criticism leveled against news media sites is that there is undue emphasis on a particular topic. One way to measure concentration across different topics is the Herfindahl-Hirschman Index (HHI) which is simply $\Sigma_n{s^2}$ where $s$ is the share of each topic.
-
-```{r Topic concentration chart, eval = TRUE}
-
-{
-  news_page_distribution.dt %>% 
-    group_by(news_page) %>% 
-    arrange(desc(articles)) %>% 
-    summarise(
-      hh_index  = sum(perc_articles ^ 2),
-      t3_topics = paste0(topic_name %>% head(3), collapse = "<br>")
-    ) %>% 
-    ungroup() %>% 
-    arrange(hh_index) %>% 
-    mutate(news_page = factor(news_page, unique(news_page))) %>% 
-    ggplot(aes(x = news_page, y = hh_index * 100)) +
-    geom_bar_interactive(
-      aes(
-        tooltip = 
-          paste0("<b>Top Topics:</b><br>", t3_topics) %>% 
-          str_replace_all("'", "")
-      ),
-      stat = "identity", 
-      fill = c("#008B45")
-    ) +
-    geom_text(aes(label = comma(round(hh_index * 100, 1))), hjust = 1.5, 
-              color = "white", family = "Roboto") +
-    scale_y_log10(
-      name = "Herfindahl-Hirschman Index (HHI)\n(100 = most concentrated)",
-      expand = c(0, 0)
-    ) +
-    labs(
-      title = "TOPIC CONCENTRATION OF PHILIPPINE NEWS PAGES",
-      subtitle = "Herfindahl-Hirschman Index (HHI)",
-      caption = "
-DATA SOURCE: Facebook Graph API
-
-CHART NOTES:
-  1. Hover over each tile to see infomration and to see top topics
-  2. Topics were derived through Latent Dirichlet Allocation (LDA) with 40 topics
-  3. Articles were classified according to the topic that has the highest probability
-
-TROY JAMES PALANCA | TJPALANCA.COM
-      "
-    ) +
-    coord_flip() +
-    theme(
-      axis.title.y       = element_blank(),
-      panel.grid.major.y = element_blank(),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      plot.subtitle      = element_text(size = 10),
-      plot.caption       = element_text(size = 8),
-      plot.title         = element_text(size = 16)
-    )
-} %>% 
-  ggiraph(
-    ggobj = .,
-    width_svg = 10,
-    height_svg = 8,
-    width = 1,
-    tooltip_extra_css = "
-    font-family: Roboto; 
-    background-color: #000; 
-    color: #fff; font-size: 16px;
-    padding: 5px;"
-  ) %>% 
-  prependContent(
-    tags$link(
-      href = "https://fonts.googleapis.com/css?family=Roboto:400,700", 
-      rel = "stylesheet"
-    )
-  ) -> chart_topic_concentration.wdgt
-
-saveWidget(
-  widget = chart_topic_concentration.wdgt,
-  file = "../figs/05-topic-concentration.html",
-  selfcontained = FALSE,
-  libdir = "../figs/js",
-  background = "#fafafa"
-)
-
-chart_topic_concentration.wdgt
-
-```
 
