@@ -13,28 +13,6 @@ output:
     self_contained: true
 ---
 
-## Introduction
-
-Social networks such as Facebook are becoming more and more important for online news services: an increasing number of their readers access the news pages via links in the networks. Users of Facebook, for example, can use their profile to share links to external websites - such as news portals - with their online friends. This has led to the development of social media into an important generator of traffic on the internet pages. In Germany, 94\% of online shared news articles in 2015 are distributed via Facebook, followed by Twitter with 3.5\% and Google+ with 2.3\% \citep{schiller_development_2016}. The advertising-financed business model of the media houses is based on the premise that users visit their websites in order to achieve high advertising revenues. For this reason, news agencies are particularly interested in finding out which topics are more likely shared on these platforms. \citet{schiller_development_2016} show, that social media users choose a certain site depending on the researched topic. FOCUS Online for example is targeted for articles from politics and business, sports news is more likely to be shared from Bild.de. 
-
-While these static resorts give an indication on the content of an article, multiple articles in the same resort probably don't cover the same topics (and are not equally shared). Especially if the articles originate from different news portals. Furthermore, articles can contain more than one topic. We use a structural topic model to reveal the underlying topics of a collection of articles (a corpus), and how the articles exhibit them. We then estimate the effect of topic prevalence on the number of Facebook shares. 
-
-
-## Methodology
-
-Mapping raw text to one or more topics, without having prior knowledge on what those topics are, translates to an unsupervised classification problem on natural language. Within topic models the Latent Dirichlet Allocation (LDA) is a widely used technique, where each document (article) is viewed as a mixture of topics (represented by the document-topic distribution) and each topic is a mixture of unique terms (represented by the topic-term distribution).\cite{blei_latent_2003} 
-
-This model views the text generation process as conforming to the following characteristics: 
-
-  * A topic is a mixture of words. A topic is comprised of many words, and each word maps to one or more topics.
-  * A document (in this case, a news article), is a mixture of topics. Each document can be thought of as containing a proportion of words from each topic.
-
-To "learn" the topic prevalence and the topic-term distribution, collapsed Gibbs sampling\footnote{See Section \ref{section_gibbs} for a non-formal description of the Gibbs sampler} can be used. One of the important considerations of this model is that the number of topics $k$ must be known a-priori.
-
-## Preliminaries
-
-We load libraries needed for this analysis.
-
 ```{r Setup}
 suppressPackageStartupMessages({
   library(dplyr)       # Data manipulation
@@ -67,6 +45,7 @@ suppressPackageStartupMessages({
   library(hunspell)    # Text processing
   library(stringdist)  # String distances
   library(topicmodels) # Topic modelling
+  library(stm)         # Sructural Topic Model
   library(proxy)       # Distance measures
   library(SnowballC)   # Stemming
 })
@@ -100,40 +79,59 @@ source("func/02-topic-modelling-functions.R")
 
 ```{r caching, echo = FALSE}
 load("../output/models/LDAGibbs 40 .Rda")
-
 #load("../output/btw_combined.Rda")
 knitr::opts_chunk$set(eval = TRUE, warning = FALSE)
 
 btw$articleID <- rownames(btw)
 ```
 
-## Pre-processing
+## Introduction
 
-### Shaping
-```{r}
+Social networks such as Facebook are becoming more and more important for online news services: an increasing number of their readers access the news pages via links in the networks. Users of Facebook, for example, can use their profile to share links to external websites - such as news portals - with their online friends. This has led to the development of social media into an important generator of traffic on the internet pages. In Germany, 94\% of online shared news articles in 2015 are distributed via Facebook, followed by Twitter with 3.5\% and Google+ with 2.3\% \citep{schiller_development_2016}. The advertising-financed business model of the media houses is based on the premise that users visit their websites in order to achieve high advertising revenues. For this reason, news agencies are particularly interested in finding out which topics are more likely shared on these platforms. \citet{schiller_development_2016} show, that social media users choose a certain site depending on the researched topic. FOCUS Online for example is targeted for articles from politics and business, sports news is more likely to be shared from Bild.de. 
+
+While these static resorts give an indication on the content of an article, multiple articles in the same resort probably don't cover the same topics (and are not equally shared). Especially if the articles originate from different news portals. Furthermore, articles can contain more than one topic. We use a structural topic model to reveal the underlying topics of a collection of articles (a corpus), and how the articles exhibit them. We then estimate the effect of topic prevalence on the number of Facebook shares. 
+
+## Methodology
+
+Mapping raw text to one or more topics, without having prior knowledge on what those topics are, translates to an unsupervised classification problem on natural language. Within topic models the Latent Dirichlet Allocation (LDA) is a widely used technique, where each document (article) is viewed as a mixture of topics (represented by the document-topic distribution) and each topic is a mixture of unique terms (represented by the topic-term distribution).\cite{blei_latent_2003} 
+
+This model views the text generation process as conforming to the following characteristics: 
+
+  * A topic is a mixture of words. A topic is comprised of many words, and each word maps to one or more topics.
+  * A document (in this case, a news article), is a mixture of topics. Each document can be thought of as containing a proportion of words from each topic.
+
+To "learn" the topic prevalence and the topic-term distribution, collapsed Gibbs sampling\footnote{See Section \ref{section_gibbs} for a non-formal description of the Gibbs sampler} can be used. One of the important considerations of this model is that the number of topics $k$ must be known a-priori.
+
+![Research Strategy](../figs/research_strategy.png)
+
+## Dataset
+
+To explore the effect of topic prevalence of an article on the times this article is shared on Facebook, we analyze a sample of 6307 news articles containing the term "Bundestagswahl" (Federal Election) dated from 01.06.2017 to 10.10.2017\footnote{German federal elections took place on 24th of September 2017.} and originated from six different german news sources.\footnote{Bild.de, Focus.de, Spiegel.de, Stern.de, Welt.de, Zeit.de} For each document in our sample, we observe the day it was written, the number of shares on Facebook and the newswire service publishing the article. We include the month the document was written and the news agency as covariates on topical prevalence. We also include news agency as a covariate affecting topical content to estimate how topics are discussed in different ways by different news agencies \citep{roberts_model_2016}.
+
+We can see the number of articles by news agency and the how many of these articles were shared on Facebook on the following figure.
+
+```{r echo=FALSE}
+btw$shared <- ifelse(btw$fb_shares == 0, "0", NA)
+btw$shared <- ifelse(btw$fb_shares > 0 | btw$fb_shares >= 100, "0-100", btw$shared)
+btw$shared <- ifelse(btw$fb_shares > 100, "> 100", btw$shared)
+
+btw %>%
+  ggplot(aes(site, fill=shared)) +
+  geom_bar(alpha = .7) +
+  labs(x="", y="Count") 
+```
+
+```{r include=FALSE}
 btw %>% 
   # Tokenize by word
   unnest_tokens(word, text_cleaned, token = "words") ->
   # Assign to variable
   posts_tokenized.dt
-```
-
-We remove words that are less than 3 characters long. 
-
-```{r Remove short words}
 
 # Remove short words
 posts_tokenized.dt %>% 
   filter(str_length(word) >= 3) ->
   posts_tokenized.dt
-
-```
-
-### Filtering and Casting
-
-We summarise the data format into a more compressed form and convert it into a document term matrix.
-
-```{r Term Frequency}
 
 # Summarise
 posts_tokenized.dt %>% 
@@ -141,24 +139,14 @@ posts_tokenized.dt %>%
   dplyr::summarise(term_frequency = n()) %>%
   ungroup() ->
   posts_tokenized.dt
-
-```
-
-```{r Cast to DTM, eval=FALSE, include=FALSE}
-# Convert to document term matrix
-posts_tokenized.dt %>% 
-  cast_dtm(articleID, word, term_frequency) ->
-  posts_tokenized.dtm
 ```
 
 ## Analysis
 
-### Topic modelling
+### LDA Training
 
-#### LDA Training
-
-##### Build Corpus
 ```{r eval=FALSE, include=FALSE}
+# Build Corpus
 btw %>%
   filter(nchar(text_cleaned) > 5) -> btw
 
@@ -170,11 +158,11 @@ dtm <- DocumentTermMatrix(df.lda)
 rownames(dtm) <- make.unique(btw$title)
 ```
 
-##### Run LDA using Gibbs sampling
-
 We then train the LDA on the full dataset, with $k = 40$.
 
 ```{r eval=FALSE, include=FALSE}
+## Run LDA using Gibbs sampling
+
 #Set parameters for Gibbs sampling (see https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-topic-modeling-using-r/)
 burnin <- 1000
 iter <- 1000
@@ -189,20 +177,7 @@ ldaOut <-LDA(dtm, k, method="Gibbs", control=list(burnin=burnin, iter = iter, ke
 t2 <- Sys.time()
 t2 - t1
 
-save(ldaOut, btw, file=paste("../output/models/LDAGibbs",k,".Rda"))
-```
-
-Training took 50 minutes on the full dataset. We extract the word-topic probabilities, and the document-topic probabilities produced by the model.
-
-alternatively...
-```{r eval=FALSE, include=FALSE}
-# Train the LDA model
-LDA(
-  x       = posts_tokenized.dtm,
-  k       = 40,
-  method  = "Gibbs",
-  control = list(seed = 7292)
-) -> posts.lda
+save(ldaOut, btw, dtm, file=paste("../output/models/LDAGibbs",k,".Rda"))
 ```
 
 
@@ -251,8 +226,6 @@ posts.wtp %>%
 
 ```
 
-We take a look at samples of articles labeled with the topics and the most relevant words that use them, and label them according to the prevalent theme. These are recorded in a csv file and loaded in:
-
 ```{r Loading topic mappings}
 ### Most likely Topics per Article
 
@@ -277,8 +250,10 @@ topics_mapping.dt <- btw %>%
   slice(1) %>%
   select(topic, title.text, articleID) 
 ```
+
+```{r message=FALSE, warning=FALSE}
 ### Create Topic Labels
-```{r}
+
 ## Return the top 30 terms.
 btw.terms <- as.data.frame(terms(ldaOut, 30), stringAsFactors = FALSE)
 
@@ -306,11 +281,88 @@ topics_mapping.dt %>%
   left_join(., topicLabel, by="topic") -> topics_mapping.dt
 ```
 
-We extract the top 30 most relevant words and plot them as follows:
+### Sample articles
 
-  1. Compute the Jensen-Shannon divergence between each of the topics according to the differences in their word-topic probabilities and construct a distance matrix,
-  2. Apply principal coordinates analysis in order to project the distance matrix down to two dimensions.
-  3. Plot each word near the center of the topic mass and repel them from each other.
+To test, wheather the topic classification make sense, we pull out sample articles classified by the model to see if they match the assigned topic.
+
+
+Now that we have labelled each topic, we produce sample documents classified to that topic for reference. We produce a random sample of 10 posts from the 300 highest probability fits per topic.
+
+```{r Document classification}
+
+set.seed(9272)
+posts.dtp %>% 
+  group_by(title = document) %>% 
+  summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
+  ungroup() %>% 
+  inner_join(btw %>% select(title, articleID), by = "title") %>% 
+  inner_join(topics_mapping.dt, by = "topic") %>% 
+  mutate(topic_title = 
+           paste0("Topic ", formatC(topic, flag = "0", width = 2), 
+                  " - ", topic_name)) %>% 
+  group_by(topic_name) %>% 
+  top_n(300, gamma) %>%
+  sample_n(5, replace = TRUE) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() ->
+  posts_classification.sdt
+
+```
+
+We produce a chart that shows this in a presentable manner.
+
+```{r Document classification chart, eval=FALSE, include=FALSE}
+
+ggsave(
+  plot = {
+    posts_classification.sdt %>% 
+      ggplot(aes(x = 0, y = row, color = factor(topic, levels = 1:40))) +
+      facet_wrap(~topic_title, ncol = 5) +
+      geom_text(
+        aes(label = title),
+        size = 2, hjust = 0, family = "Roboto"
+      ) +
+      geom_point(aes(x = -0.025), size = 0.5) +
+      scale_x_continuous(limits = c(-0.05, 1), expand = c(0, 0)) +
+      scale_color_manual(
+        values = rainbow(40) %>% 
+          adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
+      ) +
+      theme(
+        axis.title       = element_blank(),
+        axis.text        = element_blank(),
+        axis.ticks       = element_blank(),
+        panel.grid       = element_blank(),
+        strip.background = element_blank(),
+        panel.border     = element_blank(),
+        strip.text       = element_text(face = "bold", hjust = 0, size = 6),
+        plot.background  = element_rect(fill = "#FAFAFA"),
+        legend.position  = "none"
+      ) +
+      labs(
+        title    = "GERMAN NEWS LANDSCAPE",
+        subtitle = "Sample online news articles in the year 2017",
+        caption  = 
+"DATA SOURCE: Webhose.io, Eventbride.com
+
+CHART NOTES:
+  1. Topics were derived through Latent Dirichlet Allocation (LDA) with 40 topics
+  2. Documents were classified according to the topic that has the highest probability
+"
+      )
+  },
+  device = "png",
+  filename = "../figs/02-topic-classification-sample.png",
+  dpi = 600, height = 10, width = 16
+)
+
+```
+
+![Facebook news samples](../figs/02-topic-classification-sample.png)
+
+### News landscape 
+
+After performing the topic modeling, we can generate an overview of the news landscape about the german elections, each group is composed of the most relevant words for that topic, and a manually-determined label. The distances that the topics have from each other reflect their semantic distance, or basically how different the words are for that topic. It is computed as the Jensen-Shannon divergence between each of the topics according to the differences in their word-topic probabilities. We then apply principal coordinates analysis in order to project the distance matrix down to two dimensions.
 
 ```{r eval=FALSE, include=FALSE}
 posts.wtp %>% 
@@ -395,80 +447,6 @@ CHART NOTES:
 ```
 
 ![Facebook News Map](../figs/01-news-landscape-map.png)
-
-Now that we have labelled each topic, we produce sample documents classified to that topic for reference. We produce a random sample of 10 posts from the 300 highest probability fits per topic.
-
-```{r Document classification}
-
-set.seed(9272)
-posts.dtp %>% 
-  group_by(title = document) %>% 
-  summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
-  ungroup() %>% 
-  inner_join(btw %>% select(title, articleID), by = "title") %>% 
-  inner_join(topics_mapping.dt, by = "topic") %>% 
-  mutate(topic_title = 
-           paste0("Topic ", formatC(topic, flag = "0", width = 2), 
-                  " - ", topic_name)) %>% 
-  group_by(topic_name) %>% 
-  top_n(300, gamma) %>%
-  sample_n(10) %>% 
-  mutate(row = row_number()) %>% 
-  ungroup() ->
-  posts_classification.sdt
-
-```
-
-We produce a chart that shows this in a presentable manner.
-
-```{r Document classification chart, eval=FALSE, include=FALSE}
-
-ggsave(
-  plot = {
-    posts_classification.sdt %>% 
-      ggplot(aes(x = 0, y = row, color = factor(topic, levels = 1:40))) +
-      facet_wrap(~topic_title, ncol = 5) +
-      geom_text(
-        aes(label = title),
-        size = 2, hjust = 0, family = "Roboto"
-      ) +
-      geom_point(aes(x = -0.025), size = 0.5) +
-      scale_x_continuous(limits = c(-0.05, 1), expand = c(0, 0)) +
-      scale_color_manual(
-        values = rainbow(40) %>% 
-          adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
-      ) +
-      theme(
-        axis.title       = element_blank(),
-        axis.text        = element_blank(),
-        axis.ticks       = element_blank(),
-        panel.grid       = element_blank(),
-        strip.background = element_blank(),
-        panel.border     = element_blank(),
-        strip.text       = element_text(face = "bold", hjust = 0, size = 6),
-        plot.background  = element_rect(fill = "#FAFAFA"),
-        legend.position  = "none"
-      ) +
-      labs(
-        title    = "GERMAN NEWS LANDSCAPE",
-        subtitle = "Sample online news articles in the year 2017",
-        caption  = 
-"DATA SOURCE: Webhose.io, Eventbride.com
-
-CHART NOTES:
-  1. Topics were derived through Latent Dirichlet Allocation (LDA) with 40 topics
-  2. Documents were classified according to the topic that has the highest probability
-"
-      )
-  },
-  device = "png",
-  filename = "../figs/02-topic-classification-sample.png",
-  dpi = 600, height = 10, width = 16
-)
-
-```
-
-![Facebook news samples](../figs/02-topic-classification-sample.png)
 
 ### Topic Trends
 
