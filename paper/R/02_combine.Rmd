@@ -8,7 +8,7 @@ output: github_document
 ```{r, include=FALSE}
 # load the packages
 libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer",
-          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "plyr","dplyr","class","knitr","data.table","parallel","SnowballC",
           "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
 lapply(libs, library, character.only = TRUE)
 
@@ -19,35 +19,57 @@ lapply(libs, library, character.only = TRUE)
 rm(list =ls())
 
 load("../output/news_cleaned.Rda")
-df2 <- read_csv("../data/eventbride/eventbride_okt_18.csv")
+okt <- read_csv("../data/eventbride/eventbride_okt_18.csv")
+nov <- read_csv("../data/eventbride/eventbride_nov_03.csv")
 ```
 
 ## Generate new variables 
 ```{r}
-## Extract site
-df2$site <- str_extract(df2$source, "(?<='uri': ')[A-z][^']*")
+### Oktober ###
+# Extract site
+okt$site <- str_extract(okt$source, "(?<='uri': ')[A-z][^']*")
 
 # number of Facebook shares
-df2$fb_shares <- str_extract(df2$shares, "(?<='facebook': )[0-9]*")
-df2$fb_shares <- ifelse(is.na(df2$fb_shares),0, df2$fb_shares)
-df2$fb_shares <- as.integer(df2$fb_shares)
+okt$fb_shares <- str_extract(okt$shares, "(?<='facebook': )[0-9]*")
+okt$fb_shares <- ifelse(is.na(okt$fb_shares),0, okt$fb_shares)
+okt$fb_shares <- as.integer(okt$fb_shares)
 
 # Text Length
-names(df2) <- gsub("body", "text", names(df2))
-df2$text_length <- sapply(gregexpr("\\S+", df2$text), length)
+names(okt) <- gsub("body", "text", names(okt))
+okt$text_length <- sapply(gregexpr("\\S+", okt$text), length)
+
+### November ###
+# Extract site
+nov$site <- str_extract(nov$source, "(?<='uri': ')[A-z][^']*")
+
+# number of Facebook shares
+nov$fb_shares <- str_extract(nov$shares, "(?<='facebook': )[0-9]*")
+nov$fb_shares <- ifelse(is.na(nov$fb_shares),0, nov$fb_shares)
+nov$fb_shares <- as.integer(nov$fb_shares)
+
+# Text Length
+names(nov) <- gsub("body", "text", names(nov))
+nov$text_length <- sapply(gregexpr("\\S+", nov$text), length)
 ```
 
 ## Reduce Dataframe
 ```{r}
 keeps <- c( "welt.de","spiegel.de","stern.de","focus.de","zeit.de","bild.de" )
+keys <- paste(c("bundestagswahl","koalition"), collapse = "|")
 
 df %>%
   filter(site %in% keeps) %>%
-  filter(grepl("bundestagswahl", text, ignore.case = TRUE)) -> btw1
+  filter(grepl(keys, text, ignore.case = TRUE)) -> btw1
 
-df2 %>%
+okt %>%
+  filter(isDuplicate == "False") %>%
   filter(site %in% keeps) %>%
-  filter(grepl("bundestagswahl", text, ignore.case = TRUE)) -> btw2
+  filter(grepl(keys, text, ignore.case = TRUE)) -> btw2
+
+nov %>%
+  filter(isDuplicate == "False") %>%
+  filter(site %in% keeps) %>%
+  filter(grepl(keys, text, ignore.case = TRUE)) -> btw3
 ```
 
 ## Combine Dataframes
@@ -56,8 +78,10 @@ common_cols <- intersect(colnames(btw1), colnames(btw2))
 
 btw <- rbind(
   btw1[, common_cols], 
-  btw2[, common_cols]
+  btw2[, common_cols],
+  btw3[, common_cols]
 )
+
 ```
 
 ```{r}
@@ -67,36 +91,42 @@ btw$title.text <- paste(btw$title, btw$text, sep = " ")
 # Pre-Process Text
 
 ## Filtering
-```{r}
+```{r}  
 btw %>%
-  # Keep unique observations
-  distinct(title, site, .keep_all = TRUE) %>%
-  # Remove Articles after 10.10.2017
-  filter(date < as.Date("2017-10-10")) -> btw
+  group_by(title, site) %>%
+  ungroup() %>%
+  arrange(desc(fb_shares)) %>%
+  distinct(title,site, .keep_all = TRUE) -> btw
+
+btw %>%
+  filter(date < as.Date("2017-10-29")) -> btw
 ```
 
 ```{r}
 btw %>%
-  # remove articles that contain a daily overview
+  # remove articles that contain daily overviews
+  filter(!grepl("Elbvertiefung", title.text)) %>%
   filter(!grepl("News des Tages", title.text)) %>%
   # remove articles that dont contain text
   filter(!grepl('</div>', title.text)) -> btw
 ```
 
-
 ```{r}
-pat <- '</div>'
+pat <- 'Florian Gathmann[^\n]*'
 btw %>%
-  filter(grepl(pat, text, perl = TRUE)) %>%
+  filter(grepl(pat, title.text, perl = TRUE, ignore.case = TRUE)) %>%
+  #select(text) %>%
+  #.[1,] %>%
+  #htmlTable::htmlTable()
   group_by(site) %>%
   tally(sort = TRUE)
 ```
 
 ```{r}
-as.data.frame(str_match(btw$text, pat)) ->test
+as.data.frame(str_match(btw$title.text, pat)) ->test
 test %>%
   filter(!is.na(test)) %>%
-  .[1]
+  .[1:100,]
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -104,16 +134,23 @@ clean.text <- function(x)
   {
   # All
   x = gsub("Getty Images", "", x)
+  x = gsub('Startseite[^\n]*', "", x, ignore.case = TRUE, perl = TRUE)
 
   # Bild.de
   x = gsub("Shopübersicht Top Gutscheine", "", x)
-
-  # Handelsblatt.com
-  x = gsub("RSS Feed", "", x)
-  x = gsub("Deutsche Presse Agentur", "", x)
+  x = gsub('Politik Inland[^\n]*', "", x, perl = TRUE)
+  
+  # welt.de
+  x = gsub('Quelle: N24[^\n]*', "", x, perl = TRUE)
+  x = gsub('infocom[^\n]*', "", x, perl = TRUE, ignore.case = TRUE)
+  x = gsub('Infografik[^\n]*', "", x, perl = TRUE, ignore.case = TRUE)
+  x = gsub('versuchen Sie es[^.]*', "", x, perl = TRUE, ignore.case = TRUE)
+  x = gsub('Video konnte nicht[^\n]*', "", x, perl = TRUE, ignore.case = TRUE)
+  x = gsub('Welt twitter', "", x, perl = TRUE, ignore.case = TRUE)
 
   # FOCUS.de
-  x = gsub("FOCUS Online/Wochit", "", x)
+  x = gsub("FOCUS Online", "", x)
+  x = gsub('Wochit[^\n]*', "", x, perl = TRUE, ignore.case = TRUE)
   x = gsub("Vielen Dank! Ihr Kommentar wurde abgeschickt.", "", x)
   x = gsub('Im Interesse unserer User[^"]*', "", x, perl = TRUE)
   x = gsub('Sie haben noch 800[^"]*', "", x, perl = TRUE)
@@ -131,12 +168,16 @@ clean.text <- function(x)
   x = gsub('Liebe Leserin, lieber Leser, um diesen[^"]*', "", x)
   x = gsub('ejf[^"]*', "", x)
   x = gsub('tjf[^"]*', "", x)
+  x = gsub('Fotostrecke[^"]*', "", x, perl = TRUE, ignore.case = TRUE)
+  x = gsub('Florian Gathmann[^\n]*', "", x, perl = TRUE)
 
   # Zeit.de
   x = gsub("Inhalt Seite", "", x)
+  x = gsub('Seitennavig[^"]*',"", x, perl=TRUE)
+  x = gsub('Kartengeschichte[^"]*', "", x, perl = TRUE, ignore.case = TRUE)
   
-  # Tagesschau
-  x = gsub('Hinweis.+?(?=(einfügen))', "", x, perl = TRUE)
+  # Stern.de
+  x = gsub('Fullscreen[^\n]*', "", x, perl = TRUE)
   
   return(x)
 }
@@ -161,7 +202,7 @@ btw$text_cleaned<- removeWords(btw$text_cleaned, stopwords("german"))
 
 ### Remove customized stopwords
 ```{r}
-mystopwords <- c("focus","online","spiegel", "stern", "handelsblatt", "de", "bild","bildplus", "zeit", "ersten", "tagesschau", "wdr", "ndr", "ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e","seien", "uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv", "nwmi", "nwnoa", "polizei","beim","dpa","video","quelle","afp","witters","fotogalerie","wurden","worden","wegen","sagt","immer","gibt","geht", "registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen", "datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
+mystopwords <- c("focus","online","spiegel", "stern", "handelsblatt", "de", "bild","bildplus", "zeit", "ersten", "tagesschau", "wdr", "ndr", "ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e","seien","comment", "uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv", "nwmi", "nwnoa", "polizei","beim","dpa","video","quelle","afp","witters","fotogalerie","wurden","worden","wegen","sagt","immer","gibt","geht","spon", "registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen", "datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
 
 mystopwords <- distinct(as.data.frame(mystopwords))
 

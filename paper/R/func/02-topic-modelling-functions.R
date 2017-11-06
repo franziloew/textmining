@@ -244,8 +244,11 @@ computeJensenShannonPCA <- function(wtp) {
   # Returns: data frame containing the x-y location of each topic 
   
   jensenShannon <- function(x, y) {
+    c = .000000001
+    x = x + c
+    y = y + c
     m <- 0.5 * (x + y)
-    0.5 * sum(x * log(x / m)) + 0.5 * sum(y * log(y / m))
+    0.5 * sum(x * log(x/m)) + 0.5 * sum(y * log(y/m))
   }
   
   wtp %>% 
@@ -272,6 +275,9 @@ computeJensenShannonPCA2 <- function(dtp) {
   # Returns: data frame containing the x-y location of each topic 
   
   jensenShannon <- function(x, y) {
+    c = .000000001
+    x = x + c
+    y = y + c
     m <- 0.5 * (x + y)
     0.5 * sum(x * log(x / m)) + 0.5 * sum(y * log(y / m))
   }
