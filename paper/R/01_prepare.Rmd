@@ -8,7 +8,7 @@ output: github_document
 ```{r, include=FALSE}
 # load the packages
 libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer",
-          "plyr","dplyr","class","knitr","kableExtra","cldr","data.table",
+          "plyr","dplyr","class","knitr","data.table",
           "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
 lapply(libs, library, character.only = TRUE)
 
@@ -40,25 +40,23 @@ published <- NULL
 section <- NULL
 
 fb_shares <- NULL
-fb_likes <- NULL
-fb_comments <- NULL
+url <- NULL
 
 #external_links <- NULL
 
 for (i in 1:length(myJSON)){
-  site <- append(site, myJSON[[i]]["thread"][[1]]["site"][[1]])
-  title <- append(title, myJSON[[i]]["title"][[1]])
-  text <- append(text, myJSON[[i]]["text"][[1]])
-  published <- append(published, myJSON[[i]]["published"][[1]])
-  section <- append(section, myJSON[[i]]["thread"][[1]]["section_title"][[1]])
-  
-  fb_shares <- append(fb_shares, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["shares"]])
-  fb_likes <- append(fb_likes, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["likes"]])
-  fb_comments <- append(fb_likes, myJSON[[i]]["thread"][[1]]["social"][[1]]["facebook"][[1]][["comments"]])
+  site <- append(site, myJSON[[i]][["thread"]][["site"]])
+  title <- append(title, myJSON[[i]][["title"]])
+  text <- append(text, myJSON[[i]][["text"]])
+  published <- append(published, myJSON[[i]][["published"]])
+  section <- append(section, myJSON[[i]][["thread"]][["site_section"]])
+
+  fb_shares <- append(fb_shares, myJSON[[i]][["thread"]][["social"]][["facebook"]][["shares"]])
+  url <- append(url, myJSON[[i]][["url"]])
   
 }
 
-df <- cbind(site, title, text, published, section, fb_shares, fb_likes, fb_comments)
+df <- cbind(site, title, text, published, section, fb_shares, url)
 df <- data.frame(df, stringsAsFactors = FALSE)
 ```
 
@@ -69,9 +67,7 @@ rm(site, title, text, published, fb_shares, fb_likes, section, fb_comments)
 ## Clean Data
 ```{r}
 df %>%
-  mutate(fb_shares = as.integer(fb_shares),
-         fb_likes = as.integer(fb_likes),
-         fb_comments = as.integer(fb_comments)) -> df
+  mutate(fb_shares = as.integer(fb_shares)) -> df
 ```
 
 ### Date
@@ -81,11 +77,6 @@ df$date <- substr(df$published, 1,10)
 df$date <- as.POSIXct(df$date, format ="%Y-%m-%d")
 
 #df <- subset(df, df$date > "2017-09-01")
-```
-
-## Count number of terms in a string
-```{r}
-df$text_length <- sapply(gregexpr("\\S+", df$text), length)
 ```
 
 ```{r}
