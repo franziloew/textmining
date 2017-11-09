@@ -33,10 +33,7 @@ okt$site <- str_extract(okt$source, "(?<='uri': ')[A-z][^']*")
 okt$fb_shares <- str_extract(okt$shares, "(?<='facebook': )[0-9]*")
 okt$fb_shares <- ifelse(is.na(okt$fb_shares),0, okt$fb_shares)
 okt$fb_shares <- as.integer(okt$fb_shares)
-
-# Text Length
 names(okt) <- gsub("body", "text", names(okt))
-okt$text_length <- sapply(gregexpr("\\S+", okt$text), length)
 
 ### November ###
 # Extract site
@@ -46,16 +43,13 @@ nov$site <- str_extract(nov$source, "(?<='uri': ')[A-z][^']*")
 nov$fb_shares <- str_extract(nov$shares, "(?<='facebook': )[0-9]*")
 nov$fb_shares <- ifelse(is.na(nov$fb_shares),0, nov$fb_shares)
 nov$fb_shares <- as.integer(nov$fb_shares)
-
-# Text Length
 names(nov) <- gsub("body", "text", names(nov))
-nov$text_length <- sapply(gregexpr("\\S+", nov$text), length)
 ```
 
 ## Reduce Dataframe
 ```{r}
 keeps <- c( "welt.de","spiegel.de","stern.de","focus.de","zeit.de","bild.de" )
-keys <- paste(c("bundestagswahl","koalition"), collapse = "|")
+keys <- paste(c("bundestagswahl","Koalition"), collapse = "|")
 
 df %>%
   filter(site %in% keeps) %>%
@@ -72,6 +66,7 @@ nov %>%
   filter(grepl(keys, text, ignore.case = TRUE)) -> btw3
 ```
 
+
 ## Combine Dataframes
 ```{r}
 common_cols <- intersect(colnames(btw1), colnames(btw2))
@@ -82,6 +77,11 @@ btw <- rbind(
   btw3[, common_cols]
 )
 
+```
+
+## Count number of terms in a string
+```{r}
+btw$text_length <- sapply(gregexpr("\\S+", btw$text), length)
 ```
 
 ```{r}
@@ -95,11 +95,7 @@ btw$title.text <- paste(btw$title, btw$text, sep = " ")
 btw %>%
   group_by(title, site) %>%
   ungroup() %>%
-  arrange(desc(fb_shares)) %>%
   distinct(title,site, .keep_all = TRUE) -> btw
-
-btw %>%
-  filter(date < as.Date("2017-10-29")) -> btw
 ```
 
 ```{r}
@@ -209,8 +205,8 @@ mystopwords <- distinct(as.data.frame(mystopwords))
 btw$text_cleaned<- removeWords(btw$text_cleaned, mystopwords$mystopwords)
 ```
 
-## Stemming
-```{r}
+## Stemming (not applied)
+```{r }
 stem_text<- function(text, language = "porter", mc.cores = 1) {
   # stem each word in a block of text
   stem_string <- function(str, language) {
@@ -230,8 +226,60 @@ stem_text<- function(text, language = "porter", mc.cores = 1) {
 btw$text_cleaned <- stem_text(btw$text_cleaned)
 ```
 
+```{r}
+load(file="../output/btw_combined.Rda")
+```
+
+# Extract FB Shares
+```{r}
+library(SocialMediaMineR)
+
+
+facebook <- get_facebook(btw$url[1:100])
+
+page <- readLines(paste0(check,btw$url[i]))
+
+
+check <- "https://graph.facebook.com/?id="
+pattern <- 'share_count\\":[0-9]+'
+
+shares <- NULL
+
+for (i in (length(shares)+1):nrow(btw)){
+  page <- readLines(paste0(check,btw$url[i]))
+  string <- str_extract(page, pattern)
+  shares <- append(shares, as.numeric(str_extract(string, "[0-9]+")))
+  Sys.sleep(10)
+}
+```
+
 
 ```{r}
 save(btw, file="../output/btw_combined.Rda")
 ```
+
+```{r}
+url_slice <- split(btw$url, ceiling(seq_along(btw$url)/1000))
+file = "../output/urls"
+
+for (i in 1:length(url_slice)){
+  url = url_slice[[i]]
+  count = as.character(i)
+  write.table(url, file=paste0(file,count,".csv"), sep ="\n", 
+              row.names = FALSE, quote = FALSE, col.names = FALSE)
+}
+
+write.table(urls1, file="../output/urls1.csv", sep ="\n", row.names = FALSE, quote = FALSE)
+write.table(urls2, file="../output/urls2.csv", sep ="\n", row.names = FALSE, quote = FALSE)
+```
+
+```{r}
+library(Rfacebook)
+
+app_id = 1580533335373831
+app_secret = "07ecdc314355649e13447278c57627f6"
+
+shares
+```
+
 
