@@ -82,23 +82,19 @@ source("func/02-topic-modelling-functions.R")
 ```{r caching, echo = FALSE}
 load("../output/models/STM 40 .Rda")
 #load("../output/btw_combined.Rda")
-knitr::opts_chunk$set(eval = TRUE, warning = FALSE)
+knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
 
 #btw$articleID <- rownames(btw)
 ```
 
-## Introduction
-
-## Methodology
-
-## Dataset
+## Explore Dataset
 ```{r}
 library(RColorBrewer) 
 
 col <- brewer.pal(6,"Dark2")
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 btw %>%
   group_by(date, site) %>%
   summarise(obs = n()) %>%
@@ -108,39 +104,45 @@ btw %>%
   theme(legend.position="none") +
   labs(x="", y="Count",color="")
 
-ggsave("../figs/timeline.png", plot = last_plot(), device = "png", 
-       dpi = 600)
+#ggsave("../figs/timeline.png", plot = last_plot(), device = "png", 
+#       dpi = 600)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 btw %>%
   ggplot(aes(site)) +
   geom_bar(fill=col, alpha= .8) +
   labs(x="", y="Count")
 
-ggsave("../figs/bar.png", plot = last_plot(), device = "png", 
-       dpi = 600)
+#ggsave("../figs/bar.png", plot = last_plot(), device = "png", 
+#       dpi = 600)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 btw %>%
   ggplot(aes(date, site, size=fb_shares, color = site)) +
   geom_point(show.legend = FALSE, alpha = .8) +
   scale_color_manual(values = col) +
   labs(x="", y="") 
 
-ggsave("../figs/fb_shares.png", plot = last_plot(), device = "png", 
-       dpi = 600)
+#ggsave("../figs/fb_shares.png", plot = last_plot(), device = "png", 
+#       dpi = 600)
+
+btw %>%
+  filter(site == "bild.de") %>%
+  select(title, text, fb_shares) %>%
+  .[3,] %>%
+  htmlTable::htmlTable()
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 btw %>%
   ggplot(aes(site, fb_shares)) +
   stat_summary(fun.y="mean", geom="bar", fill = col, alpha = .8) +
   labs(x="", y="") 
 
-ggsave("../figs/fb_shares_mean.png", plot = last_plot(), 
-       dpi = 600)
+#ggsave("../figs/fb_shares_mean.png", plot = last_plot(), 
+#       dpi = 600)
 ```
 
 ```{r Tokenize}
@@ -266,8 +268,7 @@ topicLabel <- topicLabel %>%
 rm(frex, lift, score)
 ```
 
-
-```{r}
+```{r Add Topic to original DF}
 # Create Dataframe
 theta <- as.data.frame(stmOut$theta)
 theta$topic <- colnames(theta)[apply(theta,1,which.max)]
@@ -283,21 +284,13 @@ btw %>%
   ## Combine with Topic label
   left_join(., topicLabel %>%
               select(topic_name, topic) %>%
-              mutate(topic = as.numeric(topic)), by="topic") -> btw
+              mutate(topic = as.numeric(topic)), by="topic") -> btw2
 
 # subset  
-topics_mapping.dt <- btw %>%
+topics_mapping.dt <- btw2 %>%
   group_by(topic) %>%
   slice(1) %>%
   select(topic, title.text, articleID, topic_name) 
-```
-
-```{r}
-## Combine with Topic label
-topics_mapping.dt %>%
-  left_join(., topicLabel %>%
-              select(topic_name, topic) %>%
-              mutate(topic = as.numeric(topic)), by="topic") -> topics_mapping.dt
 ```
 
 ## Topic Summary
@@ -323,7 +316,7 @@ posts_classification.sdt <-
   group_by(articleID = document) %>% 
   summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
   ungroup() %>% 
-  inner_join(btw %>% select(title, articleID) %>%
+  inner_join(btw2 %>% select(title, articleID) %>%
                mutate(articleID = as.numeric(articleID)), by = "articleID") %>% 
   inner_join(topics_mapping.dt, by = "topic") %>%
   mutate(topic_title = 
@@ -459,10 +452,9 @@ posts.wtp %>%
 We classify each document based on which topic has the highest probability. If one or more topics have equal probability, then the count is assigned equally to all the topics.
 
 ```{r Topic classification}
-
 posts.dtp %>% 
   group_by(document) %>% 
-  filter(gamma == max(gamma)) %>% 
+  filter(gamma == max(gamma)) %>%
   mutate(allocation = 1/n()) %>% 
   ungroup() ->
   posts_classification.dt
@@ -477,7 +469,7 @@ set.seed(7292)
 posts_classification.dt %>% 
   # Add post information
   inner_join(
-    btw %>% 
+    btw2 %>% 
       mutate(document = as.numeric(articleID)) %>%
       select(document, date, 
              title) %>% 
@@ -571,9 +563,10 @@ chart_topic_trends.dt %>%
 ggsave("../figs/topic-trends.png")
 ```
 
-## Facebook Shares
+## Regression
 
-```{r}
+### Facebook Shares
+```{r Facebook Shares}
 btw %>%
   ggplot(aes(as.factor(topic), fb_shares)) +
   stat_summary(fun.y="sum", geom="bar", fill = "blue", alpha=.7) +
@@ -586,6 +579,44 @@ ggsave("../figs/fb_shares_topics.png", device = "png",
        dpi = 600)
 ```
 
+### Prepare Data
+```{r}
+top_topics <-
+  posts.dtp %>% 
+  group_by(document) %>%
+  mutate(therank = rank(-gamma, ties.method = "random")) %>%
+  filter(therank %in% 1) %>%
+  select(- therank)
+```
+
+```{r}
+# filter documents with low posterior
+btw.reg <- 
+  btw %>%
+  mutate(document = as.numeric(articleID)) %>%
+  left_join(., top_topics, by="document") %>%
+  #filter(gamma > 0.6) %>%
+  filter(fb_shares > 0)
+
+# generate factor variables
+btw.reg %>%
+  mutate(topic.f = factor(topic),
+         site.f = factor(site)) -> btw.reg
+```
+
+```{r}
+btw.reg %>%
+  filter(fb_shares < 500) %>%
+  ggplot(aes(fb_shares, fill = site)) +
+  geom_histogram(binwidth = 10)
+```
+
+
+```{r}
+linreg <- lm(fb_shares ~ topic.f*site, data=btw.reg)
+
+summary(linreg)
+```
 
 
 ## Animated Figures
@@ -734,7 +765,7 @@ chart_trends_line.wdgt
 # Prepare dataset for joy plot
 posts_classification.dt %>% 
   inner_join(
-    btw %>% 
+    btw2 %>% 
       mutate(document = as.numeric(articleID)) %>%
       select(
         document, 
@@ -746,7 +777,7 @@ posts_classification.dt %>%
   ) %>%
   inner_join(topics_mapping.dt, by = "topic") %>% 
   inner_join(
-    btw %>% 
+    btw2 %>% 
       mutate(document = as.numeric(articleID)) %>%
       group_by(document) %>%
       summarise(reactions = sum(fb_shares)) %>%
@@ -888,7 +919,7 @@ A common accusation leveled against traditional news media is the amount of bias
 set.seed(7292)
 posts_classification.dt %>% 
   inner_join(
-    btw %>% mutate(document = as.numeric(articleID)) %>%
+    btw2 %>% mutate(document = as.numeric(articleID)) %>%
       select(document, news_page = site, title),
     by = "document"
   ) %>%

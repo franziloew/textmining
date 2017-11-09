@@ -1,0 +1,205 @@
+---
+title: "Regression"
+subtitle: ""
+author: "Franziska Löw"
+date: ""
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: "lumen"
+    highlight: "tango"
+    code_folding: show
+    self_contained: true
+---
+
+```{r Setup, include=FALSE}
+suppressPackageStartupMessages({
+  library(dplyr)       # Data manipulation
+  library(stringr)     # String manipulation
+  library(lubridate)   # Date and time manipulation
+  library(purrr)       # Functional programming
+  library(tidyr)       # Reshaping
+  library(magrittr)    # Advanced piping
+  library(pushoverr)   # Pushover notifications
+  library(doMC)        # Parallel Computing
+  library(readr)       # Importing data
+  library(tibble)      # Better data frames
+  library(data.table)
+  library(pscl)
+  library(boot)
+  
+  library(ggplot2)     # Static data visualization
+  library(scales)      # Scales
+  library(viridis)     # Viridis color scales
+
+  library(tidytext)    # Tidy text mining
+  library(stringdist)  # String distances
+  library(proxy)       # Distance measures
+})
+
+# Theming
+quartzFonts(
+  Roboto =
+    c("Roboto-Light",
+      "Roboto-Bold",
+      "Roboto-Regular",
+      "Roboto-Thin")
+)
+
+theme_set(
+  theme_bw(base_family = "Roboto", base_size = 14) +
+    theme(
+      plot.title = element_text(face = "bold", size = 14,
+                                margin = margin(0, 0, 4, 0, "pt")),
+      plot.subtitle = element_text(size = 12),
+      plot.caption = element_text(size = 6, hjust = 0),
+      axis.title = element_text(size = 10),
+      panel.border = element_blank()
+    )
+)
+
+rm(list=ls())
+```
+
+## Load Data
+```{r caching, echo = FALSE}
+load("../output/btw_combined.Rda")
+btw2 <- btw
+
+load("../output/models/STM 40 .Rda")
+#load("../output/btw_combined.Rda")
+knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
+
+
+# Set color
+library(RColorBrewer) 
+col <- brewer.pal(6,"Dark2")
+```
+
+## Prepare Data
+```{r Extract wtp and dtp}
+# Word-topic probabilities
+stmOut %>% tidy("beta") %>% filter(!is.na(topic)) -> posts.wtp
+# Document-topic probabilities
+stmOut %>% tidy("gamma") -> posts.dtp
+```
+
+```{r}
+top_topics <-
+  posts.dtp %>% 
+  group_by(document) %>%
+  mutate(therank = rank(-gamma, ties.method = "random")) %>%
+  filter(therank %in% 1) %>%
+  select(- therank)
+```
+
+We classify each document based on which topic has the highest probability. To estimate the true effect of a topic, we delete documents where the highest topic probability is smaller than 0.5, as topic assignment is not ambiguous. This left us with 7740 documents. 
+
+```{r}
+btw.reg <- 
+  btw %>%
+  left_join(., btw2 %>%
+              select(title.text, shares, url),
+            by = "title.text")
+```
+
+```{r}
+# filter documents with low posterior
+btw.reg <- 
+  btw.reg %>%
+  mutate(document = as.numeric(articleID)) %>%
+  left_join(., top_topics, by="document") %>%
+  filter(gamma > 0.5) 
+
+# generate new variables and reduce df
+btw.reg %>%
+  mutate(topic = factor(topic),
+         site = factor(site),
+         shares.dummy = factor(ifelse(shares==0,0,1))) %>%
+  select(site, shares, shares.dummy, date, text_length, month, 
+         document, topic, gamma) -> btw.reg
+```
+
+## Description of Data
+```{r}
+summary(btw.reg)
+```
+
+The proportion of zeros in the independent variable (number of Facebook shares) is about 65.6\%. One way to model this type of situation is to assume that the data come from a mixture of two populations, one where the counts is always zero, and another where the count has a Poisson distribution with mean $\mu$. In this model zero counts can come from either population, while positive counts come only from the second one. 
+
+The distribution of the outcome can then be modeled in terms of two parameters, $\pi$ the probability of 'always zero', and $\mu$, the mean number of publications for those not in the 'always zero' group. A natural way to introduce covariates is to model the logit of the probability $\pi$ of always zero and the log of the mean $\mu$ for those not in the always zero class.
+
+## Analysis
+### Zero-inflated Poisson regression
+```{r}
+# filter NAs
+btw.reg %>%
+  filter(!is.na(shares)) -> btw.reg
+```
+
+```{r Zero-inflated Poisson}
+library(pscl)
+m1 <- zeroinfl(shares ~ topic + site | topic + site + text_length, data = btw.reg)
+summary(m1)
+```
+Looking at the inflate equation we see that some topics are significant predictors of being in the 'always zero' class.
+
+Looking at the equation for the mean number or Facebook fhares among those not in the always zero class, we find ...
+
+To verify that the model solves the problem of excess zeroes we predict π and μ, and calculate the combined probability of no publications. There are options in the predict() function called "zero" and "count" to obtain these. There's also an option "prob" to compute the predicted density, but this is overkill as we only want the probability of zero.
+
+```{r}
+pr <- predict(m1, type = "zero") # π
+mu <- predict(m1, type= "count") # μ
+
+zip <- pr+(1-pr)*exp(-mu)
+mean(zip)
+```
+
+So the model solves the problem of excess zeroes, predicting that 65.6% of the articles will not be shared on Facebook which is very close to the observed value. 
+
+Note that the model output above does not indicate in any way if our zero-inflated model is an improvement over a standard Poisson regression. We can determine this by running the corresponding standard Poisson model and then performing a Vuong test of the two models. 
+
+```{r}
+p1 <- glm(shares ~ topic, family = poisson, data = btw.reg)
+summary(p1)
+```
+
+```{r}
+vuong(p1, m1)
+```
+
+The Vuong test compares the zero-inflated model with an ordinary Poisson regression model. We can see that our test statistic is significant, indicating that the zero-inflated model is superior to the standard Poisson model.
+
+### Plot the residuals
+
+```{r}
+btw.reg$predicted <- predict(m1)
+btw.reg$residuals <- residuals(m1)
+```
+
+
+#### Residual Plot for multiple Variables
+```{r}
+ggplot(btw.reg, aes(predicted, residuals)) +
+  geom_point(color="blue", alpha=0.6) 
+```
+
+#### Residual Plot for single Variables
+
+The predicted values are plotted in black. They are connected to the actual data points through a line and high residuals (in abolsute terms) are made more red on actual values. This helps to identify non-linearity in the data. We can see that there is more red for extreme values for spiegel.de as well as for the topics 12, 21 and 9. 
+```{r message=FALSE, warning=FALSE}
+btw.reg %>%
+  select(site, shares, topic, residuals, predicted) %>%
+  gather(key="iv", value="x", -shares, -predicted, -residuals) %>%
+  ggplot(aes(x=x, y=shares)) +
+  geom_segment(aes(xend=x, yend=predicted), alpha=.2) +
+  geom_point(aes(color=residuals)) +
+  scale_color_gradient2(low="black", mid="blue", high="red") +
+  guides(color=FALSE) +
+  geom_point(aes(y=predicted), shape=1) +
+  facet_grid(~iv, scales="free") +
+  theme_bw()
+```
+

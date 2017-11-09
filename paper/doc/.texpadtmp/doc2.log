@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  6 NOV 2017 17:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  8 NOV 2017 18:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1176,15 +1176,12 @@ Package caption Info: End \AtBeginDocument code.
 LaTeX Warning: Citation 'schiller_development_2016' on page 1 undefined on input line 45.
 
 
-LaTeX Warning: Citation 'schiller_development_2016' on page 1 undefined on input line 45.
-
-
-Overfull \hbox (51.2028pt too wide) in paragraph at lines 45--46
-\T1/cmr/m/n/12 which top-ics are more likely shared on these plat-forms. []
+Overfull \hbox (1.53209pt too wide) in paragraph at lines 45--46
+\T1/cmr/m/n/12 Twit-ter with 3.5% and Google+ with 2.3% ([]). 
  []
 
 
-LaTeX Warning: Citation 'blei_latent_2003' on page 1 undefined on input line 49.
+LaTeX Warning: Citation 'schiller_development_2016' on page 1 undefined on input line 47.
 
 
 LaTeX Warning: Citation 'blei_latent_2003' on page 1 undefined on input line 51.
@@ -1194,7 +1191,7 @@ LaTeX Warning: Citation 'roberts_model_2016' on page 1 undefined on input line 5
 
 [1
 
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] <../figs/research_strategy.pdf, id=48, 963.6pt x 542.025pt>
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] <../figs/research_strategy.pdf, id=49, 963.6pt x 542.025pt>
 File: ../figs/research_strategy.pdf Graphic file (type pdf)
  <use ../figs/research_strategy.pdf>
 Package pdftex.def Info: ../figs/research_strategy.pdf used on input line 57.
@@ -1260,90 +1257,82 @@ l.87 ... estimates LDA, then uses estimates of ^^R
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
 
-<../figs/timeline.png, id=115, 4391.40625pt x 2713.13625pt>
+<../figs/timeline.png, id=119, 4214.74625pt x 3010.24625pt>
 File: ../figs/timeline.png Graphic file (type png)
  <use ../figs/timeline.png>
 Package pdftex.def Info: ../figs/timeline.png used on input line 107.
-(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
- <../figs/bar.png, id=117, 4391.40625pt x 2713.13625pt>
+(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
+ <../figs/bar.png, id=121, 4214.74625pt x 3010.24625pt>
 File: ../figs/bar.png Graphic file (type png)
  <use ../figs/bar.png>
-Package pdftex.def Info: ../figs/bar.png used on input line 111.
-(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
- [3] <../figs/fb_shares.png, id=133, 4391.40625pt x 2713.13625pt>
+Package pdftex.def Info: ../figs/bar.png used on input line 112.
+(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
+ [3] <../figs/fb_shares.png, id=136, 4214.74625pt x 3010.24625pt>
 File: ../figs/fb_shares.png Graphic file (type png)
  <use ../figs/fb_shares.png>
-Package pdftex.def Info: ../figs/fb_shares.png used on input line 122.
-(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
- <../figs/fb_shares_mean.png, id=134, 4391.40625pt x 2713.13625pt>
+Package pdftex.def Info: ../figs/fb_shares.png used on input line 123.
+(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
+ <../figs/fb_shares_mean.png, id=137, 4214.74625pt x 3010.24625pt>
 File: ../figs/fb_shares_mean.png Graphic file (type png)
  <use ../figs/fb_shares_mean.png>
-Package pdftex.def Info: ../figs/fb_shares_mean.png used on input line 126.
-(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
+Package pdftex.def Info: ../figs/fb_shares_mean.png used on input line 127.
+(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
 
 
-LaTeX Warning: Citation 'gentzkow_text_2017' on page 4 undefined on input line 133.
-
-
-LaTeX Warning: Citation 'bholat_text_2015' on page 4 undefined on input line 140.
+LaTeX Warning: Citation 'gentzkow_text_2017' on page 4 undefined on input line 134.
 
 [4 <../figs/timeline.png> <../figs/bar.png> <../figs/fb_shares.png> <../figs/fb_shares_mean.png>]
 
-LaTeX Warning: Citation 'gentzkow_text_2017' on page 5 undefined on input line 152.
+LaTeX Warning: Citation 'bholat_text_2015' on page 5 undefined on input line 144.
 
 
-Overfull \hbox (6.45454pt too wide) in paragraph at lines 152--153
-\T1/cmr/m/n/12 model that pre-dicts the num-ber of Face-book shares ([]). 
- []
+LaTeX Warning: Citation 'airoldi_reconceptualizing_2010' on page 5 undefined on input line 148.
 
 
-LaTeX Warning: Citation 'roberts_model_2016' on page 5 undefined on input line 154.
+LaTeX Warning: Citation 'roberts_model_2016' on page 5 undefined on input line 148.
 
 
-LaTeX Warning: Citation 'blei_latent_2003' on page 5 undefined on input line 154.
-
-
-LaTeX Warning: Citation 'minka_expectation-propagation_2002' on page 5 undefined on input line 154.
-
-
-LaTeX Warning: Citation 'mishler_using_2015' on page 5 undefined on input line 154.
-
-
-Overfull \hbox (30.92363pt too wide) in paragraph at lines 154--155
-[]\T1/cmr/m/n/12 We use the struc-tural topic model (STM) de-vel-oped by []
- []
+LaTeX Warning: Citation 'gentzkow_text_2017' on page 5 undefined on input line 156.
 
 [5]
 
-LaTeX Warning: Citation 'roberts_model_2016' on page 6 undefined on input line 156.
+LaTeX Warning: Citation 'roberts_model_2016' on page 6 undefined on input line 158.
 
 
-LaTeX Warning: Citation 'airoldi_reconceptualizing_2010' on page 6 undefined on input line 156.
+LaTeX Warning: Citation 'blei_latent_2003' on page 6 undefined on input line 158.
 
 
-LaTeX Warning: Citation 'roberts_model_2016' on page 6 undefined on input line 156.
+LaTeX Warning: Citation 'minka_expectation-propagation_2002' on page 6 undefined on input line 158.
 
-<../figs/news-landscape-map.png, id=155, 4215.75pt x 4215.75pt>
-File: ../figs/news-landscape-map.png Graphic file (type png)
- <use ../figs/news-landscape-map.png>
-Package pdftex.def Info: ../figs/news-landscape-map.png used on input line 166.
-(pdftex.def)             Requested size: 390.0pt x 389.95078pt.
- [6] <../figs/topic-classification-sample.png, id=162, 9636.0pt x 6022.5pt>
-File: ../figs/topic-classification-sample.png Graphic file (type png)
- <use ../figs/topic-classification-sample.png>
-Package pdftex.def Info: ../figs/topic-classification-sample.png used on input line 175.
-(pdftex.def)             Requested size: 390.0pt x 243.70775pt.
- [7 <../figs/news-landscape-map.png>] <../figs/fb_shares_topics.png, id=171, 4391.40625pt x 2713.13625pt>
-File: ../figs/fb_shares_topics.png Graphic file (type png)
- <use ../figs/fb_shares_topics.png>
-Package pdftex.def Info: ../figs/fb_shares_topics.png used on input line 182.
-(pdftex.def)             Requested size: 390.0pt x 240.9426pt.
- [8 <../figs/topic-classification-sample.png> <../figs/fb_shares_topics.png>] [9]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 188.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 188.
+
+LaTeX Warning: Citation 'roberts_model_2016' on page 6 undefined on input line 158.
+
+
+Overfull \hbox (30.92363pt too wide) in paragraph at lines 158--159
+[]\T1/cmr/m/n/12 We use the struc-tural topic model (STM) de-vel-oped by []
+ []
+
+
+LaTeX Warning: Citation 'mishler_using_2015' on page 6 undefined on input line 160.
+
+[6]
+
+LaTeX Warning: Citation 'roberts_stm:_2016' on page 7 undefined on input line 191.
+
+
+LaTeX Warning: Citation 'roberts_navigating_2016' on page 7 undefined on input line 191.
+
+
+Overfull \hbox (18.40865pt too wide) in paragraph at lines 191--192
+\T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
+ []
+
+[7] [8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 241.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 241.
  (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 188.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 188.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 241.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 241.
 Package rerunfilecheck Info: File `doc2.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
 
@@ -1360,18 +1349,18 @@ Package logreq Info: Writing requests to 'doc2.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35135 strings out of 493089
- 779515 string characters out of 6134842
- 1292243 words of memory out of 5000000
- 37934 multiletter control sequences out of 15000+600000
- 23978 words of font info for 69 fonts, out of 8000000 for 9000
+ 35116 strings out of 493089
+ 778930 string characters out of 6134842
+ 1291288 words of memory out of 5000000
+ 37922 multiletter control sequences out of 15000+600000
+ 23968 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,8n,92p,1472b,1482s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.pdf (9 pages, 9250816 bytes).
+ 62i,13n,92p,1168b,1482s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.pdf (8 pages, 2060966 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
- 178 compressed objects within 2 object streams
- 28 named destinations out of 1000 (max. 500000)
- 109 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 232 PDF objects out of 1000 (max. 8388607)
+ 175 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 94 words of extra memory for PDF output out of 10000 (max. 10000000)
 
