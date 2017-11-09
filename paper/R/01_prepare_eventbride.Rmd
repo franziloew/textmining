@@ -18,7 +18,7 @@ lapply(libs, library, character.only = TRUE)
 ```{r}
 rm(list =ls())
 
-df <- read_csv("../data/eventbride/eventbride_03_sep.csv")
+df <- read_csv("../data/eventbride/eventbride_nov_03.csv")
 ```
 
 # Generate new variables 
