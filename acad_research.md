@@ -1,6 +1,6 @@
 # Text Mining Bibliography
 
-## Text as Data: A general overview
+## 1.Text as Data: A general overview
 
 [Gentzkow, M., Kelly, B.T., and Taddy, M. (2017).](https://web.stanford.edu/~gentzkow/research/text-as-data.pdf)
 - Introduction to the use of text as an input to economic research.
@@ -9,11 +9,11 @@
 [Grimmer, J., and Stewart, B. (2013).](https://scholar.princeton.edu/bstewart/publications/text-data-promise-and-pitfalls-automatic-content-analysis-methods-political)
 - A guide to use text as data in political science.
 
-## Topic Model
+## 2.Topic Model
 
 An extensive bibliography on topic modeling can be found [here](https://mimno.infosci.cornell.edu/topics.html)
 
-### LDA
+### a) LDA
 
 [Blei, D.M., Ng, A.Y., and Jordan, M.I. (2001).](http://dl.acm.org/citation.cfm?id=2980539.2980618)
 **Theory**
@@ -44,6 +44,7 @@ An extensive bibliography on topic modeling can be found [here](https://mimno.in
 
 [Blei, D.M., Griffiths, T.L., and Jordan, M.I. (2007).](http://arxiv.org/abs/0710.0845)
 **Application + Theory**
+- Extension of [Griffiths, Jordan, Tenenbaum and Blei (2004).](http://papers.nips.cc/paper/2466-hierarchical-topic-models-and-the-nested-chinese-restaurant-process.pdf)
 - Application of the nested Chinese restaurant process (nCRP) as a prior distribution in a Bayesian nonparametric model of document collections.
 
 [Blei, D.M. (2012).](http://doi.acm.org/10.1145/2133806.2133826)
@@ -54,7 +55,7 @@ An extensive bibliography on topic modeling can be found [here](https://mimno.in
 **Application**
 - An online variational Bayes (VB) algorithm for LDA introduced by Blei, Ng and Jordan (2003).
 
-### Author Topic Model / Structural Topic Model (STM):
+### b) Author Topic Model / Structural Topic Model (STM):
 
 [Roberts, M., Stewart, B., Tingley, D., and Airoldi, E. (2013).](https://scholar.princeton.edu/bstewart/publications/structural-topic-model-and-applied-social-science)
 **Theory**
