@@ -8,7 +8,7 @@ Treating this text-data quantitatively is of increasing interest to economic res
 
 This website gives an overview about recent trends of text mining in economics.
 
-[**Academic paper**](acad_research.md)
+[**Bibliography**](acad_research.md)
 
 [**Blogs & Tutorials**](blogs.md)
 
