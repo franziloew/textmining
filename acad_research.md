@@ -15,6 +15,10 @@ An extensive bibliography on topic modeling can be found [here](https://mimno.in
 
 ### a) LDA
 
+[Hoffmann, T. (1999)](https://dl.acm.org/citation.cfm?id=312649)
+- First text-motivated topic model
+- describes its mixed-membership likelihood as a probability model for the latent semantic indexing of [Deerwester et al. (1990)](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.108.8490)
+
 [Blei, D.M., Ng, A.Y., and Jordan, M.I. (2001).](http://dl.acm.org/citation.cfm?id=2980539.2980618)
 **Theory**
 - First paper on LDA, treating topics as free parameters. Not used.
@@ -25,7 +29,8 @@ An extensive bibliography on topic modeling can be found [here](https://mimno.in
 
 [Blei, D.M., Ng, A.Y., and Jordan, M.I. (2003).](https://endymecy.gitbooks.io/spark-ml-source-analysis/content/%E8%81%9A%E7%B1%BB/LDA/docs/Latent%20Dirichlet%20Allocation.pdf)
 **Theory**
-- Extended version of their first paper in Journal of Machine Learning Research and by far the most cited LDA paper.
+- Extended version of their first paper and by far the most cited LDA paper.
+- contemporary Bayesian formulation of topic models as latent Dirichlet allocation (LDA) by adding conditionally conjugate Dirichlet priors for topics and weights.
 
 [Griffiths, T.L., Jordan, M.I., Tenenbaum, J.B., and Blei, D.M. (2004).](http://papers.nips.cc/paper/2466-hierarchical-topic-models-and-the-nested-chinese-restaurant-process.pdf)
 **Application + Theory**
