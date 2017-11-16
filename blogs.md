@@ -31,6 +31,8 @@
 
 - A way to implement the unsupervised LDA as a **semi-supervised GuidedLDA** was developed by Vikash Singh [here](https://medium.freecodecamp.org/how-we-changed-unsupervised-lda-to-semi-supervised-guidedlda-e36a95f3a164).
 
+- [Learning Structural Topic Modeling](https://github.com/dondealban/learning-stm) is a simple and clear workflow example for the **Structural Topic Model** using the stm-package in R.  
+
 - An application of the **Structural Topic Model (STM)** on the [public Facebook posts of North Carolina state senators](https://wesslen.github.io/social%20media/nc-state-senator-facebook-posts/) was posted by [Ryan Wesslen](https://wesslen.github.io/).
 
 - [Facebook Topic Modeling](https://github.com/tjpalanca/facebook-news-analysis)
