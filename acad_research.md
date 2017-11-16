@@ -2,13 +2,16 @@
 
 ## Text as Data: A general overview
 
-- [Gentzkow, Matthew, Bryan T. Kelly, and Matt Taddy. 2017.](https://web.stanford.edu/~gentzkow/research/text-as-data.pdf) “Text as Data.” Working Paper 23276. National Bureau of Economic Research. doi:10.3386/w23276.
+[Gentzkow, M., Kelly, B.T., and Taddy, M. (2017).](https://web.stanford.edu/~gentzkow/research/text-as-data.pdf)
+- Introduction to the use of text as an input to economic research.
+- Practical overview of relevant statistical methods, and survey a variety of applications.
 
-- [Grimmer, Justin, and Brandon Stewart. 2013.](https://scholar.princeton.edu/bstewart/publications/text-data-promise-and-pitfalls-automatic-content-analysis-methods-political) “Text as Data: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts.” Political Analysis 21: 267–97.
+[Grimmer, J., and Stewart, B. (2013).](https://scholar.princeton.edu/bstewart/publications/text-data-promise-and-pitfalls-automatic-content-analysis-methods-political)
+- A guide to use text as data in political science.
 
 ## Topic Model
 
-An extensive bibliography on topic modeling can be found (here)[https://mimno.infosci.cornell.edu/topics.html]
+An extensive bibliography on topic modeling can be found [here](https://mimno.infosci.cornell.edu/topics.html)
 
 ### LDA
 
