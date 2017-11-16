@@ -55,7 +55,45 @@ An extensive bibliography on topic modeling can be found [here](https://mimno.in
 **Application**
 - An online variational Bayes (VB) algorithm for LDA introduced by Blei, Ng and Jordan (2003).
 
-### b) Author Topic Model / Structural Topic Model (STM):
+[Wallach, H.M., Mimno, D.M., and McCallum, A. (2009).](https://papers.nips.cc/paper/3854-rethinking-lda-why-priors-matter)
+- The use of an asymmetric Dirichlet prior on per-document topic distributions reduces sensitivity to very common words (e.g. stopwords and near-stopwords) and makes topic assignments more stable as the number of topics grows.
+
+
+### b) Structural Topic Model (STM):
+The [website of the stm-package](http://www.structuraltopicmodel.com/) gives a good overview about theory, implementation and applications.
 
 [Roberts, M., Stewart, B., Tingley, D., and Airoldi, E. (2013).](https://scholar.princeton.edu/bstewart/publications/structural-topic-model-and-applied-social-science)
 **Theory**
+- Paper that introduces the model.  
+
+### c) Evaluation of topic Models
+
+[Wei, X., and Croft, W.B. (2006).](https://dl.acm.org/citation.cfm?doid=1148170.1148204)
+- How to efficiently use LDA to improve ad-hoc retrieval.
+- Extrinsic evaluation method of topics
+
+[Chang, J., Gerrish, S., Wang, C., Boyd-graber, J.L., and Blei, D.M. (2009).](http://papers.nips.cc/paper/3700-reading-tea-leaves-how-humans-interpret-topic-models.pdf)
+- Quantitative methods for measuring semantic meaning in inferred topics.
+- Surprisingly, topic models which perform better on held-out likelihood may infer less semantically meaningful topics.
+
+[Wallach, H.M., Murray, I., Salakhutdinov, R., and Mimno, D. (2009).](https://dl.acm.org/citation.cfm?doid=1553374.1553515)
+- They demonstrate experimentally that commonly-used evaluation metrics are unlikely to accurately estimate the probability of held-out documents
+- Propose two alternative methods.
+
+[Buntine, W. (2009).](https://dl.acm.org/citation.cfm?id=1693251)
+- Provides improved versions of some of the methods in Wallach et al. (2009) for calculating held-out probability.
+
+[AlSumait, L., Barbará, D., Gentle, J., and Domeniconi, C. (2009).](https://link.springer.com/chapter/10.1007%2F978-3-642-04180-8_22)
+- Automated unsupervised analysis of LDA models to identify junk topics from legitimate ones, and to rank the topic significance.
+
+[Mimno, D., Wallach, H.M., Talley, E., Leenders, M., and McCallum, A. (2011).](https://dl.acm.org/citation.cfm?id=2145462)
+- A simple, automated metric that uses only information contained in the training documents has strong ability to predict human judgments of topic coherence.
+
+[Mimno, D., and Blei, D. (2011).](https://dl.acm.org/citation.cfm?id=2145459)
+- Posterior predictive checks are useful in detecting lack of fit in topic models and identifying which metadata-enriched models might be useful.
+
+[Newman, D., Lau, J.H., Grieser, K., and Baldwin, T. (2010)](https://dl.acm.org/citation.cfm?id=1858011)
+- apply a range of topic scoring models to the evaluation task, drawing on WordNet, Wikipedia and the Google search engine, and existing research on lexical similarity/relatedness.
+- A simple co-occurrence measure based on pointwise mutual information over Wikipedia data is able to achieve results for the task at or nearing the level of inter-annotator correlation.
+
+**[Back Home](README.md)**
