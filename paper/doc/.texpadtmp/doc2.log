@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  8 NOV 2017 18:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  22 NOV 2017 17:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1099,43 +1099,99 @@ Package csquotes Info: ... found 'babel' package.
  (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.aux)
 \openout1 = `doc2.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
 (biblatex)             Assuming data encoding 'utf8'.
 \openout3 = `doc2.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'doc2.bbl' not found.
+Package biblatex Info: ... file 'doc2.bbl' found.
+ (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.bbl
 
-No file doc2.bbl.
-Package biblatex Info: Reference section=0 on input line 41.
-Package biblatex Info: Reference segment=0 on input line 41.
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                corden_maximisation_1952
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                gustafsson_circulation_1978
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                rochet_platform_2003
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                ellman_what_2009
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                caillaud_chicken_2003
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                blair_pricing_1993
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                evans_empirical_2003
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                armstrong_competition_2006
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
+Package biblatex Info: Reference section=0 on input line 43.
+Package biblatex Info: Reference segment=0 on input line 43.
 \AtBeginShipoutBox=\box47
-Package hyperref Info: Link coloring OFF on input line 41.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
+Package hyperref Info: Link coloring OFF on input line 43.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
  (/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count332
 )
-LaTeX Info: Redefining \ref on input line 41.
-LaTeX Info: Redefining \pageref on input line 41.
-LaTeX Info: Redefining \nameref on input line 41.
+LaTeX Info: Redefining \ref on input line 43.
+LaTeX Info: Redefining \pageref on input line 43.
+LaTeX Info: Redefining \nameref on input line 43.
  (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.out) (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.out)
 \@outlinefile=\write5
 \openout5 = `doc2.out'.
@@ -1166,201 +1222,217 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable tick labels; missing features). Consider writing \pgfplotsset{compat=1.12} into your preamble.
- on input line 41.
+ on input line 43.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-
-LaTeX Warning: Citation 'schiller_development_2016' on page 1 undefined on input line 45.
-
-
-Overfull \hbox (1.53209pt too wide) in paragraph at lines 45--46
-\T1/cmr/m/n/12 Twit-ter with 3.5% and Google+ with 2.3% ([]). 
- []
-
-
-LaTeX Warning: Citation 'schiller_development_2016' on page 1 undefined on input line 47.
-
-
-LaTeX Warning: Citation 'blei_latent_2003' on page 1 undefined on input line 51.
-
-
-LaTeX Warning: Citation 'roberts_model_2016' on page 1 undefined on input line 51.
-
 [1
 
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] <../figs/research_strategy.pdf, id=49, 963.6pt x 542.025pt>
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+
+LaTeX Warning: Reference `ch_results' on page 2 undefined on input line 55.
+
+<../figs/research_strategy.pdf, id=65, 963.6pt x 542.025pt>
 File: ../figs/research_strategy.pdf Graphic file (type pdf)
  <use ../figs/research_strategy.pdf>
-Package pdftex.def Info: ../figs/research_strategy.pdf used on input line 57.
+Package pdftex.def Info: ../figs/research_strategy.pdf used on input line 59.
 (pdftex.def)             Requested size: 370.49881pt x 208.4032pt.
 
-
-LaTeX Warning: Citation 'taddy_estimation_2012' on page 2 undefined on input line 76.
-
-
-LaTeX Warning: Citation 'blei_probabilistic_2012' on page 2 undefined on input line 78.
-
-
-LaTeX Warning: Citation 'grimmer_bayesian_2010' on page 2 undefined on input line 78.
-
-
-Overfull \hbox (1.11818pt too wide) in paragraph at lines 78--79
-[]\T1/cmr/m/n/12 Since its in-tro-duc-tion into text anal-y-sis, topic mod-el-ing has be-come hugely
+Overfull \hbox (117.63011pt too wide) in paragraph at lines 72--73
+\T1/cmr/m/n/12 es-pe-cially on me-dia mar-kets ([]), ([]),
  []
 
 
-Overfull \hbox (7.96927pt too wide) in paragraph at lines 78--79
-\T1/cmr/m/n/12 been es-pe-cially use-ful in po-lit-i-cal sci-ence (e.g., ([])),
- []
-
-
-LaTeX Warning: Citation 'blei_latent_2003' on page 2 undefined on input line 80.
-
-LaTeX Font Info:    Try loading font information for U+msa on input line 80.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 80.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: Citation 'pritchard_inference_2000' on page 2 undefined on input line 81.
-
-
-Overfull \hbox (23.13373pt too wide) in paragraph at lines 80--82
-\T1/cmr/m/n/12 model was in-de-pen-dently in-tro-duced in ge-net-ics by []
+Overfull \hbox (41.02113pt too wide) in paragraph at lines 72--73
+\T1/cmr/m/n/12 car-ried out in the last ten years, start-ing with the works of [],
  []
 
 [2 <../figs/research_strategy.pdf>]
+LaTeX Font Info:    Try loading font information for U+msa on input line 87.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 87.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [3] [4] <../figs/timeline.png, id=182, 4391.40625pt x 2713.13625pt>
+File: ../figs/timeline.png Graphic file (type png)
+ <use ../figs/timeline.png>
+Package pdftex.def Info: ../figs/timeline.png used on input line 106.
+(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
+ <../figs/bar.png, id=184, 4391.40625pt x 2713.13625pt>
+File: ../figs/bar.png Graphic file (type png)
+ <use ../figs/bar.png>
+Package pdftex.def Info: ../figs/bar.png used on input line 111.
+(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
+ <../figs/fb_shares.png, id=185, 4391.40625pt x 2713.13625pt>
+File: ../figs/fb_shares.png Graphic file (type png)
+ <use ../figs/fb_shares.png>
+Package pdftex.def Info: ../figs/fb_shares.png used on input line 122.
+(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
+ <../figs/fb_shares_mean.png, id=186, 4391.40625pt x 2713.13625pt>
+File: ../figs/fb_shares_mean.png Graphic file (type png)
+ <use ../figs/fb_shares_mean.png>
+Package pdftex.def Info: ../figs/fb_shares_mean.png used on input line 126.
+(pdftex.def)             Requested size: 191.10214pt x 118.02875pt.
+ [5 <../figs/timeline.png> <../figs/bar.png>] [6 <../figs/fb_shares.png> <../figs/fb_shares_mean.png>]
+./doc2.tex:152: Undefined control sequence.
+l.152 ...itet{roberts_structural_2013} and \citept
+                                                  {roberts_stm:_2016}. The p...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-LaTeX Warning: Citation 'blei_dynamic_2006' on page 3 undefined on input line 83.
+./doc2.tex:152: Missing $ inserted.
+<inserted text> 
+                $
+l.152 ...rts_structural_2013} and \citept{roberts_
+                                                  stm:_2016}. The process of...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+./doc2.tex:152: Extra }, or forgotten $.
+l.152 ...ural_2013} and \citept{roberts_stm:_2016}
+                                                  . The process of filling a...
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+./doc2.tex:152: Missing $ inserted.
+<inserted text> 
+                $
+l.152 ...-prevalence vector $d(\boldsymbol{\theta}
+                                                  _d)$ drawn from a logistic...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
 
 
-Overfull \hbox (25.1232pt too wide) in paragraph at lines 83--84
-\T1/cmr/m/n/12 ways. A promi-nent ex-am-ple is the dy-namic topic model of [],
+Overfull \hbox (98.64807pt too wide) in paragraph at lines 152--153
+\OT1/cmr/m/n/12 016\OML/cmm/m/it/12 :Theprocessoffillingaword \OMS/cmsy/m/n/12 ^^@ \OML/cmm/m/it/12 positioninadocumentbeginswiththegenerationofadocument \OMS/cmsy/m/n/12 ^^@
+ []
+
+[7]
+Overfull \hbox (18.40865pt too wide) in paragraph at lines 181--182
+\T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
  []
 
 
-./doc2.tex:87: Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
+./doc2.tex:198: Package inputenc Error: Unicode char \u8:θ not set up for use with LaTeX.
 
 See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.87 ... estimates LDA, then uses estimates of ^^R
-                                                  $\theta_d$ as the dependen...
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
+l.198 ...s reflected in the text. The parameter θ
+                                                  d provides an estimate of ...
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
 
-<../figs/timeline.png, id=119, 4214.74625pt x 3010.24625pt>
-File: ../figs/timeline.png Graphic file (type png)
- <use ../figs/timeline.png>
-Package pdftex.def Info: ../figs/timeline.png used on input line 107.
-(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
- <../figs/bar.png, id=121, 4214.74625pt x 3010.24625pt>
-File: ../figs/bar.png Graphic file (type png)
- <use ../figs/bar.png>
-Package pdftex.def Info: ../figs/bar.png used on input line 112.
-(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
- [3] <../figs/fb_shares.png, id=136, 4214.74625pt x 3010.24625pt>
-File: ../figs/fb_shares.png Graphic file (type png)
- <use ../figs/fb_shares.png>
-Package pdftex.def Info: ../figs/fb_shares.png used on input line 123.
-(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
- <../figs/fb_shares_mean.png, id=137, 4214.74625pt x 3010.24625pt>
-File: ../figs/fb_shares_mean.png Graphic file (type png)
- <use ../figs/fb_shares_mean.png>
-Package pdftex.def Info: ../figs/fb_shares_mean.png used on input line 127.
-(pdftex.def)             Requested size: 191.10214pt x 136.46574pt.
-
-
-LaTeX Warning: Citation 'gentzkow_text_2017' on page 4 undefined on input line 134.
-
-[4 <../figs/timeline.png> <../figs/bar.png> <../figs/fb_shares.png> <../figs/fb_shares_mean.png>]
-
-LaTeX Warning: Citation 'bholat_text_2015' on page 5 undefined on input line 144.
-
-
-LaTeX Warning: Citation 'airoldi_reconceptualizing_2010' on page 5 undefined on input line 148.
-
-
-LaTeX Warning: Citation 'roberts_model_2016' on page 5 undefined on input line 148.
-
-
-LaTeX Warning: Citation 'gentzkow_text_2017' on page 5 undefined on input line 156.
-
-[5]
-
-LaTeX Warning: Citation 'roberts_model_2016' on page 6 undefined on input line 158.
-
-
-LaTeX Warning: Citation 'blei_latent_2003' on page 6 undefined on input line 158.
-
-
-LaTeX Warning: Citation 'minka_expectation-propagation_2002' on page 6 undefined on input line 158.
-
-
-LaTeX Warning: Citation 'roberts_model_2016' on page 6 undefined on input line 158.
-
-
-Overfull \hbox (30.92363pt too wide) in paragraph at lines 158--159
-[]\T1/cmr/m/n/12 We use the struc-tural topic model (STM) de-vel-oped by []
- []
-
-
-LaTeX Warning: Citation 'mishler_using_2015' on page 6 undefined on input line 160.
-
-[6]
-
-LaTeX Warning: Citation 'roberts_stm:_2016' on page 7 undefined on input line 191.
-
-
-LaTeX Warning: Citation 'roberts_navigating_2016' on page 7 undefined on input line 191.
-
-
-Overfull \hbox (18.40865pt too wide) in paragraph at lines 191--192
-\T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
- []
-
-[7] [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 241.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 241.
+[8] <../figs/topic-classification-sample.png, id=251, 9636.0pt x 6022.5pt>
+File: ../figs/topic-classification-sample.png Graphic file (type png)
+ <use ../figs/topic-classification-sample.png>
+Package pdftex.def Info: ../figs/topic-classification-sample.png used on input line 205.
+(pdftex.def)             Requested size: 390.0pt x 243.70775pt.
+ [9 <../figs/topic-classification-sample.png>] [10] [11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 253.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 253.
  (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 241.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 241.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 253.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 253.
 Package rerunfilecheck Info: File `doc2.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
 
 
 LaTeX Warning: There were undefined references.
 
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                doc2
-(biblatex)                and rerun LaTeX afterwards.
-
 Package logreq Info: Writing requests to 'doc2.run.xml'.
 \openout1 = `doc2.run.xml'.
 
- ) 
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 152 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 35116 strings out of 493089
- 778930 string characters out of 6134842
- 1291288 words of memory out of 5000000
- 37922 multiletter control sequences out of 15000+600000
- 23968 words of font info for 69 fonts, out of 8000000 for 9000
+ 35301 strings out of 493089
+ 783503 string characters out of 6134842
+ 1294242 words of memory out of 5000000
+ 38063 multiletter control sequences out of 15000+600000
+ 24652 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,13n,92p,1168b,1482s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.pdf (8 pages, 2060966 bytes).
+ 62i,13n,92p,1610b,1560s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{cite.0@chang_reading_2009} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@wei_lda-based_2006} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@mimno_optimizing_2011} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@teh_hierarchical_2006} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@airoldi_reconceptualizing_2010} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@taddy_estimation_2012} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@wallach_evaluation_2009} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@asuncion_smoothing_2012} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@grimmer_bayesian_2010} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@roberts_navigating_2016} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@roberts_stm:_2016} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@roberts_structural_2013} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@bholat_text_2015} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@gentzkow_text_2017} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@grimmer_text_2013} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@blei_probabilistic_2012} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@pritchard_inference_2000} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@hofmann_probabilistic_1999} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@griffiths_finding_2004} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@griffiths_probabilistic_2002} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@mueller_reading_2016} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@baturo_what_2017} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@mishler_using_2015} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@farrell_corporate_2016} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@roberts_structural_2014} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@blei_dynamic_2006} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@evans_economics_2008} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@roberts_model_2016} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@blei_latent_2003} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@schiller_development_2016} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
+Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/doc2.pdf (11 pages, 7092173 bytes).
 PDF statistics:
- 232 PDF objects out of 1000 (max. 8388607)
- 175 compressed objects within 2 object streams
- 24 named destinations out of 1000 (max. 500000)
- 94 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 347 PDF objects out of 1000 (max. 8388607)
+ 283 compressed objects within 3 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 123 words of extra memory for PDF output out of 10000 (max. 10000000)
 

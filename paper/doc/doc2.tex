@@ -38,6 +38,8 @@
 \usepackage{bm}
 \usepackage{eurosym}
 
+\addbibresource{Textmining.bib}
+
 \begin{document}
 
 \section{Introduction}
@@ -61,59 +63,39 @@ Figure \ref{fig_research_strat} gives an overview of the applied research strate
 
 % Related Literature
 % ------------------
-
 \section{Related Literature}
+% ---------------------------------------
+% Business Model in the online news market
+% --------------------------------------- 
+\subsection{The online news market}
 
-% Quantitative approaches
-% -----------------------
+Media outlets naturally appear as two-sided platforms, that allow interaction between two categories of consumers: audiences and advertisers. The demand on both consumer-sides are often linked via indirect network externalities. The market in which media outlets operate are accordingly referred to as two-sided or multi-sided markets. The theoretical literature on two-sided markets originates from the analysis of credit card markets \citep{rochet_platform_2003} and was later transferred to the concept of other industries, such as dating agencies, real estate agents, and internet “business-to-business” websites \citep{caillaud_chicken_2003}. The basic concept of two-sided markets was already discussed decades ago in several economic studies, especially on media markets \citep{corden_maximisation_1952}, \citep{gustafsson_circulation_1978}, \citep{blair_pricing_1993}. However, comprehensive analyses have only been carried out in the last ten years, starting with the works of \citet{rochet_platform_2003}, \citet{evans_empirical_2003} and \citet{armstrong_competition_2006}.
 
+Online news are typical examples of two-sided markets where the news pages can be conceived as platforms that allow interaction between audiences ("eyeballs") and advertisers. The size and characteristics of the audience has a positive effect on the advertisers' willingness to pay, as advertisements are typically sold based on cost per viewer, often expressed in terms of the cost of reaching a thousand viewers (CPM). Advertising can also have an effect on the recipients, which can be both negative and positive, depending on the quality of the advertising. 
 
-% Topic Modeling / LDA
-% ---------------------------
+Depending on the strength of the indirect network effects, publisher maximize their revenue by balancing the demand from advertisers and subscribers using different business models \citep{evans_economics_2008}. Many traditional newspapers follow the subscription/advertising model, where the publisher charges both market sides: The audience pays a fee to obtain access to the content, and advertisers pay to to obtain access to the viewers. Many online news agencies also provide a part of their editorial content as a premium service. However, since the Internet has considerably simplified the possibilities for obtaining information and thus reduced the marginal utility of content, such a business model can only function if the content is very exclusive. As a result, many publishers rely on a free-media model, in which the publishers do not charge viewers for access to the media at all, in order to attract as many readers as possible to their platform, and thus exploit the indirect network effects on the advertising site. % What is the share of advertising revenue in total earnings of german online newspaper ? 
 
-Topic modeling is a statistical and computational technique for discerning information about the contents of a large corpus of documents without reading or annotating the original texts. A topic model uncovers patterns of word co-occurrence across the corpus, yielding a set of word clusters, together with associated probabilities of occurrence, which constitute the topics.
+In addition to the quantity of the audience, the demographic characteristics of recipients also have an influence on the willingness to pay on the advertiser site. Online advertising makes it possible to target ads to particular consumers in real time. Facebook instant articles facilitates this targeting, as they make the public users profile data available to the publisher. 
 
-See \citep{taddy_estimation_2012} for a review of topic estimation techniques)
+The two-sided market structure of news markets results in news platforms striving to choose their content in such a way that its reach is as large as possible in order to maximize profits from advertising revenues. This may lead to media-bias, as advertising may affect the ability and incentives of media to provide independent news. On the other hand, advertising may also have a positive impact on the media, as it enables publishers to report independently of political parties. \citet{ellman_what_2009} found that advertising increases the intensity of competition for readers and therefore raises accuracy of media coverage.  
 
-Since its introduction into text analysis, topic modeling has become hugely popular.8 (See \citet{blei_probabilistic_2012} for an overview.) The model has been especially useful in political science (e.g., \citep{grimmer_bayesian_2010}), where researchers have been successful in attaching political issues and beliefs to the estimated latent topics.
+% --------------
+% Topic Modeling
+% --------------
+\subsection{Topic Modeling}
 
-Topic modeling is alternatively labeled as “latent Dirichlet allocation,” (LDA) which refers to the Bayesian model in \citet{blei_latent_2003} that treats each $\boldsymbol{v}_i$ and $\boldsymbol{\theta}_l$ as generated from a Dirichlet - distributed prior.
-The same model was independently introduced in genetics by \citet{pritchard_inference_2000} for factorizing gene expression as a function of latent populations; it has been similarly successful in that field. 
+We use the structural topic model (STM) developed by \citet{roberts_model_2016} that allows us to incorporate document specific covariates (e.g. the author or date of a document). STM is a recent extension of the standard topic modeling technique, labeled as "latent Dirichlet allocation" (LDA), which refers to the Bayesian model in \citet{blei_latent_2003} that treats each word in a topic and each topic in a document as generated from a Dirichlet - distributed prior.\footnote{See also \citet{griffiths_probabilistic_2002}, \citet{griffiths_finding_2004} and \citet{hofmann_probabilistic_1999}. \citet{pritchard_inference_2000} introduced the same model in genetics for factorizing gene expression as a function of latent populations.} Topic models formalize the idea that documents are formed by hidden variables (topics) that generate correlations among observed terms. Since its introduction into text analysis, LDA has become hugely popular and especially useful in political science.\footnote{see \citet{blei_probabilistic_2012} and \citet{grimmer_text_2013} for an overview.}
 
-The basic topic model has been generalized and extended in variety of ways. A prominent example is the dynamic topic model of \citet{blei_dynamic_2006}, which considers documents that are indexed by date (e.g., publication date for academic articles) and allows the topics, say $\boldsymbol{\Theta}_t$, to evolve smoothly in time. 
+The basic topic model has been extended in variety of ways. \citet{blei_dynamic_2006} considers documents that are indexed by publication date date and allows the topics to evolve in time. To relax the assumption that all texts in the modeled corpus are generated by the same underlying process, \cite{roberts_model_2016} introduces the structural topic model (STM), that provides a way to include covariates. Using a generalized linear model on document-level metadata allows the researcher to link topics to covariate data and to model changes in topic prevalence over time. 
 
-Applications:
+STM has been applied to multiple academic fields: \citet{roberts_structural_2014} uses STM to analyse open-ended responses from surveys and experiments, \citet{farrell_corporate_2016} applies the model to scientific texts on climate change, revealing links between corporate funding and the framing of scientific studies and \citet{mishler_using_2015} shows that "STM can be used to detect significant events such as the downing of Malaysia Air Flight 17" when applied to twitter data. Another study shows how STM can be used to explore the main international development topics of countries’ annual statements in the UN General Debate and examine the country-specific drivers of international development rhetoric \citep{baturo_what_2017}. \citet{mueller_reading_2016} uses newspaper text to predict armed conflicts in different regions. They use the estimated topic shares in linear fixed effects regression to forecast conflict out-of-sample.
 
-
-% Structural topic models (STM)
-% ----------------------------
-A typical application of topic modeling in the social sciences first estimates LDA, then uses estimates of $\theta_d$ as the dependent variable in an regression on covariates to test whether different types of documents have different content. 
-
-This is contradictory because documents are assumed to be generated by a statistical process that we subsequently reject.
-The structural topic model (STM) of Roberts et. al. (2016) explicitly introduces covariates into a topic model, and allows one to estimate the impact of document-level covariates on topic content and prevalence as part of the topic model itself.
-
-Applications:
-Structural topic modeling is an alternative to LDA that allows researchers to link topics to covariate data and to model changes in topic prevalence over time. STM has recently been applied to scientific texts on climate change, revealing links between corporate funding and the framing of scientific studies \citep{farrell_corporate_2016}. It has also been applied to social media data in a variety of ways. One study shows that “STM can be used to detect significant events such as the downing of Malaysia Air Flight 17” when applied to twitter data \cite{mishler_using_2015}. Another study shows how STM can be used to explore relatively large data sets including course evaluations and discussion forum posts from a Massive Open Online Course \cite{reich_computer-assisted_2014}. 
-
-\cite{roberts_structural_2014} . This article focuses on how the STM is helpful for survey researchers and experimentalists. The STM makes analyzing open-ended responses easier, more revealing, and capable of being used to estimate treatment effects. We illustrate these innovations with analysis of text from surveys and experiments.
-
-\cite{lucas_computer_2015} This article discusses practical issues that arise in the processing, management, translation, and analysis of textual data with a particular focus on how procedures differ across languages. These procedures are combined in two applied examples of automated text analysis using the recently introduced Structural Topic Model. We also show how the model can be used to analyze data that have been translated into a single language via machine translation tools. All the methods we describe here are implemented in open-source software packages available from the authors.
-
-\citet{baturo_what_2017} applies STM to countries’ annual statements in the UN General Debate. This paper identifies the main international development topics that states raise in these speeches between 1970 and 2016, and examine the country-specific drivers of international development rhetoric.
-
-\cite{das_trends_2017} Through the use of a structural topic model, this study introduced distinct topic models on the basis of the relative frequencies of the words used in the abstracts of 15,357 TRB compendium papers. With data from 7 years (2008 through 2014) of TRB annual meeting compendium papers, the 20 most dominant topics emerged from a bag of 4 million words. 
-
-\cite{law_constitutional_2016}  analysis of the world’s constitutional preambles using methods from computational linguistics suggests that they consist of a combination of the three archetypes. Estimation of a structural topic model yields a quantitative measure of the extent to which each preamble draws upon each archetype.
-
-\cite{mueller_reading_2016} This article provides a new methodology to predict armed conflict by using newspaper text. They use the estimated topic shares in linear fixed effects regression to forecast conflict out-of-sample.
- 
 % -----
 % Data
 % -----
-
 \section{Dataset}\label{ch_data}
 
-We conduct our estimation on a sample of 10531 news articles containing the term "Bundestagswahl" (Federal Election) dated from 01.06.2017 to 28.10.2017.\footnote{German federal elections took place on 24th of September 2017.} We first extract all online articles of six mainstream german online news portals\footnote{Bild.de, Focus.de, Spiegel.de, Stern.de, Welt.de, Zeit.de} using the the Event Regestry API.\footnote{For more information see http://eventregistry.org/documentation. The scraping code was written in Python and can be made available on request.} We then filter those articles that contain the term "Bundestagswahl" (Federal Election) in their text body. We use the URL of these articles, to check how many times they where shared on Facebook using the \textit{sharedcount} API.\footnote{http://docs.sharedcount.com/}
+We conduct our estimation on a sample of 10531 news articles containing the term "Bundestagswahl" (Federal Election) dated from 01.06.2017 to 28.10.2017.\footnote{German federal elections took place on 24th of September 2017.} We first extract all online articles of six mainstream german online news portals\footnote{Bild.de, Focus.de, Spiegel.de, Stern.de, Welt.de, Zeit.de} using the the Event Regestry API.\footnote{For more information see http://eventregistry.org/documentation. The scraping code was written in Python and can be made available on request.} We then filter those articles that contain the term "Bundestagswahl" (Federal Election) in their text body. We use the URL of these articles, to check how many times they where shared on Facebook using the \textit{sharedcount} API.\footnote{http://docs.sharedcount.com/} The returned share count is the sum of (1) the number of likes of this URL, (2) the number of shares of this URL (including copy-pasting a link back to Facebook), (3) the number of likes and comments on stories on Facebook about this URL and (4) the number of inbox messages containing this URL as an attachment.\footnote{See https://developers.facebook.com/docs/graph-api for more information about the Facebook Graph API.}
 
 Figure \ref{fig_distr1} shows the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th. Most of the articles are published by welt.de, followed by stern.de (see \ref{fig_distr2}).  
 
@@ -156,27 +138,18 @@ After pre-processing, each document $d$ is a finite list of terms. Each unique t
 % ------------------
 % Text Pre-Procesing
 % ------------------
-\subsection{Text pre-procesing and feature selection}
+\subsection{Text pre-procesing}
 
 A central task in text mining is to extract low-dimensional information from documents that are high-dimensional by nature \citep{bholat_text_2015}. This is related to the task of reducing the number of unique language elements in order to reduce the dimensionality of data (to avoid unnecessary computational complexity and overfitting) while at the same time keeping those words that reflect the content of a document. Any useful representation of text will throw away some information, the trick is to include the relevant information for our needs, and exclude the extraneous information. 
 
 Intuitively the term frequency (tf) of a word is a measure of how important that word may be. There are words in a document, however, that occur many times but may not be important like articles, conjunctions, and so on. These terms, often called "stop words", are important to the grammatical structure of a text, but typically don't add any additional meaning and can therefore be neglected. We use a pre-defined stop word list from the Snowball stemmer project\footnote{http://svn.tartarus.org/snowball/trunk/website/algorithms/*/stop.txt} together with a customized list of stop-words that are redundant superfluous or distorting. We also remove punctuation character (e.g. ., ,, !, ?, etc.) and all numbers from our corpus.  
 
-We use source of each article (the news-platform) as a covariate in the topic prevalence portion of the model. Thus, we assume that the process differs with regard to the platform. In other words, the probability distribution of topics depends on the editorial strategy of a media house. We set the number of topics to be 40 after evaluating and maximizing topics' coherence using a cross-validation scheme while changing the number of topics (\citet{airoldi_reconceptualizing_2010}; \citet{roberts_model_2016}).
-
 % ----------------------
 % Structural topic Model
 % ----------------------
-
 \section{Topic detection}\label{ch_model}
 
-As we cannot directly observe the latent topic of an article, we use an unsupervised machine learning algorithm, that takes unclassified observations of words and uncovers hidden patterns (topics) that structure them in some meaningful way. We can than use the output of this process as inputs into an econometric model, that predicts the number of Facebook shares conditional on the topic of an article \citep{gentzkow_text_2017}.  
-
-We use the structural topic model (STM) developed by \citet{roberts_model_2016} that allows us to incorporate document specific covariates (e.g. the author or date of a document). STM is a recent extension of the standard topic modeling technique, the latent Dirichlet allocation (LDA). Topic models formalize the idea that documents are formed by hidden variables (topics) that generate correlations among observed terms. LDA is a particularly popular method for fitting a topic model \citep{blei_latent_2003}, also known as the generative aspect model \citep{minka_expectation-propagation_2002}. Each document $d$ is generated from the following process \citep{blei_latent_2003}: The number of words $N$ is a random  , containing $N_d$ words from a vocabulary of interest of $V$ unique terms, is a mixture of $k$ topics. Thus, each document has its own probability distribution over topics. Simultaneously, each topic has a probability distribution over terms, associated with a $V$-dimensional probability mass function $\boldsymbol{\beta}_k$, that controls the frequency according to which terms are generated from that topic. 
-
-This standard topic modeling technique makes the assumption that all texts in the modeled corpus are generated by the same underlying process \citep{mishler_using_2015}. To include additional information that improve the estimation of the topics, we estimate a structural topic model, where topical prevalence (the distribution of topics among documents) is specified as a simple generalized linear model on document-level metadata. 
-
-The following description of the generative model of the STM is based on \citet{roberts_structural_2013} ans \citept{roberts_stm:_2016}. The process of filling a word-position in a document begins with the generation of a document-specific topic-prevalence vector $d(\boldsymbol{\theta}_d)$ drawn from a logistic-normal distribution, where the parameters are a function of the covariate values:
+The following description of the generative model of the STM is based on \citet{roberts_structural_2013} and \citept{roberts_stm:_2016}. The process of filling a word-position in a document begins with the generation of a document-specific topic-prevalence vector $d(\boldsymbol{\theta}_d)$ drawn from a logistic-normal distribution, where the parameters are a function of the covariate values:
 
 \begin{align*}
 	\boldsymbol{\theta}_d|\boldsymbol{x}_{d\gamma},\boldsymbol{\Sigma} \sim \textrm{LogisticNormal}(\mu = \boldsymbol{x}_{d\gamma}\boldsymbol{\Sigma})
@@ -207,7 +180,37 @@ where the word probability $\beta_{dkv}$ is modeled as a function of the two par
 
 The STM maximizes the posterior likelihood that the observed data were generated by the above data-generating process using an iterative approximation-based variational expectation-maximization algorithm available in R's stm package \citep{roberts_stm:_2016}. Regularizing prior distributions are used for $\gamma$, $\kappa$ and (optionally) $\Sigma$. To address problems due to non-convexity, we rely on the spectral initialization approach advocated by \citet{roberts_navigating_2016}.
 
-\section{Probabilities and Classification}\label{ch_results}
+% ----------------------
+% Model Selection
+% ----------------------
+\subsection{Model selection}
+
+Topic models are generally inaccurate, since the number of topics must be determined a priori. Furthermore, multiple solutions exist for the optimization problem. Ex post analysis of several model specifications helps to evaluate its quality, as well as the number of topics and metadata selected. 
+
+The most common choice is the probability of held-out documents \citep{grimmer_bayesian_2010}. Similar to cross-validation (VC), different model specifications are compared to how well they do in predicting words within a document \citep{asuncion_smoothing_2012}, \citep{wallach_evaluation_2009}. Another strategy to find an appropriate number of topics is to check for residual overdispersion of the variance of the multinomial within the data generating process of the model \citep{taddy_estimation_2012}. Other approaches can be found in \citet{airoldi_reconceptualizing_2010} and \citet{teh_hierarchical_2006}. We run multiple model specifications and compare them based on held-out likelihood estimation, residual checks as well as semantic coherence to chose the number of topics that best fits the corpus to be 50. Furthermore, we use the source of each article (the media house) and the month it was published as a covariates in the topic prevalence portion of the model. In other words, the probability distribution of topics depends on the editorial strategy of a media house as well as on the month the article was published. 
+
+% ----------------------
+% Evaluation
+% ----------------------
+\subsection{Evaluation}
+
+
+The most effective method for assessing model fit is to carefully read documents that are closely associated with particular topics to verify that the semantic concept covered by the topic is reflected in the text. The parameter θd provides an estimate of each document’s association with every topicmaking it straightforward to effectively direct analyst engagement with the texts (see, e.g., Roberts, Stewart, and Tingley 2014a). An overview of manual validation procedures can be found in Grimmer and Stewart (2013).\cite{roberts_model_2016}
+
+To validate the accuracy with which the fitted model is capturing the content of a document, we first conduct a process of informal manual audits \citep{gentzkow_text_2017}: We inspect inspect a subset of documents alongside the fitted topics to cross-check against the coding a human would produce by hand. Figure \ref{fig_classification} shows sample documents classified to each topic for reference. We produce a random sample of 7 posts from the 300 highest probability fits per topic.
+
+\begin{figure}[H]
+\centering
+	\caption{Sample articles}
+	\includegraphics[width=\textwidth]{../figs/topic-classification-sample.png}	
+	\label{fig_classification}
+\end{figure}
+
+The interpretability or semantic coherence of topics can vary considerably. \citet{mimno_optimizing_2011} propose a topic semantic coherence score computed from in-corpus word co-occurrence statistics, and show strong agreement with human evaluations. 
+
+\cite{mimno_optimizing_2011}
+The evaluation of statistical topic models has traditionally been dominated by either extrinsic methods (i.e., using the inferred topics to perform some external task such as information retrieval \citep{wei_lda-based_2006} or quantitative intrinsic methods, such as computing the probability of held-out documents \citep{wallach_evaluation_2009}. Recent work has focused on evaluation of topics as semantically coherent concepts. For example, \citet{chang_reading_2009} found that the probability of held-out documents is not always a good predictor of human judgments.
+
 
 After performing the topic modeling, we can generate an overview of the news landscape about the german elections. Each group is composed of the most relevant words for that topic, and a manually-determined label. The distances that the topics have from each other reflect their semantic distance, or basically how different the words are for that topic. It is computed as the Jensen-Shannon divergence between each of the topics according to the differences in their word-topic probabilities. We then apply principal coordinates analysis in order to project the distance matrix down to two dimensions.
 
@@ -218,14 +221,6 @@ After performing the topic modeling, we can generate an overview of the news lan
 %	\label{fig_landscape}
 %\end{figure}
 
-To check weather the estimated topic classifications make sense, we first produce sample documents classified to that topic for reference. We produce a random sample of 10 posts from the 300 highest probability fits per topic.
-
-%\begin{figure}[H]
-%\centering
-%	\caption{Sample articles}
-%	\includegraphics[width=\textwidth]{../figs/topic-classification-sample.png}	
-%	\label{fig_classification}
-%\end{figure}
 %
 %\begin{figure}[H]
 %\centering

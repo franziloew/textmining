@@ -76,25 +76,22 @@ theme_set(
 rm(list=ls())
 # Functions
 source("func/02-topic-modelling-functions.R")
-
 ```
 
-```{r caching, echo = FALSE}
-load("../output/models/STM 40 .Rda")
-#load("../output/btw_combined.Rda")
-knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
+```{r caching, echo=, message=FALSE, warning=FALSE}
+load("../output/btw_combined.Rda")
 
-#btw$articleID <- rownames(btw)
+#load("../output/models/STM 50 .Rda")
+knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
 ```
 
 ## Explore Dataset
 ```{r}
 library(RColorBrewer) 
-
-col <- brewer.pal(6,"Dark2")
+col <- brewer.pal(7,"Dark2")
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 btw %>%
   group_by(date, site) %>%
   summarise(obs = n()) %>%
@@ -102,49 +99,134 @@ btw %>%
   geom_line() +
   scale_color_manual(values = col) +
   theme(legend.position="none") +
-  labs(x="", y="Count",color="")
+  labs(x="", y="Count",color="") +
+  scale_x_date(breaks = date_breaks("2 weeks"), labels=date_format("%d.%m", tz="CET"))
 
-#ggsave("../figs/timeline.png", plot = last_plot(), device = "png", 
-#       dpi = 600)
+# ggsave("../figs/timeline.png", plot = last_plot(), device = "png", 
+#        dpi = 600)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 btw %>%
   ggplot(aes(site)) +
   geom_bar(fill=col, alpha= .8) +
   labs(x="", y="Count")
 
-#ggsave("../figs/bar.png", plot = last_plot(), device = "png", 
-#       dpi = 600)
+# ggsave("../figs/bar.png", plot = last_plot(), device = "png", 
+#        dpi = 600)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 btw %>%
-  ggplot(aes(date, site, size=fb_shares, color = site)) +
+  ggplot(aes(date, site, size=text_length, color = site)) +
   geom_point(show.legend = FALSE, alpha = .8) +
   scale_color_manual(values = col) +
   labs(x="", y="") 
 
-#ggsave("../figs/fb_shares.png", plot = last_plot(), device = "png", 
-#       dpi = 600)
-
-btw %>%
-  filter(site == "bild.de") %>%
-  select(title, text, fb_shares) %>%
-  .[3,] %>%
-  htmlTable::htmlTable()
+# ggsave("../figs/fb_shares.png", plot = last_plot(), device = "png", 
+#        dpi = 600)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 btw %>%
-  ggplot(aes(site, fb_shares)) +
-  stat_summary(fun.y="mean", geom="bar", fill = col, alpha = .8) +
+  ggplot(aes(site, text_length)) +
+  stat_summary(fun.y="median", geom="bar", fill = col, alpha = .8) +
   labs(x="", y="") 
 
 #ggsave("../figs/fb_shares_mean.png", plot = last_plot(), 
 #       dpi = 600)
 ```
 
+
+# Structural Topic Model
+## Build Corpus
+```{r eval=FALSE, include=FALSE}
+# Process data
+processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","month")],
+                           wordLengths = c(2,Inf),
+                           lowercase = F,
+                           removestopwords = F,
+                           removenumbers = F,
+                           removepunctuation = F,
+                           stem = F)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+```
+
+### Select number of topics
+```{r}
+K<-c(30,40,50,60,80)
+
+t1 <- Sys.time()
+kresult <- searchK(out$documents, out$vocab, K, prevalence=~site + s(btw_dummy), data = out$meta, init.type = "Spectral")
+t2 <- Sys.time()
+t2 - t1
+
+save(btw, out, kresult, file="../output/models/kresult.Rda")
+#load(file="../output/models/kresult.Rda")
+```
+
+
+```{r}
+plot(kresult)
+```
+
+We then train the Structural Topic Model on the full dataset, with $k = 50$.
+
+```{r}
+k = 40 # Topics
+
+t1 <- Sys.time()
+stmOut <- stm(documents = out$documents,
+           vocab = out$vocab,
+           K=k,
+           prevalence = ~site+s(month),
+           data=out$meta,
+           max.em.its = 75,
+           seed =8458159,
+           init.type = "Spectral")
+t2 <- Sys.time()
+t2 - t1
+
+save(stmOut, btw, out, file=paste("../output/models/STM",k,".Rda"))
+
+#load(file=paste("../output/models/STM",k,".Rda"))
+```
+
+## Explore Model Results
+
+### Using build-in functions
+#### Topic Summary
+```{r}
+plot(stmOut, type = "summary", xlim = c(0,.14), n = 5, #labeltype = "frex",
+         main = "Online News Topics", text.cex = 0.8)
+```
+
+The most frequent words in the model such as for topics #3, #7, and #20
+```{r}
+plot(stmOut, type="labels", topics=c(37,8))
+```
+
+A comparison of two topics 
+```{r}
+plot(stmOut, type="perspectives", topics=c(37,8))
+```
+
+The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups
+```{r}
+out$meta$site <- as.factor(out$meta$site)
+prep <- estimateEffect(1:50 ~ site+s(month), stmOut, meta=out$meta, uncertainty = "Global")
+```
+
+To see how prevalence of topics differs across values of a continuous covariate:
+```{r}
+plot(prep, "month", method="continuous", topics = c(46,42),
+     xlab="Month (2017)")
+monthseq <- seq(from=as.Date("2017-06-01"), to=as.Date("2017-11-01"), by="month")
+monthnames <- month(monthseq)
+axis(1, at=as.numeric(monthseq), labels = monthnames)
+```
+
+#### Topic Labeling
 ```{r Tokenize}
 btw %>% 
   # Tokenize by word
@@ -162,46 +244,7 @@ posts_tokenized.dt %>%
   posts_tokenized.dt
 ```
 
-
-## Structural Topic Model
-
-```{r eval=FALSE, include=FALSE}
-# Build Corpus
-btw$month <- month(btw$date)
-# Process data
-processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned")],
-                           wordLengths = c(2,Inf),
-                           lowercase = F,
-                           removestopwords = F,
-                           removenumbers = F,
-                           removepunctuation = F,
-                           stem = F)
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
-```
-
-We then train the Structural Topic Model on the full dataset, with $k = 40$.
-
-```{r eval=FALSE, include=FALSE}
-k = 40 # Topics
-
-t1 <- Sys.time()
-stmOut <- stm(documents = out$documents, 
-           vocab = out$vocab, 
-           K=k, 
-           prevalence = ~site, 
-           data=out$meta, 
-           init.type = "Spectral")
-t2 <- Sys.time()
-t2 - t1
-
-save(stmOut, btw, out, file=paste("../output/models/STM",k,".Rda"))
-
-```
-
-#### Topic Labeling
-
 ```{r Extract wtp and dtp}
-
 # Word-topic probabilities
 stmOut %>% tidy("beta") %>% filter(!is.na(topic)) -> posts.wtp
 
@@ -212,7 +255,6 @@ stmOut %>% tidy("gamma") -> posts.dtp
 To get an idea of the topics, we take a look at the words that are associated with topics and label them accordingly. We then inspect the documents that are estimated to be highly associated with each topic. Figure --- shows a random sample of 7 posts from the 300 highest probability fits per topic.
 
 ```{r Compute relevance}
-
 posts.wtp %>%
     filter(str_length(term) >= 3) %>%
   # Compute lambda and phi_kw
@@ -274,7 +316,7 @@ theta <- as.data.frame(stmOut$theta)
 theta$topic <- colnames(theta)[apply(theta,1,which.max)]
 
 doctopics.df <- theta %>%
-  transmute(articleID = rownames(.),
+  transmute(articleID = as.numeric(rownames(.)),
     topic = as.numeric(gsub("V","",topic)))
 
 
@@ -284,21 +326,14 @@ btw %>%
   ## Combine with Topic label
   left_join(., topicLabel %>%
               select(topic_name, topic) %>%
-              mutate(topic = as.numeric(topic)), by="topic") -> btw2
+              mutate(topic = as.numeric(topic)), by="topic") -> btw
 
 # subset  
-topics_mapping.dt <- btw2 %>%
+topics_mapping.dt <- btw %>%
   group_by(topic) %>%
-  slice(1) %>%
-  select(topic, title.text, articleID, topic_name) 
+  slice(5) %>%
+  select(topic, articleID, topic_name)
 ```
-
-## Topic Summary
-```{r}
-plot(stmOut, type = "summary", xlim = c(0,.14), n = 5, #labeltype = "frex",
-         main = "Online News Topics", text.cex = 0.8)
-```
-
 
 ### Sample articles
 
@@ -315,10 +350,10 @@ posts_classification.sdt <-
   posts.dtp %>% 
   group_by(articleID = document) %>% 
   summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
-  ungroup() %>% 
-  inner_join(btw2 %>% select(title, articleID) %>%
-               mutate(articleID = as.numeric(articleID)), by = "articleID") %>% 
-  inner_join(topics_mapping.dt, by = "topic") %>%
+  ungroup() %>%
+  inner_join(btw %>% select(title, title_text, articleID, topic_name),
+              by = "articleID") %>%
+  #inner_join(topics_mapping.dt, by = "topic") %>%
   mutate(topic_title = 
            paste0("Topic ", formatC(topic, flag = "0", width = 2), 
                   " - ", topic_name)) %>%
@@ -346,7 +381,7 @@ ggsave(
       geom_point(aes(x = -0.025), size = 0.5) +
       scale_x_continuous(limits = c(-0.05, 1), expand = c(0, 0)) +
       scale_color_manual(
-        values = rainbow(40) %>% 
+        values = rainbow(50) %>% 
           adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
       ) +
       theme(
@@ -420,7 +455,7 @@ posts.wtp %>%
           ) +
           scale_size_continuous(range = c(1, 4)) +
           scale_color_manual(
-            values = rainbow(40) %>% 
+            values = rainbow(39) %>% 
               adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
           ) +
           theme(
@@ -447,6 +482,13 @@ posts.wtp %>%
 
 ![Facebook News Map](../figs/news-landscape-map.png)
 
+```{r}
+btw %>%
+  #filter(topic==4) %>%
+  filter(startsWith(title,"News")) %>%
+  select(url,title, text)
+```
+
 ### Topic Trends
 
 We classify each document based on which topic has the highest probability. If one or more topics have equal probability, then the count is assigned equally to all the topics.
@@ -469,8 +511,9 @@ set.seed(7292)
 posts_classification.dt %>% 
   # Add post information
   inner_join(
-    btw2 %>% 
-      mutate(document = as.numeric(articleID)) %>%
+    btw %>% 
+      mutate(document = as.numeric(articleID),
+             date = as.POSIXct(date)) %>%
       select(document, date, 
              title) %>% 
       mutate(post_period = 
@@ -512,7 +555,7 @@ posts_classification.dt %>%
   chart_topic_trends.dt
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 chart_topic_trends.dt %>% 
     ggplot(
       aes(
@@ -567,12 +610,12 @@ ggsave("../figs/topic-trends.png")
 
 ### Facebook Shares
 ```{r Facebook Shares}
-btw %>%
+btw2 %>%
   ggplot(aes(as.factor(topic), fb_shares)) +
   stat_summary(fun.y="sum", geom="bar", fill = "blue", alpha=.7) +
   labs(x="", y="Sum") +
-  scale_x_discrete(breaks=c(1:40), labels = topicLabel$topic_name) +
-  theme(axis.text.x = element_text(size=6, angle=90),
+  scale_x_discrete(breaks=c(1:50), labels = topicLabel$topic_name) +
+  theme(axis.text.x = element_text(size=7, angle=90),
         axis.text.y = element_text(size=7))
 
 ggsave("../figs/fb_shares_topics.png", device = "png", 
