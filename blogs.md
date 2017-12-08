@@ -36,3 +36,5 @@
 - An application of the **Structural Topic Model (STM)** on the [public Facebook posts of North Carolina state senators](https://wesslen.github.io/social%20media/nc-state-senator-facebook-posts/) was posted by [Ryan Wesslen](https://wesslen.github.io/).
 
 - [Facebook Topic Modeling](https://github.com/tjpalanca/facebook-news-analysis)
+
+- A more "coding" way of learning probabilistic topic models: [Understanding Probabilistic Topic Models By Simulation](https://www.youtube.com/watch?v=_R66X_udxZQ) by Timothy Hopper. 
