@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+webhose_nov_30 <- read.csv(".../data/eventbride/webhose_nov_30.csv")
+```
+
+Test string patterns
+```{r}
+pattern <- "(?<=main_image': ')[^']*"
+str_extract(webhose_nov_30$posts[2],pattern)
+```
+
+```{r}
+webhose_nov_30$posts[80]
+```
+
+
+```{r}
+webhose_nov_30 %>%
+  transmute(url = str_extract(posts,"(?<=main_image': ')[^']*"),
+         section = str_extract(posts, "(?<=section_title': ')[^']*"),
+         site = str_extract(posts,"(?<=site': ')[^']*"),
+         title = str_extract(posts, "(?<=title_full': ')[^']*"),
+         text = str_extract(posts, "(?<=text': ')[^']*"),
+         date = as.POSIXct(str_extract(posts, "(?<=published': ')[^']*"))) %>%
+  distinct(title,site, .keep_all = TRUE) %>%
+  filter(!is.na(text)) -> df
+```
+
+## select politic section
+```{r}
+pat1 <- "\\w\\.de/politik/deutschland"
+pat2 <- "\\w\\.de/politik/inland"
+pat3 <- "\\w\\.de/politik/wahl"
+pat4 <- "\\w\\.de/politik/bundestagswahl"
+pat5 <- "tagesschau\\.de/inland"
+
+df %>%
+  filter(grepl(paste(pat1,pat2,pat3,pat4,pat5,
+                     sep="|"), url, perl = TRUE)) -> btw
+```
+
+```{r}
+df %>%
+  filter(site == "focus.de") %>%
+  select(url) 
+```
+
+
+
+
+
+

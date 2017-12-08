@@ -13,7 +13,7 @@ output:
     self_contained: true
 ---
 
-```{r Setup, include=FALSE}
+```{r}
 suppressPackageStartupMessages({
   library(dplyr)       # Data manipulation
   library(stringr)     # String manipulation
@@ -28,8 +28,14 @@ suppressPackageStartupMessages({
   library(data.table)
   library(pscl)
   library(boot)
+  library(stm)
+  library(readxl)
   
   library(ggplot2)     # Static data visualization
+  library(ggpmisc)
+  library(RColorBrewer) 
+  library(ggrepel)
+  library(plotly)
   library(scales)      # Scales
   library(viridis)     # Viridis color scales
 
@@ -48,7 +54,7 @@ quartzFonts(
 )
 
 theme_set(
-  theme_bw(base_family = "Roboto", base_size = 14) +
+  theme_bw(base_family = "Roboto", base_size = 8) +
     theme(
       plot.title = element_text(face = "bold", size = 14,
                                 margin = margin(0, 0, 4, 0, "pt")),
@@ -59,29 +65,146 @@ theme_set(
     )
 )
 
-rm(list=ls())
+#rm(list=ls())
+col <- brewer.pal(7,"Dark2")
 ```
 
-## Load Data
+# Load Data
 ```{r caching, echo = FALSE}
-load("../output/btw_combined.Rda")
-
-load("../output/models/STM 40 .Rda")
 #load("../output/btw_combined.Rda")
-knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
-
-
-# Set color
-library(RColorBrewer) 
-col <- brewer.pal(6,"Dark2")
+load("../output/models/STM 28 .Rda")
 ```
 
-## Prepare Data
+load data "Unique User"
+```{r}
+## Daily (06-2017 - 12-2017)
+unique_user1 <- read_excel("../data/uniqueUser_1.xls")
+unique_user2 <- read_excel("../data/uniqueUser_2.xls")
+
+uu_df <- rbind(unique_user1,unique_user2) %>%
+  rename(uniqueUser = `Unique User Tag Mio.`,
+         site = Dachmarke,
+         date = Tag) %>%
+  select(date, site, uniqueUser)
+
+rm(unique_user1, unique_user2)
+```
+
+# Description of Data
+
+### Unique User 
+```{r}
+p <- uu_df %>%
+  filter(date > as.Date("2017-05-31")) %>%
+  ggplot(aes(date, uniqueUser, color=site)) +
+  geom_line() +
+  geom_vline(aes(xintercept=as.POSIXct("2017-09-24")),
+             linetype = 2, color="grey50") +
+  scale_color_manual(values = col[c(1,2,3,4,6,7)]) +
+  theme(
+      #legend.position   = "none",
+      legend.text       =  element_text(size=6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    ) +
+  labs(x="", y="", color="", title = "", 
+      caption = "
+  Source: AGOF (www.agof.de)
+      " )
+
+#ggplotly(p)
+ggsave(plot= p,
+filename = "../figs/uniqueUser.png", device = "png",
+width = 6, height = 4,
+        dpi = 600
+)
+```
+
+### Distribution of articles
+```{r message=FALSE, warning=FALSE}
+ggsave({
+  btw %>%
+  ggplot(aes(site)) +
+  geom_bar(fill=col, alpha= .8) +
+  labs(x="", y="Count") +
+  theme(
+      legend.position   = "none",
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      plot.title        = element_text(size = 18),
+      plot.subtitle     = element_text(size = 8),
+      plot.caption      = element_text(size = 7),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    )
+  
+},
+filename = "../figs/bar.png", device = "png", 
+width = 6, height = 4,
+        dpi = 600)
+```
+
+```{r message=FALSE, warning=FALSE}
+ggsave({
+  btw %>%
+  group_by(date, site) %>%
+  summarise(obs = n()) %>%
+  ggplot(aes(date, obs, color = site)) +
+  geom_line() +
+  #geom_vline(aes(xintercept=as.Date("2017-09-24")),
+  #           linetype = 2, color="grey40") +
+  #geom_vline(aes(xintercept=as.Date("2017-11-20")),
+  #               linetype = 2, color="grey40") +
+  scale_color_manual(values = col) +
+  labs(x="", y="Count",color="") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(
+      #legend.position   = "none",
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      plot.title        = element_text(size = 18),
+      plot.subtitle     = element_text(size = 8),
+      plot.caption      = element_text(size = 7),
+      #panel.grid        = element_blank(),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    )
+},
+filename = "../figs/timeline.png", device = "png",width = 7, height = 4,
+dpi = 600
+)
+
+```
+
+# Model Results
 ```{r Extract wtp and dtp}
 # Word-topic probabilities
 stmOut %>% tidy("beta") %>% filter(!is.na(topic)) -> posts.wtp
 # Document-topic probabilities
 stmOut %>% tidy("gamma") -> posts.dtp
+```
+
+## Topic Labeling
+```{r Label Topics}
+label <- labelTopics(stmOut, n=3)
+
+prob <- as.data.frame(label$prob, stringsAsFactors = F)
+frex <- as.data.frame(label$frex, stringsAsFactors = F)
+lift <- as.data.frame(label$lift, stringsAsFactors = F)
+score <- as.data.frame(label$score, stringsAsFactors = F)
+
+topicLabel <- prob %>% 
+  transmute(topic = rownames(.),
+            topic_name = paste(prob$V1,prob$V2,prob$V3,score$V1,score$V2,score$V3, sep=","),
+            prob = paste(prob$V1,prob$V2,prob$V3, sep=","),
+            frex = paste(frex$V1,frex$V2,frex$V3, sep=","),
+            lift = paste(lift$V1,lift$V2,lift$V3, sep=","),
+            score = paste(score$V1,score$V2,score$V3, sep=",")) 
+
+topicLabel$topic_name <- vapply(lapply(strsplit(topicLabel$topic_name, ","), unique), paste, character(1L), collapse = " ")
+rm(prob, frex, lift, score)
 ```
 
 ```{r}
@@ -91,66 +214,342 @@ top_topics <-
   mutate(therank = rank(-gamma, ties.method = "random")) %>%
   filter(therank %in% 1) %>%
   select(- therank)
+
+# Add Topic to origian DF
+btw %>%
+  mutate(document = articleID) %>%
+  inner_join(.,top_topics, by="document") %>%
+  ## Combine with Topic label
+  left_join(., topicLabel %>%
+              select(topic_name, topic) %>%
+              mutate(topic = as.numeric(topic)), by="topic") -> btw
 ```
 
-Have a look at the assigned topics per documents
+## Topic Proportion
 ```{r}
-btw$articleID <- as.numeric(rownames(btw))
-
-# filter documents with low posterior
-btw.reg <- 
-  btw %>%
-  mutate(document = articleID) %>%
-  left_join(., top_topics, by="document") 
-
-btw.reg %>%
-  filter(site=="focus.de") %>%
-  group_by(topic, site) %>%
-  arrange(desc(gamma)) %>%
-  select(title, topic, gamma, url) %>%
-  top_n(2) %>%
-  htmlTable::htmlTable()
+png("../figs/topic_proportion.png")
+plot(stmOut, type = "summary", xlim = c(0,.16), n = 5, 
+     custom.labels = topicLabel$topic_name, 
+     family = "Roboto", main = "", text.cex = 0.7)
+dev.off()
 ```
 
-We classify each document based on which topic has the highest probability. To estimate the true effect of a topic, we delete documents where the highest topic probability is smaller than 0.5, as topic assignment is not ambiguous. This left us with 7740 documents. 
+## Topic Correlation
+We can correlate the topic by the metadata available. The column means of theta, grouped by category is calculated.
+```{r}
+theta <- as.data.frame(stmOut$theta)
+names(theta) <- as.character(1:28)
+
+theta2 <- theta %>% mutate(document = as.numeric(rownames(theta))) %>%
+  left_join(., btw %>% select(site, document),
+            by="document") 
+
+theta.mean.by <- by(theta2[,1:28], theta2$site, colMeans)
+theta.mean <- do.call("rbind", theta.mean.by)
+
+library(corrplot)
+c <- cor(theta.mean)
+corrplot(c, method = "circle")
+```
+
+## Sample Articles
+We classify each document based on which topic has the highest probability. 
+
+```{r Document classification}
+set.seed(9272)
+posts_classification.sdt <-
+  posts.dtp %>% 
+  group_by(articleID = document) %>% 
+  summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
+  ungroup() %>%
+  inner_join(btw %>% select(title, title_text, articleID, topic_name),
+              by = "articleID") %>%
+  #inner_join(topics_mapping.dt, by = "topic") %>%
+  mutate(topic_title = 
+           paste0("Topic ", formatC(topic, flag = "0", width = 2), 
+                  " - ", topic_name)) %>%
+  group_by(topic_name) %>% 
+  top_n(300, gamma) %>%
+  sample_n(7) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() 
+
+```
+
+```{r Document classification chart, echo=TRUE}
+
+ggsave(
+  plot = {
+    posts_classification.sdt %>% 
+      ggplot(aes(x = 0, y = row, color = factor(topic, levels = 1:28))) +
+      facet_wrap(~topic_title, ncol = 4) +
+      geom_text(
+        aes(label = title),
+        size = 3, hjust = 0, family = "Roboto"
+      ) +
+      geom_point(aes(x = -0.025), size = 0.5) +
+      scale_x_continuous(limits = c(-0.05, 1), expand = c(0, 0)) +
+      scale_color_manual(
+        values = rainbow(28) %>% 
+          adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
+      ) +
+      theme(
+        axis.title       = element_blank(),
+        axis.text        = element_blank(),
+        axis.ticks       = element_blank(),
+        panel.grid       = element_blank(),
+        strip.background = element_blank(),
+        panel.border     = element_blank(),
+        strip.text       = element_text(face = "bold", hjust = 0, size = 7),
+        plot.background  = element_rect(fill = "#FAFAFA"),
+        legend.position  = "none"
+      ) 
+  },
+  device = "png",
+  filename = "../figs/topic-classification-sample.png",
+  dpi = 600, height = 10, width = 16
+)
+```
+
+## Estimating the Effect of Covariates
+
+### Differences in Word-Topic Distribution
+How do different news sources describe the same topic with different vocabulary
+
+```{r Top Words by topic and news source}
+btw %>% 
+  unnest_tokens(word, text_cleaned, token = "words") %>%
+  filter(str_length(word) >= 3) %>%
+  count(site, topic, word) %>%
+  ungroup() ->
+  posts_tokenized.dt
+
+posts_tokenized.dt %>%
+  group_by(site, topic) %>%
+  dplyr::arrange(desc(n)) %>%
+  top_n(18) %>%
+  # concatenate words
+  group_by(site, topic) %>%
+  summarise(top_words = paste(word, collapse=", ")) %>%
+  mutate(top_words = gsub("([^,]+,[^,]+,[^,]+),","\\1\n", top_words)) %>%
+  left_join(.,topicLabel %>%
+              mutate(topic=as.numeric(topic),
+                     topic_name = gsub("([^\\s]+,[^\\s]+),","\\1\n", topic_name)) %>%
+              select(topic, topic_name),
+            by="topic") ->
+  top_words.dtf
+```
 
 ```{r}
-# filter documents with low posterior
-btw.reg <- 
-  btw %>%
-  mutate(document = articleID) %>%
-  left_join(., top_topics, by="document") 
-  filter(gamma > 0.5) 
+ggsave(
+  plot = {
+    top_words.dtf %>% 
+  filter(topic %in% c(5,6,7,12,15,16)) %>%
+  mutate(row=row_number()) %>%
+      ggplot(aes(x = topic_name, y=site, color=site)) +
+      facet_wrap(~topic_name, ncol=6) +
+      geom_text(aes(x =topic_name, y=site, label=top_words),
+                hjust="inward",
+                size = 2, family = "Roboto"
+      ) +
+      theme(
+        axis.title       = element_blank(),
+        axis.text        = element_blank(),
+        axis.ticks       = element_blank(),
+        panel.grid       = element_blank(),
+        strip.background = element_blank(),
+        panel.border     = element_blank(),
+        strip.text       = element_text(hjust = 0.5, size = 6),
+        plot.background  = element_rect(fill = "#FAFAFA"),
+        legend.title     = element_text(size=7),
+        legend.text      = element_text(size=7)
+      ) 
+      #guides(colour = guide_legend(override.aes = list(size=1)))
+  },
+  device = "png",
+  filename = "../figs/top_words_news.png",
+  dpi = 600, height = 6, width = 12
+)
+```
 
-# generate new variables and reduce df
-btw.reg %>%
+### Difference in topic prevalence
+The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
+
+```{r}
+prep <- estimateEffect(1:28 ~site + s(month),
+                       stmOut, meta=out$meta, uncertainty = "Global")
+```
+
+```{r}
+summary(prep)
+```
+
+Expected difference in topic probability by news source (with 95% Confidence Intervals). 
+parameter "covariate": String of the name of the main covariate of interest. Must be enclosed in quotes. All other covariates within the formula specified in estimateEffect will be kept at their median.
+```{r}
+for (i in 1:28){
+  png(paste0("../figs/estimate_effect",i,".png"))
+  plot(prep, "site", method = "pointestimate", topics = i,
+       labeltype = "custom", custom.labels = unique(prep$data$site),
+       ylab = "", xlab = "Mean topic proportion in corpus",
+       main = paste0("Topic ",i,": ",topicLabel$topic_name[i]),
+       xlim = c(-.05,0.15))
+  dev.off()
+}
+```
+
+```{r}
+for (i in 1:25){
+  plot(prep, "month", method = "continuous", topics = i,
+       printlegend = F,
+       ylab = "", xlab = "Mean topic proportion in corpus",
+       main = paste0("Topic ",i,": ",topicLabel$topic_name[i]))
+}
+
+```
+
+```{r}
+p<- posts.dtp %>%
+  left_join(., btw %>% select(document, topic_name,
+                              site, month),
+            by="document")  %>%
+  mutate(site = factor(site),
+         topic = factor(topic)) %>%
+  filter(month!=5) %>%
+  ggplot(aes(weight=gamma, x=topic, fill=topic, text=topic_name)) +
+  geom_bar() +
+  coord_flip() +
+  facet_grid(site~month) +
+  guides(fill=FALSE) +
+  xlab("Proportion")
+
+ggplotly(p)
+```
+
+# Regression
+
+What is the distribution of the gamma value?
+```{r}
+ggsave(plot={
+  btw %>%
+  ggplot(aes(gamma)) +
+  geom_density(fill="blue",alpha=.5,color="blue") 
+},
+filename = "../figs/gamma_dist.png",
+       width = 8, height = 6, device = "png", dpi=600)
+```
+
+filter documents with low posterior
+```{r}
+btw.reg <- btw %>%
+  filter(gamma >= 0.5) %>%
+  #filter(!site=="stern.de") %>%
   mutate(topic = factor(topic),
          site = factor(site),
-         shares.dummy = factor(ifelse(shares==0,0,1))) %>%
-  select(site, shares, shares.dummy, date, text_length, month, 
-         document, topic, gamma) -> btw.reg
+         month = factor(month),
+         fb_shares_log = log1p(fb_shares)) -> btw.reg
 ```
 
-## Description of Data
+Proportion of zeros
 ```{r}
-summary(btw.reg)
+nrow(btw.reg[which(btw.reg$fb_shares==0),])/nrow(btw.reg)
 ```
 
-The proportion of zeros in the independent variable (number of Facebook shares) is about 65.6\%. One way to model this type of situation is to assume that the data come from a mixture of two populations, one where the counts is always zero, and another where the count has a Poisson distribution with mean $\mu$. In this model zero counts can come from either population, while positive counts come only from the second one. 
+Distribution of Facebook shares
+```{r}
+btw.reg$share.cut <- cut(btw.reg$fb_shares, 
+                         breaks = c(0,1,100,500,1000,5000,max(btw.reg$fb_shares)),
+                         right = T, include.lowest = TRUE)
 
-The distribution of the outcome can then be modeled in terms of two parameters, $\pi$ the probability of 'always zero', and $\mu$, the mean number of publications for those not in the 'always zero' group. A natural way to introduce covariates is to model the logit of the probability $\pi$ of always zero and the log of the mean $\mu$ for those not in the always zero class.
+ggsave(plot={
+  ggplot(btw.reg, aes(x=share.cut)) + 
+  geom_bar(aes(fill=site), alpha=.7) + 
+  labs(title = "") +
+  labs(x="Facebook Shares", y="Count", fill="") +
+  scale_fill_manual(values = col) +
+  scale_x_discrete(labels = c("0","1-100","101-500","501-1000","1001-5000",">5000"))
+},
+filename = "../figs/facebook_shares.png", width = 8, height = 6, 
+       device = "png", dpi = 600
+)
+```
+
+## Topic Timeline
+```{r Data for topic trends chart, message=FALSE, warning=FALSE}
+set.seed(7292)
+btw.reg %>% 
+  mutate(date = as.POSIXct(date),
+         allocation = 1) %>%
+  mutate(post_period = 
+           date %>% with_tz("Europe/Paris") %>% 
+           floor_date("week")) %>%
+  # Summarise into tidy dataframe
+  group_by(post_period, topic, topic_name) %>% dplyr::summarise(articles = sum(allocation)) %>%
+  # Mark peaks 
+  group_by(topic_name) %>% dplyr::mutate(peak = ifelse(articles==max(articles),1,0)) -> chart_topic_trends.dt
+```
+
+```{r message=FALSE, warning=FALSE}
+ggsave(
+  plot = {
+    ggplot(chart_topic_trends.dt, 
+       aes(post_period, articles, color=topic_name)) +
+  geom_line() +
+  scale_color_manual(
+            values = rainbow(28) %>% 
+              adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
+          ) +
+  geom_text_repel(data=subset(chart_topic_trends.dt,peak==1),
+            aes(post_period,articles,label=paste(topic,topic_name,sep=":")),
+            size=2.8) +
+      geom_vline(aes(xintercept=as.POSIXct("2017-09-23")),
+                 linetype = 2, color="grey20") +
+      geom_vline(aes(xintercept=as.POSIXct("2017-11-19")),
+                 linetype = 2, color="grey20") +
+  ylim(c(0,200)) +
+    theme(
+      legend.position   = "none",
+      #plot.background   = element_rect("#fafafa", "#fafafa"),
+      plot.title        = element_text(size = 18),
+      plot.subtitle     = element_text(size = 8),
+      plot.caption      = element_text(size = 7),
+      panel.grid        = element_blank(),
+      #panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    )
+  },
+  device = "png",
+  filename = "../figs/topic-timeline.png",
+  dpi = 600, height = 5, width = 8
+)
+```
 
 ## Analysis
-### Zero-inflated Poisson regression
 ```{r}
-# filter NAs
-btw.reg %>%
-  filter(!is.na(shares)) -> btw.reg
+summary(btw.reg[,c("site","text_length","fb_shares","gamma")])
 ```
+
+### Simple linear regression
+```{r}
+source("func/functions.R")
+
+library(stargazer)
+lm <- lm(fb_shares_log ~ topic + site + text_length, data=btw.reg)
+
+lm.t <- stargazer(lm)
+
+lm.t <- AddResizeBox(lm.t)
+
+writeLines(lm.t, con = "../doc/lm1.tex")
+```
+
+### Zero-inflated Poisson regression
+The distribution of the outcome can then be modeled in terms of two parameters, $\pi$ the probability of 'always zero', and $\mu$, the mean number of publications for those not in the 'always zero' group. A natural way to introduce covariates is to model the logit of the probability $\pi$ of always zero and the log of the mean $\mu$ for those not in the always zero class.
 
 ```{r Zero-inflated Poisson}
 library(pscl)
-m1 <- zeroinfl(shares ~ topic + site | topic + site + text_length, data = btw.reg)
+m1 <- zeroinfl(fb_shares ~ topic + site | topic + site + text_length, data = btw.reg)
 summary(m1)
 ```
 Looking at the inflate equation we see that some topics are significant predictors of being in the 'always zero' class.
@@ -172,7 +571,7 @@ So the model solves the problem of excess zeroes, predicting that 65.6% of the a
 Note that the model output above does not indicate in any way if our zero-inflated model is an improvement over a standard Poisson regression. We can determine this by running the corresponding standard Poisson model and then performing a Vuong test of the two models. 
 
 ```{r}
-p1 <- glm(shares ~ topic, family = poisson, data = btw.reg)
+p1 <- glm(fb_shares ~ topic, family = poisson, data = btw.reg)
 summary(p1)
 ```
 
@@ -201,9 +600,9 @@ ggplot(btw.reg, aes(predicted, residuals)) +
 The predicted values are plotted in black. They are connected to the actual data points through a line and high residuals (in abolsute terms) are made more red on actual values. This helps to identify non-linearity in the data. We can see that there is more red for extreme values for spiegel.de as well as for the topics 12, 21 and 9. 
 ```{r message=FALSE, warning=FALSE}
 btw.reg %>%
-  select(site, shares, topic, residuals, predicted) %>%
-  gather(key="iv", value="x", -shares, -predicted, -residuals) %>%
-  ggplot(aes(x=x, y=shares)) +
+  select(site, fb_shares, topic, residuals, predicted) %>%
+  gather(key="iv", value="x", -fb_shares, -predicted, -residuals) %>%
+  ggplot(aes(x=x, y=fb_shares)) +
   geom_segment(aes(xend=x, yend=predicted), alpha=.2) +
   geom_point(aes(color=residuals)) +
   scale_color_gradient2(low="black", mid="blue", high="red") +

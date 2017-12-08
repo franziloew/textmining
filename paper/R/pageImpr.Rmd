@@ -1,0 +1,37 @@
+---
+title: "R Notebook"
+output: 
+---
+
+```{r}
+library(readxl)
+library(tidyverse)
+```
+
+```{r}
+unique_user1 <- read_excel("../data/unique_user1.xls")
+unique_user2 <- read_excel("../data/unique_user2.xls")
+
+uu_df <- rbind(unique_user1,unique_user2) %>%
+  rename(uniqueUser = `Unique User Tag Mio.`,
+         site = Dachmarke,
+         date = Tag) %>%
+  select(date, site, uniqueUser)
+```
+
+```{r}
+## Monthly (2003-2017)
+unique_user1 <- read_excel("../data/unique_user_2003_2017.xls")
+unique_user2 <- read_excel("../data/unique_user_2003_2017_2.xls")
+
+uu_df_full <- rbind(unique_user1,unique_user2) %>%
+  mutate(date = as.POSIXct(paste(Jahr,month,"1",sep="-"))) %>%
+  rename(uniqueUser = `Unique User Monat Mio.`,
+         site = Dachmarke) %>%
+  select(date, site, uniqueUser)
+```
+
+
+
+
+
