@@ -14,15 +14,14 @@ output:
 ---
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-library(tidyverse)
+library(dplyr)
 library(ggplot2)
 library(MCMCpack)
 library(Compositional)
 library(data.table)
-library(utf8)
-#install.packages("emojifont")
+#library(utf8)
 #library(emojifont)
-library(htmlTable)
+#library(htmlTable)
 ```
 
 **This is basically a R-version of [Timothy Hoppers](https://github.com/tdhopper/pydata-nyc-2015) presentation.
@@ -219,7 +218,6 @@ for (i in 1:i) {
 docs
 ```
 
-
 # Mixture Model for Documents
 ```{r}
 vocabulary = c("elephant","panda_face","hamster")
@@ -234,27 +232,47 @@ topics = rbind(c(0.1,  0.3,  0.6),
 mixture_proportion = c(0.3, 0.7)
 ```
 
-```{r}
-dd=data.frame(x=topic_labels, y=mixture_proportion)
+```{r eval=FALSE, include=FALSE}
+#list.emojifonts()
+#load.emojifont('OpenSansEmoji.ttf')
 
-ggplot(dd, aes(x, y)) + geom_col(fill="blue",alpha=.6) + 
-  #theme(axis.text.x = emoji_text) + 
+emoji_text=element_text(family="OpenSansEmoji", size=20)
+
+dd=data.frame(x=emoji(topic_labels), y=mixture_proportion)
+
+ggsave(plot={
+  ggplot(dd, aes(x, y)) + geom_col(fill="blue",alpha=.6) + 
+  theme(axis.text.x = emoji_text) + 
   labs(x="", y="", title="Mixture Proportions") 
+},
+file = "images/simulations-1.png", dpi=600,
+width = 7, height = 4
+)
 ```
 
-```{r}
+![Mixture Proportions](images/simulations-1.png)
+
+```{r eval=FALSE, include=FALSE}
 dd <- as.data.frame(topics)
-names(dd) <- vocabulary
-dd$topic_label <- topic_labels
+names(dd) <- emoji(vocabulary)
+dd$topic_label <- emoji(topic_labels)
 
 
-melt(dd, id.vars="topic_label") %>%
+ggsave(plot={
+  melt(dd, id.vars="topic_label") %>%
   ggplot(aes(x=as.factor(topic_label), y=value, fill=variable)) +
   geom_col(position = "dodge") +
-    #theme(axis.text.x = emoji_text,
-    #      legend.text = emoji_text) +
-    labs(x="", y="", title="Mixture Proportions", fill="")  
+    theme(axis.text.x = emoji_text,
+          legend.text = emoji_text) +
+    labs(x="", y="", title="Mixture Proportions", fill="") 
+},
+file="images/simulations-2.png",
+dpi = 600,
+width=7,
+height = 4
+)
 ```
+![Mixture Proportions 2](images/simulations-2.png)
 
 Lets generate some documents
 ```{r}
@@ -265,7 +283,7 @@ docs <- list()
 
 # Generate documents
 for (doc_index in 1:i) {
-  topic = sample(topic_labels, 1, p=mixture_proportions)
+  topic = sample(topic_labels, 1, p=mixture_proportion)
   topic_num <- append(topic_num, topic)
   
   doc_len = rpois(1,10)
