@@ -432,7 +432,7 @@ type: prompt
     1. **Topic Prevalence**: Attributes that affect the likelihood of discussing topic $k$
     2. **Topic Content**: Attributes that affect the likelihood of including term $w$ overall, and of including it within topic $k$
     
-- The generation of the $\beta_k$ and $\theta_k$ terms is via multinomial logistic regression, which breaks local conjugacy.
+- The generation of the $\beta_k$ and $\theta_k$ terms is via multinomial logistic regression.
 
 Model Selection
 ========================================================
