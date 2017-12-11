@@ -52,11 +52,22 @@ Date: 3/25/2016
 }
 
 .reveal h3 {
-    color: #c1d192;
+		color: #92a8d1
     text-align: left;
     padding-bottom: 10px;
-    font-family: Impact, sans-serif;
 }
+
+.col2 {
+  columns: 2 200px;         /* number of columns and width in pixels*/
+  -webkit-columns: 2 200px; /* chrome, safari */
+  -moz-columns: 2 200px;    /* firefox */
+}
+.col3 {
+  columns: 3 100px;
+  -webkit-columns: 3 100px;
+  -moz-columns: 3 100px;
+}
+
 
 /* Images */
 

@@ -65,14 +65,13 @@ theme_set(
     )
 )
 
-#rm(list=ls())
+rm(list=ls())
 col <- brewer.pal(7,"Dark2")
 ```
 
 # Load Data
 ```{r caching, echo = FALSE}
-#load("../output/btw_combined.Rda")
-load("../output/models/STM 28 .Rda")
+load("../output/models/STM 28 2.Rda")
 ```
 
 load data "Unique User"
@@ -226,11 +225,12 @@ btw %>%
 ```
 
 ## Topic Proportion
-```{r}
+```{r fig.height=7, fig.width=9}
+library(stm)
 png("../figs/topic_proportion.png")
 plot(stmOut, type = "summary", xlim = c(0,.16), n = 5, 
      custom.labels = topicLabel$topic_name, 
-     family = "Roboto", main = "", text.cex = 0.7)
+     family = "Roboto", main = "", text.cex = 1)
 dev.off()
 ```
 

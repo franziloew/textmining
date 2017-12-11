@@ -281,6 +281,7 @@ height = 2
 
 
 * **$z_{d,n}|\theta_d$**: according to $\theta_d$, assign a topic $z_{d,n}$ for the $n^{th}$ word;
+      
       E.g.$K=1$
 
 <aside class="notes">
@@ -405,13 +406,13 @@ type: prompt
   3. We use these patterns (posterior distributions) to predict a variable
 </aside>
 
-Strucutral Topic Model
+Strucutral Topic Model (Roberts et. al. (2016))
 ========================================================
 type: prompt
 
-- The structural topic model (STM) of Roberts et. al. (2016) explicitly introduces covariates into a topic model, and allows one to estimate the impact of document-level covariates on topic content and prevalence as part of the topic model itself.
+- Including covariates into a topic model, to estimate the impact of document-level covariates on topic content and prevalence as part of the topic model itself.
 
-<div style="position:relative; width:700px; height:300px; margin:0 auto;">
+<div style="position:relative; width:800px; height:400px; margin:0 auto;">
   <img class="fragment" src="img/stm.png" style="position:absolute;top:0;left:0;" />
 </div>
 
@@ -443,22 +444,10 @@ type: prompt
       - Griffiths & Steyvers (2002) recommend $\eta = 200/N$ and $\alpha = 50/K$. 
       - Smaller values will tend to generate more concentrated distributions. (See also Wallach et.al. (2009)).
   - $K$ is clearer. Two potential goals:
-     1. Predict text well. Statistical criteria to select $K$.
+      1. Predict text well. Statistical criteria to select $K$.
       2. Interpretability. General versus specific.
 
-Formalizing Interpretability
-========================================================
-type: prompt
 
-- Chang et. al. (2009) propose an objective way of determining whether topics are indeed interpretable.
-- Two tests:
-  1. *Word intrusion*:
-      - Form set of words consisting of top five words from topic k + word with low probability in topic k. 
-      - Ask subjects to identify inserted word.
-  2. *Topic intrusion*: 
-      - Show subjects a snippet of a document + top three topics associated to it + randomly drawn other topic. 
-      - Ask to identify inserted topic.
-      
 
 Model Results
 ========================================================
