@@ -1,7 +1,7 @@
 ---
-title: "Whats inside the news?"
+title: "What is reported in the news?"
 author: Franziska Löw
-date: December 16, 2017
+date: December 12, 2017
 output: 
   revealjs::revealjs_presentation:
     theme: serif
@@ -78,13 +78,15 @@ load("data/presentation-data.Rda")
 
 ## Agenda
 
-1. **Introduction**
+###1. Introduction
 
-2. **Methodology**
+###2. Data
 
-4. **First Results**
+###3. Methodology
 
-5. **Whats next**
+###4. First Results
+
+###5. Whats next?
 
 # Introduction
 
@@ -107,13 +109,38 @@ load("data/presentation-data.Rda")
 </div>
 
 - **Does the business model have an effect on the editorial content?**
-- **Methodology:**
-  1. Estimate a Structural Topic Model
-  2. Use posterior distribution to estimate the effect of document metadata. 
+
+# Data
 
 ## Data
 
 Online news articles about domestic politics from 01.06.2017 - 01.12.2017
+
+```{r echo=FALSE, fig.height=6, fig.width=8, message=FALSE, warning=FALSE}
+btw %>%
+  group_by(date) %>%
+  summarise(obs = n()) %>%
+  ggplot(aes(date, obs)) +
+  geom_line(color="blue") +
+  geom_vline(aes(xintercept=as.Date("2017-09-24")),
+             linetype = 2, color="grey40") +
+  geom_vline(aes(xintercept=as.Date("2017-11-20")),
+                 linetype = 2, color="grey40") +
+  labs(x="", y="Count") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(
+      #legend.position   = "none",
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      plot.title        = element_text(size = 18),
+      plot.subtitle     = element_text(size = 8),
+      plot.caption      = element_text(size = 7),
+      #panel.grid        = element_blank(),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    )
+```
+
 
 <img class="fragment" src="img/timeline.png" width="850"/>
 
@@ -140,6 +167,16 @@ kable(table)
 - Documents are seen as "bag of words"
 
 - Each article has metadata: publisher (news platform) and the day it was published. 
+
+## Research Process
+
+<img class="fragment" src="img/research_strategy.png" width="1000"/>
+
+<aside class="notes">
+(1)We have knowledge about the world and want to answer a specific question: We know that newspapers are based on different business models. does that have an effect on the topics discussed in the newspaper?
+(2)We make assumptions and bring them together with our data to uncover patterns.
+(3)We use these patterns (posterior distributions) to predict a variable
+</aside>
   
 ## How to find out latent topics in an article?
 
@@ -168,15 +205,11 @@ Each document is comming from a mixture model, where the mixture proportions cha
 
 <img src="img/lda-plate-2.png" width="600">
 
-* Nodes are random variables; arrows indicate dependence
-* Plates indicate replicated variables:
-    * $N =$ collection of words within a document.
-    * $D =$ collection of documents within a corpus.
-
-* Shaded nodes are observed; unshaded nodes are hidden
-    * observed: word in a document $w_{d,n}$
-    * fixed: mixture components (number of topics $K$ & vocabulary)
-    * hidden: mixture proportions (per-document topic proportions $\theta_d$ & word-topic distribution $\beta_k$)
+  * $N =$ collection of words within a document.
+  * $D =$ collection of documents within a corpus.
+  * observed: word in a document $w_{d,n}$
+  * fixed: mixture components (number of topics $K$ & vocabulary)
+  * hidden: mixture proportions (per-document topic proportions $\theta_d$ & word-topic distribution $\beta_k$)
     
 <aside class="notes">
 Diagram:
@@ -185,18 +218,11 @@ Diagram:
 (3)Connects to algorithm for computing with data: Inference problem: finding the hidden variables given the observations.
 </aside>
     
-## LDA - joint distribution
 
 $$
 \begin{aligned}
-p(\beta_{1:K},\theta_{1:D},z_{1:D}, w_{1:D}) \propto
-\end{aligned}
-$$
-
-
-$$
-\begin{aligned}
-\displaystyle \prod_{i=1}^{K}p(\beta_i)\displaystyle \prod_{d=1}^{D}p(\theta_d)(\prod_{n=1}^Np(z_{d,n,}|\theta_d)p(w_{d,n}|\beta_{1:K},z_{d,n}))
+p(\beta,\theta,z|w) \propto
+\displaystyle \prod_{i=1}^{K}p(\beta_i)\displaystyle \prod_{d=1}^{D}p(\theta_d)(\prod_{n=1}^Np(z_{d,n,}|\theta_d)p(w_{d,n}|\beta_{d,k},z_{d,n}))
 \end{aligned}
 $$
 
@@ -271,11 +297,11 @@ height = 4
 )
 ```
 
-* **$K$**: choose the number of topics
+* $K$: choose the number of topics
    
     * $K=3$
    
-* **$\theta_d$**: for each document $d$, choose a distribution over topics;
+* $\theta_d$: for each document $d$, choose a distribution over topics;
    
     * $\theta_d$ ~ Dirichlet($\alpha$)
   
@@ -288,7 +314,7 @@ height = 4
   </div>
 
 
-* **$z_{d,n}|\theta_d$**: according to $\theta_d$, assign a topic $z_{d,n}$ for the $n^{th}$ word;
+* $z_{d,n}|\theta_d$: according to $\theta_d$, assign a topic $z_{d,n}$ for the $n^{th}$ word;
       
       * $K=Topic 1$
 
@@ -298,7 +324,7 @@ The higher value of $\alpha_i$, the greater “weight” of $X_i$ and the greate
 
 ## Generative process (contd.)
 
-* **$w_{d,n}|z_{d,n},\beta,\theta$**: choose a term from that topic according to $\beta_k$
+* $w_{d,n}|z_{d,n},\beta,\theta$: choose a term from that topic according to $\beta_k$
    
     * $\beta_k$ ~ Dirichlet($\eta$)
   
@@ -365,9 +391,9 @@ dpi = 600
 </div>
 
 
-* **$N$**: repead this process for all $n$ word-positions in the document.
+* $N$: repead this process for all $n$ word-positions in the document.
 
-* **$D$**: conduct this process for all $d$ documents in the corpus
+* $D$: conduct this process for all $d$ documents in the corpus
 
 ## Research Process
 
@@ -417,25 +443,16 @@ $m$= marginal log-frequency of term $v$ (estimated from total counts)
 (c)core language (or observation) model, which combines these two sources of variation to produce the actual words in each document.
 </aside>
 
-## STM Priors
-
-<div style="position:relative; width:600px; height:350px; margin:0 auto;">
-  <img class="fragment" src="img/stm5.png" style="position:absolute;top:0;left:0;" />
-</div>  
-
 ## Bayesian inference
 
 Posterior probability:
 
 $$
-\begin{aligned}
-p(\eta,z,\kappa,\gamma,\Sigma|w,X,Y) \propto
-\displaystyle \prod_{d=1}^{D}(\eta_d|X_d\gamma,\Sigma) (\displaystyle \prod_{n=1}^{D}(z_{n,d}|\theta_d)*(w_n|\beta_{d,k=z_{d,n}}))) * \displaystyle \prod p(\kappa)\displaystyle \prod p(\Gamma)
-\end{aligned}
+p(\eta,z,\kappa,\gamma,\Sigma|w,X,Y)\propto (\displaystyle \prod^D_{d=1}(\eta_d|X_d,\gamma,\Sigma)( \prod^N_{n=1}(z_{n,d}|\theta_d)(w_n|\beta_{d,k=z_{d,n}}))) \prod p(\kappa)\prod p(\Gamma)
 $$
 
-
-* The number of possible topic structures is exponentially large --> sum is intractable to compute.
+* The number of possible topic structures is exponentially large
+    -> sum is intractable to compute.
 * Instead of obtaining a closed-form solution for the posterior distribution, we must approximate it.
 
 <aside class="notes">
@@ -458,38 +475,13 @@ Central research goal of probabilistic modeling: develop efficient methods for a
 * Distributed samplung (Newsman et al., 2008; Ahmed et al., 2012)
 * Stochastic inference (Hoffman et al., 2010, 2013; Mimno et al., 2012)
 * Factorization inference (Arora et al., 2012; Anandkumar et al., 2012)
-* **Variational EM algorithm** (Wang and Blei 2013; Roberts et. al. (2016)
+* **Variational EM algorithm** (Wang and Blei 2013; Roberts et. al. (2016))
 * ...
     
 <aside class="notes">
 the answers the estimation procedure comes up with may depend on starting values of the parameters (e.g., the distribution over words for a particular topic).
 </aside>
   
-## Model Selection
-
-
-
-**Prior Specification:**
-
-$\gamma_{p,k}$ ~ Normal$(0,\sigma^2_k)$
-
-$\sigma^2_k$ ~ Inverse-Gamma$(a,b)$
-
-<aside class="notes">
-The prior specification for the topic prevalence parameters is a zero mena Haussian distribution with shared variance parameter.
-$p$ indexes the covariates, $k$ indexes the topics and $a,b$ are fixed hyperparameters
-</aside>
-
-**Topic Selection:**
-
-$K=28$
-
-<aside class="notes">
-(2)Two potential goals:
-(2a)Predict text well. Statistical criteria to select $K$.
-(2b)Interpretability. General versus specific.
-</aside>
-
 # Model Results
 
 ```{r include=FALSE}
@@ -539,7 +531,7 @@ topic_sample <- c(1,5,6,7,9,16,19,24)
 ## Topic Proportions
 
 ```{r echo=FALSE, fig.height=6.5}
-plot(stmOut, type = "summary", xlim = c(0,.16), n = 5, 
+plot(stmOut, type = "summary", xlim = c(0,.18), n = 5, 
      custom.labels = topicLabel$topic_name, 
      family = "Roboto", main = "", text.cex = 1)
 ```
@@ -645,5 +637,9 @@ The stm-package provides a function that uses the method of composition to incor
 
 1. **Estimate model, including the effect of covariates on topical content** How are topics discused within different newswires?
 
-2. **Relationship between topics** How topics are correlated differently for different newswires, indicating how topics are connected and framed differently in each newswire.
+2. **Sentiment analysis** 
+
+3. **Relationship between topics** How topics are correlated differently for different newswires, indicating how topics are connected and framed differently in each newswire.
+
+# Thank you! Questions? 
 
