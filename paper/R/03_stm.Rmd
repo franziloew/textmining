@@ -101,6 +101,10 @@ posts_tokenized.dt %>%
 # Structural Topic Model
 
 ## Preparation
+```{r}
+btw %>% mutate(week = week(date)) -> btw
+```
+
 ### Build Corpus
 ```{r eval=FALSE, include=FALSE}
 # Process data
@@ -142,7 +146,7 @@ plot(kresult)
 We then train the Structural Topic Model on the full dataset, with $k = 28$.
 
 ```{r}
-k = 28 # Topics
+k = 15 # Topics
 
 t1 <- Sys.time()
 stmOut <- stm(documents = out$documents,
@@ -150,7 +154,7 @@ stmOut <- stm(documents = out$documents,
            K=k,
            prevalence = ~site+s(month),
            data=out$meta,
-           max.em.its = 75,
+           #max.em.its = 150,
            seed =8458159,
            init.type = "Spectral")
 t2 <- Sys.time()

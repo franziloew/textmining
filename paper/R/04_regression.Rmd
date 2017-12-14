@@ -65,13 +65,13 @@ theme_set(
     )
 )
 
-rm(list=ls())
-col <- brewer.pal(7,"Dark2")
+#rm(list=ls())
+col <- brewer.pal(6,"Dark2")
 ```
 
 # Load Data
 ```{r caching, echo = FALSE}
-load("../output/models/STM 28 2.Rda")
+load("../output/models/STM 15 .Rda")
 ```
 
 load data "Unique User"
@@ -149,7 +149,7 @@ width = 6, height = 4,
 ggsave({
   btw %>%
   group_by(date, site) %>%
-  summarise(obs = n()) %>%
+  dplyr::summarise(obs = n()) %>%
   ggplot(aes(date, obs, color = site)) +
   geom_line() +
   #geom_vline(aes(xintercept=as.Date("2017-09-24")),
@@ -215,6 +215,8 @@ top_topics <-
   select(- therank)
 
 # Add Topic to origian DF
+btw$articleID = as.numeric(rownames(btw))
+
 btw %>%
   mutate(document = articleID) %>%
   inner_join(.,top_topics, by="document") %>%
@@ -228,7 +230,7 @@ btw %>%
 ```{r fig.height=7, fig.width=9}
 library(stm)
 png("../figs/topic_proportion.png")
-plot(stmOut, type = "summary", xlim = c(0,.16), n = 5, 
+plot(stmOut, type = "summary", xlim = c(0,.3), n = 5, 
      custom.labels = topicLabel$topic_name, 
      family = "Roboto", main = "", text.cex = 1)
 dev.off()
@@ -269,7 +271,7 @@ posts_classification.sdt <-
            paste0("Topic ", formatC(topic, flag = "0", width = 2), 
                   " - ", topic_name)) %>%
   group_by(topic_name) %>% 
-  top_n(300, gamma) %>%
+  top_n(100, gamma) %>%
   sample_n(7) %>% 
   mutate(row = row_number()) %>% 
   ungroup() 
@@ -281,11 +283,11 @@ posts_classification.sdt <-
 ggsave(
   plot = {
     posts_classification.sdt %>% 
-      ggplot(aes(x = 0, y = row, color = factor(topic, levels = 1:28))) +
-      facet_wrap(~topic_title, ncol = 4) +
+      ggplot(aes(x = 0, y = row, color = factor(topic, levels = 1:15))) +
+      facet_wrap(~topic_title, ncol = 3) +
       geom_text(
         aes(label = title),
-        size = 3, hjust = 0, family = "Roboto"
+        size = 2.8, hjust = 0, family = "Roboto"
       ) +
       geom_point(aes(x = -0.025), size = 0.5) +
       scale_x_continuous(limits = c(-0.05, 1), expand = c(0, 0)) +
@@ -310,6 +312,17 @@ ggsave(
   dpi = 600, height = 10, width = 16
 )
 ```
+
+```{r}
+btw %>% filter(topic==8) %>%
+  filter(gamma>=0.5) %>%
+  select(url, gamma) %>% htmlTable::htmlTable(align="l")
+```
+
+```{r}
+label[1]
+```
+
 
 ## Estimating the Effect of Covariates
 
@@ -376,7 +389,7 @@ ggsave(
 The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
 
 ```{r}
-prep <- estimateEffect(1:28 ~site + s(month),
+prep <- estimateEffect(1:15 ~site + s(month),
                        stmOut, meta=out$meta, uncertainty = "Global")
 ```
 
@@ -387,13 +400,13 @@ summary(prep)
 Expected difference in topic probability by news source (with 95% Confidence Intervals). 
 parameter "covariate": String of the name of the main covariate of interest. Must be enclosed in quotes. All other covariates within the formula specified in estimateEffect will be kept at their median.
 ```{r}
-for (i in 1:28){
+for (i in 1:15){
   png(paste0("../figs/estimate_effect",i,".png"))
   plot(prep, "site", method = "pointestimate", topics = i,
        labeltype = "custom", custom.labels = unique(prep$data$site),
        ylab = "", xlab = "Mean topic proportion in corpus",
        main = paste0("Topic ",i,": ",topicLabel$topic_name[i]),
-       xlim = c(-.05,0.15))
+       xlim = c(-.05,0.2))
   dev.off()
 }
 ```
