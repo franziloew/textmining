@@ -73,9 +73,8 @@ theme_set(
     )
 )
 
-rm(list=ls())
+#rm(list=ls())
 # Functions
-source("func/topic-modelling-functions.R")
 ```
 
 ```{r caching, echo=, message=FALSE, warning=FALSE}
@@ -101,14 +100,10 @@ posts_tokenized.dt %>%
 # Structural Topic Model
 
 ## Preparation
-```{r}
-btw %>% mutate(week = week(date)) -> btw
-```
-
 ### Build Corpus
 ```{r eval=FALSE, include=FALSE}
 # Process data
-processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","month")],
+processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","week")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
@@ -116,6 +111,8 @@ processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_clea
                            removepunctuation = F,
                            stem = F)
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+
+save(btw, out, file="../output/btw_combined.Rda")
 ```
 
 ### Select number of topics
@@ -146,13 +143,13 @@ plot(kresult)
 We then train the Structural Topic Model on the full dataset, with $k = 28$.
 
 ```{r}
-k = 15 # Topics
+k = 50 # Topics
 
 t1 <- Sys.time()
 stmOut <- stm(documents = out$documents,
            vocab = out$vocab,
            K=k,
-           prevalence = ~site+s(month),
+           prevalence = ~site+s(week),
            data=out$meta,
            #max.em.its = 150,
            seed =8458159,

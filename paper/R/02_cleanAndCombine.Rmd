@@ -17,119 +17,145 @@ lapply(libs, library, character.only = TRUE)
 ```{r message=FALSE}
 rm(list =ls())
 
-load("../output/news_cleaned.Rda")
+#load("../output/news_cleaned.Rda")
 okt <- read_csv("../data/eventbride/eventbride_okt_18.csv")
 nov_03 <- read_csv("../data/eventbride/eventbride_nov_03.csv")
 nov_22 <- read_csv("../data/eventbride/eventbride_nov_22.csv")
 dec_16 <- read_csv("../data/eventbride/eventbride_dec_16.csv")
+jan_1 <- read_csv("../data/eventbride/eventbride_jan_1.csv")
 ```
 
 ## combine dataframes
 
 ```{r}
-df_full <- bind_rows(list(okt,nov_03,nov_22,dec_16)) %>%
+df_full <- bind_rows(list(okt,nov_03,nov_22,dec_16,jan_1)) %>%
   mutate(text = body,
          # Extract site 
          site = str_extract(source, "(?<='uri': ')[A-z][^']*")) %>%
   # Delete duplicates
   #filter(isDuplicate=="False") %>%
   distinct(text, site, .keep_all = TRUE) %>%
-  select(date,title,text,site,url) 
+  select(date,title,text,site,url)  
 
-df_full <- bind_rows(df %>%
-                   mutate(date = as.Date(date)) %>%
-                   select(date,title,text,site,url),
-                 df_full)
+# df_full <- bind_rows(df %>%
+#                    mutate(date = as.Date(date)) %>%
+#                    select(date,title,text,site,url),
+#                  df_full)
 ```
 
 # Pre-Process Text
 ## select news-outlets
 ```{r}
-keeps <- c("spiegel.de","focus.de","zeit.de","bild.de",
+keeps <- c("spiegel.de", "focus.de", "zeit.de","bild.de",
            "tagesschau.de","deutschlandfunk.de")
 
-df_full %>%
+df <- df_full %>%
   mutate(title_text = paste(title, text, sep=" ")) %>%
   filter(site %in% keeps) %>%
-  filter(date>=as.Date("2017-09-14")) -> btw
-```
-## select politic section
-```{r}
-pat1 <- "\\w\\.de/politik/deutschland"
-pat2 <- "\\w\\.de/politik/inland"
-pat3 <- "\\w\\.de/politik/wahl"
-pat4 <- "\\w\\.de/politik/bundestagswahl"
-pat5 <- paste("cdu","csu","union","spd","fdp","afd","linkspartei","gruenen",
-              "merkel","schulz","nahles","gabriel","oezdemir","petry","wagenknecht","lindner",
-              "gauland","weidel","steinmeier","seehofer","maiziere","dreyer","althusmann",
-              "buergermeister", "fraktion","jamaika","groko","koalition","sondierung","btw","wahl",
-              "bundestag","bundewehr","bundesregierung","landtag","minister","kanzler",
-              "fluechtling","raf", "glyphosat","rundfunk",  sep="|")
-
-btw %>%
-  mutate(politics = ifelse(grepl(paste(pat1,pat2,pat3,pat4,
-                      sep="|"), url, perl = TRUE),1,0)) -> btw1
- 
-btw1$politics <- ifelse(btw1$site=="deutschlandfunk.de"&grepl(pat5,btw1$url),1,btw1$politics)
-btw1$politics <- ifelse(btw1$site=="tagesschau.de"&grepl(pat5,btw1$url),1,btw1$politics)
-```
-
-```{r}
-btw <- btw1 %>% filter(politics==1) %>%
   filter(date>=as.Date("2017-09-14"))
 ```
 
+## select politic section
 ```{r}
-p <- btw %>%
+# pat1 <- "\\w\\.de/politik/deutschland"
+# pat2 <- "\\w\\.de/politik/inland"
+# pat3 <- "\\w\\.de/politik/wahl"
+# pat4 <- "\\w\\.de/politik/bundestagswahl"
+# pat5 <- paste("cdu","csu","union","spd","fdp","afd","linkspartei","gruenen",
+#               "merkel","schulz","nahles","gabriel","oezdemir","petry","wagenknecht","lindner",
+#               "gauland","weidel","steinmeier","seehofer","maiziere","dreyer","althusmann",
+#               "buergermeister", "fraktion","jamaika","groko","koalition","sondierung","btw","wahl",
+#               "bundestag","bundewehr","bundesregierung","landtag","minister","kanzler",
+#               "fluechtling","raf","glyphosat","rundfunk",  sep="|")
+# 
+# btw %>%
+#   mutate(politics = ifelse(grepl(paste(pat1,pat2,pat3,pat4,
+#                       sep="|"), url, perl = TRUE),1,0)) -> btw1
+# 
+#  
+# btw1$politics <- ifelse(btw1$site=="deutschlandfunk.de"&grepl(pat5,btw1$url),1,btw1$politics)
+# btw1$politics <- ifelse(btw1$site=="tagesschau.de"&grepl(pat5,btw1$url),1,btw1$politics)
+
+#........................
+pat <- paste("cdu","csu","union","spd","fdp","afd",
+             "linkspartei","die linke","die grünen","bündnis 90", sep="|")
+
+df %>%
+  mutate(politics = ifelse(grepl(pat, title_text, ignore.case = TRUE),1,0)) -> btw1
+```
+
+```{r}
+btw1 %>%
+  #filter(politics==1) %>%
+  ggplot(aes(site, fill=factor(politics))) +
+  geom_bar(show.legend = FALSE, alpha=0.8)
+```
+
+```{r}
+btw <- btw1 %>% filter(politics==1)
+```
+
+```{r}
+btw %>%
   group_by(date, site) %>%
-  dplyr::summarise(obs = n()) %>%
-  ggplot(aes(date, obs, color = factor(site))) +
-  geom_line() +
+  summarize(obs = n()) %>%
+  ggplot(aes(date, obs, fill = factor(site))) +
+  geom_col(alpha=0.8) +
   #geom_vline(aes(xintercept=as.Date("2017-09-24")),
   #           linetype = 2, color="grey40") +
   #geom_vline(aes(xintercept=as.Date("2017-11-20")),
   #               linetype = 2, color="grey40") +
   #scale_color_manual(values = col) +
-  labs(x="", y="Count",color="") +
-  scale_x_date(breaks = date_breaks("1 day"), labels=date_format("%d.%m", tz="CET"))
-
-plotly::ggplotly(p)
+  labs(x="", y="Count",fill="") +
+  scale_x_date(breaks = date_breaks("1 week"), labels=date_format("%d.%m", tz="CET"))
 ```
 
 ## count number of terms in a string
 ```{r}
-btw$text_length <- sapply(gregexpr("\\S+", btw$text), length)
+df$text_length <- sapply(gregexpr("\\S+", df$text), length)
 ```
 
 ## ... and filter short text & other
 ```{r}
-btw %>%
+btw <- df %>%
   filter(text_length > 120) %>%
   arrange(desc(text_length)) %>%
   distinct(url, .keep_all = TRUE) %>%
   
   # remove articles that contain daily overviews
   filter(!grepl("Nachrichten am Morgen", title)) %>%
+  filter(!grepl("elbvertiefung", url)) %>%
+  filter(!grepl("zeit-magazin", url)) %>%
+  filter(!grepl("s-magazin", url)) %>%
   filter(!startsWith(title,"News")) %>%
-  
+
   # remove articles that only contain video 
   filter(!grepl("Video einbetten Nutzungsbedingungen Embedding Tagesschau", title_text)) %>%
   
   # remove english text
   filter(!grepl("bild-international", url)) %>%
+  filter(!grepl("spiegel.de/international", url)) %>%
   filter(!grepl("german",url)) %>%
+  filter(!grepl("arabisch",url)) %>%
   
   # remove text that mostly contain user comments
   filter(!grepl("ticker", title, ignore.case = TRUE)) %>%
   filter(!grepl("stream", title, ignore.case = TRUE)) %>%
-  filter(!startsWith(text,"1.")) -> btw
+  filter(!startsWith(text,"1.")) 
+```
+
+```{r}
+save(btw, file="../output/btw_combined.Rda")
+
+rm(list=ls())
+load("../output/btw_combined.Rda")
 ```
 
 ## Clean text
 
 The following two chuncks of code are just to check right regex definitions to use it inthe clean.text function.
 ```{r}
-pat <- "\\w{1,10}[^:]"
+pat <- "Newsletter[^\n]*"
 btw %>%
   filter(grepl(pat, title_text, perl = TRUE, ignore.case = TRUE)) %>%
   #filter(site=="tagesschau.de") %>%
@@ -214,45 +240,65 @@ clean.text <- function(x)
   
   # Deutschlandfunk
   x = gsub("Äußerungen unserer Gesprächspartner[^.]*", "", x, perl = TRUE)
-  x = gsub("im Gespräch mit \\w{1,}", "", x, ignore.case = TRUE)
-  x = gsub("Heinlein", "", x, ignore.case = TRUE)
-  x = gsub("Barenberg", "", x, ignore.case = TRUE)
-  x = gsub("Büüsker", "", x, ignore.case = TRUE)
-  x = gsub("Dobovisek", "", x, ignore.case = TRUE)
-  x = gsub("Schmidt-Mattern", "", x, ignore.case = TRUE)
-  x = gsub("Zagatta", "", x, ignore.case = TRUE)
-  x = gsub("Armbrüster", "", x, ignore.case = TRUE)
-  x = gsub("Münchenberg", "", x, ignore.case = TRUE)
-  x = gsub("Heckmann", "", x, ignore.case = TRUE)
+  x = gsub("im Gespräch mit \\w{1,}", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Heinlein", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Barenberg", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Büüsker", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Dobovisek", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Schmidt-Mattern", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Zagatta", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Armbrüster", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Münchenberg", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Heckmann", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Kaess", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Engels", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Zurheide", "", x, ignore.case = TRUE, perl=TRUE)
+  x = gsub("Marc Müller", "", x, ignore.case = TRUE, perl=TRUE)
 
   return(x)
 }
 
 # apply function to dataframe
 btw$text_cleaned <- clean.text(btw$title_text)
-```
 
-```{r}
 btw$text_cleaned <- gsub("[[:punct:]]", " ", btw$text_cleaned)
 btw$text_cleaned <- gsub("[[:cntrl:]]", " ", btw$text_cleaned)
 btw$text_cleaned <- gsub("[[:digit:]]", " ", btw$text_cleaned)
 btw$text_cleaned <- gsub("^[[:space:]]+", " ", btw$text_cleaned)
 btw$text_cleaned <- gsub("[[:space:]]+$", " ", btw$text_cleaned)
 btw$text_cleaned <- tolower(btw$text_cleaned)
+
+## Remove stopwords
+# 1
+german_stopwords_full <- read.table("dict/german_stopwords_full.txt", stringsAsFactors = F)
+german_stopwords_full <- german_stopwords_full$V1
+
+# 2
+mystopwords <- c("focus","online","spiegel", "stern", "de", "bild","bildplus","n-tv.de", "zeit", "ersten", "tagesschau","müssen","sagen", "zeitmagazin","seitenanfang","ja","mal","heute","ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e","seien","comment","ticker","live","laif","uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv","nwmi","wäre","viele","nwnoa","morgenkolumne","beim","dpa","video","quelle","afp","witters","fotogalerie","wurden","worden","wegen","sagt","immer","gibt","geht","spon","registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen","tba","datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht","herr","imago","dobovisek","barenberg","heinlein","armbrüster","kaess","münchenberg","büüsker","tsereteli","konietzny","klenkes","hauptstadtstudio","newsletter","premiumbereich","nachrichtenpodcast","karrierespiegel","ganslmeier","heißler","zerback","böddeker","frage","glaube","vorstellen","denken","beispiel","sozusagen","na","picture alliance")
+
+stopwords <- c(german_stopwords_full, mystopwords)
+stopwords <- unique(stopwords)
+
+# 3
+btw$text_cleaned<- removeWords(btw$text_cleaned, stopwords)
 ```
 
-## Remove Stopwords
+## month & document number
 ```{r}
-german_stopwords_full <- read.table("dict/german_stopwords_full.txt")
-
-btw$text_cleaned<- removeWords(btw$text_cleaned, german_stopwords_full$V1)
+btw %>%
+  mutate(month = month(date),
+         week = week(date),
+         articleID = as.numeric(rownames(btw)),
+         site = ifelse(site=="bild.de","Bild.de",site),
+         site = ifelse(site=="focus.de","FOCUS ONLINE",site),
+         site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
+         site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
+         site = ifelse(site=="deutschlandfunk.de","Deutschlandfunk.de",site),
+         site = ifelse(site=="tagesschau.de","Tagesschau.de",site)) -> btw
 ```
 
-### Remove customized stopwords
 ```{r}
-mystopwords <- c("focus","online","spiegel", "stern", "de", "bild","bildplus", "zeit", "ersten", "tagesschau","müssen","sagen", "zeitmagazin","seitenanfang","ja","mal","heute","ich","sie","passwort","kommentar","wurde","ihr","der","im","artikel","mehr","ihren","foto","e","seien","comment","ticker","live","laif","uhr","videolänge","dass","mindestens","das","mail","die","schon","neuer abschnitt", "login", "loggen", "inaktiv","nwmi","wäre","viele","nwnoa","morgenkolumne","beim","dpa","video","quelle","afp","witters","fotogalerie","wurden","worden","wegen","sagt","immer","gibt","geht","spon","registrierter","als","spiegel","vielen","in","es","bitte","dank","unserer","nutzer","sei","beitrag","user","seit","zeichen","tba","datenschutzerklärung","premium","nutzungsbedingungen","nutzungsrechte","pflichtfelder","registrierung","anzeige","großbuchstaben","sonderzeichen","html","seitennavigation","fullscreen","statista","club","sagte","borenda","spreepicture","shopübersicht")
-
-btw$text_cleaned<- removeWords(btw$text_cleaned, mystopwords)
+save(btw, file="../output/btw_combined.Rda")
 ```
 
 ### check words with high tf-idf 
@@ -260,9 +306,9 @@ btw$text_cleaned<- removeWords(btw$text_cleaned, mystopwords)
 token <- btw %>%
   group_by(site) %>%
   unnest_tokens(word, text_cleaned) %>%
-  count(site, word, sort = TRUE)  %>%
+  dplyr::count(site, word, sort = TRUE)  %>%
   bind_tf_idf(word, site, n) %>%
-  arrange(desc(tf_idf))
+  dplyr::arrange(desc(tf_idf))
 
 token %>%
   arrange(desc(tf)) %>%
@@ -329,20 +375,7 @@ btw <- btw %>% mutate(fb_shares = shares) %>%
 unique(btw$site)
 ```
 
-## month & document number
 ```{r}
-btw %>%
-  mutate(month = month(date),
-         week = week(date),
-         articleID = as.numeric(rownames(btw)),
-         site = ifelse(site=="bild.de","Bild.de",site),
-         site = ifelse(site=="focus.de","FOCUS ONLINE",site),
-         site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
-         site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
-         site = ifelse(site=="welt.de","DIE WELT",site)) -> btw
-```
-
-```{r}
-save(btw, file="../output/btw_combined_small.Rda")
+btw %>% filter(grepl("Heckmann",text)) %>% select(text,text_cleaned) %>% sample_n(1) %>% htmlTable(align="l")
 ```
 

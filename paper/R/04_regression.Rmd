@@ -65,60 +65,13 @@ theme_set(
     )
 )
 
-#rm(list=ls())
+rm(list=ls())
 col <- brewer.pal(6,"Dark2")
 ```
 
 # Load Data
 ```{r caching, echo = FALSE}
-load("../output/models/STM 15 .Rda")
-```
-
-load data "Unique User"
-```{r}
-## Daily (06-2017 - 12-2017)
-unique_user1 <- read_excel("../data/uniqueUser_1.xls")
-unique_user2 <- read_excel("../data/uniqueUser_2.xls")
-
-uu_df <- rbind(unique_user1,unique_user2) %>%
-  rename(uniqueUser = `Unique User Tag Mio.`,
-         site = Dachmarke,
-         date = Tag) %>%
-  select(date, site, uniqueUser)
-
-rm(unique_user1, unique_user2)
-```
-
-# Description of Data
-
-### Unique User 
-```{r}
-p <- uu_df %>%
-  filter(date > as.Date("2017-05-31")) %>%
-  ggplot(aes(date, uniqueUser, color=site)) +
-  geom_line() +
-  geom_vline(aes(xintercept=as.POSIXct("2017-09-24")),
-             linetype = 2, color="grey50") +
-  scale_color_manual(values = col[c(1,2,3,4,6,7)]) +
-  theme(
-      #legend.position   = "none",
-      legend.text       =  element_text(size=6),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      panel.background  = element_rect("#fafafa"),
-      axis.title.x      = element_blank(),
-      axis.text.y       = element_text(size = 8)
-    ) +
-  labs(x="", y="", color="", title = "", 
-      caption = "
-  Source: AGOF (www.agof.de)
-      " )
-
-#ggplotly(p)
-ggsave(plot= p,
-filename = "../figs/uniqueUser.png", device = "png",
-width = 6, height = 4,
-        dpi = 600
-)
+load("../output/models/STM 20 .Rda")
 ```
 
 ### Distribution of articles
@@ -189,21 +142,31 @@ stmOut %>% tidy("gamma") -> posts.dtp
 ```{r Label Topics}
 label <- labelTopics(stmOut, n=3)
 
+# topicLabel <- as.data.frame(label$topics)
+# 
+# topicLabel <- topicLabel %>% 
+#   transmute(topic = rownames(.),
+#              topic_name = paste(V1,V2,V3,V4,V5, sep=","))
+
 prob <- as.data.frame(label$prob, stringsAsFactors = F)
 frex <- as.data.frame(label$frex, stringsAsFactors = F)
 lift <- as.data.frame(label$lift, stringsAsFactors = F)
 score <- as.data.frame(label$score, stringsAsFactors = F)
 
-topicLabel <- prob %>% 
+topicLabel <- prob %>%
   transmute(topic = rownames(.),
             topic_name = paste(prob$V1,prob$V2,prob$V3,score$V1,score$V2,score$V3, sep=","),
             prob = paste(prob$V1,prob$V2,prob$V3, sep=","),
             frex = paste(frex$V1,frex$V2,frex$V3, sep=","),
             lift = paste(lift$V1,lift$V2,lift$V3, sep=","),
-            score = paste(score$V1,score$V2,score$V3, sep=",")) 
+            score = paste(score$V1,score$V2,score$V3, sep=","))
 
 topicLabel$topic_name <- vapply(lapply(strsplit(topicLabel$topic_name, ","), unique), paste, character(1L), collapse = " ")
 rm(prob, frex, lift, score)
+```
+
+```{r}
+labelTopics(stmOut, 19, n=10)
 ```
 
 ```{r}
@@ -230,7 +193,7 @@ btw %>%
 ```{r fig.height=7, fig.width=9}
 library(stm)
 png("../figs/topic_proportion.png")
-plot(stmOut, type = "summary", xlim = c(0,.3), n = 5, 
+plot(stmOut, type = "summary", xlim = c(0,.5), n = 5, 
      custom.labels = topicLabel$topic_name, 
      family = "Roboto", main = "", text.cex = 1)
 dev.off()
@@ -313,17 +276,6 @@ ggsave(
 )
 ```
 
-```{r}
-btw %>% filter(topic==8) %>%
-  filter(gamma>=0.5) %>%
-  select(url, gamma) %>% htmlTable::htmlTable(align="l")
-```
-
-```{r}
-label[1]
-```
-
-
 ## Estimating the Effect of Covariates
 
 ### Differences in Word-Topic Distribution
@@ -389,7 +341,7 @@ ggsave(
 The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
 
 ```{r}
-prep <- estimateEffect(1:15 ~site + s(month),
+prep <- estimateEffect(1:15 ~site + s(week),
                        stmOut, meta=out$meta, uncertainty = "Global")
 ```
 
@@ -413,7 +365,7 @@ for (i in 1:15){
 
 ```{r}
 for (i in 1:25){
-  plot(prep, "month", method = "continuous", topics = i,
+  plot(prep, "week", method = "continuous", topics = i,
        printlegend = F,
        ylab = "", xlab = "Mean topic proportion in corpus",
        main = paste0("Topic ",i,": ",topicLabel$topic_name[i]))
@@ -490,7 +442,7 @@ filename = "../figs/facebook_shares.png", width = 8, height = 6,
 ## Topic Timeline
 ```{r Data for topic trends chart, message=FALSE, warning=FALSE}
 set.seed(7292)
-btw.reg %>% 
+btw %>% 
   mutate(date = as.POSIXct(date),
          allocation = 1) %>%
   mutate(post_period = 
@@ -509,7 +461,7 @@ ggsave(
        aes(post_period, articles, color=topic_name)) +
   geom_line() +
   scale_color_manual(
-            values = rainbow(28) %>% 
+            values = rainbow(15) %>% 
               adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
           ) +
   geom_text_repel(data=subset(chart_topic_trends.dt,peak==1),
