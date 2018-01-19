@@ -1,0 +1,34 @@
+---
+title: "R Notebook"
+output: 
+---
+
+
+```{r, include=FALSE}
+# load the packages
+libs <- c("tidytext","tidyr","readr","lubridate","tm","stm","RColorBrewer",
+          "plyr","dplyr","class","knitr","data.table","parallel","SnowballC",
+          "htmlTable","ggplot2","gridExtra","jsonlite","stringr","scales","rjson")
+lapply(libs, library, character.only = TRUE)
+```
+
+# Load and prepare Dataframes
+```{r message=FALSE}
+rm(list =ls())
+
+load("paper/output/news_cleaned.Rda")
+```
+
+# Pre-Process Text
+## Artikel über Wahlprogramme
+```{r}
+pat <- c("Wahlprogramm")
+
+df <- df %>%
+  filter(grepl(pat, title))
+```
+
+```{r}
+df %>% select(title, site) %>% htmlTable::htmlTable(align="l")
+```
+

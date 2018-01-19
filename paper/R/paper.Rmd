@@ -13,38 +13,35 @@ output:
     self_contained: true
 ---
 
-```{r}
-suppressPackageStartupMessages({
-  library(dplyr)       # Data manipulation
-  library(stringr)     # String manipulation
-  library(lubridate)   # Date and time manipulation
-  library(purrr)       # Functional programming
-  library(tidyr)       # Reshaping
-  library(magrittr)    # Advanced piping
-  library(pushoverr)   # Pushover notifications
-  library(doMC)        # Parallel Computing
-  library(readr)       # Importing data
-  library(tibble)      # Better data frames
-  library(data.table)
-  library(pscl)
-  library(boot)
-  library(stm)
-  library(readxl)
+```{r include=FALSE}
+library(ggplot2)     # Static data visualization
+library(dplyr)       # Data manipulation
+library(stringr)     # String manipulation
+library(lubridate)   # Date and time manipulation
+library(purrr)       # Functional programming
+library(tidyr)       # Reshaping
+library(magrittr)    # Advanced piping
+library(pushoverr)   # Pushover notifications
+library(readr)       # Importing data
+library(data.table)
+library(stm)
+library(readxl)
   
-  library(ggplot2)     # Static data visualization
-  library(ggpmisc)
-  library(ggiraph)
-  library(RColorBrewer) 
-  library(ggrepel)
-  library(htmlwidgets)
-  library(plotly)
-  library(scales)      # Scales
-  library(viridis)     # Viridis color scales
+library(igraph)
+library(ggpmisc)
+library(ggiraph)
+library(RColorBrewer) 
+library(ggrepel)
+#library(plotly)
+library(scales)      # Scales
+library(viridis)     # Viridis color scales
 
-  library(tidytext)    # Tidy text mining
-  library(stringdist)  # String distances
-  library(proxy)       # Distance measures
-})
+library(tidytext)    # Tidy text mining
+library(stringdist)  # String distances
+library(proxy)       # Distance measures
+  
+library(htmlwidgets) # JS visuliaztions
+library(htmltools)   # Arbitrary html
 
 # Theming
 quartzFonts(
@@ -58,32 +55,362 @@ quartzFonts(
 theme_set(
   theme_bw(base_family = "Roboto", base_size = 8) +
     theme(
-      plot.title = element_text(face = "bold", size = 14,
+      plot.title = element_text(size = 10,
                                 margin = margin(0, 0, 4, 0, "pt")),
       plot.subtitle = element_text(size = 12),
-      plot.caption = element_text(size = 6, hjust = 0),
-      axis.title = element_text(size = 10),
+      plot.caption = element_text(size = 6),
       panel.border = element_blank()
     )
 )
 
 rm(list=ls())
-col <- brewer.pal(6,"Dark2")
+col <- brewer.pal(5,"Dark2")
 ```
 
-# Load Data
+# The online news market
+
+## Pageviews
+```{r}
+views1 <- read.csv("../data/alexa/Historical_Traffic_Trends__Pageviews_Percent_1.csv", comment.char="#")
+views2 <- read.csv("../data/alexa/Historical_Traffic_Trends__Pageviews_Percent_2.csv", comment.char="#")
+
+views <- left_join(views1, views2 %>% 
+                     select(-Metric), by = "Date") %>%
+  mutate(date = as.Date(Date, "%m/%d/%Y")) %>%
+  select(- c(Metric,Date)) %>%
+  gather(key="site", value="views", focus.de:tagesspiegel.de)
+```
+
+```{r}
+# keeps <- c("spiegel.de", "focus.de", "zeit.de","bild.de",
+#           "tagesschau.de")
+#drop <- c("stern.de","sueddeutsche.de")
+
+# reach <- reach %>% 
+#   mutate(date = as.Date(Date, "%m/%d/%Y")) %>%
+#   select(- c(Metric,Date)) %>%
+#   gather(key="site", value="reach", focus.de:n.tv.de) %>%
+#  filter(!site %in% drop) %>%
+#   mutate(site = ifelse(site=="bild.de","Bild.de",site),
+#        site = ifelse(site=="focus.de","FOCUS ONLINE",site),
+#        site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
+#        site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
+#        site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
+#        site = ifelse(site=="zdf.de","ZDF.de",site),
+#        site = ifelse(site=="welt.de","DIE WELT",site),
+#        site = ifelse(site=="n-tv.de","n-tv.de",site))
+
+```
+
+```{r}
+p1 <- views %>%
+  filter(date > as.POSIXct("2017-05-31")) %>%
+  ggplot(aes(date, views, color=site)) +
+  geom_line(show.legend = F) +
+  geom_text_repel(data = views[views$date==max(views$date), ],
+                  aes(date, views, label=site),
+                  size=2.8, show.legend = F, seed = 5) +
+  scale_x_date(limits = c(as.Date("2017-05-31"),as.Date("2018-02-15")),
+               breaks = date_breaks("1 month"), 
+               labels=date_format("%B %y", tz="CET")) +
+  theme(
+      #legend.position   = "none",
+      legend.text       =  element_text(size=6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    ) +
+  labs(x="", y="pageviews", color="", title = "", 
+      caption = "Source: Alexa Internet, Inc. (www.alexa.com)" )
+
+p1
+
+ggsave(plot= p1,
+filename = "../figs/reach.png", device = "png",
+width = 6, height = 4,
+        dpi = 600
+)
+```
+
+```{r}
+# calculate percentual change
+views$perc_change <- (views$views - lag(views$views, n=1)) / (views$views*100)
+
+p1 <- views %>% 
+  filter(date >= as.Date("2017-09-17") &
+                   date <= as.Date("2017-10-01")) %>%
+  ggplot(aes(date, perc_change, color=factor(site))) +
+  geom_line(show.legend = F) +
+  geom_text_repel(data = views[views$date=="2017-09-24", ],
+                  aes(date, perc_change, label=site),
+                  size=2.8, show.legend = F, seed = 5) +
+  #scale_color_manual(values = brewer.pal(8,"Dark2")) +
+  scale_x_date(breaks = date_breaks("1 day"), labels=date_format("%d.%m.", tz="CET")) +
+  labs(x="",y="% change", color="") +
+  theme(
+      legend.text       =  element_text(size=6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.y       = element_text(size = 8)
+    ) 
+
+p1
+
+ggsave(plot= p1,
+filename = "../figs/perc_change.png", device = "png",
+width = 6, height = 4,
+        dpi = 600
+)
+```
+
+## Traffic source
+
+```{r}
+source1 <- read.csv("../data/alexa/Traffic_Sources_1.csv", 
+                    comment.char="#", stringsAsFactors = F)
+source2 <- read.csv("../data/alexa/Traffic_Sources_2.csv", 
+                    comment.char="#", stringsAsFactors = F)
+
+source <- left_join(source1, source2,
+                    by=c("Date","Metric")) %>%
+  select(- c(Date)) %>%
+  gather(key="site", value="traffic", 
+         focus.de:tagesspiegel.de)
+```
+
+```{r}
+p1 <- ggplot(source, aes(site, traffic, fill=Metric,
+                   label = round(traffic, digits = 2))) +
+  geom_col(alpha = 0.8) +
+  geom_text(size = 2, position = position_stack(vjust = 0.5)) +
+  labs(x = "", y = "Percentage of total traffic", 
+       caption = "Source: Alexa Internet, Inc. (www.alexa.com)") +
+  theme(axis.text.x = element_text(angle = 45, size = 7 ))
+
+p1
+
+ggsave(plot= p1,
+filename = "../figs/traffic_source.png", device = "png",
+width = 6, height = 4,
+        dpi = 600
+)
+```
+
+
+## Keywords
+```{r message=FALSE, warning=FALSE}
+setwd("../data/alexa/keywords/")
+filenames <- list.files(pattern = ".tsv$")
+
+# create an empty list that will serve as a container to receive the incoming files
+list.data<-list()
+ 
+# create a loop to read in your data
+for (i in 1:length(filenames)) {
+  list.data[[i]]<-read.delim(filenames[i], comment.char="#")
+}
+
+# Create DF
+keywords.df <- as.data.frame(list.data[1])
+
+for (i in 2:length(filenames)) {
+  keywords.df <- rbind(keywords.df, as.data.frame(list.data[i]))
+}
+```
+
+```{r}
+keepsite <- c("tagesschau.de", "spiegel.de", "zeit.de", "deutschlandfunk.de",
+              "zdf.de", "bild.de", "welt.de", "stern.de", "sueddeutsche.de", "focus.de")
+
+keywords.df <- keywords.df %>% 
+  filter(nchar(as.character(site))>1)
+#  filter(site %in% keepsite)
+
+unique(keywords.df$site)
+```
+
+### Search Traffic %
+```{r}
+p1 <- keywords.df %>%
+  arrange(desc(Percent_of_traffic)) %>%
+  group_by(site) %>%
+  top_n(10, Percent_of_traffic) %>%
+  ungroup() %>%
+  ggplot(aes(reorder(term, Percent_of_traffic), 
+             Percent_of_traffic, fill=site)) +
+  geom_col(show.legend = FALSE) +
+  theme_bw(base_family = "Roboto", base_size = 4) +
+  coord_flip() +
+  facet_wrap(~site, scales = "free") +
+  labs(x= "", y = "Search traffic %", 
+       title = "",
+       caption = "Source: Alexa Internet, Inc. (www.alexa.com)")
+
+p1
+
+ggsave(plot= p1,
+filename = "../figs/search_traffic.png", device = "png",
+width = 7, height = 4,
+        dpi = 600
+)
+```
+
+### Share of voice
+```{r}
+keyword1 <- c("nachrichten", "news", "bundestagswahl 2017",
+            "groko", "jamaika")
+
+keyword2 <- c("cdu","csu","spd","fdp","afd",
+           "die linke","die grünen")
+
+```
+
+```{r}
+p1 <- keywords.df %>%
+  filter(term %in% keyword1) %>%
+  ggplot(aes(site,
+             Share_of_voice, fill=term)) +
+  geom_col(show.legend = F) +
+  coord_flip() +
+  facet_grid(~term, scales = "free") +
+  labs(x= "", y = "Share of voice",
+       title = ""
+       )
+
+p1
+
+ggsave(plot= p1,
+filename = "../figs/keywords1.png", device = "png",
+width = 6, height = 4,
+        dpi = 600
+)
+```
+
+```{r}
+p1 <- keywords.df %>%
+  filter(term %in% keyword2) %>%
+  ggplot(aes(site,
+             Share_of_voice, fill=term)) +
+  geom_col(show.legend = F) +
+  coord_flip() +
+  facet_grid(~term) +
+  labs(x= "", y = "Share of voice",
+       caption = "
+  Source: Alexa Internet, Inc. (www.alexa.com)
+      ",
+       title = ""
+       )
+
+p1
+
+ggsave(plot= p1,
+filename = "../figs/keywords2.png", device = "png",
+width = 6, height = 4,
+        dpi = 600
+)
+```
+
+## Audience Network
+```{r}
+focus <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_focus.csv", header=FALSE, comment.char="#")
+spiegel <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_spiegel.csv", header=FALSE, comment.char="#")
+bild <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_bildde.csv", header=FALSE, comment.char="#")
+zeit <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_zeitde.csv", header=FALSE, comment.char="#")
+tagesschau <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_tagesschau.csv", header=FALSE, comment.char="#")
+
+zdf <-  read.csv("../data/audience_network/Audience_Overlap_1_15_2018_zdf.csv.crdownload.csv", header=FALSE, comment.char="#")
+#stern <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_stern.csv", header=FALSE, comment.char="#")
+welt <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018 _welt.csv", header=FALSE, comment.char="#")
+```
+
+```{r}
+focus <- focus[-1,1:2] 
+colnames(focus) <- c("site","focus.de")
+
+spiegel <- spiegel[-1,1:2] 
+colnames(spiegel) <- c("site","spiegel.de")
+
+bild <- bild[-1,1:2] 
+colnames(bild) <- c("site","bild.de")
+
+zeit <- zeit[-1,1:2] 
+colnames(zeit) <- c("site","zeit.de")
+
+tagesschau <- tagesschau[-1,1:2] 
+colnames(tagesschau) <- c("site","tagesschau.de")
+
+zdf <- zdf[-1,1:2] 
+colnames(zdf) <- c("site","zdf.de")
+
+welt <- welt[-1,1:2] 
+colnames(welt) <- c("site","welt.de")
+```
+
+```{r}
+# combine dataframes
+network_df <- left_join(focus[1:80,], spiegel[1:80,], by="site") %>%
+  left_join(., bild[1:80,], by = "site") %>%
+  left_join(., zeit[1:80,], by = "site") %>%
+  left_join(., tagesschau[1:80,], by = "site") %>%
+  left_join(., zdf[1:80,], by = "site") %>%
+  left_join(., welt[1:80,], by = "site")
+
+network_df <- na.omit(network_df)
+
+melted <- network_df %>%
+    gather(key="seed", value="score", focus.de:welt.de) %>%
+  mutate(score = as.integer(score),
+         site = as.factor(site),
+         seed = as.factor(seed))
+```
+
+```{r}
+p1 <- ggplot(melted, aes(seed, site, fill=score)) +
+  geom_tile() +
+  scale_fill_gradient(low="gray95",high=col[3]) +
+  scale_x_discrete(labels=c("bilde.de" = "Bild.de", 
+                            "focus.de" = "FOCUS ONLINE", 
+                            "spiegel.de" = "SPIEGEL ONLINE",
+                            "tagesschau.de" = "Tagesschau.de", 
+                            "welt.de" ="DIE WELT",
+                            "zdf.de" = "ZDF.de",
+                            "zeit.de" = "ZEIT ONLINE")) +
+  labs(x="", y="",  caption = "
+  Source: Alexa Internet, Inc. (www.alexa.com)
+      ") +
+  theme(
+      legend.text       =  element_text(size=6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.x = element_text(size=8, angle = 45),
+      axis.text.y       = element_text(size = 8)
+    ) 
+
+ggsave(plot= p1,
+filename = "../figs/audience.png", device = "png",
+width = 5, height = 6,
+        dpi = 600
+)
+
+p1
+```
+
+# Data 
+
 ```{r caching, echo = FALSE}
-#load("../output/models/STM 80 .Rda")
 load("../output/btw_combined.Rda")
 ```
 
-### Distribution of articles
+## Distribution of articles
 ```{r message=FALSE, warning=FALSE}
 ggsave({
   btw %>%
   ggplot(aes(site)) +
   geom_bar(fill=col, alpha= .8) +
-  labs(x="", y="Count") +
+  labs(x="", y="Number of articles") +
   theme(
       legend.position   = "none",
       plot.background   = element_rect("#fafafa", "#fafafa"),
@@ -134,22 +461,21 @@ dpi = 600
 ```
 
 # Model Results
+
+```{r caching, echo = FALSE}
+#load("../output/models/STM 60 .Rda")
+```
+
 ```{r Extract wtp and dtp}
 # Word-topic probabilities
 stmOut %>% tidy("beta") %>% filter(!is.na(topic)) -> posts.wtp
 # Document-topic probabilities
 stmOut %>% tidy("gamma") -> posts.dtp
-```
 
-## Topic Labeling
-```{r Label Topics}
+##################
+# Topic Labeling #
+##################
 label <- labelTopics(stmOut, n=5)
-
-# topicLabel <- as.data.frame(label$topics)
-# 
-# topicLabel <- topicLabel %>% 
-#   transmute(topic = rownames(.),
-#              topic_name = paste(V1,V2,V3,V4,V5, sep=","))
 
 prob <- as.data.frame(label$prob, stringsAsFactors = F)
 frex <- as.data.frame(label$frex, stringsAsFactors = F)
@@ -158,7 +484,7 @@ score <- as.data.frame(label$score, stringsAsFactors = F)
 
 topicLabel <- prob %>%
   transmute(topic = rownames(.),
-            topic_name = paste(prob$V1,prob$V2,prob$V3,score$V1,score$V2,score$V3, sep=","),
+            topic_name = paste(topic,": ",prob$V1,prob$V2,prob$V3,score$V1,score$V2,score$V3, sep=","),
             prob = paste(prob$V1,prob$V2,prob$V3, sep=","),
             frex = paste(frex$V1,frex$V2,frex$V3, sep=","),
             lift = paste(lift$V1,lift$V2,lift$V3, sep=","),
@@ -166,13 +492,11 @@ topicLabel <- prob %>%
 
 topicLabel$topic_name <- vapply(lapply(strsplit(topicLabel$topic_name, ","), unique), paste, character(1L), collapse = " ")
 rm(prob, frex, lift, score)
-```
 
-```{r}
-labelTopics(stmOut, 57, n=15)
-```
+####################################################
+# Assign topic with highest gamma to each document #
+####################################################
 
-```{r}
 top_topics <-
   posts.dtp %>% 
   group_by(document) %>%
@@ -180,36 +504,74 @@ top_topics <-
   filter(therank %in% 1) %>%
   select(- therank)
 
-# Add Topic to origian DF
-btw$articleID = as.numeric(rownames(btw))
-
 btw %>%
   mutate(document = articleID) %>%
   inner_join(.,top_topics, by="document") %>%
   ## Combine with Topic label
   left_join(., topicLabel %>%
               select(topic_name, topic) %>%
-              mutate(topic = as.numeric(topic)), by="topic") -> btw
+              mutate(topic = as.numeric(topic)), by="topic") %>%
+  filter(gamma >= 0.5) %>%
+  mutate(allocation = 1) -> btw
 ```
 
-## Topic Proportion
-```{r fig.height=12, fig.width=9}
-#library(stm)
-#png("../figs/topic_proportion.png")
-plot(stmOut, type = "summary", xlim = c(0,.5), n = 5, 
-     custom.labels = topicLabel$topic_name, 
-     family = "Roboto", main = "", text.cex = 0.8)
-#dev.off()
+After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
+
+```{r}
+btw %>% group_by(topic, site) %>%
+  select(topic_name, title) %>% top_n(3) %>%
+  arrange(topic) %>%
+  htmlTable::htmlTable(align="l")
 ```
 
 ```{r}
-btw %>% filter(grepl("zagatta", text_cleaned)) %>% select(url)
+topic_name <- c("1: A.Merkel & K.-T.z.Guttenberg","2: SPD (Schulz,Nahles)","3: Election in Niedersachsen","4: Election campaigns", 
+                "5: car industry, diesel", "6: exploratory talks CDU/SPD","7: exploratory talks Jamaika",
+                "8: people in GER, christmas speech Steinmeier", "9: CSU (Seehofer,Söder)", "10: Federal Election (various)",
+                "11: Schulz, TV-Duell", "12: G20 riots", "13: digital & telecommunication topics","14: regional politics", 
+                "15: text-processing failure", "16: Turkey (Erdoğan)", "17: Federal statistics", "18: various electoral districts", 
+                "19: SPD (Nahles, Geißler, Klingbeil,...)", "20: EU policies, refugee debate", "21: poll results", 
+                "22: FDP (C.Lindner)", "23: election campaign A.Merkel (riots finsterwalde)", "24: Armed Forces (v.d.Leyen)", 
+                "25: Twitter fail", "26: AfD internal party structures", "27: H.Maas, Facebook, social media", 
+                "28: SPD (Schwesig), women, sexism", "29: USA, D.Trump, UN-climate conference", "30: same-sex marriage vote", 
+                "31: DIE LINKE", "32: Muslims in GER, anti-Semitism", "33: S.Gabriel, G.Schröder, Russia", 
+                "34: AfD (Gauland, Höcke,...)", "35: BAMF, BND, BKA", "36: church, people", "37: political talkshows", 
+                "38: legal judgments (linksunten, insider trading, ...)", "39: Bundestag (AfD, Schäuble, Lammert)",
+                "40: refugees, deportation", "41: Terrorism in GER (NSA)", "42: refugee cap, family reunion", 
+                "43: general statistics", "44: AfD general", "45: RAF, Steinmeier", "46: Glyphosat, Schmidt, (green) policy",
+                "47: Terror attacks in GER (Breitscheidplatz)", "48: crime, healthcare statistics", "49: Helmut Kohl", "50: Muslims in GER", "51: SPD, Schulz", "52: Glyphosat scandal",
+                "53: Attack in Hamburg", "54: A.Merkel (pension policy)", "55: H.Kohl", "56: Election in Niedersachsen, various", 
+                "57: Terrorism, Rock am Ring", "58: Guttenberg, CSU", "59: CDU/SPD coalition", "60: statistics about crimes&terrorism")
+                             
+topic_name <- as.data.frame(topic_name) %>%
+  mutate(topic = seq(1:60))
+
+btw <- btw %>% select(- topic_name) %>%
+  left_join(., topic_name, by = "topic")
+
+btw %>% filter(topic==24 & site=="SPIEGEL ONLINE") %>% select(text_cleaned1) %>% .[2,]
 ```
 
+Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, we used a combination of most frequent words in that topic and words with the highest "score", computed as the log frequency of the word in the topic divided by the log frequency of the word in other topics \citep{roberts_stm:_2016}. The most frequent topic (4) describes the exploratory talks between the CDU/CSU, FDP and Bündnis90/Die Grünen following the federal elections. This is followed by topic 32, which classifies articles that deal with the NSU trial and the main defendant Zschäpe. 
 
 ```{r}
-keeps <- c(7,27,46,24,18,16,49,9,38,57,59,36,13)
+frequency <- as.data.frame(colMeans(stmOut$theta)) %>% 
+  mutate(frequency = colMeans(stmOut$theta),
+    topic=as.character(seq(1:40))) %>%
+  left_join(., topicLabel %>% select(topic, topic_name),
+            by="topic") 
+
+ggsave(plot = {
+  ggplot(frequency, aes(x=reorder(topic_name, frequency), y=frequency)) + 
+    geom_col(fill=col[1], alpha=0.8) +
+    coord_flip() +
+    labs(x="", y="expected frequency") +
+    theme(axis.text = element_text(size=10))
+}, filename = "../figs/topic_proportion.png", device = "png",width = 8, height = 12,
+dpi = 600)
 ```
+
+![Topic Proportion](../figs/topic_proportion.png)
 
 ## Sample Articles
 
@@ -217,19 +579,20 @@ keeps <- c(7,27,46,24,18,16,49,9,38,57,59,36,13)
 set.seed(9272)
 posts_classification.sdt <-
   posts.dtp %>% 
-  filter(topic %in% keeps) %>%
+  #filter(topic %in% keeps) %>%
   group_by(articleID = document) %>% 
   summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
   ungroup() %>%
-  inner_join(btw %>% filter(topic %in% keeps) %>%
+  inner_join(btw %>% 
+               #filter(topic %in% keeps) %>%
                select(title, title_text, articleID, topic_name, site),
               by = "articleID") %>%
   mutate(topic_title = 
            paste0("Topic ", formatC(topic, flag = "0", width = 2), 
                   " - ", topic_name)) %>%
   group_by(topic_name, site) %>% 
-  top_n(50, gamma) %>%
-  sample_n(3) %>%
+  top_n(10, gamma) %>%
+  sample_n(3, replace = TRUE) %>%
   mutate(row = row_number()) %>% 
   ungroup() 
 ```
@@ -247,8 +610,8 @@ posts_classification.sdt %>%
 The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
 
 ```{r}
-prep <- estimateEffect(keeps ~site + s(week),
-                       stmOut, meta=out$meta, uncertainty = "Global")
+prep <- estimateEffect(1:40 ~site + s(month),
+                       stmOut, meta=out_stemmed$meta, uncertainty = "Global")
 ```
 
 ```{r}
@@ -258,13 +621,13 @@ summary(prep)
 Expected difference in topic probability by news source (with 95% Confidence Intervals). 
 parameter "covariate": String of the name of the main covariate of interest. Must be enclosed in quotes. All other covariates within the formula specified in estimateEffect will be kept at their median.
 ```{r}
-for (i in keeps){
+for (i in 1:40){
   
   png(paste0("../figs/estimate_effect",i,".png"))
   plot(prep, "site", method = "pointestimate", topics = i,
        labeltype = "custom", custom.labels = unique(prep$data$site),
        ylab = "", xlab = "Mean topic proportion in corpus",
-       main = paste0("Topic ",i,": ",topicLabel$topic_name[i]),
+       main = paste0("Topic ",topicLabel$topic_name[i]),
        xlim = c(-.05,0.2))
   dev.off()
 }
@@ -273,29 +636,28 @@ for (i in keeps){
 ```
 
 ```{r}
-for (i in keeps){
-  plot(prep, "week", method = "continuous", topics = i,
-       printlegend = F,
-       ylab = "", xlab = "Mean topic proportion in corpus",
-       main = paste0("Topic ",i,": ",topicLabel$topic_name[i]))
-}
-
+# for (i in 1:40){
+#   plot(prep, "month", method = "continuous", topics = i,
+#        printlegend = F,
+#        ylab = "", xlab = "Mean topic proportion in corpus",
+#        main = paste0("Topic ",i,": ",topicLabel$topic_name[i]))
+# }
 ```
 
 ```{r}
 p<- posts.dtp %>%
   left_join(., btw %>% select(document, topic_name,
-                              site, week),
+                              site, month),
             by="document")  %>%
-  group_by(site, topic, topic_name, week) %>%
+  group_by(site, topic, topic_name, month) %>%
   summarize(gamma_mean = mean(gamma)) %>%
   #filter(month!=5) %>%
-  ggplot(aes(x=week, y=gamma_mean, fill=factor(topic), text=topic_name)) +
+  ggplot(aes(x=month, y=gamma_mean, fill=factor(topic), text=topic_name)) +
   geom_col() +
   facet_wrap(~site) +
   #facet_grid(~site) +
   theme(legend.position = "none") +
-  xlab("Proportion")
+  xlab("Month")
 
 ggplotly(p)
 ```
@@ -304,7 +666,7 @@ What is the distribution of the gamma value?
 ```{r}
 ggsave(plot={
   btw %>%
-    filter(topic %in% keeps) %>%
+    #filter(topic %in% keeps) %>%
   ggplot(aes(gamma)) +
   geom_density(fill="blue",alpha=.5,color="blue") 
 },
@@ -312,18 +674,10 @@ filename = "../figs/gamma_dist.png",
        width = 8, height = 6, device = "png", dpi=600)
 ```
 
-filter documents with low posterior
-```{r}
-btw.reg <- btw %>%
-  filter(topic %in% keeps) %>%
-  filter(gamma >= 0.5) %>%
-  mutate(allocation = 1)
-```
-
 ## Topic Timeline
 ```{r Data for topic trends chart, message=FALSE, warning=FALSE}
 set.seed(7292)
-btw.reg %>% 
+btw %>% 
   mutate(date = as.POSIXct(date),
          allocation = 1) %>%
   mutate(post_period = 
@@ -340,21 +694,21 @@ ggsave(
   plot = {
     ggplot(chart_topic_trends.dt, 
        aes(post_period, articles, color=topic_name)) +
-  geom_line() +
+  geom_line(show.legend = FALSE) +
   scale_color_manual(
-            values = rainbow(20) %>% 
+            values = rainbow(60) %>% 
               adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
           ) +
-  geom_text_repel(data=subset(chart_topic_trends.dt,peak==1),
-            aes(post_period,articles,label=paste(topic,topic_name,sep=":")),
+      geom_text_repel(data= subset(chart_topic_trends.dt,peak==1 & articles >=25),
+            aes(post_period,articles,label=topic_name), vjust = -1, size = 2,
             size=2.8) +
       geom_vline(aes(xintercept=as.POSIXct("2017-09-23")),
                  linetype = 2, color="grey20") +
       geom_vline(aes(xintercept=as.POSIXct("2017-11-19")),
                  linetype = 2, color="grey20") +
-  ylim(c(0,200)) +
+  ylim(c(0,120)) +
     theme(
-      legend.position   = "none",
+      legend.position = "none",
       #plot.background   = element_rect("#fafafa", "#fafafa"),
       plot.title        = element_text(size = 18),
       plot.subtitle     = element_text(size = 8),
@@ -376,91 +730,92 @@ ggsave(
 
 A common accusation leveled against traditional news media is the amount of bias in reporting various topics. We try to explore the topic distribution of news articles.
 
-```{r Data for topic distribution chart}
-
-set.seed(7292)
-btw.reg %>% 
-    mutate(document = articleID) %>%
-  group_by(site, topic, topic_name) %>%
-  summarise(
-    articles = sum(allocation),
-    sample_articles = 
-      paste0(
-        "<li>", sample(title, pmin(3, length(document))), "</li>",
-        collapse = "<br>"
-      )
-  ) %>%
-  ungroup() %>%
-  group_by(site) %>% 
-  mutate(perc_articles = articles/sum(articles)) %>% 
-  ungroup() %>%
-  mutate(
-    tooltip_text = 
-      paste0(
-        "<b>", comma(round(articles, 0)), " (", percent(perc_articles), 
-        ") </b> of articles from <b>", site, 
-        "</b> fall under <b>", "Topic",topic,": ", topic_name, "</b><br><br>Sample Articles:<br><ul>",
-        sample_articles, "</ul>"
-      ) %>% str_replace_all("'", "")
-  ) ->
-  news_page_distribution.dt
+```{r}
+library(radarchart)
 ```
 
-```{r Topic distribution chart, eval = TRUE}
-{
-  news_page_distribution.dt %>% 
-    ggplot(aes(x = site, y = perc_articles, fill = topic_name)) +
-    geom_bar_interactive(
-      aes(tooltip = tooltip_text),
-      position = position_stack(), 
-      stat = "identity", color = "darkgray"
-    ) +
-    scale_y_continuous(
-      name = "Percent of Articles", 
-      labels = percent,
-      expand = c(0, 0)
-    ) +
-    theme(
-      legend.position = "none",
-      axis.title.y = element_blank(),
-      legend.background = element_rect("#fafafa"),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      plot.subtitle     = element_text(size = 8),
-      plot.caption      = element_text(size = 7),
-      plot.title        = element_text(size = 18)
-    ) +
-    coord_flip() +
-    scale_fill_viridis(discrete = TRUE) +
-    labs(
-      title = ""
-    )
-} %>% 
-  ggiraph(
-    ggobj = .,
-    width_svg = 12,
-    height_svg = 8,
-    width = 1,
-    tooltip_extra_css = "
-    font-family: Roboto; 
-    background-color: #000; 
-    color: #fff; font-size: 10px;
-    padding: 5px;"
-  ) -> chart_topic_distribution.wdgt
+```{r}
+btw %>% 
+  group_by(site, topic, topic_name) %>%
+  summarise(articles = sum(allocation)) %>%
+  ungroup() %>%
+  group_by(site) %>%
+  mutate(perc_articles = articles/sum(articles)) %>% 
+  ungroup() %>%
+  transmute(site=site,
+            perc_articles=perc_articles,
+            topic=topic_name) %>%
+  spread(key=site, value=perc_articles) %>%
+  ungroup() %>%
+  mutate(topic=factor(topic)) -> radar
+```
 
-saveWidget(
-  widget = chart_topic_distribution.wdgt,
-  file = "../figs/04-topic-distribution-pages.html",
-  selfcontained = FALSE,
-  libdir = "../figs/js",
-  background = "#fafafa"
-)
-
-chart_topic_distribution.wdgt
-
+```{r}
+chartJSRadar(scores = radar, labelSize = 9, maxScale = 0.1, 
+             showToolTipLabel = TRUE,
+             width = 8, height = 8)
 ```
 
 
 ## Sentiment analysis
+
+```{r}
+sent <- c(
+  # positive Wörter
+  readLines("dict/SentiWS_v1.8c_Negative.txt",
+            encoding = "UTF-8"),
+  # negative Wörter
+  readLines("dict/SentiWS_v1.8c_Positive.txt",
+            encoding = "UTF-8")
+) %>% lapply(function(x) {
+  # Extrahieren der einzelnen Spalten
+  res <- strsplit(x, "\t", fixed = TRUE)[[1]]
+  return(data.frame(words = res[1], value = res[2],
+                    stringsAsFactors = FALSE))
+}) %>%
+  bind_rows %>% 
+  mutate(word = gsub("\\|.*", "", words) %>% tolower,
+         value = as.numeric(value)) %>% 
+  # manche Wörter kommen doppelt vor, hier nehmen wir den mittleren Wert
+  group_by(word) %>% summarise(value = mean(value)) %>% ungroup
+```
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# Tokenize text
+token <- btw %>%
+  unnest_tokens(word, text_cleaned1)
+
+# Combine with sentiment values
+sentDF <- left_join(token, sent, by="word") %>% 
+  mutate(sentiment = as.numeric(value)) %>% 
+  filter(!is.na(sentiment)) 
+```
+
+```{r fig.height=12}
+sentDF %>% group_by(topic_name, site) %>% 
+  summarize(sentiment = mean(sentiment)) %>%
+  ggplot(aes(topic_name, sentiment, fill=site)) +
+  geom_col(fill=col[3], alpha=0.8) +
+    facet_wrap(~site, ncol = 1) +
+    labs(x="", y="sentiment value") +
+    theme(axis.text.x = element_text(size=10, angle = 90))
+```
+
+### Radar plot
+```{r}
+sentDF %>% 
+  select(site, topic_name, sentiment) %>%
+  spread(key=site, value=sentiment) %>%
+  ungroup() -> radar
+```
+
+```{r}
+chartJSRadar(scores = radar, labelSize = 8, maxScale = 1000, showToolTipLabel = TRUE,
+             addDots = FALSE, showLegend = FALSE,
+             width = 8, height = 8)
+```
+
+### Using sentimentr
 ```{r}
 library(sentimentr)
 ```
@@ -518,17 +873,22 @@ p1 <- plot_btw %>%
 ggplotly(p1)
 ```
 
-
 ```{r}
 btw.reg %>% 
-  filter(document==4) %>%
+  filter(document==372) %>%
   mutate(text_split = get_sentences(text)) %$%
   sentiment_by(text_split,
                polarity_dt = sentiment_df) %>%
   sentimentr::highlight()
 ```
 
+```{r}
+btw.reg %>% 
+  filter(document==4) %>% select(text_cleaned)
+```
+
 ### Radar
+#### with ggiraphExtra
 ```{r}
 require(ggiraphExtra)
 ```
@@ -537,16 +897,16 @@ require(ggiraphExtra)
 btw.reg %>%
   group_by(site, topic_name) %>%
   summarize(sentiment = mean(sentiment, na.rm = T)) %>%
-  spread(site, sentiment) %>%
+  spread(topic_name, sentiment) -> radar
   ungroup() %>%
   mutate(topic=factor(topic_name)) -> radar
 ```
 
 ```{r}
 ggsave(plot={
-  ggRadar(radar, aes(color=topic), rescale = FALSE,
-        legend.position = "none") +
-  facet_wrap(~topic, ncol = 4)
+  ggRadar(radar, aes(color=site), rescale = FALSE,
+        legend.position = "none") 
+  facet_wrap(~topic)
 },
 file="../figs/radar.png",
 dpi=600,
@@ -554,5 +914,27 @@ height = 7,
 width = 9
 )
 ```
+
+#### with radarchart
+
+```{r}
+btw.reg %>% 
+  group_by(site, topic, topic_name) %>%
+  summarise(sentiment = mean(sentiment, na.rm = TRUE)) %>%
+  ungroup() %>%
+  transmute(site=site,
+            sentiment=sentiment,
+            topic=paste(topic, topic_name, sep=": ")) %>%
+  spread(key=site, value=sentiment) %>%
+  ungroup() %>%
+  mutate(topic = factor(topic))-> radar
+```
+
+```{r}
+chartJSRadar(scores = radar, labelSize = 8, maxScale = 0.1, showToolTipLabel = TRUE,
+             addDots = FALSE, showLegend = FALSE,
+             width = 8, height = 8)
+```
+
 
 

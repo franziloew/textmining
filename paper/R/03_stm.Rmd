@@ -20,9 +20,7 @@ suppressPackageStartupMessages({
   library(lubridate)   # Date and time manipulation
   library(purrr)       # Functional programming
   library(tidyr)       # Reshaping
-  library(magrittr)    # Advanced piping
   library(pushoverr)   # Pushover notifications
-  library(doMC)        # Parallel Computing
   library(readr)       # Importing data
   library(tibble)      # Better data frames
   library(data.table)
@@ -42,14 +40,9 @@ suppressPackageStartupMessages({
   library(httr)        # HTTP functions
   library(jsonlite)    # JSON parsing
   
-  library(tidytext)    # Tidy text mining
-  library(tm)    # Tidy text mining
-  library(hunspell)    # Text processing
   library(stringdist)  # String distances
-  library(topicmodels) # Topic modelling
   library(stm)         # Sructural Topic Model
   library(proxy)       # Distance measures
-  library(SnowballC)   # Stemming
 })
 
 # Theming
@@ -103,7 +96,7 @@ posts_tokenized.dt %>%
 ### Build Corpus
 ```{r eval=FALSE, include=FALSE}
 # Process data
-processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","week")],
+processed <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","month","week")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
