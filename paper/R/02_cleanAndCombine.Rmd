@@ -43,49 +43,22 @@ df_full <- bind_rows(df %>%
                  df_full)
 ```
 
-## select stratified random sample
-```{r}
-public <- c("deutschlandfunk.de", "heute.de", "ndr.de", "swr.de", "tagesschau.de", "wdr.de", "zdf.de")
-
-df_full <- df_full %>% 
-  mutate(ownership = ifelse(site %in% public, "public", "private"),
-         month = month(date))
-
-df_full %>% 
-  #filter may2017 and january2018
-  filter(month>5) %>%
-  #calculate site totals by month
-  group_by(site, month) %>%
-  summarize(site_sum = n()) %>%
-  ungroup() %>%
-  #calculate month total
-  group_by(month) %>%
-  mutate(month_sum = sum(site_sum)) %>%
-  ungroup() %>%
-  #calculate share
-  mutate(share = 100*(site_sum/month_sum))-> totals_site
-
-df_full %>% 
-  #filter may2017 and january2018
-  filter(month>5) %>%
-  # calculate ownership totals by month
-  mutate(ownership = ifelse(site %in% public, "public", "private")) %>%
-  group_by(ownership, month) %>%
-  summarize(owner_sum = n()) %>%
-  #calculate month total
-  group_by(month) %>%
-  mutate(month_sum = sum(owner_sum)) %>%
-  ungroup() %>%
-  #calculate share
-  mutate(share = 100*(owner_sum/month_sum))-> totals_ownership
-```
-
-
 # Pre-Process Text
 ## select news-outlets
 ```{r}
+df_full %>%
+  mutate(month=month(date)) %>%
+  filter(month > 5) %>%
+  ggplot(aes(site, fill=factor(month))) +
+  geom_bar() +
+  labs(x="", y="") +
+  theme(axis.text.x = element_text(angle = 60))
+```
+
+
+```{r}
 keeps <- c("spiegel.de", "focus.de", "zeit.de","bild.de",
-           "tagesschau.de")
+           "tagesschau.de", "welt.de")
 
 df <- df_full %>%
   mutate(title_text = paste(title, text, sep=" ")) %>%
@@ -112,15 +85,6 @@ df %>%
 # 
 # df %>%
 #   mutate(politics = ifelse(grepl(pat, title_text, ignore.case = TRUE),1,0)) -> btw1
-
-#df %>% filter(site=="tagesschau.de") %>% select(url)
-```
-
-```{r}
-df %>%
-  #filter(politics==1) %>%
-  ggplot(aes(site, fill=factor(politics))) +
-  geom_bar(show.legend = FALSE, alpha=0.8)
 ```
 
 ```{r}
@@ -190,6 +154,12 @@ save(btw, file="../output/btw_combined.Rda")
 
 rm(list=ls())
 load("../output/btw_combined.Rda")
+```
+
+```{r}
+btw %>%
+  ggplot(aes(site)) +
+  geom_bar(show.legend = FALSE, alpha=0.8)
 ```
 
 ## Clean text
@@ -337,7 +307,8 @@ btw %>%
          site = ifelse(site=="focus.de","FOCUS ONLINE",site),
          site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
          site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
-         site = ifelse(site=="tagesschau.de","Tagesschau.de",site)) -> btw
+         site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
+         site = ifelse(site=="welt.de","DIE WELT",site)) -> btw
 ```
 
 ```{r}
@@ -402,25 +373,29 @@ bigrams %>%
 ### Build Corpus
 ```{r eval=FALSE, include=FALSE}
 # Process data
-processed1 <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","month")],
+
+### without stemming
+# processed1 <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","month")],
+#                            wordLengths = c(2,Inf),
+#                            lowercase = F,
+#                            removestopwords = F,
+#                            removenumbers = F,
+#                            removepunctuation = F,
+#                            stem = F)
+# out1 <- prepDocuments(processed1$documents, processed1$vocab, processed1$meta)
+###
+
+processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
                            removenumbers = F,
                            removepunctuation = F,
                            stem = F)
-out1 <- prepDocuments(processed1$documents, processed1$vocab, processed1$meta)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out$meta$site <- as.factor(out$meta$site)
 
-processed2 <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
-                           wordLengths = c(2,Inf),
-                           lowercase = F,
-                           removestopwords = F,
-                           removenumbers = F,
-                           removepunctuation = F,
-                           stem = F)
-out_stemmed <- prepDocuments(processed2$documents, processed2$vocab, processed2$meta)
-
-save(btw, out1, out_stemmed, file="../output/btw_combined.Rda")
+save(btw, out, file="../output/btw_combined.Rda")
 ```
 
 # FB Shares

@@ -26,13 +26,13 @@ library(readr)       # Importing data
 library(data.table)
 library(stm)
 library(readxl)
-  
+library(Matrix)
+
 library(igraph)
 library(ggpmisc)
 library(ggiraph)
 library(RColorBrewer) 
 library(ggrepel)
-#library(plotly)
 library(scales)      # Scales
 library(viridis)     # Viridis color scales
 
@@ -64,10 +64,10 @@ theme_set(
 )
 
 rm(list=ls())
-col <- brewer.pal(5,"Dark2")
+col <- brewer.pal(6,"Dark2")
 ```
 
-# The online news market
+# 1. The online news market
 
 ## Pageviews
 ```{r}
@@ -398,8 +398,7 @@ width = 5, height = 6,
 p1
 ```
 
-# Data 
-
+# 2. Data 
 ```{r caching, echo = FALSE}
 load("../output/btw_combined.Rda")
 ```
@@ -460,481 +459,241 @@ dpi = 600
 
 ```
 
-# Model Results
-
+# 3. Model Results
 ```{r caching, echo = FALSE}
-#load("../output/models/STM 60 .Rda")
+load("../output/models/STM_stemmed2 40 .Rda")
 ```
 
+## Label topics
+```{r}
+sagelabs <- sageLabels(stmOut, 100)
+```
+
+```{r}
+stmOut$settings$covariates$yvarlevels
+```
+
+### Label topics based on Bild.de
+
+After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
+```{r}
+sagelabs$cov.betas[[1]]$problabels[,1:10]
+```
+
+```{r}
+topics <- matrix(c(1, "Great coalition", 2, "Merkel,election campaign", 3, "Jamaica coalition", 
+                   4, "Diesel scandal", 5, "Merkel chancellor", 6, "Seehover vs. Söder", 
+                   7, "Germany, EU, Jamaika", 8, "Merkel vs.Schulz", 9, "AfD election results", 
+                   10, "Steinmeier,Federal President", 11, "unclear (Schröder, Google)", 
+                   12, "Federal Election in social media", 13, "Climate policy", 14, "G20 Hamburg", 
+                   15, "error", 16, "Education, Pension policy", 17, "Reports on individuals",
+                   18, "Family reunion refugees", 19, "Polls federal election", 
+                   20, "AfD top candidates Weidel, Storch", 21, "M.Schwesig (SPD)",
+                   22, "elections in Niedersachsen", 23, "Böhmermann vs. Erdogan", 
+                   24, "political talkshows", 25, "German armed forces", 26, "W.Schäuble", 
+                   27, "C.Lindner FDP", 28, "Turkey, Russia", 29, "A.Merkel Youtube", 
+                   30, "H.Kohl obituary", 31, "AfD Gauland, Höcke", 32, "Asylum claims and deportation", 
+                   33, "EU policies", 34, "DIE LINKE", 35, "SPD", 36, "Islam and antisemitism in GER", 
+                   37, "AfD in parliament", 38, "Terror attacks (GER)  & police reports", 
+                   39, "Church", 40, "RAF"), ncol=2, byrow=T)
+```
+
+## Assign a topic to each document (choose by gamma)
 ```{r Extract wtp and dtp}
-# Word-topic probabilities
-stmOut %>% tidy("beta") %>% filter(!is.na(topic)) -> posts.wtp
 # Document-topic probabilities
-stmOut %>% tidy("gamma") -> posts.dtp
+stmOut %>% tidy("theta") -> theta
 
-##################
-# Topic Labeling #
-##################
-label <- labelTopics(stmOut, n=5)
-
-prob <- as.data.frame(label$prob, stringsAsFactors = F)
-frex <- as.data.frame(label$frex, stringsAsFactors = F)
-lift <- as.data.frame(label$lift, stringsAsFactors = F)
-score <- as.data.frame(label$score, stringsAsFactors = F)
-
-topicLabel <- prob %>%
-  transmute(topic = rownames(.),
-            topic_name = paste(topic,": ",prob$V1,prob$V2,prob$V3,score$V1,score$V2,score$V3, sep=","),
-            prob = paste(prob$V1,prob$V2,prob$V3, sep=","),
-            frex = paste(frex$V1,frex$V2,frex$V3, sep=","),
-            lift = paste(lift$V1,lift$V2,lift$V3, sep=","),
-            score = paste(score$V1,score$V2,score$V3, sep=","))
-
-topicLabel$topic_name <- vapply(lapply(strsplit(topicLabel$topic_name, ","), unique), paste, character(1L), collapse = " ")
-rm(prob, frex, lift, score)
-
-####################################################
-# Assign topic with highest gamma to each document #
-####################################################
-
-top_topics <-
-  posts.dtp %>% 
+top_topics <- theta %>% 
   group_by(document) %>%
   mutate(therank = rank(-gamma, ties.method = "random")) %>%
-  filter(therank %in% 1) %>%
+  filter(therank == 1) %>%
   select(- therank)
 
-btw %>%
+topics.df <- as.data.frame(topics) %>% transmute(topic = as.integer(V1),
+                                 topic_name = paste(topic, V2, sep=": "))
+
+btw.2 <- btw %>%
   mutate(document = articleID) %>%
   inner_join(.,top_topics, by="document") %>%
   ## Combine with Topic label
-  left_join(., topicLabel %>%
-              select(topic_name, topic) %>%
-              mutate(topic = as.numeric(topic)), by="topic") %>%
-  filter(gamma >= 0.5) %>%
-  mutate(allocation = 1) -> btw
+  left_join(., topics.df, by="topic") %>%
+  mutate(allocation = 1) 
 ```
 
-After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
-
+### now we can inspect the unclear topics
 ```{r}
-btw %>% group_by(topic, site) %>%
-  select(topic_name, title) %>% top_n(3) %>%
-  arrange(topic) %>%
+btw %>% filter(topic==17) %>% select(title, gamma, url) %>%
   htmlTable::htmlTable(align="l")
 ```
 
-```{r}
-topic_name <- c("1: A.Merkel & K.-T.z.Guttenberg","2: SPD (Schulz,Nahles)","3: Election in Niedersachsen","4: Election campaigns", 
-                "5: car industry, diesel", "6: exploratory talks CDU/SPD","7: exploratory talks Jamaika",
-                "8: people in GER, christmas speech Steinmeier", "9: CSU (Seehofer,Söder)", "10: Federal Election (various)",
-                "11: Schulz, TV-Duell", "12: G20 riots", "13: digital & telecommunication topics","14: regional politics", 
-                "15: text-processing failure", "16: Turkey (Erdoğan)", "17: Federal statistics", "18: various electoral districts", 
-                "19: SPD (Nahles, Geißler, Klingbeil,...)", "20: EU policies, refugee debate", "21: poll results", 
-                "22: FDP (C.Lindner)", "23: election campaign A.Merkel (riots finsterwalde)", "24: Armed Forces (v.d.Leyen)", 
-                "25: Twitter fail", "26: AfD internal party structures", "27: H.Maas, Facebook, social media", 
-                "28: SPD (Schwesig), women, sexism", "29: USA, D.Trump, UN-climate conference", "30: same-sex marriage vote", 
-                "31: DIE LINKE", "32: Muslims in GER, anti-Semitism", "33: S.Gabriel, G.Schröder, Russia", 
-                "34: AfD (Gauland, Höcke,...)", "35: BAMF, BND, BKA", "36: church, people", "37: political talkshows", 
-                "38: legal judgments (linksunten, insider trading, ...)", "39: Bundestag (AfD, Schäuble, Lammert)",
-                "40: refugees, deportation", "41: Terrorism in GER (NSA)", "42: refugee cap, family reunion", 
-                "43: general statistics", "44: AfD general", "45: RAF, Steinmeier", "46: Glyphosat, Schmidt, (green) policy",
-                "47: Terror attacks in GER (Breitscheidplatz)", "48: crime, healthcare statistics", "49: Helmut Kohl", "50: Muslims in GER", "51: SPD, Schulz", "52: Glyphosat scandal",
-                "53: Attack in Hamburg", "54: A.Merkel (pension policy)", "55: H.Kohl", "56: Election in Niedersachsen, various", 
-                "57: Terrorism, Rock am Ring", "58: Guttenberg, CSU", "59: CDU/SPD coalition", "60: statistics about crimes&terrorism")
-                             
-topic_name <- as.data.frame(topic_name) %>%
-  mutate(topic = seq(1:60))
+## Expected topic proportions
 
-btw <- btw %>% select(- topic_name) %>%
-  left_join(., topic_name, by = "topic")
-
-btw %>% filter(topic==24 & site=="SPIEGEL ONLINE") %>% select(text_cleaned1) %>% .[2,]
-```
-
-Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, we used a combination of most frequent words in that topic and words with the highest "score", computed as the log frequency of the word in the topic divided by the log frequency of the word in other topics \citep{roberts_stm:_2016}. The most frequent topic (4) describes the exploratory talks between the CDU/CSU, FDP and Bündnis90/Die Grünen following the federal elections. This is followed by topic 32, which classifies articles that deal with the NSU trial and the main defendant Zschäpe. 
-
+### in the overall corpus
 ```{r}
 frequency <- as.data.frame(colMeans(stmOut$theta)) %>% 
   mutate(frequency = colMeans(stmOut$theta),
-    topic=as.character(seq(1:40))) %>%
-  left_join(., topicLabel %>% select(topic, topic_name),
-            by="topic") 
+    topic=paste(topics[,1],topics[,2], sep=": ")) 
 
-ggsave(plot = {
-  ggplot(frequency, aes(x=reorder(topic_name, frequency), y=frequency)) + 
+p1 <- ggplot(frequency, aes(x=reorder(topic, frequency), y=frequency)) + 
     geom_col(fill=col[1], alpha=0.8) +
     coord_flip() +
     labs(x="", y="expected frequency") +
-    theme(axis.text = element_text(size=10))
-}, filename = "../figs/topic_proportion.png", device = "png",width = 8, height = 12,
-dpi = 600)
+    theme(axis.text = element_text(size=8),
+          axis.title = element_text(size=10))
+
+p1
+
+#ggsave(plot = p1, filename = "../figs/topic_proportion.png", device = "png",width = 8, height = 12,
+#dpi = 600)
 ```
 
-![Topic Proportion](../figs/topic_proportion.png)
-
-## Sample Articles
-
-```{r Document classification}
-set.seed(9272)
-posts_classification.sdt <-
-  posts.dtp %>% 
-  #filter(topic %in% keeps) %>%
-  group_by(articleID = document) %>% 
-  summarise(topic = min(topic[gamma == max(gamma)]), gamma = max(gamma)) %>% 
-  ungroup() %>%
-  inner_join(btw %>% 
-               #filter(topic %in% keeps) %>%
-               select(title, title_text, articleID, topic_name, site),
-              by = "articleID") %>%
-  mutate(topic_title = 
-           paste0("Topic ", formatC(topic, flag = "0", width = 2), 
-                  " - ", topic_name)) %>%
-  group_by(topic_name, site) %>% 
-  top_n(10, gamma) %>%
-  sample_n(3, replace = TRUE) %>%
-  mutate(row = row_number()) %>% 
-  ungroup() 
-```
-
+## by newspaper
 ```{r}
-posts_classification.sdt %>%
-  select(site,topic_title,title) %>%
-  htmlTable::htmlTable(align="l")
-```
-
-
-## Estimating the Effect of Covariates
-
-### Difference in topic prevalence
-The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
-
-```{r}
-prep <- estimateEffect(1:40 ~site + s(month),
-                       stmOut, meta=out_stemmed$meta, uncertainty = "Global")
-```
-
-```{r}
-summary(prep)
-```
-
-Expected difference in topic probability by news source (with 95% Confidence Intervals). 
-parameter "covariate": String of the name of the main covariate of interest. Must be enclosed in quotes. All other covariates within the formula specified in estimateEffect will be kept at their median.
-```{r}
-for (i in 1:40){
+plotNewspaperHistogram <- function(topic){
+  tab <- tapply(stmOut$theta[,topic], stmOut$settings$covariates$betaindex, mean)
+  tab <- as.data.frame(tab) %>% 
+    mutate(site=stmOut$settings$covariates$yvarlevels)
   
-  png(paste0("../figs/estimate_effect",i,".png"))
-  plot(prep, "site", method = "pointestimate", topics = i,
-       labeltype = "custom", custom.labels = unique(prep$data$site),
-       ylab = "", xlab = "Mean topic proportion in corpus",
-       main = paste0("Topic ",topicLabel$topic_name[i]),
-       xlim = c(-.05,0.2))
-  dev.off()
+  ggplot(data=tab, aes(x=site, y=tab)) +
+    geom_col(fill=col[3]) +
+    coord_flip() +
+    theme(axis.text = element_text(size=8),
+          axis.title = element_text(size=10)) +
+    labs(x="", y=paste("expected frequency of topic",topics.df[topic,2], sep=" ")) 
 }
-
-#plot(prep, "site", method = "pointestimate", topics = keeps[1])
 ```
 
 ```{r}
-# for (i in 1:40){
-#   plot(prep, "month", method = "continuous", topics = i,
-#        printlegend = F,
-#        ylab = "", xlab = "Mean topic proportion in corpus",
-#        main = paste0("Topic ",i,": ",topicLabel$topic_name[i]))
-# }
+# Topic 3
+plotNewspaperHistogram(1)
+```
+
+## Topic Correlation
+```{r}
+topicCorrelation <- function(ylevel) {
+  cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==ylevel,])
+  adjmat <- ifelse(cormat > .04,1,0)
+  
+  corr <- list()
+  corr$posadj <- adjmat
+  corr$poscor <- cormat*adjmat
+  corr$cor <- ifelse(abs(cormat)>.04,cormat,0)
+  
+  x <- corr$posadj[1:nrow(corr$posadj),1:nrow(corr$posadj)]
+
+  g<- graph.adjacency(x, mode="undirected", weighted=TRUE, diag=FALSE)
+
+  E(g)$size <- 1
+  E(g)$lty <- 2
+  E(g)$color <- "black"
+  V(g)$label <- topics[,2]
+  layout <- layout_nicely
+
+  plot.igraph(g, layout=layout_nicely, vertex.color="white", label.font = "Roboto",
+     vertex.frame.color="grey", vertex.size=1, vertex.label.cex=.6, edge.color="red",
+     edge.width=1, main=paste("Topic correlation", stmOut$settings$covariates$yvarlevels[ylevel]))
+}
 ```
 
 ```{r}
-p<- posts.dtp %>%
-  left_join(., btw %>% select(document, topic_name,
-                              site, month),
-            by="document")  %>%
-  group_by(site, topic, topic_name, month) %>%
-  summarize(gamma_mean = mean(gamma)) %>%
-  #filter(month!=5) %>%
-  ggplot(aes(x=month, y=gamma_mean, fill=factor(topic), text=topic_name)) +
-  geom_col() +
-  facet_wrap(~site) +
-  #facet_grid(~site) +
-  theme(legend.position = "none") +
-  xlab("Month")
-
-ggplotly(p)
+topicCorrelation(5)
 ```
 
-What is the distribution of the gamma value?
+### Overlapping Correlation
 ```{r}
-ggsave(plot={
-  btw %>%
-    #filter(topic %in% keeps) %>%
-  ggplot(aes(gamma)) +
-  geom_density(fill="blue",alpha=.5,color="blue") 
-},
-filename = "../figs/gamma_dist.png",
-       width = 8, height = 6, device = "png", dpi=600)
+topicCorrCompare <- function(ylevel1, ylevel2) {
+  
+  # find all edges between topics where they exhibit a positive correlation above 0.1
+  cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==ylevel1,])
+  adjmat <- ifelse(cormat > .1,1,0)
+  
+  corr.1 <- list()
+  corr.1$posadj <- adjmat
+  corr.1$poscor <- cormat*adjmat
+  corr.1$cor <- ifelse(abs(cormat)>.04,cormat,0)
+  
+  # Ylevel 2
+  cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==ylevel2,])
+  adjmat <- ifelse(cormat > .1,1,0)
+  
+  corr.2 <- list()
+  corr.2$posadj <- adjmat
+  corr.2$poscor <- cormat*adjmat
+  corr.2$cor <- ifelse(abs(cormat)>.04,cormat,0)
+  
+  # Prepare plot
+  g.1 <- graph.adjacency(corr.1$cor, mode="undirected", weighted = T, diag = F) 
+  g.2 <- graph.adjacency(corr.2$cor, mode = "undirected", weighted = T, diag = F)
+  
+  inter.graph <- graph.intersection(g.1, g.2)
+  added.subgraph <- graph.difference(g.1, inter.graph)
+  subs.subgraph <- graph.difference(g.2, inter.graph)
+  
+  # Styling
+  E(added.subgraph)$color <- col[1]
+  E(subs.subgraph)$color <- col[2]
+  E(inter.graph)$color <- col[3]
+  
+  # Matrix
+  g.whole<-graph.union(inter.graph,added.subgraph,subs.subgraph)
+  V(g.whole)$color<-col[3]
+  E(g.whole)$color <- col[2]
+  E(g.whole)[1:length(E(inter.graph))]$color<-col[3]
+  E(g.whole)[(length(E(inter.graph))+1):(length(E(inter.graph))+length(E(added.subgraph)))]$color<-col[1]
+
+  inter.list <- get.edgelist(inter.graph)
+  list.1 <- get.edgelist(added.subgraph)
+  list.2 <- get.edgelist(subs.subgraph)
+  
+  # Set Frame
+  cormat <- matrix(0, nrow=100, ncol=100)
+  for(i in 1:nrow(inter.list)){
+    cormat[inter.list[i,1], inter.list[i,2]] <- .5
+    cormat[inter.list[i,2], inter.list[i,1]] <- .5
+    }
+  
+  for(i in 1:nrow(list.1)){
+    cormat[list.1[i,1], list.1[i,2]] <- -1
+    cormat[list.1[i,2], list.1[i,1]] <- -1
+    }
+
+  for(i in 1:nrow(list.2)){
+    cormat[list.2[i,1], list.2[i,2]] <- 1
+    cormat[list.2[i,2], list.2[i,1]] <- 1
+    }
+
+  cormat <- cormat[as.numeric(topics[,1]),as.numeric(topics[,1])]
+  topics2 <- sapply(topics[,2], function (x) str_replace(x, "\n", ""))
+  rownames(cormat) <- colnames(cormat) <- topics.df$topic_name
+  
+  only.1 <- apply(cormat,1, function (x) sum(x==1))
+  only.2 <- apply(cormat,1, function (x) sum(x==-1))
+  both <- apply(cormat,1, function (x) sum(x==.5))
+  all <- apply(cormat,1, function (x) sum(x!=0))
+  disagree <- only.1/all + only.2/all
+  
+  
+  disagreed <- order(disagree, decreasing=F)
+  list <- topics[disagreed,2]
+  disagreemat <- cormat[disagreed, disagreed]
+  rownames(disagreemat) <- topics2[disagreed]
+  colnames(disagreemat) <- topics2[disagreed]
+
+  corrplot(disagreemat, cl.pos="n", tl.col="black", tl.cex=.5)
+  legend(40,20, c(paste(stmOut$settings$covariates$yvarlevels[ylevel1]), paste(stmOut$settings$covariates$yvarlevels[ylevel2]), "Both", "None"),
+         col=c("darkred", "darkblue", "lightblue", "white"), 
+         pch=c(15,15,16,16), cex = 0.7, box.lty = 0)
+}
 ```
 
-## Topic Timeline
-```{r Data for topic trends chart, message=FALSE, warning=FALSE}
-set.seed(7292)
-btw %>% 
-  mutate(date = as.POSIXct(date),
-         allocation = 1) %>%
-  mutate(post_period = 
-           date %>% with_tz("Europe/Paris") %>% 
-           floor_date("week")) %>%
-  # Summarise into tidy dataframe
-  group_by(post_period, topic, topic_name) %>% dplyr::summarise(articles = sum(allocation)) %>%
-  # Mark peaks 
-  group_by(topic_name) %>% dplyr::mutate(peak = ifelse(articles==max(articles),1,0)) -> chart_topic_trends.dt
-```
-
-```{r message=FALSE, warning=FALSE}
-ggsave(
-  plot = {
-    ggplot(chart_topic_trends.dt, 
-       aes(post_period, articles, color=topic_name)) +
-  geom_line(show.legend = FALSE) +
-  scale_color_manual(
-            values = rainbow(60) %>% 
-              adjustcolor(red.f = 0.6, green.f = 0.6, blue.f = 0.6)
-          ) +
-      geom_text_repel(data= subset(chart_topic_trends.dt,peak==1 & articles >=25),
-            aes(post_period,articles,label=topic_name), vjust = -1, size = 2,
-            size=2.8) +
-      geom_vline(aes(xintercept=as.POSIXct("2017-09-23")),
-                 linetype = 2, color="grey20") +
-      geom_vline(aes(xintercept=as.POSIXct("2017-11-19")),
-                 linetype = 2, color="grey20") +
-  ylim(c(0,120)) +
-    theme(
-      legend.position = "none",
-      #plot.background   = element_rect("#fafafa", "#fafafa"),
-      plot.title        = element_text(size = 18),
-      plot.subtitle     = element_text(size = 8),
-      plot.caption      = element_text(size = 7),
-      panel.grid        = element_blank(),
-      #panel.background  = element_rect("#fafafa"),
-      axis.title.x      = element_blank(),
-      axis.text.y       = element_text(size = 8)
-    )
-  },
-  device = "png",
-  filename = "../figs/topic-timeline.png",
-  dpi = 600, height = 5, width = 8
-)
-```
-
-
-### Topic Distribution by News Page
-
-A common accusation leveled against traditional news media is the amount of bias in reporting various topics. We try to explore the topic distribution of news articles.
-
+Pairs of topics where an edge exists in both Newspaper, we denote with a light blue dot. Pairs of topics where Newspaper1, but not Newspaper2 have an edge between them, we denote with a red square, and those where Newspaper2, but not Newspaper1 have an edge between them we denote with a blue square.
+We then sort the matrix by topics that are similarly correlated with other topics in Newspaper1 and Newspaper2 to those that are not similarly correlated.
 ```{r}
-library(radarchart)
+topicCorrCompare(3,5)
 ```
 
-```{r}
-btw %>% 
-  group_by(site, topic, topic_name) %>%
-  summarise(articles = sum(allocation)) %>%
-  ungroup() %>%
-  group_by(site) %>%
-  mutate(perc_articles = articles/sum(articles)) %>% 
-  ungroup() %>%
-  transmute(site=site,
-            perc_articles=perc_articles,
-            topic=topic_name) %>%
-  spread(key=site, value=perc_articles) %>%
-  ungroup() %>%
-  mutate(topic=factor(topic)) -> radar
-```
+## How they talk about GroKo differently
 
-```{r}
-chartJSRadar(scores = radar, labelSize = 9, maxScale = 0.1, 
-             showToolTipLabel = TRUE,
-             width = 8, height = 8)
-```
-
-
-## Sentiment analysis
-
-```{r}
-sent <- c(
-  # positive Wörter
-  readLines("dict/SentiWS_v1.8c_Negative.txt",
-            encoding = "UTF-8"),
-  # negative Wörter
-  readLines("dict/SentiWS_v1.8c_Positive.txt",
-            encoding = "UTF-8")
-) %>% lapply(function(x) {
-  # Extrahieren der einzelnen Spalten
-  res <- strsplit(x, "\t", fixed = TRUE)[[1]]
-  return(data.frame(words = res[1], value = res[2],
-                    stringsAsFactors = FALSE))
-}) %>%
-  bind_rows %>% 
-  mutate(word = gsub("\\|.*", "", words) %>% tolower,
-         value = as.numeric(value)) %>% 
-  # manche Wörter kommen doppelt vor, hier nehmen wir den mittleren Wert
-  group_by(word) %>% summarise(value = mean(value)) %>% ungroup
-```
-
-```{r, message=FALSE, warning=FALSE, include=FALSE}
-# Tokenize text
-token <- btw %>%
-  unnest_tokens(word, text_cleaned1)
-
-# Combine with sentiment values
-sentDF <- left_join(token, sent, by="word") %>% 
-  mutate(sentiment = as.numeric(value)) %>% 
-  filter(!is.na(sentiment)) 
-```
-
-```{r fig.height=12}
-sentDF %>% group_by(topic_name, site) %>% 
-  summarize(sentiment = mean(sentiment)) %>%
-  ggplot(aes(topic_name, sentiment, fill=site)) +
-  geom_col(fill=col[3], alpha=0.8) +
-    facet_wrap(~site, ncol = 1) +
-    labs(x="", y="sentiment value") +
-    theme(axis.text.x = element_text(size=10, angle = 90))
-```
-
-### Radar plot
-```{r}
-sentDF %>% 
-  select(site, topic_name, sentiment) %>%
-  spread(key=site, value=sentiment) %>%
-  ungroup() -> radar
-```
-
-```{r}
-chartJSRadar(scores = radar, labelSize = 8, maxScale = 1000, showToolTipLabel = TRUE,
-             addDots = FALSE, showLegend = FALSE,
-             width = 8, height = 8)
-```
-
-### Using sentimentr
-```{r}
-library(sentimentr)
-```
-
-```{r}
-# Load dictionaries (from: http://wortschatz.uni-leipzig.de/de/download)
-neg_df <- read_tsv("dict/SentiWS_v1.8c_Negative.txt", col_names = FALSE)
-pos_df <- read_tsv("dict/SentiWS_v1.8c_Positive.txt", col_names = FALSE)
-
-sentiment_df <- bind_rows(neg_df,pos_df)
-names(sentiment_df) <- c("Wort_POS", "polarity", "Inflektionen")
-
-sentiment_df %>% 
-  mutate(words = str_sub(Wort_POS, 1, regexpr("\\|", .$Wort_POS)-1),
-         words = tolower(words)
-         #POS = str_sub(Wort_POS, start = regexpr("\\|", .$Wort_POS)+1)
-         ) %>%
-  select(words, polarity) -> sentiment_df
-
-sentiment_df <- rbind(sentiment_df, c("nicht",-0.8))
-
-sentiment_df %>% mutate(polarity = as.numeric(polarity)) %>%
-  as_key() -> sentiment_df
-```
-
-```{r}
-btw.reg %>% 
-  mutate(text_split = get_sentences(text)) %$%
-  sentiment(text_split,
-               polarity_dt = sentiment_df) -> btw_sentiment
-
-btw_sentiment_doclevel <- btw_sentiment %>%
-  group_by(element_id) %>%
-  summarize(sentiment = mean(sentiment)) 
-
-btw.reg <- left_join(btw.reg, btw_sentiment_doclevel %>%
-                       mutate(document = element_id) %>%
-                       select(document, sentiment),
-                      by="document")
-btw.reg %>%
-  group_by(site) %>%
-  mutate(ave_sentiment = mean(sentiment, na.rm = T)) -> plot_btw
-```
-
-```{r}
-p1 <- plot_btw %>%
-  ggplot(aes(sentiment, factor(site), color=topic_name, 
-             text=paste(document,": ",title))) +
-  geom_point(alpha=.5, shape=1) +
-  xlim(c(-0.25,0.1)) +
-  facet_wrap(~topic_name) +
-  labs(y="") +
-  theme(legend.position = "none")
-
-ggplotly(p1)
-```
-
-```{r}
-btw.reg %>% 
-  filter(document==372) %>%
-  mutate(text_split = get_sentences(text)) %$%
-  sentiment_by(text_split,
-               polarity_dt = sentiment_df) %>%
-  sentimentr::highlight()
-```
-
-```{r}
-btw.reg %>% 
-  filter(document==4) %>% select(text_cleaned)
-```
-
-### Radar
-#### with ggiraphExtra
-```{r}
-require(ggiraphExtra)
-```
-
-```{r}
-btw.reg %>%
-  group_by(site, topic_name) %>%
-  summarize(sentiment = mean(sentiment, na.rm = T)) %>%
-  spread(topic_name, sentiment) -> radar
-  ungroup() %>%
-  mutate(topic=factor(topic_name)) -> radar
-```
-
-```{r}
-ggsave(plot={
-  ggRadar(radar, aes(color=site), rescale = FALSE,
-        legend.position = "none") 
-  facet_wrap(~topic)
-},
-file="../figs/radar.png",
-dpi=600,
-height = 7,
-width = 9
-)
-```
-
-#### with radarchart
-
-```{r}
-btw.reg %>% 
-  group_by(site, topic, topic_name) %>%
-  summarise(sentiment = mean(sentiment, na.rm = TRUE)) %>%
-  ungroup() %>%
-  transmute(site=site,
-            sentiment=sentiment,
-            topic=paste(topic, topic_name, sep=": ")) %>%
-  spread(key=site, value=sentiment) %>%
-  ungroup() %>%
-  mutate(topic = factor(topic))-> radar
-```
-
-```{r}
-chartJSRadar(scores = radar, labelSize = 8, maxScale = 0.1, showToolTipLabel = TRUE,
-             addDots = FALSE, showLegend = FALSE,
-             width = 8, height = 8)
-```
 
 
 
