@@ -45,17 +45,36 @@
 
 \section{Introduction}
 
-In Germany, the debate about the role of public media and their mission in a rapidly changing media world is a recurring theme. By shifting media content to the Internet, the dual system, which has been shaping the German television and radio landscape since the introduction of private broadcasting in the early 1980s, is facing a radical change. Since 2000, public broadcasting has expanded its range of services, particularly in the digital media sector. If the right to use digital media were to be withdrawn from the public media outlets, they would not only be deprived of the possibility of improved information provision. They also threatened to lose their competitiveness with commercial media. On the other hand, there is the concern of commercial providers who are registering an ever-increasing number of digital services financed by fees. They complain about a bias in competition caused by public media offering online text-content because of their fee financing. The advertising-financed business model of the media houses is based on the premise that users visit their websites in order to achieve high advertising revenues.
+In Germany, the debate about the role of public media and their mission in a rapidly changing media world is a recurring theme. By shifting media content to the Internet, the dual system, which has been shaping the German television and radio landscape since the introduction of private broadcasting in the early 1980s, is facing a radical change. Since 2000, public broadcasting has expanded its range of services, particularly in the digital media sector. If the right to produce digital media content were to be withdrawn from the public media outlets, they would not only be deprived of the possibility of improved information provision. They also threatened to lose their competitiveness with commercial media. On the other hand, there is the concern of commercial providers who are registering an ever-increasing number of digital services financed by fees. They complain about a bias in competition caused by public media offering online text-content because of their fee financing. The advertising-financed business model of the media houses is based on the premise that users visit their websites in order to achieve high advertising revenues.
 
-The fundamental question in this debate is whether the offer of public news on the internet is justified. They should only occur where there are clear deficits in private sector supply. A frequently cited argument is that only the public media make it possible to provide information that is free of self-interest. Due to their public mandate and financing, they can afford what private providers cannot or only to a limited extent because of their economic dependency: a journalistic and editorial self-observation of society in the public interest. Due to their constitutional determination, they are obliged to the diversity and representation of the political and social spectrum of opinion in its entire breadth, including minority positions.
+One fundamental question in this debate is whether the offer of public news on the internet is justified. They should only occur where there are clear deficits in private sector supply. A frequently cited argument is that only the public media make it possible to provide information that is free of self-interest. Due to their public mandate and financing, they can afford what private providers cannot or only to a limited extent because of their economic dependency: a journalistic and editorial self-observation of society in the public interest. Due to their constitutional determination, they are obliged to the diversity and representation of the political and social spectrum of opinion in its entire breadth, including minority positions.
 
-On the basis of these justifications, this paper examines whether public media offer different content than private providers. In other words, whether socially desired content that meets the (social) needs of society and is therefore politically desirable is not provided by the market of private news, but by public providers. In order to examine this, the online news content of public media is compared with the supply of private news providers.
+On the basis of these justifications, this paper examines whether public media offer different content than private providers. In order to examine this, the online news content of public media is compared with the supply of private news providers.
 
-We use a data set of German online news articles about domestic politics to examine the differences in news content between public and private news provides. Your dataset contains articles dated from 01.06.2017 to 31.12.2017\footnote{German federal elections took place on 24th of September 2017.} from seven German content providers to analyze news reports about german elections, where we allow prevalence of topics to evolve over time (before and after the elections) and vary across newswire services. We then estimate the effect of news wire source on both topical prevalence (topic distribution) and topical content (word-topic distribution). 
+We use a data set of German online news articles about domestic politics dated from 01.06.2017 to 31.12.2017\footnote{German federal elections took place on 24th of September 2017.} from six German content providers. 
 
-Mapping raw text to one or more topics, without having prior knowledge on what those topics are, translates to an unsupervised classification problem on natural language. Topic models generate low-dimensional representations of data and can uncover interesting latent structure in large text datasets. They are popular tools for automatically identifying prominent themes in text. Within topic models the Latent Dirichlet Allocation (LDA) is a widely used technique, where each document (article) is viewed as a mixture of topics (represented by the document-topic distribution) and each topic is a mixture of unique terms, represented by the topic-term distribution \citep{blei_latent_2003}. \citet{roberts_model_2016} extents the base idea of LDA by developing a structural topic model (STM) that allows to incorporate external variables that effect both topical content and topical prevalence. We use this approach to analyze online news about the german domestic politics, where we allow prevalence of topics to vary across newswire services. We then estimate the effect of topical prevalence (the posterior document-topic distribution) on the ownership (public or private).
+The research strategy is as follows:
 
-The paper proceeds as follows: The next section (\ref{ch_onlinenews}) briefly explains the market for online news in Germany. We will examine the largest players on the market and use keyword analytics to investigate which providers are similar. Section \ref{ch_model} explains the generative process of the mixed membership model and the results of this process are presented in chapter \ref{ch_results}. Chapter \ref{ch_data} contains a description of the text data and how it was pre-processed in order to use it as input variable. Chapter \ref{ch_regression} describes how we regress the estimated probabilities of topic prevalence of a document on its metadata.
+\begin{enumerate}
+	\item \textbf{Discovering Topics} Discover latent topics in the corpus using structural topic modeling (STM)\citep{roberts_model_2016} An extension of latent dirichlet allocation (LDA) \citep{blei_latent_2003}). The STM approach models (a) topics as multinomial distributions of words and (b) documents as multinomial distributions of topics, allowing to incorporate external variables that effect both (a) topical content and (b) topical prevalence. To explore the results, we label each topic by looking at most frequent words and most representative articles across all news providers. (Section \ref{ch_model})
+
+	\item \textbf{Measuring Similarity of news content} Different approaches to examine the similarities / differences of content between the news provider:
+	\begin{enumerate}
+		\item \textbf{Differences in topic prevalence:} As we allow prevalence of topics to evolve over time (by month) and vary across newswire services, we can use the posterior topic-probability of document $d$, to estimate the conditional expectation of topic prevalence $\theta_d$ for given document characteristics (lm on compositional data) \citep{roberts_model_2016}. 
+		\begin{align*}
+			\theta_d=\alpha+\beta_1x_{site}+\beta_2x_{month}+\epsilon
+		\end{align*}
+		
+		\item \textbf{Topic correlation} How are topics linked and framed differently across news wires? Find all edges between topics where they exhibit a positive correlation above 0.1 \citep{roberts_model_2016}.
+
+		\item \textbf{Differences in word-topic distributions} From the STM we get a $K$x$V$ matrix (where $K=$ number of topics and $V=$ vocabulary) of the whole corpus that contains the probability of seeing each word of the vocabulary $V$ within topic $k$ conditional on the news provider. That is, for each news provider we get a respective $K$x$V$ matrix. We then use each row (corresponding to each topic) to calculate the similarity of the word-topic distribution between the news provider using the square root of the Jensen-Shannon (JS) Divergence.
+		
+		Previous topic modeling research try to measure the similarity between topics, comparing the word-topic-distribution between the topics (most of the research uses LDA without metadata, so the word-topic-distribution is the same within the whole corpus). cosine similarity \citep{he_detecting_2009}, \citep{ramage_labeled_2009}, Kullback-Leibler (KL) \citep{newman_distributed_2009}, \citep{wang_mining_2009} and the average Log Odds Ratio \citep{chaney_visualizing_2012} are frequently used metrics to compare word probability distributions. \citet{kim_topic_2011} compare six popular similarity metrics in terms of log likelihood of data, concluding that Jensen-Shannon Divergence (the symmetric variation of KL divergence) is best in terms of performance and generality. 
+		
+		\end{enumerate}
+	
+\end{enumerate}
+
 
 % ----------------------
 % the online news market
@@ -76,22 +95,17 @@ However, given today's media landscape, the role of public media provider and it
 
 On the basis of these justifications, this paper examines whether imperfections in the market of online news exist. In other words, whether socially desired content that meets the (social) needs of society and is therefore politically desirable is not provided by the market. In order to examine this, the online news content of public media is compared with the supply of private news providers. In the event that there is no market failure in terms of information provision (the contents do not differ), the existence of public media could still be justified by the fact that socially relevant contents of private providers are systematically distorted and the existence of public offerings ensures the diversity of information and opinions transmitted. 
 
-\subsection{Competitors}
+\subsection{Competitor analysis}
 
-Figure \ref{fig_reach} shows the largest providers of online news in terms of daily pageviews.\footnote{The figure shows the estimated percentage of daily pageviews on the internet that occurred on a specific website.} It is striking that SPIEGEL ONLINE has the greatest reach over the entire course of time followed by Bild.de. Looking at the percentage change of pageviews on the election day, increase is highest for Tagesschau.de followed by Tagesspiegel.de, whereas Huffingtonpost.de and Bild.de have the lowest increase (see figure \ref{fig_change}).
+Figure \ref{fig_reach} shows the largest providers of online news in terms of daily pageviews.\footnote{The figure shows the estimated percentage of daily pageviews on the internet that occurred on a specific website.} It is striking that SPIEGEL ONLINE has the greatest reach over the entire course of time followed by Bild.de.
 
 \begin{figure}[H]
 	\caption{}
 	\begin{center}
-		\begin{subfigure}[normla]{0.49\textwidth}
+		\begin{subfigure}[normla]{0.8\textwidth}
 			\includegraphics[width=\textwidth]{../figs/reach.png}
 			\caption{Percentage of daily pageviews}
 			\label{fig_reach}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.49\textwidth}
-			\includegraphics[width=\textwidth]{../figs/perc_change.png}
-			\caption{Percentage change of pageviews}
-			\label{fig_change}
 		\end{subfigure}
 	\end{center}
 \end{figure}
@@ -102,7 +116,7 @@ Users can access a website either directly or through an intermediary, such as s
 \begin{figure}[H]
 	\caption{Traffic Sources}
 	\begin{center}
-		\includegraphics[width=0.8\textwidth]{../figs/traffic_source.png}
+		\includegraphics[width=0.6\textwidth]{../figs/traffic_source.png}
 		\label{fig_traffic}
 	\end{center}
 \end{figure}
@@ -110,47 +124,50 @@ Users can access a website either directly or through an intermediary, such as s
 \begin{figure}[H]
 	\caption{Search traffic \%}
 	\begin{center}
-		\includegraphics[width=0.95\textwidth]{../figs/search_traffic.png}
+		\includegraphics[width=0.8\textwidth]{../figs/search_traffic.png}
 		\label{fig_searchtraffic}
 	\end{center}
 \end{figure}
 
-Assuming that each search query is in itself a market where providers compete for traffic, the share of search queries for a keyword that has led visitors to a news page is the market share of that provider. In this context, figures \ref{fig_keywords1} and \ref{fig_keywords2} show the market share of providers for different keywords.\footnote{The figures show the percentage of searches for a keyword that sent traffic to a website in major search engines over the time span Jun-Dec 2017.} Nearly 15\% of all search queries for the keyword "Bundestagswahl 2017" (federal elections 2017) were forwarded to welt.de. Focus.de, faz.net and spiegel.de obtained a market share of 7\% - 8\%. For the keyword "Groko" (grand coalition between CDU/CSU and SPD), SPIEGEL ONLINE was able to gain the largest market share (17\%) in the past six months, followed by DIE WELT (\%10), FOCUS ONLINE (8\%) and Bild.de (7.5\%). Figure \ref{fig_keywords2} shows the market share of news pages for the keyword search for a specific party. Contrary to figure \ref{fig_keywords1} , the x-axes in figure \ref{fig_keywords2} are scaled equally to show not only the market share of news sites depending on one party, but also for which party this provider has the largest market share. 
+Assuming that each search query is in itself a market where providers compete for traffic, the share of search queries for a keyword that has led visitors to a news page is the market share of that provider. In this context, figures \ref{fig_keywords1} and \ref{fig_keywords2} show the market share of providers for different keywords.\footnote{The figures show the percentage of searches for a keyword that sent traffic to a website in major search engines over the time span Jun-Dec 2017.} Nearly 15\% of all search queries for the keyword "Bundestagswahl 2017" (federal elections 2017) were forwarded to DIE WELT. FOCUS ONLINE, faz.net and SPIEGEL ONLINE obtained a market share of 7\% - 8\%. For the keyword "Groko" (grand coalition between CDU/CSU and SPD), SPIEGEL ONLINE was able to gain the largest market share (17\%) in the past six months, followed by DIE WELT (\%10), FOCUS ONLINE (8\%) and Bild.de (7.5\%). Figure \ref{fig_keywords2} shows the market share of news pages for the keyword search for a specific party. 
+
+Contrary to figure \ref{fig_keywords1} , the x-axes in figure \ref{fig_keywords2} are scaled equally to show not only the market share of news sites for a specific party-keyword, but also for which party this provider has the largest market share. For example, we can see that the market share of sueddeutsche.de is largest for the keyword "Die Grünen". However, the biggest market share among the listed news providers for this keyword has Zeit.de. The largest market share for the keyword "AfD" can be found at DIE WELT, followed by SPIEGEL ONLINE. The proportion of public news providers is comparatively low for all keywords. 
 
 \begin{figure}[H]
-	\caption{Market share for different keywords}
 	\begin{center}
-		\begin{subfigure}[normla]{0.7\textwidth}
-			\includegraphics[width=\textwidth]{../figs/keywords1.png}
-			\caption{policy topics / general}
+			\includegraphics[width=.8\textwidth]{../figs/keywords1.png}
+			\caption{Keyword market share for policy topics / general}
 			\label{fig_keywords1}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.7\textwidth}
-			\includegraphics[width=\textwidth]{../figs/keywords2.png}
-			\caption{political parties}
-			\label{fig_keywords2}
-		\end{subfigure}
 	\end{center}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+			\includegraphics[width=.8\textwidth]{../figs/keywords2.png}
+			\caption{Keyword market share for party-keywords}
+			\label{fig_keywords2}
+	\end{center}
+\end{figure}
+
 
 % -----
 % Data
 % -----
 \subsection{Dataset}\label{ch_data}
 
-We conduct our estimation on a sample of 7061 online news articles from five news provider about domestic politics\footnote{Bild.de, FOCUS ONLINE, SPIEGEL ONLINE, ZEIT ONLINE, Tagesschau.de} dated from 01.06.2017 to 31.12.2017.\footnote{German federal elections took place on 24th of September 2017.} We first extract all online articles using the the Webhose.io API.\footnote{For more information see https://docs.webhose.io/v1.0/docs/getting-started. The scraping code was written in Python and can be made available on request.} We then filtered all articles from the section "domestic policy" by checking the URL structure. 
+We conduct our estimation on a sample of 9393 online news articles from six news provider about domestic politics\footnote{Bild.de, DIE WELT, FOCUS ONLINE, SPIEGEL ONLINE, ZEIT ONLINE, Tagesschau.de}, of which only Tagesschau.de belongs to the group of public provider. The reason for this is that the content of Tagesschau.de is most similar to that of the private providers. ZDF.de offers predominantly video content and DLF website mainly offers audio content in the form of interviews. The articles are dated from 01.06.2017 to 31.12.2017.\footnote{German federal elections took place on 24th of September 2017.} We first extract all online articles using the the Webhose.io API.\footnote{For more information see https://docs.webhose.io/v1.0/docs/getting-started. The scraping code was written in Python and can be made available on request.} We then filtered all articles from the section "domestic policy" by checking the URL structure. 
 
-Figure \ref{fig_distr1}\footnote{The vertical line indicate the date of the federal elections (24.09.2017).} shows the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th.  
+Figure \ref{fig_distr1} shows the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th.  
 
 \begin{figure}[H]
 	\caption{Article distribution...}
 	\begin{center}
-		\begin{subfigure}[normla]{0.8\textwidth}
+		\begin{subfigure}[normla]{0.49\textwidth}
 			\includegraphics[width=\textwidth]{../figs/timeline.png}
-			\caption{...by date \& news source}
+			\caption{...by date}
 			\label{fig_distr1}
 		\end{subfigure}
-		\begin{subfigure}[normla]{0.8\textwidth}
+		\begin{subfigure}[normla]{0.49\textwidth}
 			\includegraphics[width=\textwidth]{../figs/bar.png}
 			\caption{... by news source}
 			\label{fig_distr2}
@@ -219,16 +236,16 @@ where the word probability $\beta_{dkv}$ is modeled as a function of the two par
 
 Topic models are usually imprecise as a number of assumptions have to be made that influence the performance of the classification task. Furthermore, multiple solutions exist for the optimization problem. The STM maximizes the posterior likelihood that the observed data were generated by the above data-generating process using an iterative approximation-based variational expectation-maximization algorithm\footnote{A technical description of this maximization process can be found in \citet{roberts_model_2016}} available in R's stm package \citep{roberts_stm:_2016}. Regularizing prior distributions are used for $\gamma$, $\kappa$ and $\Sigma$. Since an ex ante valuation of a model is hardly possible, we compute a variety of different models with different parameters and compare them with respect to the research problem \citep{gentzkow_text_2017}. To evaluate the accuracy of a model its perplexity can be computed. Similar to cross-validation (VC), different model specifications are compared to how well they do in predicting words within a document \citep{asuncion_smoothing_2012}, \citep{wallach_evaluation_2009}. However, \citet{chang_reading_2009} have proven with large user studies that optimal held out likelihood does not correspond to human perception of semantic coherence of topics. \cite{mimno_optimizing_2011} introduced a measure of coherence of a topic by observing co-occurences of the top $N$ terms of each topic on a document. Another strategy for selecting an appropriate model is to check for residual overdispersion of the variance of the multinomial within the data generating process of the model \citep{taddy_estimation_2012}. Other approaches can be found in \citet{airoldi_reconceptualizing_2010} and \citet{teh_hierarchical_2006}. However, cross-checking some subset of assigned topic distributions to evaluate whether the estimates align with the concept of interest \citep{gentzkow_text_2017}. We apply these manual audits together with numeric optimization based on the topic coherence measure suggested by \citet{mimno_optimizing_2011}. 
 
-This process revealed that a model with 25 topics best reflects the structure in the corpus. Furthermore, we use the source of each article (the media house) and the month it was published as covariates in the topic prevalence portion of the model. In other words, the probability distribution of topics depends on the editorial strategy of a media house as well as on the month the article was published. To address problems due to non-convexity, we rely on the spectral initialization approach advocated by \citet{roberts_navigating_2016}. 
+This process revealed that a model with 40 topics best reflects the structure in the corpus. Furthermore, we use the source of each article (the media house) and the month it was published as covariates in the topic prevalence. In other words, the probability distribution of topics depends on the editorial strategy of a media house as well as on the month the article was published. We also include news agency as a covariate affecting topical content to estimate how topics are discussed in different ways by different news agencies. To address problems due to non-convexity, we rely on the spectral initialization approach advocated by \citet{roberts_navigating_2016}. 
 
 % ----------------------
 % Model Results
 % ----------------------
-\subsection{Empirical Evaluation}
+\section{Empirical Evaluation}
 
 Inference of mixed-membership models, such as the one applied in this paper, has been a thread of research in applied statistics in the past few years \citep{blei_latent_2003} \citep{erosheva_mixed-membership_2004} \citep{braun_variational_2010}. As the posterior can be highly dependent on the model definition, using multiple starting points and clever initialization are successful practices. The takeaway from empirical evaluations of the inference task of mixed-membership models is that the bayesian posterior as good frequentist properties \citep{wallach_evaluation_2009}. \citet{roberts_model_2016} use empirical evaluation, including a frequentist coverage analysis and compare the performance of their STM to a variety of alternatives in \citet{roberts_navigating_2016}. 
 
-Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, we used a combination of most frequent words in that topic and words with the highest "score", computed as the log frequency of the word in the topic divided by the log frequency of the word in other topics \citep{roberts_stm:_2016}. The most common topic (3) is a general topic full of words that are frequently used in policy news, and therefore is not very interpretable. However, the remaining labels seem to classify a certain topic.  
+Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, we looked at the most frequent words in that topic and the most representative articles \citep{roberts_model_2016}.  
 
 \begin{figure}[H]
 	\begin{center}
@@ -241,164 +258,64 @@ Figure \ref{fig_topic_proportion} displays the topics ordered by their expected 
 % ----------------------
 % Effect of covariates
 % ----------------------
-Since we included news source as a covariate in estimating topical prevalence part within the model, we can estimate the frequency a topic is discussed within a news corpus \citep{roberts_model_2016}. We estimate the conditional expectation of topic prevalence for given document characteristics. More specifically, we estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents. The stm-package provides a function that uses the method of composition to incorporates uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results. 
+\subsection{Differences in topic prevalence}
+Since we included news source as a covariate in estimating topical prevalence part within the model, we can estimate the frequency a topic is discussed within a news corpus \citep{roberts_model_2016}. We estimate the conditional expectation of topic prevalence for given document characteristics. More specifically, we estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation \ref{eq_1}). The stm-package provides a function that uses the method of composition to incorporates uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results \citep{roberts_stm:_2016}. 
 
-Figure \ref{fig_estimateEffects_small} displays topics, where the most significant differences between the news sources are discernible.\footnote{An overview of all estimated topics can be found in the appendix \ref{fig_estimateEffects_full1} and \ref{fig_estimateEffects_full2}.} Topic 2, classifying articles about the diesel scandal, the glpyphosate decision and green policies, occur comparatively more often in tagesschau.de and bild.de, whereas tagesschau.de reports comparatively little about the riots during the G20 summit (topic 9). Topics 10 (about public (financial) statistics) and 13 (about the federal migration office (BAMF), asylum procedures and other issues related to refugees) also seems to be represented comparatively frequently in the tagesschau.de corpus, the latter topic is most often discussed in the DIE WELT corpus. However, topic 20 (the public debate between Die Grünen and FDP in the process of coalition negotiations) is represented significantly more often in the corpus of spiegel.de and bild.de. Topic 26, which classifies articles that deal with terrorism, mainly about the NSU trial and the main defendant Zschäpe as well es IS, is significantly more often present in the corpus of FOCUS ONLINE.
+\begin{align}\label{eq_1}
+	\theta_d=\alpha+\beta_1x_{site}+\beta_2x_{month}+\epsilon
+\end{align}
+
+Figures \ref{fig_estimateEffects1} and \ref{fig_estimateEffects2} display the regression results.  
 
 \begin{figure}[H]
-	\caption{Mean prevalence of topics within each news source corpus}
-	\begin{center}
-		\begin{subfigure}[normla]{0.3\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect2.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.3\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect9.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.3\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect11.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.3\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect13.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.3\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect20.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.3\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect26.png}
-		\end{subfigure}
-	\end{center}
-	\label{fig_estimateEffects_small}
+	\caption{Regression results 1}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/estimates_site.png}
+		\end{center}
+	\label{fig_estimateEffects1}
 \end{figure}
 
-Another interesting aspect is how the news sources discusses the different topics, that is, describe the same event with different vocabulary.
+\begin{figure}[H]
+	\caption{Regression results 2}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/estimates_month.png}
+		\end{center}
+	\label{fig_estimateEffects2}
+\end{figure}
 
-\section{Distance Metric}
 
-Since the topic distribution of a text is a simple mapping of text space, similarity of two texts can be measured by computing the topic distribution. KL distance is the measurement of “difference” between two probabilities. 
+\subsection{Topic correlations}
 
-We use a probability distribution distance metric related to Jensen-Shannon divergence (JSD) to compare the word-topic distribution. Jensen-Shannon Divergence is a positive definite measure, satisfying the following conditions: $D_{js}(a,b) \geq 0$, $D_{js}(a,b)=0$ iff $(a=b)$. It is also symmetric: $D_{js}(a,b)=D_{js}(b,a)$. Let $p(x)$ and $q(x)$ be two probability density functions, the Jensen-Shannon distance $D_{js}(p,q)$ between this two distributions is defined as:
+Next, we examine how topics are correlated differently for different news wires, indicating how topics are connected and framed differently in each newswire. In Figure \ref{fig_topic_correlations}, we find all edges between topics where they exhibit a positive correlation above 0.1 \citep{roberts_model_2016}.
 
-\begin{align*}
-	D_{js}(p,q)=\frac{1}{2}D_{KL}(p,\frac{p+q}{2})+\frac{1}{2}D_{KL}(q,\frac{p+q}{2})
-\end{align*}
 
-where $D_{KL}$ is the Kullback-Leibler divergence between $p$ and $q$ defined as:
+\begin{figure}[H]
+	\caption{Topic Correlation}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/topic_correlation.png}
+		\end{center}
+	\label{fig_topic_correlations}
+\end{figure}
 
-\begin{align*}
-	D_{KL}(p,q)=\sum_{i=1}^T p_i ln \frac{p_i}{q_i}
-\end{align*}
 
-Since $D_{js}$ does not satisfy the triangular inequality condition $D_{js}(a,c)\leq D_{js}(a,c)+D_{js}(b,c)$, the JSD is not considered to be a real metric. On the other hand, the square root of JSD is a real distance metric \citep{endres_new_2003}. This is the reason why we use the square root and not JSD itself. 
+\subsection{Differences in word-topic distributions}
 
-\section{Sentiment analysis}
+From the STM model we get a $KxV$ matrix (where $K=$number of topics and $V=$vocabulary) of the whole corpus that contains the probability of seeing each word of the vocabulary $V$ within topic $k$ conditional on the news provider. That is, for every news provider we get a $KxV$ matrix. We use each row (corresponding to each topic) to calculate the similarity of the word-topic distribution between the news provider using the square root of the Jensen-Shannon (JS) Divergence.
 
-The idea of Sentiment analysis is to determine the attitude of a writer through online text data toward certain topic or the overall tonality of a document.
+A low JSD value indicates stronger similarities.
 
-commonly used lexical or “bag-ofwords” approach. In that approach, the researcher provides pre-defined dictionaries (lists) of words associated with a given emotion, such as negativity. The target text is then deconstructed into individual words (or tokens) and the frequencies of words contained in a given dictionary are then calculated. For example, Loughran and McDonald (2011) construct a dictionary of words that express negativity in financial contexts, which they then use to measure the negativity in company 10-K filings and relate that negativity to financial outcomes.
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=\textwidth,keepaspectratio]{../figs/jsd.png}
+	\caption{Jensen-Shannon (JS) Divergence of word-topic probability}
+	\label{fig_jsd}
+	\end{center}
+\end{figure}
 
-The psychology literature demonstrates that any emotion can be parsimoniously defined by assigning it a score along two primary dimensions: valence (i.e., positive or negative) and arousal (i.e., activation and deactivation). For comparison purposes, we also examine three additional measures: “worried,” “satisfied,” and a lexical “negativity” measure. 
 
 % ----------------------
 % Appendix
 % ----------------------
 \section*{Appendix}
-
-\begin{figure}[H]
-	\caption{Mean prevalence of topics within each news source corpus 1}
-	\begin{center}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect1.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect2.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect3.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect4.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect5.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect6.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect7.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect8.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect9.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect10.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect11.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect12.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect13.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect14.png}
-		\end{subfigure}
-	\end{center}
-	\label{fig_estimateEffects_full1}
-\end{figure}
-
-\begin{figure}[H]
-	\caption{Mean prevalence of topics within each news source corpus 2}
-	\begin{center}
-			\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect15.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect16.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect17.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect18.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect19.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect20.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect21.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect22.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect23.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect24.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect25.png}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect26.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect26.png}
-		\end{subfigure}
-				\begin{subfigure}[normla]{0.2\textwidth}
-			\includegraphics[width=\textwidth]{../figs/estimate_effect28.png}
-		\end{subfigure}
-	\end{center}
-	\label{fig_estimateEffects_full2}
-\end{figure}
 
 \end{document}

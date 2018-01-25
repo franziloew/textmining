@@ -19,6 +19,92 @@ lapply(libs, library, character.only = TRUE)
 rm(list = ls())
 ```
 
+## Audience Network
+```{r}
+focus <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_focus.csv", header=FALSE, comment.char="#")
+spiegel <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_spiegel.csv", header=FALSE, comment.char="#")
+bild <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_bildde.csv", header=FALSE, comment.char="#")
+zeit <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_zeitde.csv", header=FALSE, comment.char="#")
+tagesschau <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_tagesschau.csv", header=FALSE, comment.char="#")
+
+zdf <-  read.csv("../data/audience_network/Audience_Overlap_1_15_2018_zdf.csv.crdownload.csv", header=FALSE, comment.char="#")
+#stern <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_stern.csv", header=FALSE, comment.char="#")
+welt <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018 _welt.csv", header=FALSE, comment.char="#")
+```
+
+```{r}
+focus <- focus[-1,1:2] 
+colnames(focus) <- c("site","focus.de")
+
+spiegel <- spiegel[-1,1:2] 
+colnames(spiegel) <- c("site","spiegel.de")
+
+bild <- bild[-1,1:2] 
+colnames(bild) <- c("site","bild.de")
+
+zeit <- zeit[-1,1:2] 
+colnames(zeit) <- c("site","zeit.de")
+
+tagesschau <- tagesschau[-1,1:2] 
+colnames(tagesschau) <- c("site","tagesschau.de")
+
+zdf <- zdf[-1,1:2] 
+colnames(zdf) <- c("site","zdf.de")
+
+welt <- welt[-1,1:2] 
+colnames(welt) <- c("site","welt.de")
+```
+
+```{r}
+# combine dataframes
+network_df <- left_join(focus[1:80,], spiegel[1:80,], by="site") %>%
+  left_join(., bild[1:80,], by = "site") %>%
+  left_join(., zeit[1:80,], by = "site") %>%
+  left_join(., tagesschau[1:80,], by = "site") %>%
+  left_join(., zdf[1:80,], by = "site") %>%
+  left_join(., welt[1:80,], by = "site")
+
+network_df <- na.omit(network_df)
+
+melted <- network_df %>%
+    gather(key="seed", value="score", focus.de:welt.de) %>%
+  mutate(score = as.integer(score),
+         site = as.factor(site),
+         seed = as.factor(seed))
+```
+
+```{r}
+p1 <- ggplot(melted, aes(seed, site, fill=score)) +
+  geom_tile() +
+  scale_fill_gradient(low="gray95",high=col[3]) +
+  scale_x_discrete(labels=c("bilde.de" = "Bild.de", 
+                            "focus.de" = "FOCUS ONLINE", 
+                            "spiegel.de" = "SPIEGEL ONLINE",
+                            "tagesschau.de" = "Tagesschau.de", 
+                            "welt.de" ="DIE WELT",
+                            "zdf.de" = "ZDF.de",
+                            "zeit.de" = "ZEIT ONLINE")) +
+  labs(x="", y="",  caption = "
+  Source: Alexa Internet, Inc. (www.alexa.com)
+      ") +
+  theme(
+      legend.text       =  element_text(size=6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
+      axis.title.x      = element_blank(),
+      axis.text.x = element_text(size=8, angle = 45),
+      axis.text.y       = element_text(size = 8)
+    ) 
+
+ggsave(plot= p1,
+filename = "../figs/audience.png", device = "png",
+width = 5, height = 6,
+        dpi = 600
+)
+
+p1
+```
+
 ## Summary Stats
 ```{r}
 df %>%

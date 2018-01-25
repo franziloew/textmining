@@ -29,6 +29,7 @@ library(readxl)
 library(Matrix)
 
 library(igraph)
+library(corrplot)
 library(ggpmisc)
 library(ggiraph)
 library(RColorBrewer) 
@@ -39,9 +40,6 @@ library(viridis)     # Viridis color scales
 library(tidytext)    # Tidy text mining
 library(stringdist)  # String distances
 library(proxy)       # Distance measures
-  
-library(htmlwidgets) # JS visuliaztions
-library(htmltools)   # Arbitrary html
 
 # Theming
 quartzFonts(
@@ -59,12 +57,15 @@ theme_set(
                                 margin = margin(0, 0, 4, 0, "pt")),
       plot.subtitle = element_text(size = 12),
       plot.caption = element_text(size = 6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
       panel.border = element_blank()
     )
 )
 
 rm(list=ls())
 col <- brewer.pal(6,"Dark2")
+source("func/functions.R")
 ```
 
 # 1. The online news market
@@ -86,19 +87,21 @@ views <- left_join(views1, views2 %>%
 #           "tagesschau.de")
 #drop <- c("stern.de","sueddeutsche.de")
 
-# reach <- reach %>% 
+# reach <- reach %>%
 #   mutate(date = as.Date(Date, "%m/%d/%Y")) %>%
 #   select(- c(Metric,Date)) %>%
 #   gather(key="site", value="reach", focus.de:n.tv.de) %>%
-#  filter(!site %in% drop) %>%
-#   mutate(site = ifelse(site=="bild.de","Bild.de",site),
-#        site = ifelse(site=="focus.de","FOCUS ONLINE",site),
-#        site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
-#        site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
-#        site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
-#        site = ifelse(site=="zdf.de","ZDF.de",site),
-#        site = ifelse(site=="welt.de","DIE WELT",site),
-#        site = ifelse(site=="n-tv.de","n-tv.de",site))
+#  filter(!site %in% drop) 
+
+views <- views %>%
+  mutate(site = ifelse(site=="bild.de","Bild.de",site),
+       site = ifelse(site=="focus.de","FOCUS ONLINE",site),
+       site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
+       site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
+       site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
+       site = ifelse(site=="zdf.de","ZDF.de",site),
+       site = ifelse(site=="welt.de","DIE WELT",site),
+       site = ifelse(site=="n-tv.de","n-tv.de",site))
 
 ```
 
@@ -109,16 +112,13 @@ p1 <- views %>%
   geom_line(show.legend = F) +
   geom_text_repel(data = views[views$date==max(views$date), ],
                   aes(date, views, label=site),
-                  size=2.8, show.legend = F, seed = 5) +
+                  size=2.8, show.legend = F, seed = 1) +
   scale_x_date(limits = c(as.Date("2017-05-31"),as.Date("2018-02-15")),
                breaks = date_breaks("1 month"), 
                labels=date_format("%B %y", tz="CET")) +
   theme(
       #legend.position   = "none",
       legend.text       =  element_text(size=6),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      panel.background  = element_rect("#fafafa"),
-      axis.title.x      = element_blank(),
       axis.text.y       = element_text(size = 8)
     ) +
   labs(x="", y="pageviews", color="", title = "", 
@@ -144,15 +144,12 @@ p1 <- views %>%
   geom_line(show.legend = F) +
   geom_text_repel(data = views[views$date=="2017-09-24", ],
                   aes(date, perc_change, label=site),
-                  size=2.8, show.legend = F, seed = 5) +
+                  size=3, show.legend = F, seed = 5) +
   #scale_color_manual(values = brewer.pal(8,"Dark2")) +
   scale_x_date(breaks = date_breaks("1 day"), labels=date_format("%d.%m.", tz="CET")) +
   labs(x="",y="% change", color="") +
   theme(
       legend.text       =  element_text(size=6),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      panel.background  = element_rect("#fafafa"),
-      axis.title.x      = element_blank(),
       axis.text.y       = element_text(size = 8)
     ) 
 
@@ -178,6 +175,18 @@ source <- left_join(source1, source2,
   select(- c(Date)) %>%
   gather(key="site", value="traffic", 
          focus.de:tagesspiegel.de)
+
+
+source <- source %>%
+  mutate(site = ifelse(site=="bild.de","Bild.de",site),
+       site = ifelse(site=="focus.de","FOCUS ONLINE",site),
+       site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
+       site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
+       site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
+       site = ifelse(site=="zdf.de","ZDF.de",site),
+       site = ifelse(site=="welt.de","DIE WELT",site),
+       site = ifelse(site=="n-tv.de","n-tv.de",site))
+
 ```
 
 ```{r}
@@ -187,7 +196,7 @@ p1 <- ggplot(source, aes(site, traffic, fill=Metric,
   geom_text(size = 2, position = position_stack(vjust = 0.5)) +
   labs(x = "", y = "Percentage of total traffic", 
        caption = "Source: Alexa Internet, Inc. (www.alexa.com)") +
-  theme(axis.text.x = element_text(angle = 45, size = 7 ))
+  theme(axis.text.x = element_text(angle = 45, size = 8 ))
 
 p1
 
@@ -221,14 +230,25 @@ for (i in 2:length(filenames)) {
 ```
 
 ```{r}
-keepsite <- c("tagesschau.de", "spiegel.de", "zeit.de", "deutschlandfunk.de",
-              "zdf.de", "bild.de", "welt.de", "stern.de", "sueddeutsche.de", "focus.de")
+keepsite <- c("tagesschau.de", "spiegel.de", "zeit.de", 
+              "bild.de", "welt.de", "focus.de")
 
-keywords.df <- keywords.df %>% 
-  filter(nchar(as.character(site))>1)
-#  filter(site %in% keepsite)
+keywords.df.reduced <- keywords.df %>% 
+  filter(nchar(as.character(site))>1) %>% filter(site %in% keepsite)
+```
 
-unique(keywords.df$site)
+```{r}
+keywords.df <- keywords.df %>%
+  mutate(site = as.character(site)) %>%
+  mutate(site = ifelse(site=="bild.de","Bild.de",site),
+       site = ifelse(site=="focus.de","FOCUS ONLINE",site),
+       site = ifelse(site=="spiegel.de","SPIEGEL ONLINE",site),
+       site = ifelse(site=="zeit.de","ZEIT ONLINE",site),
+       site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
+       site = ifelse(site=="deutschlandfunk.de","DLF",site),
+       site = ifelse(site=="zdf.de","ZDF.de",site),
+       site = ifelse(site=="welt.de","DIE WELT",site),
+       site = ifelse(site=="n-tv.de","n-tv.de",site))
 ```
 
 ### Search Traffic %
@@ -240,8 +260,8 @@ p1 <- keywords.df %>%
   ungroup() %>%
   ggplot(aes(reorder(term, Percent_of_traffic), 
              Percent_of_traffic, fill=site)) +
-  geom_col(show.legend = FALSE) +
-  theme_bw(base_family = "Roboto", base_size = 4) +
+  geom_col(fill=col[1], show.legend = FALSE) +
+  theme_bw(base_family = "Roboto", base_size = 7) +
   coord_flip() +
   facet_wrap(~site, scales = "free") +
   labs(x= "", y = "Search traffic %", 
@@ -252,7 +272,7 @@ p1
 
 ggsave(plot= p1,
 filename = "../figs/search_traffic.png", device = "png",
-width = 7, height = 4,
+width = 9, height = 5,
         dpi = 600
 )
 ```
@@ -272,7 +292,7 @@ p1 <- keywords.df %>%
   filter(term %in% keyword1) %>%
   ggplot(aes(site,
              Share_of_voice, fill=term)) +
-  geom_col(show.legend = F) +
+  geom_col(fill=col[3], show.legend = F) +
   coord_flip() +
   facet_grid(~term, scales = "free") +
   labs(x= "", y = "Share of voice",
@@ -293,7 +313,7 @@ p1 <- keywords.df %>%
   filter(term %in% keyword2) %>%
   ggplot(aes(site,
              Share_of_voice, fill=term)) +
-  geom_col(show.legend = F) +
+  geom_col(fill=col[3], show.legend = F) +
   coord_flip() +
   facet_grid(~term) +
   labs(x= "", y = "Share of voice",
@@ -312,92 +332,6 @@ width = 6, height = 4,
 )
 ```
 
-## Audience Network
-```{r}
-focus <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_focus.csv", header=FALSE, comment.char="#")
-spiegel <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_spiegel.csv", header=FALSE, comment.char="#")
-bild <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_bildde.csv", header=FALSE, comment.char="#")
-zeit <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_zeitde.csv", header=FALSE, comment.char="#")
-tagesschau <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_tagesschau.csv", header=FALSE, comment.char="#")
-
-zdf <-  read.csv("../data/audience_network/Audience_Overlap_1_15_2018_zdf.csv.crdownload.csv", header=FALSE, comment.char="#")
-#stern <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018_stern.csv", header=FALSE, comment.char="#")
-welt <- read.csv("../data/audience_network/Audience_Overlap_1_15_2018 _welt.csv", header=FALSE, comment.char="#")
-```
-
-```{r}
-focus <- focus[-1,1:2] 
-colnames(focus) <- c("site","focus.de")
-
-spiegel <- spiegel[-1,1:2] 
-colnames(spiegel) <- c("site","spiegel.de")
-
-bild <- bild[-1,1:2] 
-colnames(bild) <- c("site","bild.de")
-
-zeit <- zeit[-1,1:2] 
-colnames(zeit) <- c("site","zeit.de")
-
-tagesschau <- tagesschau[-1,1:2] 
-colnames(tagesschau) <- c("site","tagesschau.de")
-
-zdf <- zdf[-1,1:2] 
-colnames(zdf) <- c("site","zdf.de")
-
-welt <- welt[-1,1:2] 
-colnames(welt) <- c("site","welt.de")
-```
-
-```{r}
-# combine dataframes
-network_df <- left_join(focus[1:80,], spiegel[1:80,], by="site") %>%
-  left_join(., bild[1:80,], by = "site") %>%
-  left_join(., zeit[1:80,], by = "site") %>%
-  left_join(., tagesschau[1:80,], by = "site") %>%
-  left_join(., zdf[1:80,], by = "site") %>%
-  left_join(., welt[1:80,], by = "site")
-
-network_df <- na.omit(network_df)
-
-melted <- network_df %>%
-    gather(key="seed", value="score", focus.de:welt.de) %>%
-  mutate(score = as.integer(score),
-         site = as.factor(site),
-         seed = as.factor(seed))
-```
-
-```{r}
-p1 <- ggplot(melted, aes(seed, site, fill=score)) +
-  geom_tile() +
-  scale_fill_gradient(low="gray95",high=col[3]) +
-  scale_x_discrete(labels=c("bilde.de" = "Bild.de", 
-                            "focus.de" = "FOCUS ONLINE", 
-                            "spiegel.de" = "SPIEGEL ONLINE",
-                            "tagesschau.de" = "Tagesschau.de", 
-                            "welt.de" ="DIE WELT",
-                            "zdf.de" = "ZDF.de",
-                            "zeit.de" = "ZEIT ONLINE")) +
-  labs(x="", y="",  caption = "
-  Source: Alexa Internet, Inc. (www.alexa.com)
-      ") +
-  theme(
-      legend.text       =  element_text(size=6),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      panel.background  = element_rect("#fafafa"),
-      axis.title.x      = element_blank(),
-      axis.text.x = element_text(size=8, angle = 45),
-      axis.text.y       = element_text(size = 8)
-    ) 
-
-ggsave(plot= p1,
-filename = "../figs/audience.png", device = "png",
-width = 5, height = 6,
-        dpi = 600
-)
-
-p1
-```
-
 # 2. Data 
 ```{r caching, echo = FALSE}
 load("../output/btw_combined.Rda")
@@ -408,17 +342,10 @@ load("../output/btw_combined.Rda")
 ggsave({
   btw %>%
   ggplot(aes(site)) +
-  geom_bar(fill=col, alpha= .8) +
+  geom_bar(fill=col[1], alpha= .8) +
   labs(x="", y="Number of articles") +
   theme(
-      legend.position   = "none",
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      plot.title        = element_text(size = 18),
-      plot.subtitle     = element_text(size = 8),
-      plot.caption      = element_text(size = 7),
-      panel.background  = element_rect("#fafafa"),
-      axis.title.x      = element_blank(),
-      axis.text.y       = element_text(size = 8)
+      legend.position   = "none"
     )
   
 },
@@ -430,27 +357,19 @@ width = 6, height = 4,
 ```{r message=FALSE, warning=FALSE}
 ggsave({
   btw %>%
-  group_by(date, site) %>%
+  group_by(date) %>%
   dplyr::summarise(obs = n()) %>%
-  ggplot(aes(date, obs, color = site)) +
-  geom_line() +
-  #geom_vline(aes(xintercept=as.Date("2017-09-24")),
-  #           linetype = 2, color="grey40") +
-  #geom_vline(aes(xintercept=as.Date("2017-11-20")),
-  #               linetype = 2, color="grey40") +
+  ggplot(aes(date, obs)) +
+  geom_line(color=col[3]) +
+  geom_vline(aes(xintercept=as.Date("2017-09-24")),
+             linetype = 2, color=col[2]) +
   scale_color_manual(values = col) +
-  labs(x="", y="Count",color="") +
+  labs(x="", y="number of articles",color="") +
   scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
   theme(
-      #legend.position   = "none",
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      plot.title        = element_text(size = 18),
-      plot.subtitle     = element_text(size = 8),
-      plot.caption      = element_text(size = 7),
-      #panel.grid        = element_blank(),
-      panel.background  = element_rect("#fafafa"),
+      legend.position   = "none",
       axis.title.x      = element_blank(),
-      axis.text.y       = element_text(size = 8)
+      axis.text       = element_text(size = 8)
     )
 },
 filename = "../figs/timeline.png", device = "png",width = 7, height = 4,
@@ -466,7 +385,7 @@ load("../output/models/STM_stemmed2 40 .Rda")
 
 ## Label topics
 ```{r}
-sagelabs <- sageLabels(stmOut, 100)
+sagelabs <- sageLabels(stmOut, 25)
 ```
 
 ```{r}
@@ -477,25 +396,29 @@ stmOut$settings$covariates$yvarlevels
 
 After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
 ```{r}
-sagelabs$cov.betas[[1]]$problabels[,1:10]
+sagelabs$cov.betas[[5]]$problabels[,1:10]
 ```
 
 ```{r}
-topics <- matrix(c(1, "Great coalition", 2, "Merkel,election campaign", 3, "Jamaica coalition", 
-                   4, "Diesel scandal", 5, "Merkel chancellor", 6, "Seehover vs. Söder", 
-                   7, "Germany, EU, Jamaika", 8, "Merkel vs.Schulz", 9, "AfD election results", 
-                   10, "Steinmeier,Federal President", 11, "unclear (Schröder, Google)", 
+topics <- matrix(c(1, "Great coalition", 2, "Merkel vs. CSU", 3, "Jamaica coalition", 
+                   4, "Diesel scandal", 5, "Merkel as chancellor", 6, "Seehover vs. Söder", 
+                   7, "political trends after the election", 8, "Merkel vs.Schulz", 9, "AfD election results", 
+                   10, "Steinmeier,Federal President", 11, "IT themes (Data policy, Wifi, Telekom)", 
                    12, "Federal Election in social media", 13, "Climate policy", 14, "G20 Hamburg", 
-                   15, "error", 16, "Education, Pension policy", 17, "Reports on individuals",
-                   18, "Family reunion refugees", 19, "Polls federal election", 
+                   15, "error (text processing failure)", 16, "Education, Pension policy",
+                   17, "Reports on individuals", 18, "Family reunion refugees", 19, "Polls federal election", 
                    20, "AfD top candidates Weidel, Storch", 21, "M.Schwesig (SPD)",
-                   22, "elections in Niedersachsen", 23, "Böhmermann vs. Erdogan", 
-                   24, "political talkshows", 25, "German armed forces", 26, "W.Schäuble", 
-                   27, "C.Lindner FDP", 28, "Turkey, Russia", 29, "A.Merkel Youtube", 
+                   22, "elections in Niedersachsen", 23, "Court sentences (NSU, Böhmermann vs. Erdogan)", 
+                   24, "election capaigns & political talkshows", 25, "German armed forces", 26, "W.Schäuble", 
+                   27, "C.Lindner FDP", 28, "Turkey, Russia", 29, "railway problems (DBahn)", 
                    30, "H.Kohl obituary", 31, "AfD Gauland, Höcke", 32, "Asylum claims and deportation", 
                    33, "EU policies", 34, "DIE LINKE", 35, "SPD", 36, "Islam and antisemitism in GER", 
                    37, "AfD in parliament", 38, "Terror attacks (GER)  & police reports", 
                    39, "Church", 40, "RAF"), ncol=2, byrow=T)
+
+topics.df <- as.data.frame(topics) %>%
+  transmute(topic_name = paste(V1, V2, sep=": "),
+         topic = 1:40) 
 ```
 
 ## Assign a topic to each document (choose by gamma)
@@ -508,9 +431,6 @@ top_topics <- theta %>%
   mutate(therank = rank(-gamma, ties.method = "random")) %>%
   filter(therank == 1) %>%
   select(- therank)
-
-topics.df <- as.data.frame(topics) %>% transmute(topic = as.integer(V1),
-                                 topic_name = paste(topic, V2, sep=": "))
 
 btw.2 <- btw %>%
   mutate(document = articleID) %>%
@@ -538,16 +458,17 @@ p1 <- ggplot(frequency, aes(x=reorder(topic, frequency), y=frequency)) +
     geom_col(fill=col[1], alpha=0.8) +
     coord_flip() +
     labs(x="", y="expected frequency") +
-    theme(axis.text = element_text(size=8),
+    theme(axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=11),
           axis.title = element_text(size=10))
 
 p1
 
-#ggsave(plot = p1, filename = "../figs/topic_proportion.png", device = "png",width = 8, height = 12,
-#dpi = 600)
+ggsave(plot = p1, filename = "../figs/topic_proportion.png", device = "png",width = 8, height = 12,
+dpi = 600)
 ```
 
-## by newspaper
+### by newspaper
 ```{r}
 plotNewspaperHistogram <- function(topic){
   tab <- tapply(stmOut$theta[,topic], stmOut$settings$covariates$betaindex, mean)
@@ -568,131 +489,252 @@ plotNewspaperHistogram <- function(topic){
 plotNewspaperHistogram(1)
 ```
 
+### Difference in topic prevalence
+The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
+
+```{r}
+effect <- estimateEffect(c(1:40) ~site+s(month), stmOut, 
+                         metadata = out$meta, uncertainty = "None")
+#plot.estimateEffect(effect, "month", topics=c(33), method = "continuous", npoints=500)
+```
+
+```{r}
+summary(effect)
+```
+
+```{r}
+tables <- vector(mode="list", length = length(effect$topics))
+
+for (i in seq_along(effect$topics)) {
+  sims <- lapply(effect$parameters[[i]], function(x) stm:::rmvnorm(500, x$est, x$vcov))
+  sims <- do.call(rbind, sims)
+  est <- colMeans(sims)
+  se <- sqrt(apply(sims,2, stats::var))
+  tval <- est/se
+  rdf <- nrow(effect$data) - length(est)
+  p <- 2*stats::pt(abs(tval), rdf, lower.tail = FALSE)
+  topic <- i
+  
+  coefficients <- cbind(topic, est, se, tval, p)
+  rownames(coefficients) <- attr(effect$parameters[[1]][[1]]$est, "names") 
+  colnames(coefficients) <- c("topic", "Estimate", "Std. Error", "t value", "p")
+  tables[[i]] <- coefficients
+}
+
+out <- list(call=effect$call, topics=effect$topics, tables=tables)
+```
+
+```{r}
+coeff <- as.data.frame(do.call(rbind,out$tables))
+
+coeff <- coeff %>% 
+  mutate(parameter = rownames(coeff),
+         parameter = gsub("site", "", parameter),
+         parameter = ifelse(parameter == "s(month)1", "1_July", parameter),
+         parameter = ifelse(parameter == "s(month)2", "2_August", parameter),
+         parameter = ifelse(parameter == "s(month)3", "3_September", parameter),
+         parameter = ifelse(parameter == "s(month)4", "4_October", parameter),
+         parameter = ifelse(parameter == "s(month)5", "5_November", parameter),
+         parameter = ifelse(parameter == "s(month)6", "6_December", parameter),
+         signifcant = ifelse(p <= 0.5,"yes","no")) %>%
+  left_join(., topics.df, by="topic")
+```
+
+```{r}
+sites <- c("(Intercept)", "DIE WELT", "FOCUS ONLINE","SPIEGEL ONLINE", "Tagesschau.de","ZEIT ONLINE")
+
+p1 <- coeff %>% filter(parameter %in% sites) %>%
+  ggplot(aes(x = reorder(topic_name,topic, decreasing=F), y = Estimate, fill=factor(signifcant))) +
+  geom_col() +
+  scale_fill_manual(values = col[c(2,1)]) +
+  coord_flip() +
+  facet_wrap(~parameter, ncol = 6) +
+  labs(x="", fill="significant at\nthe 5% level") +
+  theme(axis.text.x = element_text(angle=90))
+
+p1
+
+ggsave(plot = p1, filename = "../figs/estimates_site.png", device = "png",width = 9, height = 5,
+dpi = 600)
+```
+
+```{r}
+p1 <- coeff %>% filter(!parameter %in% sites) %>%
+  ggplot(aes(x = reorder(topic_name,topic, decreasing=F), y = Estimate, 
+             fill=factor(signifcant))) +
+  geom_col() +
+  scale_fill_manual(values = col[c(2,1)]) +
+  coord_flip() +
+  facet_wrap(~parameter, ncol = 6) +
+  labs(x="", fill="significant at\nthe 5% level") +
+  theme(axis.text.x = element_text(angle=90))
+
+p1
+
+ggsave(plot = p1, filename = "../figs/estimates_month.png", device = "png",width = 9, height = 5,
+dpi = 600)
+```
+
 ## Topic Correlation
 ```{r}
-topicCorrelation <- function(ylevel) {
-  cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==ylevel,])
-  adjmat <- ifelse(cormat > .04,1,0)
+## Create Dataframe with correlations
+
+cor <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==1,])
+colnames(cor) <- 1:40
   
-  corr <- list()
-  corr$posadj <- adjmat
-  corr$poscor <- cormat*adjmat
-  corr$cor <- ifelse(abs(cormat)>.04,cormat,0)
+df <- as.data.frame(cor) %>% 
+  mutate(topic = 1:40) %>%
+  melt(., id="topic", value.name="corr") %>%
+  mutate(site = stmOut$settings$covariates$yvarlevels[1])
+
+for (i in 2:6) {
+  cor <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==i,])
+  colnames(cor) <- 1:40
   
-  x <- corr$posadj[1:nrow(corr$posadj),1:nrow(corr$posadj)]
-
-  g<- graph.adjacency(x, mode="undirected", weighted=TRUE, diag=FALSE)
-
-  E(g)$size <- 1
-  E(g)$lty <- 2
-  E(g)$color <- "black"
-  V(g)$label <- topics[,2]
-  layout <- layout_nicely
-
-  plot.igraph(g, layout=layout_nicely, vertex.color="white", label.font = "Roboto",
-     vertex.frame.color="grey", vertex.size=1, vertex.label.cex=.6, edge.color="red",
-     edge.width=1, main=paste("Topic correlation", stmOut$settings$covariates$yvarlevels[ylevel]))
+  df1 <- as.data.frame(cor) %>% 
+    mutate(topic = 1:40) %>%
+    melt(., id="topic", value.name="corr") %>%
+    mutate(site = stmOut$settings$covariates$yvarlevels[i])
+  
+  df <- rbind(df,df1)
 }
 ```
 
 ```{r}
-topicCorrelation(5)
+df <- df %>% 
+  left_join(.,topics.df, by = "topic") %>%
+  mutate(topic1 = topic,
+         topic_name1 = topic_name,
+         topic = as.numeric(variable)) %>%
+  select(-topic_name) %>%
+  left_join(., topics.df, by="topic")
 ```
+
+```{r}
+p1 <- df %>%
+  filter(corr>0.1 & corr < 1) %>%
+  ggplot(aes(reorder(topic_name1,topic1), topic_name, 
+             fill=corr)) +
+  geom_tile() +
+  facet_wrap(~site, ncol = 6) +
+  scale_fill_distiller(palette = "Spectral", trans = "reverse") + 
+  labs(x="", y="", fill="correlation") +
+  theme_bw(base_family = "Roboto", base_size = 10) +
+  theme(axis.text.x = element_text(angle=90, size = 6),
+        #plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        axis.ticks = element_line(colour = 'transparent'))
+
+p1
+
+ggsave(plot = p1, filename = "../figs/topic_correlation.png", device = "png",width = 9, height = 5,
+dpi = 600)
+```
+
 
 ### Overlapping Correlation
-```{r}
-topicCorrCompare <- function(ylevel1, ylevel2) {
-  
-  # find all edges between topics where they exhibit a positive correlation above 0.1
-  cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==ylevel1,])
-  adjmat <- ifelse(cormat > .1,1,0)
-  
-  corr.1 <- list()
-  corr.1$posadj <- adjmat
-  corr.1$poscor <- cormat*adjmat
-  corr.1$cor <- ifelse(abs(cormat)>.04,cormat,0)
-  
-  # Ylevel 2
-  cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==ylevel2,])
-  adjmat <- ifelse(cormat > .1,1,0)
-  
-  corr.2 <- list()
-  corr.2$posadj <- adjmat
-  corr.2$poscor <- cormat*adjmat
-  corr.2$cor <- ifelse(abs(cormat)>.04,cormat,0)
-  
-  # Prepare plot
-  g.1 <- graph.adjacency(corr.1$cor, mode="undirected", weighted = T, diag = F) 
-  g.2 <- graph.adjacency(corr.2$cor, mode = "undirected", weighted = T, diag = F)
-  
-  inter.graph <- graph.intersection(g.1, g.2)
-  added.subgraph <- graph.difference(g.1, inter.graph)
-  subs.subgraph <- graph.difference(g.2, inter.graph)
-  
-  # Styling
-  E(added.subgraph)$color <- col[1]
-  E(subs.subgraph)$color <- col[2]
-  E(inter.graph)$color <- col[3]
-  
-  # Matrix
-  g.whole<-graph.union(inter.graph,added.subgraph,subs.subgraph)
-  V(g.whole)$color<-col[3]
-  E(g.whole)$color <- col[2]
-  E(g.whole)[1:length(E(inter.graph))]$color<-col[3]
-  E(g.whole)[(length(E(inter.graph))+1):(length(E(inter.graph))+length(E(added.subgraph)))]$color<-col[1]
-
-  inter.list <- get.edgelist(inter.graph)
-  list.1 <- get.edgelist(added.subgraph)
-  list.2 <- get.edgelist(subs.subgraph)
-  
-  # Set Frame
-  cormat <- matrix(0, nrow=100, ncol=100)
-  for(i in 1:nrow(inter.list)){
-    cormat[inter.list[i,1], inter.list[i,2]] <- .5
-    cormat[inter.list[i,2], inter.list[i,1]] <- .5
-    }
-  
-  for(i in 1:nrow(list.1)){
-    cormat[list.1[i,1], list.1[i,2]] <- -1
-    cormat[list.1[i,2], list.1[i,1]] <- -1
-    }
-
-  for(i in 1:nrow(list.2)){
-    cormat[list.2[i,1], list.2[i,2]] <- 1
-    cormat[list.2[i,2], list.2[i,1]] <- 1
-    }
-
-  cormat <- cormat[as.numeric(topics[,1]),as.numeric(topics[,1])]
-  topics2 <- sapply(topics[,2], function (x) str_replace(x, "\n", ""))
-  rownames(cormat) <- colnames(cormat) <- topics.df$topic_name
-  
-  only.1 <- apply(cormat,1, function (x) sum(x==1))
-  only.2 <- apply(cormat,1, function (x) sum(x==-1))
-  both <- apply(cormat,1, function (x) sum(x==.5))
-  all <- apply(cormat,1, function (x) sum(x!=0))
-  disagree <- only.1/all + only.2/all
-  
-  
-  disagreed <- order(disagree, decreasing=F)
-  list <- topics[disagreed,2]
-  disagreemat <- cormat[disagreed, disagreed]
-  rownames(disagreemat) <- topics2[disagreed]
-  colnames(disagreemat) <- topics2[disagreed]
-
-  corrplot(disagreemat, cl.pos="n", tl.col="black", tl.cex=.5)
-  legend(40,20, c(paste(stmOut$settings$covariates$yvarlevels[ylevel1]), paste(stmOut$settings$covariates$yvarlevels[ylevel2]), "Both", "None"),
-         col=c("darkred", "darkblue", "lightblue", "white"), 
-         pch=c(15,15,16,16), cex = 0.7, box.lty = 0)
-}
-```
-
 Pairs of topics where an edge exists in both Newspaper, we denote with a light blue dot. Pairs of topics where Newspaper1, but not Newspaper2 have an edge between them, we denote with a red square, and those where Newspaper2, but not Newspaper1 have an edge between them we denote with a blue square.
 We then sort the matrix by topics that are similarly correlated with other topics in Newspaper1 and Newspaper2 to those that are not similarly correlated.
 ```{r}
-topicCorrCompare(3,5)
+png("../figs/overlapping_correlation.png")
+topicCorrCompare(1,5)
+dev.off()
 ```
 
-## How they talk about GroKo differently
+### Distance metric
+
+Compute the Jensen Shannon divergence of the word-topic probability. The K-by-V (number of words in the vocabulary) matrix logbeta contains the natural log of the probability of seeing each word conditional on the topic.
+
+```{r}
+stmOut$settings$covariates$yvarlevels[1]
+```
+
+```{r}
+comb.matrix <- matrix(0, nrow= 36, ncol = 2)
+
+y <- 1
+for (i in 1:6) {
+  for (j in 1:6) {
+    comb.matrix[y,1] <- stmOut$settings$covariates$yvarlevels[i]
+    comb.matrix[y,2] <- stmOut$settings$covariates$yvarlevels[j]
+    y <- y+1
+  }
+}
+```
+
+```{r}
+# Create empty matrix
+kld.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = 40)
+names(kld.matrix) <- 1:40
+# Populate matrix with JSD Values
+
+x <- 1
+
+for (i in 1:6) {
+  
+      print(paste("ylevel = ", i))
+    base <- exp(stmOut$beta$logbeta[[i]])
+    compare1 <- exp(stmOut$beta$logbeta[[1]])
+    compare2 <- exp(stmOut$beta$logbeta[[2]])
+    compare3 <- exp(stmOut$beta$logbeta[[3]])
+    compare4 <- exp(stmOut$beta$logbeta[[4]])
+    compare5 <- exp(stmOut$beta$logbeta[[5]])
+    compare6 <- exp(stmOut$beta$logbeta[[6]])
+  
+  for (j in 1:40) {
+    
+    print(paste("topic = ", j))
+    kld.matrix[x,j] <- JSD(base[j,],compare1[j,])
+    kld.matrix[x+1,j] <- JSD(base[j,],compare2[j,])
+    kld.matrix[x+2,j] <- JSD(base[j,],compare3[j,])
+    kld.matrix[x+3,j] <- JSD(base[j,],compare4[j,])
+    kld.matrix[x+4,j] <- JSD(base[j,],compare5[j,])
+    kld.matrix[x+5,j] <- JSD(base[j,],compare6[j,])
+
+  }
+    x <- x+6
+}
+
+```
+
+```{r}
+## Create DF
+kld.df <- as.data.frame(kld.matrix) 
+colnames(kld.df) <- 1:40
+
+kld.df <- kld.df %>% mutate(News1 = comb.matrix[,1],
+         News2 = comb.matrix[,2]) %>%
+  melt(.,id=c("News1","News2"), value.name="JSD",
+       variable.name = "topic") %>%
+  mutate(topic = as.integer(topic)) %>%
+  left_join(., topics.df, by="topic")
+```
+
+```{r}
+cols <- rev(brewer.pal(11, 'RdYlBu'))
+
+
+p1 <- kld.df %>%
+  filter(!topic %in% c("11","15")) %>%
+  filter(News1!=News2) %>%
+  ggplot(aes(News2, factor(topic_name), fill = JSD)) + 
+  geom_tile() + 
+  facet_grid(~News1) + 
+  scale_fill_gradientn(colours = cols) +
+  labs(x="", y="") +
+  theme_bw(base_family = "Roboto", base_size = 11) +
+  theme(axis.text.x = element_text(angle=90),
+        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        axis.ticks = element_line(colour = 'transparent'))
+
+p1
+
+ggsave(plot = p1, filename = "../figs/jsd.png", device = "png",width = 10, height = 8,
+dpi = 600)
+```
+
+
 
 
 
