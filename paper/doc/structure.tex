@@ -74,8 +74,7 @@ The research strategy is as follows:
 		\end{enumerate}
 	
 \end{enumerate}
-
-
+ 
 % ----------------------
 % the online news market
 % ----------------------
@@ -194,38 +193,38 @@ Intuitively the term frequency (tf) of a word is a measure of how important that
 
 We use the structural topic model (STM) developed by \citet{roberts_model_2016} that allows us to incorporate document specific covariates (e.g. the author or date of a document). STM is a recent extension of the standard topic modeling technique, labeled as "latent Dirichlet allocation" (LDA), which refers to the Bayesian model in \citet{blei_latent_2003} that treats each word in a topic and each topic in a document as generated from a Dirichlet - distributed prior.\footnote{See also \citet{griffiths_probabilistic_2002}, \citet{griffiths_finding_2004} and \citet{hofmann_probabilistic_1999}. \citet{pritchard_inference_2000} introduced the same model in genetics for factorizing gene expression as a function of latent populations.} Topic models formalize the idea that documents are formed by hidden variables (topics) that generate correlations among observed terms. Since its introduction into text analysis, LDA has become hugely popular and especially useful in political science.\footnote{see \citet{blei_probabilistic_2012}, \citet{grimmer_text_2013} and \citet{wiedmann_text_2016} for an overview in social science and \citet{gentzkow_text_2017} give an overview of text mining applications in economics.} \citet{wiedmann_text_2016} use topic model methods in on large amounts of news articles from two german newspapers published between 1959 and 2011, to reveal how democratic demarcation was performed in Germany over the past six decades. 
 
-STM has been applied to multiple academic fields: \citet{roberts_structural_2014} uses STM to analyse open-ended responses from surveys and experiments, \citet{farrell_corporate_2016} applies the model to scientific texts on climate change, revealing links between corporate funding and the framing of scientific studies and \citet{mishler_using_2015} shows that "STM can be used to detect significant events such as the downing of Malaysia Air Flight 17" when applied to twitter data. Another study shows how STM can be used to explore the main international development topics of countries’ annual statements in the UN General Debate and examine the country-specific drivers of international development rhetoric \citep{baturo_what_2017}. \citet{mueller_reading_2016} uses newspaper text to predict armed conflicts in different regions. They use the estimated topic shares in linear fixed effects regression to forecast conflict out-of-sample.
+STM has been applied to multiple academic fields: \citet{roberts_structural_2014} uses STM to analyse open-ended responses from surveys and experiments, \citet{farrell_corporate_2016} applies the model to scientific texts on climate change, revealing links between corporate funding and the framing of scientific studies and \citet{mishler_using_2015} shows that "STM can be used to detect significant events such as the downing of Malaysia Air Flight 17" when applied to twitter data. Another study shows how STM can be used to explore the main international development topics of countries’ annual statements in the UN General Debate and examine the country-specific drivers of international development rhetoric \citep{baturo_what_2017}. \citet{mueller_reading_2016} uses newspaper text to predict armed conflicts in different regions. They use the estimated topic shares in linear fixed effects regression to forecast conflict out-of-sample. In order to demonstrate multi-modality of topic-models\footnote{That is, the solution of topic-models can be sensitive to the starting values as the function to be optimized has multiple modes.} can be mitigated, \citep{roberts_navigating_2016} use STM to examine the role of partisanship in topical coverage using a corpus of 13,246 posts that were written for 6 political blogs during the course of the 2008 U.S. presidential election. With the aim of revealing the effect of partisan membership on topic prevalence, each blog is assigned to be either liberal or conservative. To explore the differences between the two, they look at the expected proportion of topic and examine the posts most associated with a respective topic. This approach is similar to \citet{roberts_model_2016}. They also use different measures of distance between the topic-word distributions of the same topic within different models. In section \ref{ch_similarity}, we apply a similar approach to measure similarity between the same topic for different covariate levels.
+
+The outline of this chapter is as follows. In Section \ref{ch_generativeProcess} we describe the generative process of the Structural Topic Model (STM). 
 
 % Topic Modeling
 % --------------
-\subsection{Generative Process of STM}
+\subsection{Generative Process of STM}\label{ch_generativeProcess}
 
-The following description of the generative model of the STM is based on \citet{roberts_structural_2013} and \citet{roberts_stm:_2016}. The process of filling a word-position in a document begins with the generation of a document-specific topic-prevalence vector $d(\boldsymbol{\theta}_d)$ drawn from a logistic-normal distribution, where the parameters are a function of the covariate values:
+As mentioned above, the STM allows to incorporate observed document metadata which is able to affect either topical prevalence and topical content. The following description of the generative model - the process of filling a word-position in a document - of the STM is based on \citet{roberts_structural_2013} and \citet{roberts_stm:_2016}. For each document $d$ and a given number of topics $K$, a document-specific topic-prevalence vector $d(\boldsymbol{\theta}_d)$ is drawn from a logistic-normal distribution, where the parameters are a function of the covariate values:
 
 \begin{align*}
 	\boldsymbol{\theta}_d|\boldsymbol{x}_{d\gamma},\boldsymbol{\Sigma} \sim \textrm{LogisticNormal}(\mu = \boldsymbol{x}_{d\gamma}\boldsymbol{\Sigma})
 \end{align*}
 
-$\boldsymbol{x}_d\gamma$ lists the values of all metadata covariates for document $d$, where $\gamma$ relates these covariate values to the topic-prevalence. The structure of $\boldsymbol{\Sigma}$ implies the possibility of correlations across documents in the topic-prevalence vector which help enhance interpretation and prevent overfitting. 
+$\boldsymbol{x}_d\gamma$ lists the values of all metadata covariates for document $d$, where $\gamma$ relates these covariate values to the topic-prevalence. The structure of $\boldsymbol{\Sigma}$ implies the possibility of correlations across documents in the topic-prevalence vector. 
 
-Given the document-specific distribution over topics, for each word in the document ($n \in \lbrace 1,...,N_d\rbrace$) is assigned to a specific topic $z_{dn}$ through the process
+According to $\theta$, a specific topic $z_{dn}$ is assigned for the $n^{th}$ word-position in the document through the process
 
 \begin{align*}
-	z_{dn}|\boldsymbol{\theta}_d \sim \textrm{Multinomial}(\boldsymbol{\theta}_d)
+	z_{dn}|\boldsymbol{\theta}_d \sim \textrm{Multinomial}(\boldsymbol{\theta}_d).
 \end{align*}
 
-where the $k^{th}$ element if $z_{dn}$ is unity and all other elements are zero when topic $k$ is chosen. 
-
-Conditional in the topic chosen, a specific word, $w_{dn}$, is chosen from the overall corpus vocabulary $V$ to fill position $n$ in document $d$, using the following process:
+Conditional in the topic chosen, a specific word, $w_{dn}$, is chosen from the overall corpus vocabulary $V$, using the following process:
 
 \begin{align*}
-	w_{dn}|z_{dn},\beta_{dkv} \sim \textrm{Multinomial}(\beta_{dk1},...,\beta_{dkV}).
+	w_{dn}|z_{dn},\beta_{dkv} \sim \textrm{Multinomial}(\beta_{dk1},...,\beta_{dkV}),
 \end{align*}
 
-where the word probability $\beta_{dkv}$ is modeled as a function of the two parameters $m_v$ (indicating the importance of that word across all documents) and $\kappa_{kv}$ (indicating the importance of the word given the topic $k$). Transforming the sum of these coefficients into probabilities for use in a multinomial distribution via logistic transformation, one obtains:
+where the word probability $\beta_{dkv}$ is parameterized in terms of log-transformed rate deviations from the rates of a corpus-wide background distribution $m_v$. The log-transformed rate deviations can then be specified by a collection of parameters $\lbrace \boldsymbol{\kappa} \rbrace$, where $\kappa^{(t)}$ is a $K$-by-$V$ matrix containing the log-transformed rate deviations for each topic $k$ and term $v$, over the baseline log-transformed rate for term $v$. This matrix is the same for all $A$ levels of covariates. To put it differently, $\kappa^{(t)}$ indicates the importance of the term $v$ given topic $k$ regardless of the covariates. Similarly, $\kappa^{(c)}$ is a $A$-by-$V$ matrix, indicating the importance of the term $v$ given the covariate level $k$ regardless of the topic. Finally, $\kappa^{(i)}$ is a $A$-by-$K$-by-$V$ matrix, collecting the covariate-topic effects.
 
 \begin{align*}
-	\beta_{dkv}|z_{dn}\propto\textrm{exp}(\boldsymbol{m}_v+\kappa_{kv})
+	\beta_{dkv}|z_{dn}=\frac{\textrm{exp}(m_v+\kappa^{(t)}_{kv},\kappa^{(c)}_{y_dv}+\kappa^{(i)}_{y_dkv})}{\sum_v \textrm{exp}(m_v+\kappa^{(t)}_{kv},\kappa^{(c)}_{y_dv}+\kappa^{(i)}_{y_dkv})}
 \end{align*}
 
 
@@ -234,7 +233,10 @@ where the word probability $\beta_{dkv}$ is modeled as a function of the two par
 % ----------------------
 \subsection{Model and parameter selection}
 
-Topic models are usually imprecise as a number of assumptions have to be made that influence the performance of the classification task. Furthermore, multiple solutions exist for the optimization problem. The STM maximizes the posterior likelihood that the observed data were generated by the above data-generating process using an iterative approximation-based variational expectation-maximization algorithm\footnote{A technical description of this maximization process can be found in \citet{roberts_model_2016}} available in R's stm package \citep{roberts_stm:_2016}. Regularizing prior distributions are used for $\gamma$, $\kappa$ and $\Sigma$. Since an ex ante valuation of a model is hardly possible, we compute a variety of different models with different parameters and compare them with respect to the research problem \citep{gentzkow_text_2017}. To evaluate the accuracy of a model its perplexity can be computed. Similar to cross-validation (VC), different model specifications are compared to how well they do in predicting words within a document \citep{asuncion_smoothing_2012}, \citep{wallach_evaluation_2009}. However, \citet{chang_reading_2009} have proven with large user studies that optimal held out likelihood does not correspond to human perception of semantic coherence of topics. \cite{mimno_optimizing_2011} introduced a measure of coherence of a topic by observing co-occurences of the top $N$ terms of each topic on a document. Another strategy for selecting an appropriate model is to check for residual overdispersion of the variance of the multinomial within the data generating process of the model \citep{taddy_estimation_2012}. Other approaches can be found in \citet{airoldi_reconceptualizing_2010} and \citet{teh_hierarchical_2006}. However, cross-checking some subset of assigned topic distributions to evaluate whether the estimates align with the concept of interest \citep{gentzkow_text_2017}. We apply these manual audits together with numeric optimization based on the topic coherence measure suggested by \citet{mimno_optimizing_2011}. 
+The STM maximizes the posterior likelihood that the observed data were generated by the above data-generating process using an iterative approximation-based variational expectation-maximization algorithm\footnote{A technical description of this maximization process can be found in \citet{roberts_model_2016}} available in R's stm package \citep{roberts_stm:_2016}. Regularizing prior distributions are used for $\gamma$, $\kappa$ and $\Sigma$. Topic models are usually imprecise as the function we are optimizing has multiple modes, such that the model results can be sensitive to the starting values. Since an ex ante valuation of a model is hardly possible, we compute a variety of different models and compare their posterior probability. This enables us to check how substantively different results are for different model solution \citep{roberts_navigating_2016}. 
+
+
+them with respect to the research problem \citep{gentzkow_text_2017}. To evaluate the accuracy of a model its perplexity can be computed. Similar to cross-validation (VC), different model specifications are compared to how well they do in predicting words within a document \citep{asuncion_smoothing_2012}, \citep{wallach_evaluation_2009}. However, \citet{chang_reading_2009} have proven with large user studies that optimal held out likelihood does not correspond to human perception of semantic coherence of topics. \cite{mimno_optimizing_2011} introduced a measure of coherence of a topic by observing co-occurences of the top $N$ terms of each topic on a document. Another strategy for selecting an appropriate model is to check for residual overdispersion of the variance of the multinomial within the data generating process of the model \citep{taddy_estimation_2012}. Other approaches can be found in \citet{airoldi_reconceptualizing_2010} and \citet{teh_hierarchical_2006}. However, cross-checking some subset of assigned topic distributions to evaluate whether the estimates align with the concept of interest \citep{gentzkow_text_2017}. We apply these manual audits together with numeric optimization based on the topic coherence measure suggested by \citet{mimno_optimizing_2011}. 
 
 This process revealed that a model with 40 topics best reflects the structure in the corpus. Furthermore, we use the source of each article (the media house) and the month it was published as covariates in the topic prevalence. In other words, the probability distribution of topics depends on the editorial strategy of a media house as well as on the month the article was published. We also include news agency as a covariate affecting topical content to estimate how topics are discussed in different ways by different news agencies. To address problems due to non-convexity, we rely on the spectral initialization approach advocated by \citet{roberts_navigating_2016}. 
 
@@ -243,17 +245,35 @@ This process revealed that a model with 40 topics best reflects the structure in
 % ----------------------
 \section{Empirical Evaluation}
 
+\todo{Inspect model with ownership covariates}
+\todo{Inspect model with different topic-numbers}
+
 Inference of mixed-membership models, such as the one applied in this paper, has been a thread of research in applied statistics in the past few years \citep{blei_latent_2003} \citep{erosheva_mixed-membership_2004} \citep{braun_variational_2010}. As the posterior can be highly dependent on the model definition, using multiple starting points and clever initialization are successful practices. The takeaway from empirical evaluations of the inference task of mixed-membership models is that the bayesian posterior as good frequentist properties \citep{wallach_evaluation_2009}. \citet{roberts_model_2016} use empirical evaluation, including a frequentist coverage analysis and compare the performance of their STM to a variety of alternatives in \citet{roberts_navigating_2016}. 
+
+From the STM we get two matrices of parameters: $\beta$ is a row-normalized $K$-by-$V$ matrix of topic-word distributions, where the entry $\beta_{k,v}$ can be interpreted as the probability of observing the $v$-th word in topic $k$. Similarly $\theta$ is a row-normalized $D$-by-$K$ matrix of topic-word distributions, where the entry $\theta_{d,k}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$. In this section we will use the $\theta$ and $\beta$ matrices to analyze the model results.  
 
 Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, we looked at the most frequent words in that topic and the most representative articles \citep{roberts_model_2016}.  
 
+Figure \ref{fig_topic_proportion_diff} plots the expected proportion of topic use in public media minus the expected proportion of topic use in private media. Thus topics more associated with public media appear to the right of zero.
+
+
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.8\textwidth,keepaspectratio]{../figs/topic_proportion.png}
-	\caption{Expected Topic Proportion}
-	\label{fig_topic_proportion}
-	\end{center}
+	\caption{Expected topic proportion}
+	\begin{subfigure}[normla]{0.4\textwidth}
+		\includegraphics[width=\textwidth,keepaspectratio]{../figs/topic_proportion.png}
+		\caption{Entire corpus}
+		\label{fig_topic_proportion}
+	\end{subfigure}
+	
+	\begin{subfigure}[normla]{0.4\textwidth}
+		\includegraphics[width=\textwidth,keepaspectratio]{../figs/topic_proportion_diff.png}
+		\caption{Differences}
+		\label{fig_topic_proportion_diff}
+	\end{subfigure}
+\end{center}
 \end{figure}
+
 
 % ----------------------
 % Effect of covariates
@@ -298,7 +318,10 @@ Next, we examine how topics are correlated differently for different news wires,
 \end{figure}
 
 
-\subsection{Differences in word-topic distributions}
+\subsection{Differences in word-topic distributions}\label{ch_similarity}
+
+\todo{Compare different metrices}
+L1 distance, cosine similarity metric (essentially the dot product rescaled by the L2 norm of the vectors).
 
 From the STM model we get a $KxV$ matrix (where $K=$number of topics and $V=$vocabulary) of the whole corpus that contains the probability of seeing each word of the vocabulary $V$ within topic $k$ conditional on the news provider. That is, for every news provider we get a $KxV$ matrix. We use each row (corresponding to each topic) to calculate the similarity of the word-topic distribution between the news provider using the square root of the Jensen-Shannon (JS) Divergence.
 
