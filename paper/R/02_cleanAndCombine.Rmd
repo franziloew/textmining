@@ -370,32 +370,38 @@ bigrams %>%
 # Structural Topic Model
 
 ## Preparation
+```{r}
+btw <- btw %>% 
+  mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private"))
+```
+
 ### Build Corpus
 ```{r eval=FALSE, include=FALSE}
 # Process data
 
 ### without stemming
-# processed1 <- textProcessor(btw$text_cleaned, metadata = btw[,c("site","text_cleaned","month")],
-#                            wordLengths = c(2,Inf),
-#                            lowercase = F,
-#                            removestopwords = F,
-#                            removenumbers = F,
-#                            removepunctuation = F,
-#                            stem = F)
-# out1 <- prepDocuments(processed1$documents, processed1$vocab, processed1$meta)
-###
-
-processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
+processed1 <- textProcessor(btw$text_cleaned1, metadata = btw[,c("ownership","text_cleaned1","month")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
                            removenumbers = F,
                            removepunctuation = F,
                            stem = F)
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
-out$meta$site <- as.factor(out$meta$site)
+out_ownership <- prepDocuments(processed1$documents, processed1$vocab, processed1$meta)
+out_ownership$meta$ownership <- as.factor(out_ownership$meta$ownership)
+###
 
-save(btw, out, file="../output/btw_combined.Rda")
+# processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
+#                            wordLengths = c(2,Inf),
+#                            lowercase = F,
+#                            removestopwords = F,
+#                            removenumbers = F,
+#                            removepunctuation = F,
+#                            stem = F)
+# out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+# out$meta$site <- as.factor(out$meta$site)
+
+save(btw, out_ownership, file="../output/btw_comb_ownership.Rda")
 ```
 
 # FB Shares

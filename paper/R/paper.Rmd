@@ -30,6 +30,7 @@ library(Matrix)
 
 library(igraph)
 library(corrplot)
+library(patchwork)
 library(ggpmisc)
 library(ggiraph)
 library(RColorBrewer) 
@@ -462,8 +463,6 @@ p1 <- ggplot(frequency, aes(x=reorder(topic, frequency), y=frequency)) +
           axis.text.y = element_text(size=11),
           axis.title = element_text(size=10))
 
-p1
-
 ggsave(plot = p1, filename = "../figs/topic_proportion.png", device = "png",width = 8, height = 12,
 dpi = 600)
 ```
@@ -485,8 +484,54 @@ plotNewspaperHistogram <- function(topic){
 ```
 
 ```{r}
-# Topic 3
+# Topic 1
 plotNewspaperHistogram(1)
+```
+
+### by ownership
+plots the expected proportion of topic use in public media minus the expected proportion of topic use in private media. Thus topics more associated with public media appear to the right of zero.
+
+```{r}
+freq <- tapply(stmOut$theta[,1], stmOut$settings$covariates$betaindex, mean)
+freq <- as.data.frame(freq) %>% 
+    mutate(site=stmOut$settings$covariates$yvarlevels,
+           topic = 1)
+
+for(i in 2:40) {
+  freq1 <- tapply(stmOut$theta[,i], stmOut$settings$covariates$betaindex, mean)
+  freq1 <- as.data.frame(freq1) %>% 
+    transmute(site=stmOut$settings$covariates$yvarlevels,
+           topic = i,
+           freq = freq1)
+  
+  freq <- rbind(freq, freq1)
+}
+
+freq <- freq %>%
+  mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private")) %>%
+  group_by(topic, ownership) %>%
+  summarise(freq_mean = mean(freq)) %>%
+  spread(ownership, freq_mean) %>%
+  mutate(freq_diff = public - private) %>%
+  mutate(value = ifelse(freq_diff>=0, 1,0)) %>%
+  left_join(., topics.df, by = "topic")
+```
+
+```{r}
+p1 <- ggplot(freq, aes(reorder(topic_name, freq_diff), freq_diff,
+                 fill = factor(value))) +
+  geom_col(show.legend = F) +
+  scale_fill_manual(values = col[c(1,3)]) +
+  coord_flip() +
+  theme(axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=11),
+          axis.title = element_text(size=10)) +
+    labs(x="", y="difference in expected frequency (public-private)") 
+
+p1 
+
+ggsave(plot = p1, filename = "../figs/topic_proportion_diff.png", device = "png",width = 8, height = 12,
+dpi = 600)
 ```
 
 ### Difference in topic prevalence
@@ -499,7 +544,7 @@ effect <- estimateEffect(c(1:40) ~site+s(month), stmOut,
 ```
 
 ```{r}
-summary(effect)
+save.image("stm_newsdata.RData")
 ```
 
 ```{r}
@@ -642,6 +687,7 @@ dev.off()
 ```
 
 ### Distance metric
+Compute different metrices and compare them.
 
 Compute the Jensen Shannon divergence of the word-topic probability. The K-by-V (number of words in the vocabulary) matrix logbeta contains the natural log of the probability of seeing each word conditional on the topic.
 
