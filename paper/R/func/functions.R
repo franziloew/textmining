@@ -11,6 +11,22 @@ Mode = function(x){
   return(mod)
 }
 
+#############################
+## Topic proportion by Ylevel
+#############################
+plotNewspaperHistogram <- function(topic){
+  tab <- tapply(stmOut$theta[,topic], stmOut$settings$covariates$betaindex, mean)
+  tab <- as.data.frame(tab) %>% 
+    mutate(site=stmOut$settings$covariates$yvarlevels)
+  
+  ggplot(data=tab, aes(x=site, y=tab)) +
+    geom_col(fill=col[3]) +
+    coord_flip() +
+    theme(axis.text = element_text(size=8),
+          axis.title = element_text(size=10)) +
+    labs(x="", y=paste("expected frequency of topic",topics.df[topic,2], sep=" ")) 
+}
+
 ##################################
 ## Topic correlation within Ylevel
 ##################################
@@ -36,6 +52,46 @@ topicCorrelation <- function(ylevel) {
   plot.igraph(g, layout=layout_nicely, vertex.color="white", label.font = "Roboto",
               vertex.frame.color="grey", vertex.size=1, vertex.label.cex=.7, edge.color="red",
               edge.width=1, main=paste("Topic correlation", stmOut$settings$covariates$yvarlevels[ylevel]))
+}
+
+##################################
+## Topic correlation Network
+##################################
+topicCorrNetwork <- function(g, title) {
+  
+  toplot <- tidygraph::as_tbl_graph(g) %>%
+    mutate(degree = tidygraph::centrality_degree(loops = FALSE)) %>%
+    tidygraph::activate(edges) %>%
+    filter(!tidygraph::edge_is_loop()) %>%
+    mutate(weight = round(weight, 2),
+           edge_label = '')
+  
+  plot <- toplot %>% ggraph(layout = 'fr') +
+    geom_edge_link(
+      aes(edge_width = weight, label =  edge_label),
+      label_colour = '#fc8d62',
+      edge_colour = '#377eb8',
+      alpha = 0.5,
+      label_size = 0.5,
+      angle_calc = 'along'
+      #label_dodge = unit(3, "mm")
+    ) +
+    geom_node_point(size = 2, colour = 'black')  +
+    geom_node_label(
+      aes(label = name),
+      size = 2,
+      colour = 'black',
+      repel = TRUE,
+      alpha = 0.85
+    ) +
+    theme_graph() +
+    #scale_size(range = c(1, 3), labels = scales::percent) +
+    labs(edge_width = 'Topic Correlation',
+         title = title) +
+    scale_edge_width(range = c(0, 3))
+  
+  return(plot)
+  
 }
 
 #############################################
