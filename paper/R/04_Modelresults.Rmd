@@ -139,7 +139,7 @@ stmOut$settings$covariates$yvarlevels
 
 After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
 ```{r}
-sagelabs$cov.betas[[1]]$problabels[,1:6]
+sagelabs$cov.betas[[2]]$problabels[,1:6]
 ```
 
 ```{r}
@@ -438,23 +438,106 @@ Compute the Jensen Shannon divergence of the word-topic probability. The K-by-V 
 
 ```{r}
 k <- stmOut$settings$dim$K
-y <- length(stmOut$settings$covariates$yvarlevels)
+p <- length(stmOut$settings$covariates$yvarlevels)
 ```
 
 ```{r}
 ## Find all combinations of ylevel
 comb.matrix <- matrix(0, 
-                      nrow= y^2, 
+                      nrow= p^2, 
                       ncol = 2)
 
 z <- 1
-for (i in 1:y) {
-  for (j in 1:y) {
+for (i in 1:p) {
+  for (j in 1:p) {
     comb.matrix[z,1] <- stmOut$settings$covariates$yvarlevels[i]
     comb.matrix[z,2] <- stmOut$settings$covariates$yvarlevels[j]
     z <- z+1
   }
 }
+```
+
+### Calculate L1 Norm
+```{r}
+# Create empty matrix
+l1.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
+names(l1.matrix) <- 1:k
+
+# Populate matrix with JSD Values
+z <- 1
+for (i in 1:p) {
+  
+    #print(paste("ylevel = ", i))
+    base <- exp(stmOut$beta$logbeta[[i]])
+    compare1 <- exp(stmOut$beta$logbeta[[1]])
+    compare2 <- exp(stmOut$beta$logbeta[[2]])
+  
+  for (j in 1:k) {
+    
+    #print(paste("topic = ", j))
+    l1.matrix[z,j] <- sum(abs(base[j,]-compare1[j,]))
+    l1.matrix[z+1,j] <- sum(abs(base[j,]-compare2[j,]))
+
+  }
+    z <- z+p
+}
+
+```
+
+```{r}
+## Create DF
+l1.df <- as.data.frame(l1.matrix) 
+colnames(l1.df) <- 1:k
+
+l1.df <- l1.df %>% 
+  mutate(News1 = comb.matrix[,1],
+         News2 = comb.matrix[,2]) %>%
+  melt(.,id=c("News1","News2"), value.name="L1Norm",
+       variable.name = "topic") %>%
+  mutate(topic = as.integer(topic)) %>%
+  left_join(., topics.df, by="topic")
+```
+
+### Calculate Cosine Similarity
+```{r}
+# Create empty matrix
+cosine.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
+names(cosine.matrix) <- 1:k
+
+
+# Populate matrix with JSD Values
+z <- 1
+for (i in 1:p) {
+  
+    #print(paste("ylevel = ", i))
+    base <- exp(stmOut$beta$logbeta[[i]])
+    compare1 <- exp(stmOut$beta$logbeta[[1]])
+    compare2 <- exp(stmOut$beta$logbeta[[2]])
+  
+  for (j in 1:k) {
+    
+    #print(paste("topic = ", j))
+    cosine.matrix[z,j] <- CosSim(base[j,],compare1[j,])
+    cosine.matrix[z+1,j] <- CosSim(base[j,],compare2[j,])
+
+  }
+    z <- z+p
+}
+
+```
+
+```{r}
+## Create DF
+cosine.df <- as.data.frame(cosine.matrix) 
+colnames(cosine.df) <- 1:k
+
+cosine.df <- cosine.df %>% 
+  mutate(News1 = comb.matrix[,1],
+         News2 = comb.matrix[,2]) %>%
+  melt(.,id=c("News1","News2"), value.name="CosineSimilarity",
+       variable.name = "topic") %>%
+  mutate(topic = as.integer(topic)) %>%
+  left_join(., l1.df, by=c("News1","News2","topic"))
 ```
 
 ### Calculate KLD
@@ -464,30 +547,22 @@ kld.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
 names(kld.matrix) <- 1:k
 
 # Populate matrix with JSD Values
-x <- 1
-for (i in 1:y) {
+z <- 1
+for (i in 1:p) {
   
     #print(paste("ylevel = ", i))
     base <- exp(stmOut$beta$logbeta[[i]])
     compare1 <- exp(stmOut$beta$logbeta[[1]])
     compare2 <- exp(stmOut$beta$logbeta[[2]])
-    # compare3 <- exp(stmOut$beta$logbeta[[3]])
-    # compare4 <- exp(stmOut$beta$logbeta[[4]])
-    # compare5 <- exp(stmOut$beta$logbeta[[5]])
-    # compare6 <- exp(stmOut$beta$logbeta[[6]])
   
   for (j in 1:k) {
     
     #print(paste("topic = ", j))
-    kld.matrix[x,j] <- KLD(base[j,],compare1[j,])
-    kld.matrix[x+1,j] <- KLD(base[j,],compare2[j,])
-    # kld.matrix[x+2,j] <- JSD(base[j,],compare3[j,])
-    # kld.matrix[x+3,j] <- JSD(base[j,],compare4[j,])
-    # kld.matrix[x+4,j] <- JSD(base[j,],compare5[j,])
-    # kld.matrix[x+5,j] <- JSD(base[j,],compare6[j,])
+    kld.matrix[z,j] <- KLD(base[j,],compare1[j,])
+    kld.matrix[z+1,j] <- KLD(base[j,],compare2[j,])
 
   }
-    x <- x+y
+    z <- z+p
 }
 ```
 
@@ -501,7 +576,7 @@ kld.df <- kld.df %>% mutate(News1 = comb.matrix[,1],
   melt(.,id=c("News1","News2"), value.name="KLD",
        variable.name = "topic") %>%
   mutate(topic = as.integer(topic)) %>%
-  left_join(., topics.df, by="topic")
+  left_join(., cosine.df, by=c("News1","News2","topic"))
 ```
 
 ### Calculate JSD
@@ -511,30 +586,22 @@ jsd.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
 names(jsd.matrix) <- 1:k
 
 # Populate matrix with JSD Values
-x <- 1
-for (i in 1:y) {
+z <- 1
+for (i in 1:p) {
   
     #print(paste("ylevel = ", i))
     base <- exp(stmOut$beta$logbeta[[i]])
     compare1 <- exp(stmOut$beta$logbeta[[1]])
     compare2 <- exp(stmOut$beta$logbeta[[2]])
-    # compare3 <- exp(stmOut$beta$logbeta[[3]])
-    # compare4 <- exp(stmOut$beta$logbeta[[4]])
-    # compare5 <- exp(stmOut$beta$logbeta[[5]])
-    # compare6 <- exp(stmOut$beta$logbeta[[6]])
   
   for (j in 1:k) {
     
     #print(paste("topic = ", j))
-    jsd.matrix[x,j] <- JSD(base[j,],compare1[j,])
-    jsd.matrix[x+1,j] <- JSD(base[j,],compare2[j,])
-    # kld.matrix[x+2,j] <- JSD(base[j,],compare3[j,])
-    # kld.matrix[x+3,j] <- JSD(base[j,],compare4[j,])
-    # kld.matrix[x+4,j] <- JSD(base[j,],compare5[j,])
-    # kld.matrix[x+5,j] <- JSD(base[j,],compare6[j,])
+    jsd.matrix[z,j] <- JSD(base[j,],compare1[j,])
+    jsd.matrix[z+1,j] <- JSD(base[j,],compare2[j,])
 
   }
-    x <- x+y
+    z <- z+p
 }
 ```
 
@@ -549,49 +616,79 @@ distance.df <- jsd.df %>% mutate(News1 = comb.matrix[,1],
        variable.name = "topic") %>%
   mutate(topic = as.integer(topic)) %>%
   left_join(., kld.df, by=c("News1","News2","topic")) 
+
+rm(l1.df, jsd.df, cosine.df, kld.df)
 ```
 
 ### Plot 
 ```{r}
 cols <- rev(brewer.pal(11, 'RdYlBu'))
 
+
 p1 <- distance.df %>%
-  filter(!topic %in% c("11","15")) %>%
-  filter(News1!=News2) %>%
-  ggplot(aes(News1, reorder(factor(topic_name),JSD), fill = KLD)) + 
-  geom_tile() +
-  #facet_wrap(~variable) + 
-  scale_fill_gradientn(colours = cols) +
-  labs(x="", y="") +
-  theme_bw(base_family = "Roboto", base_size = 11) +
-  theme(axis.text.y = element_blank(),
-        legend.position = "top",
-    #axis.text.x = element_text(angle=90),
-        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        axis.ticks = element_line(colour = 'transparent'))
-
-
-p2 <- distance.df %>%
   filter(!topic %in% c("11","15")) %>%
   filter(News1!=News2) %>%
   filter(News1=="private") %>%
   ggplot(aes(News1, reorder(factor(topic_name),JSD), fill = JSD)) + 
   geom_tile() +
-  #facet_wrap(~variable) + 
   scale_fill_gradientn(colours = cols) +
   labs(x="", y="") +
   theme_bw(base_family = "Roboto", base_size = 11) +
   theme(axis.text.x = element_blank(),
         legend.position = "top",
-    #axis.text.x = element_text(angle=90),
         plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
         strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
         axis.ticks = element_line(colour = 'transparent'))
 
-p2+p1
+p2 <- distance.df %>%
+  filter(!topic %in% c("11","15")) %>%
+  filter(News1!=News2) %>%
+  ggplot(aes(News1, reorder(factor(topic_name),JSD), fill = KLD)) + 
+  geom_tile() +
+  scale_fill_gradientn(colours = cols) +
+  labs(x="", y="") +
+  theme_bw(base_family = "Roboto", base_size = 11) +
+  theme(axis.text.y = element_blank(),
+        legend.position = "top",
+        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        axis.ticks = element_line(colour = 'transparent'))
 
-ggsave(filename = "../figs/distance.png", device = "png",width = 10, height = 8,
+p3 <- distance.df %>%
+  filter(!topic %in% c("11","15")) %>%
+  filter(News1!=News2) %>%
+  filter(News1=="private") %>%
+  ggplot(aes(News1, reorder(factor(topic_name),JSD), 
+             fill = CosineSimilarity)) + 
+  geom_tile() +
+  scale_fill_gradientn(colours = cols) +
+  labs(x="", y="") +
+  theme_bw(base_family = "Roboto", base_size = 11) +
+  theme(axis.text = element_blank(),
+        legend.position = "top",
+        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        axis.ticks = element_line(colour = 'transparent'))
+
+p4 <- distance.df %>%
+  filter(!topic %in% c("11","15")) %>%
+  filter(News1!=News2) %>%
+  filter(News1=="private") %>%
+  ggplot(aes(News1, reorder(factor(topic_name),JSD), 
+             fill = L1Norm)) + 
+  geom_tile() +
+  scale_fill_gradientn(colours = cols) +
+  labs(x="", y="") +
+  theme_bw(base_family = "Roboto", base_size = 11) +
+  theme(axis.text = element_blank(),
+        legend.position = "top",
+        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        axis.ticks = element_line(colour = 'transparent'))
+
+(p1 | p2 | p3 | p4 )
+
+ggsave(filename = "../figs/distance.png", device = "png",width = 12, height = 8,
 dpi = 600)
 ```
 

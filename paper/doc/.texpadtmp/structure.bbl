@@ -19,51 +19,6 @@
 
 \refsection{0}
   \sortlist{nyt}{nyt}
-    \entry{airoldi_reconceptualizing_2010}{article}{}
-      \name{author}{6}{}{%
-        {{uniquename=1,hash=753c42f9b69830f9410ef84fd6e88ab1}{Airoldi}{A\bibinitperiod}{Edoardo\bibnamedelima M.}{E\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=a5b8bae71ced09e425f872e3226fb726}{Erosheva}{E\bibinitperiod}{Elena\bibnamedelima A.}{E\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=f29b7463290b8063ae778ce466f17987}{Fienberg}{F\bibinitperiod}{Stephen\bibnamedelima E.}{S\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=74b5a7b1549f5cb6af698cf341ba864b}{Joutard}{J\bibinitperiod}{Cyrille}{C\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=b303e65405f8d33de1478f825ccb0372}{Love}{L\bibinitperiod}{Tanzy}{T\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=5ca94ec92c3d8bda2b6b68e4eeb4398b}{Shringarpure}{S\bibinitperiod}{Suyash}{S\bibinitperiod}{}{}{}{}}%
-      }
-      \list{language}{1}{%
-        {en}%
-      }
-      \strng{namehash}{d3fc13352805fd8c093289bf8043e299}
-      \strng{fullhash}{2ac76c7991eedacd0dd69c559b673001}
-      \field{sortinit}{A}
-      \field{sortinithash}{b685c7856330eaee22789815b49de9bb}
-      \field{labelyear}{2010}
-      \field{labelmonth}{07}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{PNAS article classification is rooted in long-standing disciplinary divisions that do not necessarily reflect the structure of modern scientific research. We reevaluate that structure using latent pattern models from statistical machine learning, also known as mixed-membership models, that identify semantic structure in co-occurrence of words in the abstracts and references. Our findings suggest that the latent dimensionality of patterns underlying PNAS research articles in the Biological Sciences is only slightly larger than the number of categories currently in use, but it differs substantially in the content of the categories. Further, the number of articles that are listed under multiple categories is only a small fraction of what it should be. These findings together with the sensitivity analyses suggest ways to reconceptualize the organization of papers published in PNAS.}
-      \field{issn}{0027-8424, 1091-6490}
-      \field{journaltitle}{Proceedings of the National Academy of Sciences}
-      \field{month}{07}
-      \field{number}{49}
-      \field{title}{Reconceptualizing the classification of {PNAS} articles}
-      \field{urlday}{07}
-      \field{urlmonth}{10}
-      \field{urlyear}{2017}
-      \field{volume}{107}
-      \field{year}{2010}
-      \field{pages}{20899\bibrangedash 20904}
-      \range{pages}{6}
-      \verb{doi}
-      \verb 10.1073/pnas.1013452107
-      \endverb
-      \verb{file}
-      \verb Full Text PDF:/Users/Franzi/Zotero/storage/3HPSSBQ2/Airoldi et al. - 2010 - Reconceptualizing the classification of PNAS artic.pdf:application/pdf;Snapshot:/Users/Franzi/Zotero/storage/3SR8QVPZ/20899.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://www.pnas.org/content/107/49/20899
-      \endverb
-      \keyw{text analysis,hierarchical modeling,Monte Carlo Markov chain,variational inference,Dirichlet process}
-    \endentry
     \entry{armstrong_competition_2006}{article}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=2e381f0784053652dae51c069503bf47}{Armstrong}{A\bibinitperiod}{Mark}{M\bibinitperiod}{}{}{}{}}%
@@ -90,36 +45,6 @@
       \verb{url}
       \verb http://dx.doi.org/10.1111/j.1756-2171.2006.tb00037.x
       \endverb
-    \endentry
-    \entry{asuncion_smoothing_2012}{article}{}
-      \name{author}{4}{}{%
-        {{uniquename=0,hash=5ee61d3f5a1c8fbf9b4a01e430890d92}{Asuncion}{A\bibinitperiod}{Arthur}{A\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=53d2880ad8047b61cdae2c6b2803e763}{Welling}{W\bibinitperiod}{Max}{M\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=4940852a16a84802eb98552d6deace24}{Smyth}{S\bibinitperiod}{Padhraic}{P\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=577af3eb832d26c33caa634a276d4d7e}{Teh}{T\bibinitperiod}{Yee\bibnamedelima Whye}{Y\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{aa9934dc50a9ab09f0ab817b094be050}
-      \strng{fullhash}{5d51da9d389f881ccdf34b48d309d0f5}
-      \field{sortinit}{A}
-      \field{sortinithash}{b685c7856330eaee22789815b49de9bb}
-      \field{labelyear}{2012}
-      \field{labelmonth}{05}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Latent Dirichlet analysis, or topic modeling, is a flexible latent variable framework for modeling high-dimensional sparse count data. Various learning algorithms have been developed in recent years, including collapsed Gibbs sampling, variational inference, and maximum a posteriori estimation, and this variety motivates the need for careful empirical comparisons. In this paper, we highlight the close connections between these approaches. We find that the main differences are attributable to the amount of smoothing applied to the counts. When the hyperparameters are optimized, the differences in performance among the algorithms diminish significantly. The ability of these algorithms to achieve solutions of comparable accuracy gives us the freedom to select computationally efficient approaches. Using the insights gained from this comparative study, we show how accurate topic models can be learned in several seconds on text corpora with thousands of documents.}
-      \field{journaltitle}{arXiv:1205.2662 [cs, stat]}
-      \field{month}{05}
-      \field{note}{arXiv: 1205.2662}
-      \field{title}{On {Smoothing} and {Inference} for {Topic} {Models}}
-      \field{year}{2012}
-      \verb{file}
-      \verb arXiv\:1205.2662 PDF:/Users/Franzi/Zotero/storage/MRRAS29S/Asuncion et al. - 2012 - On Smoothing and Inference for Topic Models.pdf:application/pdf;arXiv.org Snapshot:/Users/Franzi/Zotero/storage/UHH4ICFA/1205.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/1205.2662
-      \endverb
-      \keyw{Statistics - Machine Learning,Computer Science - Learning}
     \endentry
     \entry{baturo_what_2017}{article}{}
       \name{author}{3}{}{%
@@ -371,45 +296,6 @@
       \verb https://www.aaai.org/ocs/index.php/ICWSM/ICWSM12/paper/view/4645
       \endverb
     \endentry
-    \entry{chang_reading_2009}{incollection}{}
-      \name{author}{5}{}{%
-        {{uniquename=0,hash=3d88622a58367acf967bd61180f15c20}{Chang}{C\bibinitperiod}{Jonathan}{J\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=005672c0d11eff4076ad7b44078044cd}{Gerrish}{G\bibinitperiod}{Sean}{S\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=5305db1dfd127efb3eb09c039837c18f}{Wang}{W\bibinitperiod}{Chong}{C\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=81e1b3697d75957e82be4a52e2bc2927}{Boyd-graber}{B\bibinithyphendelim g\bibinitperiod}{Jordan\bibnamedelima L.}{J\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=7441e4d372e854fc6d24d0d5a16a1687}{Blei}{B\bibinitperiod}{David\bibnamedelima M.}{D\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-      }
-      \name{editor}{5}{}{%
-        {{hash=70e8dbe8854143005205be1e8f21028a}{Bengio}{B\bibinitperiod}{Y.}{Y\bibinitperiod}{}{}{}{}}%
-        {{hash=334bf76cdd9dcb853864033d40f4e2c5}{Schuurmans}{S\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
-        {{hash=4eaa9c06d856b0d50052a73dd7338e5e}{Lafferty}{L\bibinitperiod}{J.\bibnamedelimi D.}{J\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
-        {{hash=31c7ad1851eccd0f6945cfeb1837db74}{Williams}{W\bibinitperiod}{C.\bibnamedelimi K.\bibnamedelimi I.}{C\bibinitperiod\bibinitdelim K\bibinitperiod\bibinitdelim I\bibinitperiod}{}{}{}{}}%
-        {{hash=d695dacead594c2681842b89314c685a}{Culotta}{C\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
-      }
-      \list{publisher}{1}{%
-        {Curran Associates, Inc.}%
-      }
-      \strng{namehash}{de2c9586901ecb8ec85938f17e15b865}
-      \strng{fullhash}{e875c5365e1f1fbec7d5a968a6281e99}
-      \field{sortinit}{C}
-      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
-      \field{labelyear}{2009}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{booktitle}{Advances in {Neural} {Information} {Processing} {Systems} 22}
-      \field{shorttitle}{Reading {Tea} {Leaves}}
-      \field{title}{Reading {Tea} {Leaves}: {How} {Humans} {Interpret} {Topic} {Models}}
-      \field{year}{2009}
-      \field{pages}{288\bibrangedash 296}
-      \range{pages}{9}
-      \verb{file}
-      \verb NIPS Full Text PDF:/Users/Franzi/Zotero/storage/UUPBMREK/Chang et al. - 2009 - Reading Tea Leaves How Humans Interpret Topic Mod.pdf:application/pdf;NIPS Snapshort:/Users/Franzi/Zotero/storage/68XT476P/3700-reading-tea-leaves-how-humans-interpret-topic-models.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://papers.nips.cc/paper/3700-reading-tea-leaves-how-humans-interpret-topic-models.pdf
-      \endverb
-    \endentry
     \entry{corden_maximisation_1952}{article}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=f4dfd047460584ed73fec235d4922b16}{Corden}{C\bibinitperiod}{W.\bibnamedelimi M.}{W\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
@@ -474,6 +360,38 @@
       \verb{url}
       \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1468-0297.2009.02218.x/abstract
       \endverb
+    \endentry
+    \entry{endres_new_2003}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=c85573d09dabe3c1b9f179da6970908a}{Endres}{E\bibinitperiod}{D.\bibnamedelimi M.}{D\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=cf606fefcfc84d1a877d650817ff8220}{Schindelin}{S\bibinitperiod}{J.\bibnamedelimi E.}{J\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{5dff9a94d2201338dda2253b958e741a}
+      \strng{fullhash}{5dff9a94d2201338dda2253b958e741a}
+      \field{sortinit}{E}
+      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
+      \field{labelyear}{2003}
+      \field{labelmonth}{07}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We introduce a metric for probability distributions, which is bounded, information-theoretically motivated, and has a natural Bayesian interpretation. The square root of the well-known χ2 distance is an asymptotic approximation to it. Moreover, it is a close relative of the capacitory discrimination and Jensen-Shannon divergence.}
+      \field{issn}{0018-9448}
+      \field{journaltitle}{IEEE Transactions on Information Theory}
+      \field{month}{07}
+      \field{number}{7}
+      \field{title}{A new metric for probability distributions}
+      \field{volume}{49}
+      \field{year}{2003}
+      \field{pages}{1858\bibrangedash 1860}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1109/TIT.2003.813506
+      \endverb
+      \verb{file}
+      \verb IEEE Xplore Abstract Record:/Users/Franzi/Zotero/storage/H6L3EIL4/1207388.html:text/html
+      \endverb
+      \keyw{Adaptive estimation,Algorithm design and analysis,asymptotic approximation,Bayes methods,Bayesian interpretation,Bayesian methods,bounded information-theoretically motivated metric,capacitory discrimination,Convergence,Gaussian noise,information theory,Iterative algorithms,Jensen-Shannon divergence,probability,Probability distribution,probability distributions,square root,Wavelet analysis,White noise,Writing,χ2 distance}
     \endentry
     \entry{erosheva_mixed-membership_2004}{article}{}
       \name{author}{3}{}{%
@@ -1384,94 +1302,6 @@
       \endverb
       \verb{url}
       \verb http://www.jstor.org/stable/1882942
-      \endverb
-    \endentry
-    \entry{taddy_estimation_2012}{inproceedings}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=16e5ccc34f2ccb8bb3c2e92bb0f64013}{Taddy}{T\bibinitperiod}{Matt}{M\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{16e5ccc34f2ccb8bb3c2e92bb0f64013}
-      \strng{fullhash}{16e5ccc34f2ccb8bb3c2e92bb0f64013}
-      \field{sortinit}{T}
-      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
-      \field{labelyear}{2012}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 15th {International} {Conference} on {Artificial} {Intelligence} and {Statistics}}
-      \field{title}{On estimation and selection for topic models}
-      \field{year}{2012}
-    \endentry
-    \entry{teh_hierarchical_2006}{article}{}
-      \name{author}{4}{}{%
-        {{uniquename=0,hash=577af3eb832d26c33caa634a276d4d7e}{Teh}{T\bibinitperiod}{Yee\bibnamedelima Whye}{Y\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=996ffb9cb286a8b4b0fc16793c54cc31}{Jordan}{J\bibinitperiod}{Michael\bibnamedelima I}{M\bibinitperiod\bibinitdelim I\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=fd3b895703fc673d6630ac165f9c67b8}{Beal}{B\bibinitperiod}{Matthew\bibnamedelima J}{M\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=0acd0349006f4ee348ffe16e1fe1fe21}{Blei}{B\bibinitperiod}{David\bibnamedelima M}{D\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{0f5dca7d11b2c1bd8f2580bd284d659d}
-      \strng{fullhash}{2342a46d71a8d08088ca450b0c586d03}
-      \field{sortinit}{T}
-      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
-      \field{labelyear}{2006}
-      \field{labelmonth}{12}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{We consider problems involving groups of data where each observation within a group is a draw from a mixture model and where it is desirable to share mixture components between groups. We assume that the number of mixture components is unknown a priori and is to be inferred from the data. In this setting it is natural to consider sets of Dirichlet processes, one for each group, where the well-known clustering property of the Dirichlet process provides a nonparametric prior for the number of mixture components within each group. Given our desire to tie the mixture models in the various groups, we consider a hierarchical model, specifically one in which the base measure for the child Dirichlet processes is itself distributed according to a Dirichlet process. Such a base measure being discrete, the child Dirichlet processes necessarily share atoms. Thus, as desired, the mixture models in the different groups necessarily share mixture components. We discuss representations of hierarchical Dirichlet processes in terms of a stick-breaking process, and a generalization of the Chinese restaurant process that we refer to as the “Chinese restaurant franchise.” We present Markov chain Monte Carlo algorithms for posterior inference in hierarchical Dirichlet process mixtures and describe applications to problems in information retrieval and text modeling.}
-      \field{issn}{0162-1459}
-      \field{journaltitle}{Journal of the American Statistical Association}
-      \field{month}{12}
-      \field{number}{476}
-      \field{title}{Hierarchical {Dirichlet} {Processes}}
-      \field{volume}{101}
-      \field{year}{2006}
-      \field{pages}{1566\bibrangedash 1581}
-      \range{pages}{16}
-      \verb{doi}
-      \verb 10.1198/016214506000000302
-      \endverb
-      \verb{file}
-      \verb Snapshot:/Users/Franzi/Zotero/storage/67GVBDZ8/016214506000000302.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://amstat.tandfonline.com/doi/abs/10.1198/016214506000000302
-      \endverb
-    \endentry
-    \entry{wallach_evaluation_2009}{inproceedings}{}
-      \name{author}{4}{}{%
-        {{uniquename=0,hash=e92e1b18d1e4fb6855b9e6a1d835313f}{Wallach}{W\bibinitperiod}{Hanna\bibnamedelima M.}{H\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=237c383069f29d1d1ffe672359e89d38}{Murray}{M\bibinitperiod}{Iain}{I\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=bd2be300d445e9f6db7808f9533e66cb}{Salakhutdinov}{S\bibinitperiod}{Ruslan}{R\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=d0b37f86f34b5267e38b3e2defce4051}{Mimno}{M\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
-      }
-      \list{location}{1}{%
-        {New York, NY, USA}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{d0f4632dc84975c29d33757f181e77fc}
-      \strng{fullhash}{77bf5b366ed2302b1630df3bb4024737}
-      \field{sortinit}{W}
-      \field{sortinithash}{99e3ba1b3f78bb6f073e7fa7ac11636b}
-      \field{labelyear}{2009}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{A natural evaluation metric for statistical topic models is the probability of held-out documents given a trained model. While exact computation of this probability is intractable, several estimators for this probability have been used in the topic modeling literature, including the harmonic mean method and empirical likelihood method. In this paper, we demonstrate experimentally that commonly-used methods are unlikely to accurately estimate the probability of held-out documents, and propose two alternative methods that are both accurate and efficient.}
-      \field{booktitle}{Proceedings of the 26th {Annual} {International} {Conference} on {Machine} {Learning}}
-      \field{isbn}{978-1-60558-516-1}
-      \field{series}{{ICML} '09}
-      \field{title}{Evaluation {Methods} for {Topic} {Models}}
-      \field{year}{2009}
-      \field{pages}{1105\bibrangedash 1112}
-      \range{pages}{8}
-      \verb{doi}
-      \verb 10.1145/1553374.1553515
-      \endverb
-      \verb{url}
-      \verb http://doi.acm.org/10.1145/1553374.1553515
       \endverb
     \endentry
     \entry{wang_mining_2009}{inproceedings}{}

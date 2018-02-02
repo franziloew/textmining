@@ -163,14 +163,23 @@ topicCorrCompare <- function(ylevel1, ylevel2) {
          pch=c(15,15,16,16), cex = 0.7, box.lty = 0)
 }
 
-##################################
-## Jensen-Shannon divergence (JSD)
-##################################
+####################
+## Distance Measures
+####################
 
+# Cosine Similarity
+CosSim <- function(x,y) {
+  
+  sum(x * y) / (sqrt(sum(x*x)) * sqrt(sum(y*y)))
+  
+}
+
+# Jensen Shanon Divergence
 JSD<- function(x,y) {
   sqrt(0.5 * KLD(x, (x+y)/2) + 0.5 * KLD(y, (x+y)/2))
 }
 
+# Kullback Leibler Divergence
 KLD <- function(x,y) {
   sum(x * log(x/y))
 }
