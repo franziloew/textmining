@@ -112,7 +112,7 @@ ggsave({
       axis.text       = element_text(size = 8)
     )
 },
-filename = "../figs/timeline.png", device = "png",width = 7, height = 4,
+filename = "../figs/timeline.png", device = "png",width = 6, height = 4,
 dpi = 600
 )
 

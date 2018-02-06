@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  2 FEB 2018 18:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  6 FEB 2018 16:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1123,7 +1123,15 @@ Package biblatex Info: Automatic encoding selection.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'structure.bbl' found.
- (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.bbl)
+ (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.bbl
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                paul_cross-collection_2017
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
 Package biblatex Info: Reference section=0 on input line 44.
 Package biblatex Info: Reference segment=0 on input line 44.
 \AtBeginShipoutBox=\box47
@@ -1138,8 +1146,7 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 44.
 LaTeX Info: Redefining \pageref on input line 44.
 LaTeX Info: Redefining \nameref on input line 44.
-
-(/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.out) (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.out)
+ (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.out) (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.out)
 \@outlinefile=\write5
 \openout5 = `structure.out'.
 
@@ -1189,363 +1196,82 @@ Overfull \hbox (2.81798pt too wide) in paragraph at lines 61--63
 \T1/cmr/m/n/12 am-ine the sim-i-lar-i-ties / dif-fer-ences of con-tent be-tween the news provider: 
  []
 
-[2] [3] [4]
-Overfull \hbox (13.46411pt too wide) in paragraph at lines 99--100
-\T1/cmr/m/n/12 Figure []1a[] shows the largest providers of on-line news in terms of daily pageviews.[][][]
- []
-
-<../figs/reach.png, id=136, 3613.5pt x 2409.0pt>
+[2] [3] [4] [5] <../figs/reach.png, id=138, 3613.5pt x 2409.0pt>
 File: ../figs/reach.png Graphic file (type png)
  <use ../figs/reach.png>
 Package pdftex.def Info: ../figs/reach.png used on input line 105.
 (pdftex.def)             Requested size: 312.00119pt x 207.97864pt.
- [5] <../figs/traffic_source.png, id=150, 3613.5pt x 2409.0pt>
+ [6 <../figs/reach.png>] <../figs/traffic_source.png, id=155, 3613.5pt x 2409.0pt>
 File: ../figs/traffic_source.png Graphic file (type png)
  <use ../figs/traffic_source.png>
 Package pdftex.def Info: ../figs/traffic_source.png used on input line 118.
-(pdftex.def)             Requested size: 234.00238pt x 155.9656pt.
- [6 <../figs/reach.png>] <../figs/search_traffic.png, id=162, 5420.25pt x 3011.25pt>
+(pdftex.def)             Requested size: 312.00119pt x 207.97864pt.
+ <../figs/search_traffic.png, id=156, 5420.25pt x 3011.25pt>
 File: ../figs/search_traffic.png Graphic file (type png)
  <use ../figs/search_traffic.png>
 Package pdftex.def Info: ../figs/search_traffic.png used on input line 126.
 (pdftex.def)             Requested size: 312.00119pt x 173.31554pt.
- [7 <../figs/traffic_source.png> <../figs/search_traffic.png>] <../figs/keywords1.png, id=180, 3613.5pt x 2409.0pt>
+ [7 <../figs/traffic_source.png>] <../figs/keywords1.png, id=171, 3613.5pt x 2409.0pt>
 File: ../figs/keywords1.png Graphic file (type png)
  <use ../figs/keywords1.png>
 Package pdftex.def Info: ../figs/keywords1.png used on input line 137.
 (pdftex.def)             Requested size: 312.00119pt x 207.97864pt.
- <../figs/keywords2.png, id=181, 3613.5pt x 2409.0pt>
+ [8 <../figs/search_traffic.png>] <../figs/keywords2.png, id=181, 3613.5pt x 2409.0pt>
 File: ../figs/keywords2.png Graphic file (type png)
  <use ../figs/keywords2.png>
 Package pdftex.def Info: ../figs/keywords2.png used on input line 145.
 (pdftex.def)             Requested size: 312.00119pt x 207.97864pt.
- [8 <../figs/keywords1.png>]
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 161.
-
-Overfull \hbox (18.64276pt too wide) in paragraph at lines 161--161
-[][][][]\T1/cmr/m/n/12 Separate 
- []
-
-
-Overfull \hbox (5.91664pt too wide) in paragraph at lines 161--161
-\T1/cmr/m/n/12 world.  
- []
-
-
-Overfull \hbox (18.64276pt too wide) in paragraph at lines 161--161
-[][][][]\T1/cmr/m/n/12 Separate 
- []
-
-
-Overfull \hbox (5.91664pt too wide) in paragraph at lines 161--161
-\T1/cmr/m/n/12 world.  
- []
-
-
-Overfull \hbox (18.64276pt too wide) in paragraph at lines 161--161
-[][][][]\T1/cmr/m/n/12 Separate 
- []
-
-
-Overfull \hbox (5.91664pt too wide) in paragraph at lines 161--161
-\T1/cmr/m/n/12 world.  
- []
-
-
-Overfull \hbox (18.64276pt too wide) in paragraph at lines 161--161
-[][][][]\T1/cmr/m/n/12 Separate 
- []
-
-
-Overfull \hbox (5.91664pt too wide) in paragraph at lines 161--161
-\T1/cmr/m/n/12 world.  
- []
-
-<../figs/timeline.png, id=191, 4215.75pt x 2409.0pt>
+ [9 <../figs/keywords1.png> <../figs/keywords2.png>] <../figs/timeline.png, id=192, 3613.5pt x 2409.0pt>
 File: ../figs/timeline.png Graphic file (type png)
  <use ../figs/timeline.png>
-Package pdftex.def Info: ../figs/timeline.png used on input line 167.
-(pdftex.def)             Requested size: 191.10214pt x 109.17224pt.
- <../figs/bar.png, id=192, 3613.5pt x 2409.0pt>
+Package pdftex.def Info: ../figs/timeline.png used on input line 165.
+(pdftex.def)             Requested size: 191.10214pt x 127.36761pt.
+ <../figs/bar.png, id=193, 3613.5pt x 2409.0pt>
 File: ../figs/bar.png Graphic file (type png)
  <use ../figs/bar.png>
-Package pdftex.def Info: ../figs/bar.png used on input line 172.
+Package pdftex.def Info: ../figs/bar.png used on input line 170.
 (pdftex.def)             Requested size: 191.10214pt x 127.36761pt.
- [9 <../figs/keywords2.png>] [10 <../figs/timeline.png> <../figs/bar.png>] [11] [12]
-Overfull \hbox (10.92207pt too wide) in paragraph at lines 228--229
+ [10 <../figs/timeline.png> <../figs/bar.png>] [11] [12]
+Overfull \hbox (10.92207pt too wide) in paragraph at lines 218--219
 []\T1/cmr/m/n/12 where the word prob-a-bil-ity $\OML/cmm/m/it/12 ^^L[]$ \T1/cmr/m/n/12 is pa-ram-e-ter-ized in terms of log-transformed
  []
 
-
-Overfull \hbox (18.40865pt too wide) in paragraph at lines 234--235
+[13]
+Overfull \hbox (18.40865pt too wide) in paragraph at lines 224--225
 \T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
  []
 
-[13] [14] <../figs/topic_proportion.png, id=298, 4818.0pt x 7227.0pt>
+[14] <../figs/topic_proportion.png, id=292, 7227.0pt x 6022.5pt>
 File: ../figs/topic_proportion.png Graphic file (type png)
  <use ../figs/topic_proportion.png>
-Package pdftex.def Info: ../figs/topic_proportion.png used on input line 259.
-(pdftex.def)             Requested size: 155.99762pt x 233.89326pt.
- <../figs/topic_proportion_diff.png, id=299, 4818.0pt x 7227.0pt>
-File: ../figs/topic_proportion_diff.png Graphic file (type png)
- <use ../figs/topic_proportion_diff.png>
-Package pdftex.def Info: ../figs/topic_proportion_diff.png used on input line 265.
-(pdftex.def)             Requested size: 155.99762pt x 233.89326pt.
- [15]
-Overfull \hbox (0.69153pt too wide) in paragraph at lines 275--275
-[][][][]\T1/cmr/m/n/12 Noch 
- []
-
-
-Overfull \hbox (16.35858pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 angeben 
- []
-
-
-Overfull \hbox (16.68488pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 gemacht 
- []
-
-
-Overfull \hbox (8.52713pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 haben.  
- []
-
-
-Overfull \hbox (0.69153pt too wide) in paragraph at lines 275--275
-[][][][]\T1/cmr/m/n/12 Noch 
- []
-
-
-Overfull \hbox (16.35858pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 angeben 
- []
-
-
-Overfull \hbox (16.68488pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 gemacht 
- []
-
-
-Overfull \hbox (8.52713pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 haben.  
- []
-
-
-Overfull \hbox (0.69153pt too wide) in paragraph at lines 275--275
-[][][][]\T1/cmr/m/n/12 Noch 
- []
-
-
-Overfull \hbox (16.35858pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 angeben 
- []
-
-
-Overfull \hbox (16.68488pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 gemacht 
- []
-
-
-Overfull \hbox (8.52713pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 haben.  
- []
-
-
-Overfull \hbox (0.69153pt too wide) in paragraph at lines 275--275
-[][][][]\T1/cmr/m/n/12 Noch 
- []
-
-
-Overfull \hbox (16.35858pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 angeben 
- []
-
-
-Overfull \hbox (16.68488pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 gemacht 
- []
-
-
-Overfull \hbox (8.52713pt too wide) in paragraph at lines 275--275
-\T1/cmr/m/n/12 haben.  
- []
-
-[16 <../figs/topic_proportion.png> <../figs/topic_proportion_diff.png>] <../figs/estimates_site.png, id=317, 5420.25pt x 3011.25pt>
+Package pdftex.def Info: ../figs/topic_proportion.png used on input line 248.
+(pdftex.def)             Requested size: 390.0pt x 324.94366pt.
+ [15] [16 <../figs/topic_proportion.png>] <../figs/estimates_site.png, id=309, 5420.25pt x 4215.75pt>
 File: ../figs/estimates_site.png Graphic file (type png)
  <use ../figs/estimates_site.png>
-Package pdftex.def Info: ../figs/estimates_site.png used on input line 291.
-(pdftex.def)             Requested size: 350.99762pt x 194.957pt.
- [17] <../figs/estimates_month.png, id=327, 5420.25pt x 3011.25pt>
-File: ../figs/estimates_month.png Graphic file (type png)
- <use ../figs/estimates_month.png>
-Package pdftex.def Info: ../figs/estimates_month.png used on input line 299.
-(pdftex.def)             Requested size: 350.99762pt x 194.957pt.
- [18 <../figs/estimates_site.png> <../figs/estimates_month.png>] <../figs/corrplot1.png, id=336, 2710.125pt x 1806.75pt>
+Package pdftex.def Info: ../figs/estimates_site.png used on input line 268.
+(pdftex.def)             Requested size: 350.99762pt x 272.9398pt.
+ [17 <../figs/estimates_site.png>] <../figs/corrplot1.png, id=320, 2710.125pt x 1806.75pt>
 File: ../figs/corrplot1.png Graphic file (type png)
  <use ../figs/corrplot1.png>
-Package pdftex.def Info: ../figs/corrplot1.png used on input line 314.
+Package pdftex.def Info: ../figs/corrplot1.png used on input line 284.
 (pdftex.def)             Requested size: 272.99881pt x 181.98131pt.
- <../figs/corrplot2.png, id=337, 2710.125pt x 1806.75pt>
+ <../figs/corrplot2.png, id=321, 2710.125pt x 1806.75pt>
 File: ../figs/corrplot2.png Graphic file (type png)
  <use ../figs/corrplot2.png>
-Package pdftex.def Info: ../figs/corrplot2.png used on input line 318.
+Package pdftex.def Info: ../figs/corrplot2.png used on input line 288.
 (pdftex.def)             Requested size: 272.99881pt x 181.98131pt.
- [19 <../figs/corrplot1.png> <../figs/corrplot2.png>]
-./structure.tex:352: Argument of \align* has an extra }.
-<inserted text> 
-                \par 
-l.352 ...\beta_{kvi}^2}\sum^d_{v=1}\beta_{kvj}^2}}
-                                                  
-I've run across a `}' that doesn't seem to match anything.
-For example, `\def\a#1{...}' and `\a}' would produce
-this error. If you simply proceed now, the `\par' that
-I've just inserted will cause me to report a runaway
-argument that might be the root of the problem. But if
-your `}' was spurious, just type `2' and it will go away.
-
-Runaway argument?
- \text {cos}(\theta )=\frac {\sum ^d_{v=1}\beta _{kvi}\beta {kvj}}{\sqrt \ETC.
-./structure.tex:352: Paragraph ended before \align* was complete.
-<to be read again> 
-                   \par 
-l.352 ...\beta_{kvi}^2}\sum^d_{v=1}\beta_{kvj}^2}}
-                                                  
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-./structure.tex:352: Missing $ inserted.
-<inserted text> 
-                $
-l.352 ...\beta_{kvi}^2}\sum^d_{v=1}\beta_{kvj}^2}}
-                                                  
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./structure.tex:352: Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.352 ...\beta_{kvi}^2}\sum^d_{v=1}\beta_{kvj}^2}}
-                                                  
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./structure.tex:352: Display math should end with $$.
-<to be read again> 
-                   \par 
-l.352 ...\beta_{kvi}^2}\sum^d_{v=1}\beta_{kvj}^2}}
-                                                  
-The `$' that I just saw supposedly matches a previous `$$'.
-So I shall assume that you typed `$$' both times.
-
-./structure.tex:352: Extra }, or forgotten \endgroup.
-<recently read> }
-                 
-l.352 ...\beta_{kvi}^2}\sum^d_{v=1}\beta_{kvj}^2}}
-                                                  
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-./structure.tex:353: Misplaced \cr.
-\math@cr@@@ ->\cr 
-                  
-l.353 \end{align*}
-                  
-I can't figure out why you would want to use a tab mark
-or \cr or \span just now. If something like a right brace
-up above has ended a previous alignment prematurely,
-you're probably due for more error messages, and you
-might try typing `S' now just to see what is salvageable.
-
-./structure.tex:353: Misplaced \noalign.
-\math@cr@@ ... \iffalse }\fi \math@cr@@@ \noalign 
-                                                  {\vskip #1\relax }
-l.353 \end{align*}
-                  
-I expect to see \noalign only after the \cr of
-an alignment. Proceed, and I'll ignore this case.
-
-./structure.tex:353: Misplaced \noalign.
-\black@ #1->\noalign 
-                     {\ifdim #1>\displaywidth \dimen@ \prevdepth \nointerlin...
-l.353 \end{align*}
-                  
-I expect to see \noalign only after the \cr of
-an alignment. Proceed, and I'll ignore this case.
-
-./structure.tex:353: Extra }, or forgotten \endgroup.
-\endalign ->\math@cr \black@ \totwidth@ \egroup 
-                                                \ifingather@ \restorealignst...
-l.353 \end{align*}
-                  
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-./structure.tex:353: Missing $ inserted.
-<inserted text> 
-                $
-l.353 \end{align*}
-                  
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./structure.tex:353: Display math should end with $$.
-<to be read again> 
-                   \endgroup 
-l.353 \end{align*}
-                  
-The `$' that I just saw supposedly matches a previous `$$'.
-So I shall assume that you typed `$$' both times.
-
-
-Overfull \hbox (5.9733pt too wide) in paragraph at lines 355--356
-\T1/cmr/m/n/12 above men-tioned met-rics the co-sine sim-i-lar-ity has a range of $\OT1/cmr/m/n/12 [0\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 1]$ \T1/cmr/m/n/12 and $\OML/cmm/m/it/12 cos\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^R\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/12 !
- []
-
-[20] <../figs/distance.png, id=354, 7227.0pt x 4818.0pt>
+ [18 <../figs/corrplot1.png> <../figs/corrplot2.png>] [19] <../figs/distance.png, id=343, 7227.0pt x 4818.0pt>
 File: ../figs/distance.png Graphic file (type png)
  <use ../figs/distance.png>
-Package pdftex.def Info: ../figs/distance.png used on input line 361.
+Package pdftex.def Info: ../figs/distance.png used on input line 335.
 (pdftex.def)             Requested size: 312.00119pt x 207.97864pt.
-
-Overfull \hbox (2.00093pt too wide) in paragraph at lines 367--367
-[][][][]\T1/cmr/m/n/12 check 
- []
-
-
-Overfull \hbox (2.00093pt too wide) in paragraph at lines 367--367
-[][][][]\T1/cmr/m/n/12 check 
- []
-
-
-Overfull \hbox (2.00093pt too wide) in paragraph at lines 367--367
-[][][][]\T1/cmr/m/n/12 check 
- []
-
-
-Overfull \hbox (2.00093pt too wide) in paragraph at lines 367--367
-[][][][]\T1/cmr/m/n/12 check 
- []
-
-[21 <../figs/distance.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 374.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 374.
+ [20 <../figs/distance.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 348.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 348.
  (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 374.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 374.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 348.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 348.
 Package rerunfilecheck Info: File `structure.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
 Package logreq Info: Writing requests to 'structure.run.xml'.
@@ -1553,13 +1279,13 @@ Package logreq Info: Writing requests to 'structure.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35552 strings out of 493089
- 788804 string characters out of 6134842
- 1298917 words of memory out of 5000000
- 38258 multiletter control sequences out of 15000+600000
+ 35461 strings out of 493089
+ 786560 string characters out of 6134842
+ 1296547 words of memory out of 5000000
+ 38174 multiletter control sequences out of 15000+600000
  23968 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,11n,92p,2375b,1539s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,11n,92p,2379b,1537s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{cite.0@endres_new_2003} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@mimno_optimizing_2011} has been referenced but does not exist, replaced by a fixed one
@@ -1572,6 +1298,10 @@ pdfTeX warning (dest): name{cite.0@roberts_stm:_2016} has been referenced but do
 
 pdfTeX warning (dest): name{cite.0@roberts_structural_2013} has been referenced but does not exist, replaced by a fixed one
 
+pdfTeX warning (dest): name{cite.0@grimmer_text_2013} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@blei_probabilistic_2012} has been referenced but does not exist, replaced by a fixed one
+
 pdfTeX warning (dest): name{cite.0@roberts_navigating_2016} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@mueller_reading_2016} has been referenced but does not exist, replaced by a fixed one
@@ -1582,9 +1312,9 @@ pdfTeX warning (dest): name{cite.0@mishler_using_2015} has been referenced but d
 
 pdfTeX warning (dest): name{cite.0@farrell_corporate_2016} has been referenced but does not exist, replaced by a fixed one
 
-pdfTeX warning (dest): name{cite.0@grimmer_text_2013} has been referenced but does not exist, replaced by a fixed one
+pdfTeX warning (dest): name{cite.0@roberts_structural_2014} has been referenced but does not exist, replaced by a fixed one
 
-pdfTeX warning (dest): name{cite.0@blei_probabilistic_2012} has been referenced but does not exist, replaced by a fixed one
+pdfTeX warning (dest): name{cite.0@wiedmann_text_2016} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@pritchard_inference_2000} has been referenced but does not exist, replaced by a fixed one
 
@@ -1594,13 +1324,9 @@ pdfTeX warning (dest): name{cite.0@griffiths_finding_2004} has been referenced b
 
 pdfTeX warning (dest): name{cite.0@griffiths_probabilistic_2002} has been referenced but does not exist, replaced by a fixed one
 
-pdfTeX warning (dest): name{cite.0@roberts_structural_2014} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@wiedmann_text_2016} has been referenced but does not exist, replaced by a fixed one
+pdfTeX warning (dest): name{cite.0@gentzkow_text_2017} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@bholat_text_2015} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@gentzkow_text_2017} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@ellman_what_2009} has been referenced but does not exist, replaced by a fixed one
 
@@ -1643,10 +1369,10 @@ pdfTeX warning (dest): name{cite.0@blei_latent_2003} has been referenced but doe
 pdfTeX warning (dest): name{cite.0@roberts_model_2016} has been referenced but does not exist, replaced by a fixed one
 
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.pdf (21 pages, 8017577 bytes).
+Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.pdf (20 pages, 6524869 bytes).
 PDF statistics:
- 445 PDF objects out of 1000 (max. 8388607)
- 373 compressed objects within 4 object streams
- 110 named destinations out of 1000 (max. 500000)
- 179 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 431 PDF objects out of 1000 (max. 8388607)
+ 364 compressed objects within 4 object streams
+ 105 named destinations out of 1000 (max. 500000)
+ 161 words of extra memory for PDF output out of 10000 (max. 10000000)
 

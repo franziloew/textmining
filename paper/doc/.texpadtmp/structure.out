@@ -2,11 +2,10 @@
 \BOOKMARK [1][-]{section.2}{The online news market}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Competitor analysis}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Dataset}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Similar Research}{section.2}% 5
-\BOOKMARK [1][-]{section.3}{The structural topic model}{}% 6
-\BOOKMARK [2][-]{subsection.3.1}{Generative Process of STM}{section.3}% 7
-\BOOKMARK [2][-]{subsection.3.2}{Model and parameter selection}{section.3}% 8
-\BOOKMARK [1][-]{section.4}{Empirical Evaluation}{}% 9
-\BOOKMARK [2][-]{subsection.4.1}{Differences in topic prevalence}{section.4}% 10
-\BOOKMARK [2][-]{subsection.4.2}{Topic correlations}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.3}{Differences in word-topic distributions}{section.4}% 12
+\BOOKMARK [1][-]{section.3}{The structural topic model}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Generative Process of STM}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Model and parameter selection}{section.3}% 7
+\BOOKMARK [1][-]{section.4}{Empirical Evaluation}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{Differences in topic prevalence}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Topic correlations}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.3}{Differences in word-topic distributions}{section.4}% 11
