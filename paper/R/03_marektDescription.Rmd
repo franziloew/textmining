@@ -68,7 +68,6 @@ theme_set(
 
 rm(list=ls())
 col <- brewer.pal(6,"Dark2")
-source("func/functions.R")
 ```
 
 # 1. The online news market
@@ -104,23 +103,27 @@ views <- views %>%
        site = ifelse(site=="tagesschau.de","Tagesschau.de",site),
        site = ifelse(site=="zdf.de","ZDF.de",site),
        site = ifelse(site=="welt.de","DIE WELT",site),
-       site = ifelse(site=="n-tv.de","n-tv.de",site))
+       site = ifelse(site=="n-tv.de","n-tv.de",site),
+       site = ifelse(site=="deutschlandfunk.de", "DLF", site))
 
+keepsite <- c("Tagesschau.de", "SPIEGEL ONLINE", "ZEIT ONLINE", 
+              "Bild.de", "DIE WELT", "FOCUS ONLINE")
 ```
 
 ```{r}
 p1 <- views %>%
   filter(date > as.POSIXct("2017-05-31")) %>%
   ggplot(aes(date, views, color=site)) +
-  geom_line(show.legend = F) +
-  geom_text_repel(data = views[views$date==max(views$date), ],
-                  aes(date, views, label=site),
-                  size=2.8, show.legend = F, seed = 1) +
-  scale_x_date(limits = c(as.Date("2017-05-31"),as.Date("2018-02-15")),
+  geom_line() +
+  geom_text(data = views[views$date==max(views$date) &
+                                 views$site %in% keepsite , ],
+                  aes((date+3), views, label=site), hjust=0.1,
+                  size=2.5, show.legend = F, check_overlap = T) +
+  scale_x_date(limits = c(as.Date("2017-05-31"),as.Date("2018-02-16")),
                breaks = date_breaks("1 month"), 
                labels=date_format("%B %y", tz="CET")) +
   theme(
-      #legend.position   = "none",
+      legend.position   = "right",
       legend.text       =  element_text(size=6),
       axis.text.y       = element_text(size = 8)
     ) +
