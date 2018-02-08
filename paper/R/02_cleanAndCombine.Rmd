@@ -146,7 +146,8 @@ btw <- btw %>%
   filter(!grepl("SPIEGEL-Plus-Artikel", text)) %>%
 
   # remove articles about the weater
-  filter(!grepl("wetter", url))
+  filter(!grepl("wetter", url)) %>%
+  filter(!grepl("Deutsche Bahn", text) | site!="Tagesschau.de")
 ```
 
 ```{r}
@@ -372,7 +373,8 @@ bigrams %>%
 ## Preparation
 ```{r}
 btw <- btw %>% 
-  mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private"))
+  #mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private")) %>%
+  filter(!grepl("Deutsche Bahn", text) | site!="Tagesschau.de")
 ```
 
 ### Build Corpus
@@ -380,15 +382,15 @@ btw <- btw %>%
 # Process data
 
 ### without stemming
-processed1 <- textProcessor(btw$text_cleaned1, metadata = btw[,c("ownership","text_cleaned1","month")],
+processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("ownership","text_cleaned1","month")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
                            removenumbers = F,
                            removepunctuation = F,
                            stem = F)
-out_ownership <- prepDocuments(processed1$documents, processed1$vocab, processed1$meta)
-out_ownership$meta$ownership <- as.factor(out_ownership$meta$ownership)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out$meta$ownership <- as.factor(out$meta$ownership)
 ###
 
 # processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
@@ -401,7 +403,7 @@ out_ownership$meta$ownership <- as.factor(out_ownership$meta$ownership)
 # out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 # out$meta$site <- as.factor(out$meta$site)
 
-save(btw, out_ownership, file="../output/btw_comb_ownership.Rda")
+save(btw, out, file="../output/btw_comb.Rda")
 ```
 
 # FB Shares
