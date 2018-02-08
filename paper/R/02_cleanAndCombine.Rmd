@@ -147,7 +147,12 @@ btw <- btw %>%
 
   # remove articles about the weater
   filter(!grepl("wetter", url)) %>%
-  filter(!grepl("Deutsche Bahn", text) | site!="Tagesschau.de")
+  filter(!grepl("sturm", url) |
+           site != "Tagesschau.de") %>%
+  filter(!grepl("Deutsche Bahn", text) | 
+           site!="Tagesschau.de") %>%
+  filter(!grepl("bahnstrecke", text) | 
+           site!="Tagesschau.de")
 ```
 
 ```{r}
@@ -373,8 +378,13 @@ bigrams %>%
 ## Preparation
 ```{r}
 btw <- btw %>% 
-  #mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private")) %>%
-  filter(!grepl("Deutsche Bahn", text) | site!="Tagesschau.de")
+  #mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private"))
+  filter(!grepl("sturm", url) |
+           site != "Tagesschau.de") %>%
+  filter(!grepl("Deutsche Bahn", text) | 
+           site!="Tagesschau.de") %>%
+  filter(!grepl("bahnstrecke", text) | 
+           site!="Tagesschau.de")
 ```
 
 ### Build Corpus

@@ -134,7 +134,7 @@ p1
 
 ggsave(plot= p1,
 filename = "../figs/reach.png", device = "png",
-width = 6, height = 4,
+width = 7, height = 4,
         dpi = 600
 )
 ```

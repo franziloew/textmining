@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  8 FEB 2018 11:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  8 FEB 2018 15:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1200,13 +1200,13 @@ Overfull \hbox (7.59055pt too wide) in paragraph at lines 99--100
 File: ../figs/reach.png Graphic file (type png)
  <use ../figs/reach.png>
 Package pdftex.def Info: ../figs/reach.png used on input line 103.
-(pdftex.def)             Requested size: 312.00119pt x 207.97864pt.
- [6 <../figs/reach.png>] <../figs/timeline.png, id=139, 3613.5pt x 2409.0pt>
+(pdftex.def)             Requested size: 390.0pt x 259.99168pt.
+ [6 <../figs/reach.png>] <../figs/timeline.png, id=137, 3613.5pt x 2409.0pt>
 File: ../figs/timeline.png Graphic file (type png)
  <use ../figs/timeline.png>
 Package pdftex.def Info: ../figs/timeline.png used on input line 115.
 (pdftex.def)             Requested size: 191.10214pt x 127.36761pt.
- <../figs/bar.png, id=140, 3613.5pt x 2409.0pt>
+ <../figs/bar.png, id=138, 3613.5pt x 2409.0pt>
 File: ../figs/bar.png Graphic file (type png)
  <use ../figs/bar.png>
 Package pdftex.def Info: ../figs/bar.png used on input line 120.
@@ -1226,22 +1226,22 @@ File: ../figs/topic_proportion.png Graphic file (type png)
  <use ../figs/topic_proportion.png>
 Package pdftex.def Info: ../figs/topic_proportion.png used on input line 198.
 (pdftex.def)             Requested size: 390.0pt x 324.94366pt.
- [12 <../figs/topic_proportion.png>] <../figs/estimates_site.png, id=255, 5420.25pt x 4215.75pt>
+ [12] [13 <../figs/topic_proportion.png>] <../figs/estimates_site.png, id=261, 5420.25pt x 4215.75pt>
 File: ../figs/estimates_site.png Graphic file (type png)
  <use ../figs/estimates_site.png>
 Package pdftex.def Info: ../figs/estimates_site.png used on input line 217.
 (pdftex.def)             Requested size: 350.99762pt x 272.9398pt.
- [13] <../figs/corrplot1.png, id=266, 2710.125pt x 1806.75pt>
+ <../figs/corrplot1.png, id=264, 2710.125pt x 1806.75pt>
 File: ../figs/corrplot1.png Graphic file (type png)
  <use ../figs/corrplot1.png>
 Package pdftex.def Info: ../figs/corrplot1.png used on input line 233.
 (pdftex.def)             Requested size: 272.99881pt x 181.98131pt.
- <../figs/corrplot2.png, id=267, 2710.125pt x 1806.75pt>
+ <../figs/corrplot2.png, id=265, 2710.125pt x 1806.75pt>
 File: ../figs/corrplot2.png Graphic file (type png)
  <use ../figs/corrplot2.png>
 Package pdftex.def Info: ../figs/corrplot2.png used on input line 237.
 (pdftex.def)             Requested size: 272.99881pt x 181.98131pt.
- [14 <../figs/estimates_site.png>] [15 <../figs/corrplot1.png> <../figs/corrplot2.png>] [16] <../figs/distance.png, id=304, 7227.0pt x 4818.0pt>
+ [14 <../figs/estimates_site.png>] [15 <../figs/corrplot1.png> <../figs/corrplot2.png>] [16] <../figs/distance.png, id=305, 7227.0pt x 4818.0pt>
 File: ../figs/distance.png Graphic file (type png)
  <use ../figs/distance.png>
 Package pdftex.def Info: ../figs/distance.png used on input line 287.
@@ -1259,13 +1259,13 @@ Package logreq Info: Writing requests to 'structure.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35428 strings out of 493089
- 785842 string characters out of 6134842
- 1296322 words of memory out of 5000000
- 38153 multiletter control sequences out of 15000+600000
+ 35429 strings out of 493089
+ 785854 string characters out of 6134842
+ 1294327 words of memory out of 5000000
+ 38154 multiletter control sequences out of 15000+600000
  23968 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,10n,92p,2378b,1535s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,10n,92p,2378b,1536s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{cite.0@endres_new_2003} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@kim_topic_2011} has been referenced but does not exist, replaced by a fixed one
@@ -1349,10 +1349,10 @@ pdfTeX warning (dest): name{cite.0@rochet_platform_2003} has been referenced but
 pdfTeX warning (dest): name{cite.0@roberts_model_2016} has been referenced but does not exist, replaced by a fixed one
 
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.pdf (18 pages, 4789007 bytes).
+Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.pdf (18 pages, 4789084 bytes).
 PDF statistics:
- 397 PDF objects out of 1000 (max. 8388607)
- 340 compressed objects within 4 object streams
+ 398 PDF objects out of 1000 (max. 8388607)
+ 341 compressed objects within 4 object streams
  97 named destinations out of 1000 (max. 500000)
  133 words of extra memory for PDF output out of 10000 (max. 10000000)
 

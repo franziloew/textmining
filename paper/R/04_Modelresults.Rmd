@@ -74,7 +74,7 @@ source("func/functions.R")
 # 2. Data 
 ```{r caching, echo = FALSE}
 #load("../output/btw_combined.Rda")
-load("../output/btw_comb_ownership.Rda")
+load("../output/btw_comb.Rda")
 ```
 
 ## Distribution of articles
@@ -120,9 +120,7 @@ dpi = 600
 
 # 3. Model Results
 ```{r caching, echo = FALSE}
-#load("../output/models/STM_stemmed2 40 .Rda")
 load("../output/models/STM_ownership 40 .Rda")
-out <- out_ownership
 ```
 
 
@@ -139,25 +137,27 @@ stmOut$settings$covariates$yvarlevels
 
 After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
 ```{r}
-sagelabs$cov.betas[[2]]$problabels[,1:6]
+sagelabs$cov.betas[[2]]$problabels[,1:5]
 ```
 
 ```{r}
-topics <- matrix(c(1, "Great coalition", 2, "A.Merkel, CSU, Guttenberg", 3, "Jamaica coalition",
-                   4, "Diesel scandal", 5, "A.Merkel, glyphosat scandal", 6, "Seehover vs. Söder",
-                   7, "political trends after the election", 8, "Merkel vs.Schulz", 9, "Trends in electoral districts", 
-                   10, "Steinmeier, Federal President", 11, "G.Schröder & IT themes (Data policy, Wifi, Telekom)", 
-                   12, "Federal Election trends", 13, "Climate policy", 14, "G20 Hamburg", 
-                   15, "error (text processing failure)", 16, "Federal budget statistics", 
-                   17, "Reports on individuals (Berlin)", 18, "Family reunion refugees", 
-                   19, "Polls federal election", 20, "AfD, Weidel in social media", 
+topics <- matrix(c(1, "Great coalition", 2, "A.Merkel, CSU, Guttenberg", 3, "Jamaica coalition", 
+                   4, "Diesel scandal", 5, "A.Merkel, glyphosat scandal", 6, "Seehover vs. Söder", 
+                   7, "political trends after the election", 8, "Merkel vs.Schulz", 
+                   9, "Trends in electoral districts", 10, "Steinmeier, Federal President", 
+                   11, "G.Schröder & IT themes (Data policy, Wifi, Telekom)", 
+                   12, "Federal Election trends", 13, "Climate policy, Die Grünen", 14, "G20 Hamburg", 
+                   15, "error (text processing failure)", 16, "Police academy (Berlin), AfD", 
+                   17, "Federal budget statistics", 18, "Family reunion refugees", 
+                   19, "Polls federal election", 20, "AfD in social media", 
                    21, "Women empowerment, M.Schwesig (SPD)", 22, "elections in Niedersachsen", 
-                   23, "Court sentences, NSU trial", 24, "election capaigns & political talkshows", 
+                   23, "Court sentences, NSU trial", 24, "election campaigns & political talkshows", 
                    25, "German armed forces", 26, "Issues in the Bundestag", 27, "C.Lindner FDP", 
-                   28, "Turkey, Russia", 29, "railway problems (DBahn)", 30, "H.Kohl obituary", 
-                   31, "AfD Gauland, Höcke", 32, "Asylum claims and deportation", 33, "EU policies", 
-                   34, "DIE LINKE", 35, "SPD", 36, "Islam and antisemitism in GER", 37, "AfD in parliament", 
-                   38, "Terror attacks (GER)  & police reports", 39, "Church", 40, "RAF"), ncol=2, byrow=T)
+                   28, "Turkey, Russia", 29, "A.Merkel in east GER", 30, "H.Kohl obituary", 
+                   31, "AfD (Petri, Gauland, Höcke)", 32, "Asylum claims and deportation", 
+                   33, "EU policies", 34, "DIE LINKE", 35, "SPD", 36, "Islam and antisemitism in GER", 
+                   37, "AfD in parliament", 38, "Church", 39, "Terror attacks (GER)  & police reports", 
+                   40, "DHL package attack (Potsdam)"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
@@ -171,21 +171,22 @@ stmOut %>% tidy("theta") -> theta
 
 top_topics <- theta %>% 
   group_by(document) %>%
-  mutate(therank = rank(-gamma, ties.method = "random")) %>%
+  mutate(therank = rank(-gamma)) %>%
   filter(therank == 1) %>%
   select(- therank)
 
 btw.2 <- btw %>%
   mutate(document = articleID) %>%
-  inner_join(.,top_topics, by="document") %>%
+  merge(.,top_topics, by="document") %>%
   ## Combine with Topic label
-  left_join(., topics.df, by="topic") %>%
+  merge(., topics.df, by="topic") %>%
   mutate(allocation = 1) 
 ```
 
 ### now we can inspect the unclear topics
 ```{r}
-btw.2 %>% filter(topic==11) %>% select(title, gamma, url) %>%
+btw.2 %>% filter(topic==17) %>% select(title, gamma, site) %>%
+  arrange(desc(gamma)) %>%
   htmlTable::htmlTable(align="l")
 ```
 
@@ -272,7 +273,7 @@ The estimateEffect() function explores how prevalence of topics varies across do
 #                          metadata = out$meta, uncertainty = "None")
 
 effect <- estimateEffect(c(1:40) ~ownership+s(month), stmOut, 
-                         metadata = out_ownership$meta, uncertainty = "None")
+                         metadata = out$meta, uncertainty = "None")
 #save(out_ownership,stmOut, effect, file = "stm_newsdata.RData")
 ```
 
@@ -385,7 +386,7 @@ df <- df %>%
 
 ```{r}
 p1 <- df %>%
-  filter(corr>0.1 & corr < 1) %>%
+  filter(corr>0.05 & corr < 1) %>%
   ggplot(aes(reorder(topic_name1,topic1), topic_name, 
              fill=corr)) +
   geom_tile() +
@@ -696,6 +697,17 @@ dpi = 600)
 ```
 
 
+Take a closer look to those topics that are discussed most different. 
 
+```{r}
+plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[29,], collapse="\n"),
+            paste(sagelabs$cov.betas[[2]]$problabels[29,], collapse="\n")))
+```
 
+```{r}
+btw.2 %>%
+  filter(grepl("sturm", url) &
+           site == "Tagesschau.de") %>%
+  select(title, site)
+```
 
