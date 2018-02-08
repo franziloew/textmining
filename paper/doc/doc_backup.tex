@@ -64,6 +64,49 @@ Within these models the Latent Dirichlet Allocation (LDA hencefirth) is a widely
 
 \citet{roberts_model_2016} develop a structural topic model (STM) that allows to incorporate external variables that effect both topical content and topical prevalence. We use this approach to analyze online news about the german federal elections, where we allow prevalence of topics to change over time (before and after the elections) and vary across newswire services (private or public) to quantify the effect of news wire source on both topical prevalence and topical content.
 
+\section{Competitor Analysis}
+\subsection{Competitor analysis}
+
+
+
+Users can access a news website either directly or through an intermediary, such as search engines or social media.  As Figure \ref{fig_traffic} illustrates\footnote{The figure shows the percentage of total traffic by source for the time period 18.12.2017-18.01.2017}, direct access\footnote{Direct traffic includes: Direct navigation (Someone types the website URL into a browser); Bookmarks (Clicks on a bookmark/favorite link in a browser); Email (Clicks on links in desktop email clients)} to a website is the main source of traffic for most news providers. In the case of Bild.de, the percentage is 85\%. Also n-tv.de (79\%), SPIEGEL ONLINE (76\%) and Tagesschau.de (75\%) get most of their traffic via the direct route. Other providers are more reliant on intermediaries, mainly search engines. FOCUS ONLINE, DLF and Handelsblatt.com, for example, obtain between 40\% and 45\% of its traffic via search engines. Thus, an important question is, which organic search keywords send traffic to a website. Figure \ref{fig_searchtraffic} displays the percentage of organic search referrals to a specific website that come from this keyword.\footnote{Percentage of organic search referrals in major search engines over the time span Jun-Dec 2017.} E.g., 0.78\% of all organic search referrals to Handelsblatt.com come from the keyword "handelsblatt". It is not surprising that the provider's name is the keyword that generates the majority of traffic for most of the news pages. However, different topics as well as names of other providers are hidden among the top 10 keywords.   
+
+\begin{figure}[H]
+	\caption{Traffic Sources}
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{../figs/traffic_source.png}
+		\label{fig_traffic}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\caption{Search traffic \%}
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{../figs/search_traffic.png}
+		\label{fig_searchtraffic}
+	\end{center}
+\end{figure}
+
+Assuming that each search query is in itself a market where providers compete for traffic, the share of search queries for a keyword that has led visitors to a news page is the market share of that provider. In this context, figures \ref{fig_keywords1} and \ref{fig_keywords2} show the market share of providers for different keywords.\footnote{The figures show the percentage of searches for a keyword that sent traffic to a website in major search engines over the time span Jun-Dec 2017.} Nearly 15\% of all search queries for the keyword "Bundestagswahl 2017" (federal elections 2017) were forwarded to DIE WELT. FOCUS ONLINE, faz.net and SPIEGEL ONLINE obtained a market share of 7\% - 8\%. For the keyword "Groko" (grand coalition between CDU/CSU and SPD), SPIEGEL ONLINE was able to gain the largest market share (17\%) in the past six months, followed by DIE WELT (\%10), FOCUS ONLINE (8\%) and Bild.de (7.5\%). Figure \ref{fig_keywords2} shows the market share of news pages for the keyword search for a specific party. 
+
+Contrary to figure \ref{fig_keywords1} , the x-axes in figure \ref{fig_keywords2} are scaled equally to show not only the market share of news sites for a specific party-keyword, but also for which party this provider has the largest market share. For example, we can see that the market share of sueddeutsche.de is largest for the keyword "Die Grünen". However, the biggest market share among the listed news providers for this keyword has Zeit.de. The largest market share for the keyword "AfD" can be found at DIE WELT, followed by SPIEGEL ONLINE. The proportion of public news providers is comparatively low for all keywords. 
+
+\begin{figure}[H]
+	\begin{center}
+			\includegraphics[width=.8\textwidth]{../figs/keywords1.png}
+			\caption{Keyword market share for policy topics / general}
+			\label{fig_keywords1}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+			\includegraphics[width=.8\textwidth]{../figs/keywords2.png}
+			\caption{Keyword market share for party-keywords}
+			\label{fig_keywords2}
+	\end{center}
+\end{figure}
+
 
 \section{Related Literature}
 
