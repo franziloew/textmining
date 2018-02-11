@@ -120,7 +120,8 @@ dpi = 600
 
 # 3. Model Results
 ```{r caching, echo = FALSE}
-load("../output/models/STM_ownership 40 .Rda")
+load("../output/models/STM_ownership 30 .Rda")
+k <- stmOut$settings$dim$K
 ```
 
 
@@ -137,31 +138,45 @@ stmOut$settings$covariates$yvarlevels
 
 After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
 ```{r}
-sagelabs$cov.betas[[2]]$problabels[,1:5]
+sagelabs$cov.betas[[1]]$problabels[,1:5]
 ```
 
 ```{r}
-topics <- matrix(c(1, "Great coalition", 2, "A.Merkel, CSU, Guttenberg", 3, "Jamaica coalition", 
-                   4, "Diesel scandal", 5, "A.Merkel, glyphosat scandal", 6, "Seehover vs. Söder", 
-                   7, "political trends after the election", 8, "Merkel vs.Schulz", 
+topics <- matrix(c(1, "Great coalition", 2, "A.Merkel, CSU, Guttenberg", 3, "Coalition talks (Jamaica, Niedersachsen)", 
+                   4, "Diesel scandal", 5, "A.Merkel, glyphosat scandal", 6, "DIE LINKE", 
+                   7, "Islam and antisemitism in GER", 8, "Merkel vs.Schulz", 
                    9, "Trends in electoral districts", 10, "Steinmeier, Federal President", 
                    11, "G.Schröder & IT themes (Data policy, Wifi, Telekom)", 
-                   12, "Federal Election trends", 13, "Climate policy, Die Grünen", 14, "G20 Hamburg", 
-                   15, "error (text processing failure)", 16, "Police academy (Berlin), AfD", 
-                   17, "Federal budget statistics", 18, "Family reunion refugees", 
+                   12, "Federal Election trends", 13, "EU policies", 14, "G20 Hamburg", 
+                   15, "error (text processing failure)", 16, "Refugees, asylum claims", 
+                   17, "Budget statistics, social welfare", 18, "Jamaica Coalition talks", 
                    19, "Polls federal election", 20, "AfD in social media", 
-                   21, "Women empowerment, M.Schwesig (SPD)", 22, "elections in Niedersachsen", 
-                   23, "Court sentences, NSU trial", 24, "election campaigns & political talkshows", 
+                   21, "Women empowerment, M.Schwesig (SPD)", 22, "AfD (Petri, Gauland, Höcke)", 
+                   23, "Terror attack Berlin (Amri)", 24, "election campaigns & political talkshows", 
                    25, "German armed forces", 26, "Issues in the Bundestag", 27, "C.Lindner FDP", 
-                   28, "Turkey, Russia", 29, "A.Merkel in east GER", 30, "H.Kohl obituary", 
-                   31, "AfD (Petri, Gauland, Höcke)", 32, "Asylum claims and deportation", 
-                   33, "EU policies", 34, "DIE LINKE", 35, "SPD", 36, "Islam and antisemitism in GER", 
-                   37, "AfD in parliament", 38, "Church", 39, "Terror attacks (GER)  & police reports", 
-                   40, "DHL package attack (Potsdam)"), ncol=2, byrow=T)
+                   28, "Turkey, Russia", 29, "Terror attacks (GER)  & police reports", 30, "H.Kohl obituary"), ncol=2, byrow=T)
+
+# topics <- matrix(c(1, "Great coalition", 2, "A.Merkel, CSU, Guttenberg", 3, "Jamaica coalition", 
+#                    4, "Diesel scandal", 5, "A.Merkel, glyphosat scandal", 6, "Seehover vs. Söder", 
+#                    7, "political trends after the election", 8, "Merkel vs.Schulz", 
+#                    9, "Trends in electoral districts", 10, "Steinmeier, Federal President", 
+#                    11, "G.Schröder & IT themes (Data policy, Wifi, Telekom)", 
+#                    12, "Federal Election trends", 13, "Climate policy, Die Grünen", 14, "G20 Hamburg", 
+#                    15, "error (text processing failure)", 16, "Police academy (Berlin), AfD", 
+#                    17, "Federal budget statistics", 18, "Family reunion refugees", 
+#                    19, "Polls federal election", 20, "AfD in social media", 
+#                    21, "Women empowerment, M.Schwesig (SPD)", 22, "elections in Niedersachsen", 
+#                    23, "Court sentences, NSU trial", 24, "election campaigns & political talkshows", 
+#                    25, "German armed forces", 26, "Issues in the Bundestag", 27, "C.Lindner FDP", 
+#                    28, "Turkey, Russia", 29, "A.Merkel in east GER", 30, "H.Kohl obituary", 
+#                    31, "AfD (Petri, Gauland, Höcke)", 32, "Asylum claims and deportation", 
+#                    33, "EU policies", 34, "DIE LINKE", 35, "SPD", 36, "Islam and antisemitism in GER", 
+#                    37, "AfD in parliament", 38, "Church", 39, "Terror attacks (GER)  & police reports", 
+#                    40, "DHL package attack (Potsdam)"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
-         topic = 1:40) 
+         topic = 1:k) 
 ```
 
 ## Assign a topic to each document (choose by gamma)
@@ -225,7 +240,7 @@ freq <- as.data.frame(freq) %>%
     mutate(ownership=stmOut$settings$covariates$yvarlevels,
            topic = 1)
 
-for(i in 2:40) {
+for(i in 2:k) {
   freq1 <- tapply(stmOut$theta[,i], stmOut$settings$covariates$betaindex, mean)
   freq1 <- as.data.frame(freq1) %>% 
     transmute(ownership=stmOut$settings$covariates$yvarlevels,
@@ -261,18 +276,15 @@ p2 <- ggplot(freq, aes(reorder(topic_name,frequency), freq_diff,
 
 p1 + p2 
 
-ggsave(filename = "../figs/topic_proportion.png", device = "png",width = 12, height = 10,
-dpi = 600)
+# ggsave(filename = "../figs/topic_proportion.png", device = "png",width = 12, height = 10,
+# dpi = 600)
 ```
 
 ## 3.2. Difference in topic prevalence
 The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
 
 ```{r}
-# effect <- estimateEffect(c(1:40) ~site+s(month), stmOut, 
-#                          metadata = out$meta, uncertainty = "None")
-
-effect <- estimateEffect(c(1:40) ~ownership+s(month), stmOut, 
+effect <- estimateEffect(c(1:k) ~ownership+s(month), stmOut, 
                          metadata = out$meta, uncertainty = "None")
 #save(out_ownership,stmOut, effect, file = "stm_newsdata.RData")
 ```
@@ -329,8 +341,8 @@ p1 <- coeff %>% filter(parameter %in% sites) %>%
 
 p1
 
-ggsave(plot = p1, filename = "../figs/estimates_site.png", device = "png",width = 9, height = 7,
-dpi = 600)
+# ggsave(plot = p1, filename = "../figs/estimates_site.png", device = "png",width = 9, height = 7,
+# dpi = 600)
 ```
 
 ```{r}
@@ -354,19 +366,19 @@ dpi = 600)
 ```{r}
 ## Create Dataframe with correlations
 cor <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==1,])
-colnames(cor) <- 1:40
+colnames(cor) <- 1:k
   
 df <- as.data.frame(cor) %>% 
-  mutate(topic = 1:40) %>%
+  mutate(topic = 1:k) %>%
   melt(., id="topic", value.name="corr") %>%
   mutate(site = stmOut$settings$covariates$yvarlevels[1])
 
 for (i in 2:2) {
   cor <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==i,])
-  colnames(cor) <- 1:40
+  colnames(cor) <- 1:k
 
   df1 <- as.data.frame(cor) %>%
-    mutate(topic = 1:40) %>%
+    mutate(topic = 1:k) %>%
     melt(., id="topic", value.name="corr") %>%
     mutate(site = stmOut$settings$covariates$yvarlevels[i])
 
@@ -700,8 +712,8 @@ dpi = 600)
 Take a closer look to those topics that are discussed most different. 
 
 ```{r}
-plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[29,], collapse="\n"),
-            paste(sagelabs$cov.betas[[2]]$problabels[29,], collapse="\n")))
+plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[27,], collapse="\n"),
+            paste(sagelabs$cov.betas[[2]]$problabels[27,], collapse="\n")))
 ```
 
 ```{r}
