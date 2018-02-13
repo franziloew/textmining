@@ -18,17 +18,18 @@ lapply(libs, library, character.only = TRUE)
 rm(list =ls())
 
 load("../output/news_cleaned.Rda")
-okt <- read_csv("../data/eventbride/eventbride_okt_18.csv")
-nov_03 <- read_csv("../data/eventbride/eventbride_nov_03.csv")
-nov_22 <- read_csv("../data/eventbride/eventbride_nov_22.csv")
-dec_16 <- read_csv("../data/eventbride/eventbride_dec_16.csv")
-jan_1 <- read_csv("../data/eventbride/eventbride_jan_1.csv")
+okt <- read_csv("../data/eventregistry/eventbride_17_10_18.csv")
+nov_03 <- read_csv("../data/eventregistry/eventbride_17_11_03.csv")
+nov_22 <- read_csv("../data/eventregistry/eventbride_17_11_22.csv")
+nov_30 <- read_csv("../data/eventregistry/eventbride_17_11_30.csv")
+dec_16 <- read_csv("../data/eventregistry/eventbride_17_12_16.csv")
+jan_1 <- read_csv("../data/eventregistry/eventbride_18_01_1.csv")
 ```
 
 ## combine dataframes
 
 ```{r}
-df_full <- bind_rows(list(okt,nov_03,nov_22,dec_16,jan_1)) %>%
+df_full <- bind_rows(list(okt,nov_03,nov_22,nov_30,dec_16,jan_1)) %>%
   mutate(text = body,
          # Extract site 
          site = str_extract(source, "(?<='uri': ')[A-z][^']*")) %>%
@@ -57,34 +58,34 @@ df_full %>%
 
 
 ```{r}
-keeps <- c("spiegel.de", "focus.de", "zeit.de","bild.de",
-           "tagesschau.de", "welt.de")
+keeps <- c("bild.de","focus.de", "zeit.de","spiegel.de", "stern.de",
+           "tagesschau.de", "welt.de", "zeit.de")
 
 df <- df_full %>%
-  mutate(title_text = paste(title, text, sep=" ")) %>%
   filter(site %in% keeps) %>%
   filter(date>=as.Date("2017-06-01")) %>%
-  filter(date< as.Date("2018-01-01"))
+  filter(date< as.Date("2018-01-01")) %>%
+  mutate(title_text = paste(title, text, sep=" "))
 ```
 
 ## select politic section
 ```{r}
-pat1 <- "\\w\\.de/politik/deutschland"
-pat2 <- "\\w\\.de/politik/inland"
-pat3 <- "\\w\\.de/politik/wahl"
-pat4 <- "\\w\\.de/politik/bundestagswahl"
-pat5 <- "tagesschau.de/inland"
-
-df %>%
-  mutate(politics = ifelse(grepl(paste(pat1,pat2,pat3,pat4,pat5,
-                      sep="|"), url, perl = TRUE),1,0)) -> df
-
-#........................
-# pat <- paste("cdu","csu","union","spd","fdp","afd",
-#              "linkspartei","die linke","die grünen","bündnis 90", sep="|")
+# pat1 <- "\\w\\.de/politik/deutschland"
+# pat2 <- "\\w\\.de/politik/inland"
+# pat3 <- "\\w\\.de/politik/wahl"
+# pat4 <- "\\w\\.de/politik/bundestagswahl"
+# pat5 <- "tagesschau.de/inland"
 # 
 # df %>%
-#   mutate(politics = ifelse(grepl(pat, title_text, ignore.case = TRUE),1,0)) -> btw1
+#   mutate(politics = ifelse(grepl(paste(pat1,pat2,pat3,pat4,pat5,
+#                       sep="|"), url, perl = TRUE),1,0)) -> df
+
+#........................
+pat <- paste("cdu","csu","union","spd","fdp","afd",
+             "linkspartei","die linke","die grünen","bündnis 90", sep="|")
+
+df %>%
+  mutate(politics = ifelse(grepl(pat, title_text, ignore.case = TRUE),1,0)) -> df
 ```
 
 ```{r}
