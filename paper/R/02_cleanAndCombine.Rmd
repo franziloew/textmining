@@ -393,7 +393,7 @@ btw <- btw %>%
 # Process data
 
 ### without stemming
-processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("ownership","text_cleaned1","month")],
+processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
                            wordLengths = c(2,Inf),
                            lowercase = F,
                            removestopwords = F,
@@ -401,20 +401,9 @@ processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("ownership","tex
                            removepunctuation = F,
                            stem = F)
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
-out$meta$ownership <- as.factor(out$meta$ownership)
-###
+out$meta$site <- as.factor(out$meta$site)
 
-# processed <- textProcessor(btw$text_cleaned1, metadata = btw[,c("site","text_cleaned1","month")],
-#                            wordLengths = c(2,Inf),
-#                            lowercase = F,
-#                            removestopwords = F,
-#                            removenumbers = F,
-#                            removepunctuation = F,
-#                            stem = F)
-# out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
-# out$meta$site <- as.factor(out$meta$site)
-
-save(btw, out, file="../output/btw_comb.Rda")
+save(btw, out, file="../output/btw_out.Rda")
 ```
 
 # FB Shares
