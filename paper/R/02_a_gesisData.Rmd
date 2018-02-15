@@ -18,6 +18,7 @@ library(ggplot2)     # Static data visualization
 library(dplyr)       # Data manipulation
 library(RColorBrewer)
 library(foreign)
+library(tidyr)
 
 
 # Theming
@@ -30,7 +31,7 @@ quartzFonts(
 )
 
 theme_set(
-  theme_bw(base_family = "Roboto", base_size = 8) +
+  theme_bw(base_family = "Roboto", base_size = 12) +
     theme(
       plot.title = element_text(size = 10,
                                 margin = margin(0, 0, 4, 0, "pt")),
@@ -94,5 +95,21 @@ df %>%
   filter(year > 2010) %>%
   ggplot(aes(cdu, fill=factor(agerange), colour=factor(agerange))) +
   geom_density(alpha=0.7, position = "fill") 
+```
+
+## Alexa Data
+
+```{r}
+age <- read_csv("../data/alexa/demographics/age.csv")
+
+age %>% select(-X1) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de) -> age
+```
+
+```{r}
+ggplot(age, aes(site, value, colour=factor(age))) +
+  geom_point(size=2) +
+  labs(x="",y="",colour="age group") +
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
