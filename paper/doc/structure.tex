@@ -188,9 +188,11 @@ This process revealed that a model with 40 topics best reflects the structure in
 % ----------------------
 \section{Empirical Evaluation}\label{ch_empirical}
 
-This section summarizes the results of the STM. Subsequently different measures to analyze the content differences between public and private ownership are applied according to the following approaches: (1) To address the question whether market imperfections exist in that sense, that some topics are not covered by private but by public news provider, I use the document-topic probability $\theta$, to estimate the conditional expectation of topic prevalence for given document characteristics. (2) Next, I find all edges between topics where they exhibit a positive correlation of $\theta$ above 0.1 to examine how topics are correlated differently for different covariate levels, indicating how topics are connected and framed differently between private and public media. Approaches (1) and (2) have been used in \citep{roberts_model_2016}. However, we extend the analysis by (3) calculating the similarity of the word-topic distribution $\beta$ between the news provider using various distance measures, to identify which topics are discussed similar or differently. 
+This section summarizes the results of the STM. Subsequently different measures to analyze the content differences between public and private ownership are applied according to the following approaches: (1) To address the question whether market imperfections exist in that sense, that some topics are not covered by private but by public news provider, I use the document-topic probability $\theta$, to estimate the conditional expectation of topic prevalence for given document characteristics (See section \ref{subsectiona_topicprevalence}). (2) Next, I find all edges between topics where they exhibit a positive correlation of $\theta$ above 0.1 to examine how topics are correlated differently for different covariate levels, indicating how topics are connected and framed differently between private and public media (see section \ref{subsection_topiccorrelation}). Approaches (1) and (2) have been used in \citep{roberts_model_2016}. However, we extend the analysis by (3) calculating the similarity of the word-topic distribution $\beta$ between the news provider using various distance measures, to identify which topics are discussed similar or differently (see section \ref{subsection_similarity}). 
 
-Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, we looked at the most frequent words in that topic and the most representative articles \citep{roberts_model_2016}. 
+In order to get an initial overview of the results, Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles \citep{roberts_model_2016}. 
+
+It becomes apparent that the topic (topic 3) about the coalition talks between the so-called Jamaica parties (CDU/CSU, FDP and Bündnis 90/Die Grünen) is the topic with the highest expected frequency in the whole corpus, followed by the topics about refugees in Germany (topic 32) and the coalition talks between CDU/CSU and SPD (topic 1), that began shortly after the failure of the Jamaican coalition. Particularly in the latter case, there is no discernible difference between private and public providers, while topic 3 and 32 are more likely to be seen in public news. The biggest difference can be seen in Topic 23, which covers court proceedings, especially in relation to the NSU case. Private providers seem to be less likely to report on this topic, as it is of less likelihood of observing this topic in the corpus of private news. Topic 7, which deals with political trends in Germany, seems to be discussed more often in private than in public news.    
 
 \begin{figure}[H]
 	\begin{center}
@@ -200,28 +202,27 @@ Figure \ref{fig_topic_proportion} displays the topics ordered by their expected 
 \end{center}
 \end{figure}
 
-\textcolor{red}{AUSWERTUNG}
+\subsection{Differences in topic prevalence}\label{subsectiona_topicprevalence}
 
-\subsection{Differences in topic prevalence}
-Since news source is included as a covariate in estimating topical prevalence part within the model, the frequency a topic is discussed within a news corpus can be calculated \citep{roberts_model_2016}. I estimate the conditional expectation of topic prevalence for given document characteristics. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation \ref{eq_1}). The stm-package provides a function that uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results \citep{roberts_stm:_2016}. 
+To identify which of these differences is significant, the conditional expectation of topic prevalence for given document characteristics can be estimated \citep{roberts_model_2016}. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation \ref{eq_1}). The stm-package provides a function that uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results \citep{roberts_stm:_2016}.
 
 \begin{equation}\label{eq_1}
-	\theta_d=\alpha+\beta_1x_{site}+\beta_2x_{month}+\epsilon
+	\theta_d=\alpha+\beta_1x_{ownership}+\beta_2x_{month}+\epsilon
 \end{equation}
 
-Figure \ref{fig_estimateEffects} displays the regression results for private vs. public. As the month an articles was published is included in the regression, the intercept indicates the mean of private news suppliers in June 2017.\footnote{Table of regression results can be found in appendix.}
+Figure \ref{fig_estimateEffects} displays the regression results for private vs. public. 
 
 \begin{figure}[H]
 	\caption{Regression results}
 		\begin{center}
-			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/estimates_site.png}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/estimates.png}
 		\end{center}
 	\label{fig_estimateEffects}
 \end{figure}
 
 \textcolor{red}{AUSWERTUNG}
 
-\subsection{Topic correlations}
+\subsection{Topic correlations}\label{subsection_topiccorrelation}
 
 Next, the topic correlation is calculated, indicating how topics are connected and framed in public and private media. In Figure \ref{fig_topic_correlations}, indicates all edges between topics where they exhibit a positive correlation above 0.1 \citep{roberts_model_2016}.
 
@@ -243,7 +244,7 @@ Next, the topic correlation is calculated, indicating how topics are connected a
 
 \textcolor{red}{AUSWERTUNG}
 
-\subsection{Differences in word-topic distributions}\label{ch_similarity}
+\subsection{Differences in word-topic distributions}\label{subsection_similarity}
 
 Previous topic modeling research try to measure the similarity between topics, comparing the word-topic-distribution between the topics (most of the research uses LDA without metadata, so the word-topic-distribution is the same within the whole corpus). cosine similarity \citep{he_detecting_2009}, \citep{ramage_labeled_2009}, Kullback-Leibler (KL) \citep{newman_distributed_2009}, \citep{wang_mining_2009} and the average Log Odds Ratio \citep{chaney_visualizing_2012} are frequently used metrics to compare word probability distributions. \citet{kim_topic_2011} compare six popular similarity metrics in terms of log likelihood of data, concluding that Jensen-Shannon Divergence (the symmetric variation of KL divergence) is best in terms of performance and generality. 
 

@@ -1,0 +1,98 @@
+---
+title: "Gesis Data"
+subtitle: ""
+author: "Franziska Löw"
+date: ""
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: "lumen"
+    highlight: "tango"
+    code_folding: show
+    self_contained: true
+---
+
+```{r include=FALSE}
+library(ggplot2)     # Static data visualization
+library(dplyr)       # Data manipulation
+library(RColorBrewer)
+library(foreign)
+
+
+# Theming
+quartzFonts(
+  Roboto =
+    c("Roboto-Light",
+      "Roboto-Bold",
+      "Roboto-Regular",
+      "Roboto-Thin")
+)
+
+theme_set(
+  theme_bw(base_family = "Roboto", base_size = 8) +
+    theme(
+      plot.title = element_text(size = 10,
+                                margin = margin(0, 0, 4, 0, "pt")),
+      plot.subtitle = element_text(size = 12),
+      plot.caption = element_text(size = 6),
+      plot.background   = element_rect("#fafafa", "#fafafa"),
+      panel.background  = element_rect("#fafafa"),
+      panel.border = element_blank()
+    )
+)
+
+rm(list=ls())
+col <- brewer.pal(6,"Dark2")
+```
+
+# 2. Data 
+```{r caching, echo = FALSE}
+gesis <- read_dta("paper/data/gesis.dta")
+```
+
+```{r}
+var.label <- c()
+
+for (i in 1:length(gesis)) {
+  var.label[i] <- attr(gesis[[i]], "label")
+}
+```
+
+```{r}
+gesis <- as.data.frame(gesis)
+names(gesis) <- var.label
+```
+
+```{r}
+df <- gesis %>% transmute(month = Erhebungsmonat,
+                    year = Erhebungsjahr,
+                    votingParticipation = `Wahlbeteiligung: Absicht`,
+                    votingParty = `Parteienwahl: Absicht`,
+                    votingPartyPast = `Wahl: Rückerinnerung`,
+                    spd = `Skalometer: SPD`,
+                    cdu = `Skalometer: CDU`,
+                    csu = `Skalometer: CSU`,
+                    fdp = `Skalometer: FDP`,
+                    grüne = `Skalometer: Grüne`,
+                    afd = `Skalometer: Republikaner/AfD`,
+                    pds = `Skalometer: PDS`,
+                    government = `Skalometer: Regierung`,
+                    opposition = `Skalometer: Opposition`,
+                    leftright = `Links-rechts-Kontinuum`,
+                    leftwing = Linksorientierung,
+                    rightwing = Rechtsorientierung,
+                    euMembership = `EU-Mitgliedschaft`,
+                    age = `Alter in Jahren`,
+                    agerange = factor(`Alter kategorisiert`),
+                    bundesland = factor(Bundesland),
+                    professionalEdu = `Abgeschlossene Berufsausbildung`)
+```
+
+```{r}
+df %>% 
+  filter(year > 2010) %>%
+  ggplot(aes(cdu, fill=factor(agerange), colour=factor(agerange))) +
+  geom_density(alpha=0.7, position = "fill") 
+```
+
