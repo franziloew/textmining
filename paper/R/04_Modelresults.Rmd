@@ -123,7 +123,7 @@ k <- stmOut$settings$dim$K
 
 ## Label topics
 ```{r}
-sagelabs <- sageLabels(stmOut, 25)
+sagelabs <- sageLabels(stmOut, 20)
 ```
 
 ```{r}
@@ -604,10 +604,115 @@ ggsave(filename = "../figs/distance.png", device = "png",width = 12, height = 8,
 dpi = 600)
 ```
 
-## 3.5 Plotquote
-Take a closer look to those topics that are discussed most different. 
+## Sentiment analysis
 
-```{r fig.height=6}
-plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[23,], collapse="\n"),
-            paste(sagelabs$cov.betas[[2]]$problabels[23,], collapse="\n")))
+```{r}
+sent <- c(
+  # positive Wörter
+  readLines("dict/SentiWS_v1.8c_Negative.txt",
+            encoding = "UTF-8"),
+  # negative Wörter
+  readLines("dict/SentiWS_v1.8c_Positive.txt",
+            encoding = "UTF-8")
+) %>% lapply(function(x) {
+  # Extrahieren der einzelnen Spalten
+  res <- strsplit(x, "\t", fixed = TRUE)[[1]]
+  return(data.frame(words = res[1], value = res[2],
+                    stringsAsFactors = FALSE))
+}) %>%
+  bind_rows %>% 
+  mutate(word = gsub("\\|.*", "", words) %>% tolower,
+         value = as.numeric(value)) %>% 
+  # manche Wörter kommen doppelt vor, hier nehmen wir den mittleren Wert
+  group_by(word) %>% summarise(value = mean(value)) %>% ungroup
 ```
+
+Apply the dictionary on the artciles
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# Tokenize text
+token <- btw.2 %>%
+  unnest_tokens(word, text)
+
+# Combine with sentiment values
+sentDF <- left_join(token, sent, by="word") %>% 
+  mutate(sentiment = as.numeric(value)) %>% 
+  filter(!is.na(sentiment)) 
+```
+
+Calculate the number of total articles to weight the senitiment value. 
+
+```{r}
+sentDF.red <- sentDF %>%
+  
+  # Count number of articles by medium
+  group_by(site) %>% 
+  add_tally() %>%
+  ungroup() %>%
+  mutate(totalcount = n) %>%
+  select(-n) %>%
+  
+  # count number of articles by medium and topic
+  group_by(site, topic_name) %>%
+  add_tally() %>%
+  ungroup() %>%
+  mutate(count = n) %>%
+  mutate(weight = count/totalcount) %>%
+  
+  # calculate weight and weighted sentiment score
+  group_by(site, topic_name) %>%
+  summarize(sent_value = mean(sentiment),
+            weight = mean(weight)) %>%
+  mutate(weighted = sent_value*weight)
+```
+
+### Plot Sentiment
+
+Unweighted
+```{r fig.height=12}
+sentDF.red %>%
+  ggplot(aes(topic_name, sent_value)) +
+  geom_col(fill=col[3], alpha=0.8) +
+  coord_flip() +
+  facet_wrap(~site, ncol = 7) +
+  labs(x="", y="sentiment value") +
+  theme(axis.text.x = element_text(size=10, angle = 90))
+
+ggsave(filename = "../figs/sentiment.png", device = "png",width = 12, height = 8,
+dpi = 600)
+```
+
+weighted
+```{r fig.height=12}
+sentDF.red %>%
+  ggplot(aes(topic_name, weighted)) +
+  geom_col(fill=col[3], alpha=0.8) +
+  coord_flip() +
+  facet_wrap(~site, ncol = 7) +
+  labs(x="", y="sentiment value") +
+  theme(axis.text.x = element_text(size=10, angle = 90))
+
+ggsave(filename = "../figs/sent_weighted.png", device = "png",width = 12, height = 8,
+dpi = 600)
+```
+
+### Radar plot
+```{r}
+library(radarchart)
+```
+
+```{r}
+sentDF.red %>% 
+  select(site, topic_name, sent_value) %>%
+  spread(key=site, value=sent_value) %>%
+  ungroup() -> radar
+```
+
+```{r}
+chartJSRadar(scores = radar, labelSize = 8, 
+             scaleStartValue = -0.15,
+             maxScale = 0, 
+             showToolTipLabel = TRUE,
+             width = 8, height = 8)
+```
+

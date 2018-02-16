@@ -70,41 +70,24 @@ df <- df_full %>%
 
 ## select politic section
 ```{r}
-# pat1 <- "\\w\\.de/politik/deutschland"
-# pat2 <- "\\w\\.de/politik/inland"
-# pat3 <- "\\w\\.de/politik/wahl"
-# pat4 <- "\\w\\.de/politik/bundestagswahl"
-# pat5 <- "tagesschau.de/inland"
-# 
-# df %>%
-#   mutate(politics = ifelse(grepl(paste(pat1,pat2,pat3,pat4,pat5,
-#                       sep="|"), url, perl = TRUE),1,0)) -> df
-
-#........................
-pat <- paste("cdu","csu","union","spd","fdp","afd",
-             "linkspartei","die linke","die grünen","bündnis 90", sep="|")
+pat1 <- "\\w\\.de/politik/deutschland"
+pat2 <- "\\w\\.de/politik/inland"
+pat3 <- "\\w\\.de/politik/wahl"
+pat4 <- "\\w\\.de/politik/bundestagswahl"
+pat5 <- "tagesschau.de/inland"
 
 df %>%
-  mutate(politics = ifelse(grepl(pat, title_text, ignore.case = TRUE),1,0)) -> df
-```
+  mutate(politics = ifelse(grepl(paste(pat1,pat2,pat3,pat4,pat5,
+                      sep="|"), url, perl = TRUE),1,0)) -> df
 
-```{r}
+#........................
+# pat <- paste("cdu","csu","union","spd","fdp","afd",
+#              "linkspartei","die linke","die grünen","bündnis 90", sep="|")
+# 
+# df %>%
+#   mutate(politics = ifelse(grepl(pat, title_text, ignore.case = TRUE),1,0)) -> df
+
 btw <- df %>% filter(politics==1)
-```
-
-```{r}
-btw %>%
-  group_by(date, site) %>%
-  dplyr::summarize(obs = n()) %>%
-  ggplot(aes(date, obs, color = factor(site))) +
-  geom_line() +
-  #geom_vline(aes(xintercept=as.Date("2017-09-24")),
-  #           linetype = 2, color="grey40") +
-  #geom_vline(aes(xintercept=as.Date("2017-11-20")),
-  #               linetype = 2, color="grey40") +
-  #scale_color_manual(values = col) +
-  labs(x="", y="Count",color="") +
-  scale_x_date(breaks = date_breaks("2 weeks"), labels=date_format("%d.%m", tz="CET"))
 ```
 
 ## count number of terms in a string
@@ -377,16 +360,6 @@ bigrams %>%
 # Structural Topic Model
 
 ## Preparation
-```{r}
-btw <- btw %>% 
-  #mutate(ownership = ifelse(site == "Tagesschau.de", "public", "private"))
-  filter(!grepl("sturm", url) |
-           site != "Tagesschau.de") %>%
-  filter(!grepl("Deutsche Bahn", text) | 
-           site!="Tagesschau.de") %>%
-  filter(!grepl("bahnstrecke", text) | 
-           site!="Tagesschau.de")
-```
 
 ### Build Corpus
 ```{r eval=FALSE, include=FALSE}
