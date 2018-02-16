@@ -301,6 +301,90 @@ chartJSRadar(scores = radar, labelSize = 9, maxScale = 0.1,
              width = 8, height = 8)
 ```
 
+## 3.3 Topic Correlation
+```{r}
+## Create Dataframe with correlations
+cor <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==1,])
+colnames(cor) <- 1:k
+  
+df <- as.data.frame(cor) %>% 
+  mutate(topic = 1:k) %>%
+  melt(., id="topic", value.name="corr") %>%
+  mutate(site = stmOut$settings$covariates$yvarlevels[1])
+
+for (i in 2:2) {
+  cor <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==i,])
+  colnames(cor) <- 1:k
+
+  df1 <- as.data.frame(cor) %>%
+    mutate(topic = 1:k) %>%
+    melt(., id="topic", value.name="corr") %>%
+    mutate(site = stmOut$settings$covariates$yvarlevels[i])
+
+  df <- rbind(df,df1)
+}
+```
+
+```{r}
+df <- df %>% 
+  left_join(.,topics.df, by = "topic") %>%
+  mutate(topic1 = topic,
+         topic_name1 = topic_name,
+         topic = as.numeric(variable)) %>%
+  select(-topic_name) %>%
+  left_join(., topics.df, by="topic")
+```
+
+```{r}
+p1 <- df %>%
+  filter(corr>0.05 & corr < 1) %>%
+  ggplot(aes(reorder(topic_name1,topic1), topic_name, 
+             fill=corr)) +
+  geom_tile() +
+  facet_wrap(~site, ncol = 6) +
+  #scale_fill_distiller(palette = "Spectral", trans = "reverse") + 
+  labs(x="", y="", fill="correlation") +
+  theme_bw(base_family = "Roboto", base_size = 10) +
+  theme(axis.text.x = element_text(angle=90, size = 6),
+        #plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
+        axis.ticks = element_line(colour = 'transparent'))
+
+p1
+
+# ggsave(plot = p1, filename = "../figs/topic_correlation.png", device = "png",width = 9, height = 5,
+# dpi = 600)
+```
+
+### Network graph
+```{r}
+i <- 1
+cormat <- cor(stmOut$theta[stmOut$settings$covariates$betaindex==i,])
+cormat <- ifelse(cormat >=0.05, cor, 0)
+# 
+g <- igraph::simplify(igraph::graph.adjacency(cormat, mode = "undirected", weight=TRUE))
+igraph::V(g)$name <- topics.df$topic_name
+igraph::V(g)$props <- colMeans(stmOut$theta)
+
+p1 <- topicCorrNetwork(g, stmOut$settings$covariates$yvarlevels[i])
+# 
+ggsave(
+      paste0("../figs/corrplot",i,".png"),
+      p1,
+      dpi = 300,
+      width = 9,
+      height = 6
+    )
+```
+
+### Overlapping Correlation
+Pairs of topics where an edge exists in both Newspaper, we denote with a light blue dot. Pairs of topics where Newspaper1, but not Newspaper2 have an edge between them, we denote with a red square, and those where Newspaper2, but not Newspaper1 have an edge between them we denote with a blue square.
+We then sort the matrix by topics that are similarly correlated with other topics in Newspaper1 and Newspaper2 to those that are not similarly correlated.
+```{r}
+png("../figs/overlapping_correlation.png")
+topicCorrCompare(1,5)
+dev.off()
+```
 
 ## Sentiment analysis
 
