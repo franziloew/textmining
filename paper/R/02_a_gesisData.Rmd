@@ -17,7 +17,7 @@ output:
 library(ggplot2)     # Static data visualization
 library(dplyr)       # Data manipulation
 library(RColorBrewer)
-library(foreign)
+library(haven)
 library(tidyr)
 
 
@@ -49,7 +49,7 @@ col <- brewer.pal(6,"Dark2")
 
 # 2. Data 
 ```{r caching, echo = FALSE}
-gesis <- read_dta("paper/data/gesis.dta")
+gesis <- read_stata("paper/data/gesis.dta")
 ```
 
 ```{r}
@@ -61,7 +61,7 @@ for (i in 1:length(gesis)) {
 ```
 
 ```{r}
-gesis <- as.data.frame(gesis)
+gesis <- as.tbl(gesis)
 names(gesis) <- var.label
 ```
 
@@ -88,28 +88,144 @@ df <- gesis %>% transmute(month = Erhebungsmonat,
                     agerange = factor(`Alter kategorisiert`),
                     bundesland = factor(Bundesland),
                     professionalEdu = `Abgeschlossene Berufsausbildung`)
+
 ```
 
+Generate Age range categories (same as alexa data)
 ```{r}
-df %>% 
-  filter(year > 2010) %>%
-  ggplot(aes(cdu, fill=factor(agerange), colour=factor(agerange))) +
-  geom_density(alpha=0.7, position = "fill") 
+df <- df %>%
+  mutate(agerange = ifelse(agerange %in% c(1,2), "18-24", agerange),
+         agerange = ifelse(agerange %in% c(3,4), "25-34", agerange),
+         agerange = ifelse(agerange %in% c(5,6), "35-44", agerange),
+         agerange = ifelse(agerange == 7, "45-49", agerange),
+         agerange = ifelse(agerange %in% c(8,9), "50-69", agerange),
+         agerange = ifelse(agerange == 10, "70+", agerange)) 
+```
+
+How do preferences change over time?
+
+```{r}
+plot.df <- df %>%
+  filter(year>2000) %>%
+  group_by(agerange, year) %>%
+  summarise(spd = mean(spd, na.rm = T ),
+            cdu = mean(cdu, na.rm = T),
+            csu = mean(csu, na.rm = T),
+            fdp = mean(fdp, na.rm = T),
+            grüne = mean(grüne, na.rm = T),
+            afd = mean(afd, na.rm = T),
+            pds = mean(pds, na.rm = T)) %>%
+  gather(party, value, spd:pds)
+```
+
+```{r fig.width=12}
+plot.df %>%
+  ggplot(aes(year, agerange, size=value, color=value)) +
+  geom_point(show.legend = F) +
+  facet_wrap(~party, ncol = 7) +
+  labs(x="", y="", color="") +
+  guides(color = guide_legend(ncol=10))+
+  theme(legend.position = "top")
 ```
 
 ## Alexa Data
 
-```{r}
-age <- read_csv("../data/alexa/demographics/age.csv")
+How similar is this site's audience to the general internet population? --> "Relative to general internet population..."
 
-age %>% select(-X1) %>%
-  gather(site, value, focus.de,spiegel.de:tagesspiegel.de) -> age
+Change relation --> "Relative to the other news websites..."
+
+### Age
+```{r message=FALSE, warning=FALSE}
+age1 <- read_csv("../data/alexa/demographics/age.csv")
+
+age1 %>% select(-c(X1,age)) -> age.m
+age.m <- as.matrix(age.m)
+
+# devide by maxvalue of each row
+maxval <- age.m/apply(age.m, 1, max)
+
+age <- as.data.frame(maxval) %>%
+  mutate(age = age1$age) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
 ```
 
-```{r}
-ggplot(age, aes(site, value, colour=factor(age))) +
-  geom_point(size=2) +
+```{r fig.width=12}
+ggplot(age, aes(site, value)) +
+  geom_col(fill = col[1]) +
+  coord_flip() +
+  facet_wrap(~age, ncol = 6) +
   labs(x="",y="",colour="age group") +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
+### Gender
+```{r message=FALSE, warning=FALSE}
+gender1 <- read_csv("../data/alexa/demographics/gender.csv")
+
+gender1 %>% select(-c(X1,gender)) -> gender.m
+gender.m <- as.matrix(gender.m)
+
+# devide by maxvalue of each row
+maxval <- gender.m/apply(gender.m, 1, max)
+
+gender <- as.data.frame(maxval) %>%
+  mutate(gender = gender1$gender) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+```
+
+```{r fig.width=12}
+ggplot(gender, aes(site, value)) +
+  geom_col(fill = col[3]) +
+  coord_flip() +
+  facet_wrap(~gender, ncol = 6) +
+  labs(x="",y="") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Income
+```{r message=FALSE, warning=FALSE}
+income1 <- read_csv("../data/alexa/demographics/income.csv")
+
+income1 %>% select(-c(X1,income)) -> income.m
+income.m <- as.matrix(income.m)
+
+# devide by maxvalue of each row
+maxval <- income.m/apply(income.m, 1, max)
+
+income <- as.data.frame(maxval) %>%
+  mutate(income = income1$income) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+```
+
+```{r fig.width=12}
+ggplot(income, aes(site, value)) +
+  geom_col(fill = col[1]) +
+  coord_flip() +
+  facet_wrap(~income, ncol = 6) +
+  labs(x="",y="") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Education
+```{r message=FALSE, warning=FALSE}
+education1 <- read_csv("../data/alexa/demographics/education.csv")
+
+education1 %>% select(-c(X1,education)) -> education.m
+education.m <- as.matrix(education.m)
+
+# devide by maxvalue of each row
+maxval <- education.m/apply(education.m, 1, max)
+
+education <- as.data.frame(maxval) %>%
+  mutate(education = education1$education) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+```
+
+```{r fig.width=12}
+ggplot(education, aes(site, value)) +
+  geom_col(fill = col[5]) +
+  coord_flip() +
+  facet_wrap(~education, ncol = 6) +
+  labs(x="",y="") +
+  theme(axis.text.x = element_text(angle = 90))
+```
