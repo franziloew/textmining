@@ -33,7 +33,7 @@ quartzFonts(
 theme_set(
   theme_bw(base_family = "Roboto", base_size = 12) +
     theme(
-      plot.title = element_text(size = 10,
+      plot.title = element_text(size = 14,
                                 margin = margin(0, 0, 4, 0, "pt")),
       plot.subtitle = element_text(size = 12),
       plot.caption = element_text(size = 6),
@@ -47,9 +47,9 @@ rm(list=ls())
 col <- brewer.pal(6,"Dark2")
 ```
 
-# 2. Data 
+## 1. Gesis Data 
 ```{r caching, echo = FALSE}
-gesis <- read_stata("paper/data/gesis.dta")
+gesis <- read_stata("../data/gesis.dta")
 ```
 
 ```{r}
@@ -87,10 +87,15 @@ df <- gesis %>% transmute(month = Erhebungsmonat,
                     age = `Alter in Jahren`,
                     agerange = factor(`Alter kategorisiert`),
                     bundesland = factor(Bundesland),
-                    professionalEdu = `Abgeschlossene Berufsausbildung`)
+                    professionalEdu = `Abgeschlossene Berufsausbildung`,
+                    university = `Staatsexamen o.ä.`,
+                    formation = `Angestrebter Schulabschluß`,
+                    profession = Berufstätigkeit,
+                    profession_group = Berufsgruppe)
 
 ```
 
+### Age 
 Generate Age range categories (same as alexa data)
 ```{r}
 df <- df %>%
@@ -106,8 +111,7 @@ How do preferences change over time?
 
 ```{r}
 plot.df <- df %>%
-  filter(year>2000) %>%
-  group_by(agerange) %>%
+  group_by(agerange, year) %>%
   summarise(spd = mean(spd, na.rm = T ),
             cdu = mean(cdu, na.rm = T),
             csu = mean(csu, na.rm = T),
@@ -120,112 +124,150 @@ plot.df <- df %>%
 
 ```{r fig.width=12}
 plot.df %>%
-  ggplot(aes(party, value)) +
-  geom_col(fill = col[1]) +
-  coord_flip() +
-  facet_wrap(~agerange, ncol = 6) +
+  filter(year >= 2000) %>%
+  filter(!is.na(agerange)) %>%
+  filter(party != "afd") %>%
+  ggplot(aes(year, value, color=agerange, group=agerange)) +
+  geom_point() + geom_line() +
   labs(x="", y="", color="") +
-  theme(axis.text.x = element_text(angle = 90))
+  facet_wrap(~party) 
 ```
 
-## Alexa Data
+### Professional education
+```{r fig.width=12}
+plot.df <- df %>%
+  group_by(professionalEdu, year) %>%
+  summarise(spd = mean(spd, na.rm = T ),
+            cdu = mean(cdu, na.rm = T),
+            csu = mean(csu, na.rm = T),
+            fdp = mean(fdp, na.rm = T),
+            grüne = mean(grüne, na.rm = T),
+            afd = mean(afd, na.rm = T),
+            pds = mean(pds, na.rm = T)) %>%
+  ungroup() %>%
+  gather(party, value, spd:pds) %>%
+  mutate(professionalEdu = ifelse(professionalEdu==1, "Ja", professionalEdu),
+         professionalEdu = ifelse(professionalEdu==2, "Nein", professionalEdu)) %>%
+    filter(!is.na(professionalEdu))
+
+plot.df %>%
+  filter(year >= 2000) %>%
+  filter(party != "afd") %>%
+  ggplot(aes(year, value, color=professionalEdu,
+             group = professionalEdu)) +
+  geom_point() + geom_line() +
+  labs(x="", y="", color="", title = "Abgeschlossene Berufsausbildung") +
+  facet_wrap(~party) 
+```
+
+```{r fig.width=12}
+plot.df <- df %>%
+  group_by(university, year) %>%
+  summarise(spd = mean(spd, na.rm = T ),
+            cdu = mean(cdu, na.rm = T),
+            csu = mean(csu, na.rm = T),
+            fdp = mean(fdp, na.rm = T),
+            grüne = mean(grüne, na.rm = T),
+            afd = mean(afd, na.rm = T),
+            pds = mean(pds, na.rm = T)) %>%
+  ungroup() %>%
+  gather(party, value, spd:pds) %>%
+  mutate(university = factor(ifelse(university==1, "Ja", university)),
+         university = factor(ifelse(university==2, "Nein", university))) %>%
+  filter(!is.na(university))
+
+plot.df %>%
+  filter(year >= 2000) %>%
+  filter(party != "afd") %>%
+  ggplot(aes(year, value, color=university,
+             group = university)) +
+  geom_point() + geom_line() +
+  labs(x="", y="", color="", title = "Abgeschlossene Studium") +
+  facet_wrap(~party) 
+```
+
+## 2. Alexa Data
+```{r}
+keeps <- c("zeit.de", "welt.de", "tagesschau.de", "stern.de", "spiegel.de", "focus.de", "bild.de")
+```
 
 How similar is this site's audience to the general internet population? --> "Relative to general internet population..."
 
 Change relation --> "Relative to the other news websites..."
 
 ### Age
-```{r message=FALSE, warning=FALSE}
-age1 <- read_csv("../data/alexa/demographics/age.csv")
 
-age1 %>% select(-c(X1,age)) -> age.m
-age.m <- as.matrix(age.m)
+```{r}
+age <- read.csv("../data/alexa/demographics/age.csv")
 
-# devide by maxvalue of each row
-maxval <- age.m/apply(age.m, 1, max)
-
-age <- as.data.frame(maxval) %>%
-  mutate(age = age1$age) %>%
-  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+age <- age %>%
+  select(-X) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de) %>%
+  filter(site %in% keeps) 
 ```
 
 ```{r fig.width=12}
-ggplot(age, aes(site, value)) +
-  geom_col(fill = col[1]) +
-  coord_flip() +
-  facet_wrap(~age, ncol = 6) +
+ggplot(age, aes(age, value)) +
+  geom_col(fill = col[3]) +
+  #coord_flip() +
+  facet_wrap(~site, ncol = 7) +
   labs(x="",y="") +
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90),
+        axis.text.y = element_blank())
 ```
 
 ### Gender
 ```{r message=FALSE, warning=FALSE}
-gender1 <- read_csv("../data/alexa/demographics/gender.csv")
+gender <- read.csv("../data/alexa/demographics/gender.csv")
 
-gender1 %>% select(-c(X1,gender)) -> gender.m
-gender.m <- as.matrix(gender.m)
-
-# devide by maxvalue of each row
-maxval <- gender.m/apply(gender.m, 1, max)
-
-gender <- as.data.frame(maxval) %>%
-  mutate(gender = gender1$gender) %>%
-  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+gender <- gender %>%
+  select(-X) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de) %>%
+  filter(site %in% keeps)
 ```
 
 ```{r fig.width=12}
-ggplot(gender, aes(site, value)) +
+ggplot(gender, aes(gender, value)) +
   geom_col(fill = col[3]) +
-  coord_flip() +
-  facet_wrap(~gender, ncol = 6) +
+  facet_wrap(~site, ncol = 7) +
   labs(x="",y="") +
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.y = element_blank())
 ```
 
 ### Income
 ```{r message=FALSE, warning=FALSE}
-income1 <- read_csv("../data/alexa/demographics/income.csv")
+income <- read.csv("../data/alexa/demographics/income.csv")
 
-income1 %>% select(-c(X1,income)) -> income.m
-income.m <- as.matrix(income.m)
-
-# devide by maxvalue of each row
-maxval <- income.m/apply(income.m, 1, max)
-
-income <- as.data.frame(maxval) %>%
-  mutate(income = income1$income) %>%
-  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+income <- income %>%
+  select(-X) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de) %>%
+  filter(site %in% keeps)
 ```
 
 ```{r fig.width=12}
-ggplot(income, aes(site, value)) +
-  geom_col(fill = col[1]) +
-  coord_flip() +
-  facet_wrap(~income, ncol = 6) +
+ggplot(income, aes(income, value)) +
+  geom_col(fill = col[3]) +
+  facet_wrap(~site, ncol = 7) +
   labs(x="",y="") +
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(angle = 90))
 ```
 
 ### Education
 ```{r message=FALSE, warning=FALSE}
-education1 <- read_csv("../data/alexa/demographics/education.csv")
+education <- read.csv("../data/alexa/demographics/education.csv")
 
-education1 %>% select(-c(X1,education)) -> education.m
-education.m <- as.matrix(education.m)
-
-# devide by maxvalue of each row
-maxval <- education.m/apply(education.m, 1, max)
-
-education <- as.data.frame(maxval) %>%
-  mutate(education = education1$education) %>%
-  gather(site, value, focus.de,spiegel.de:tagesspiegel.de)
+education <- education %>%
+  select(-X) %>%
+  gather(site, value, focus.de,spiegel.de:tagesspiegel.de) %>%
+  filter(site %in% keeps)
 ```
 
 ```{r fig.width=12}
-ggplot(education, aes(site, value)) +
-  geom_col(fill = col[5]) +
-  coord_flip() +
-  facet_wrap(~education, ncol = 6) +
+ggplot(education, aes(education, value)) +
+  geom_col(fill = col[3]) +
+  facet_wrap(~site, ncol = 7) +
   labs(x="",y="") +
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(angle = 90))
 ```
