@@ -1,5 +1,5 @@
 ---
-title: "Model Results"
+title: "Whats reported in the news?"
 subtitle: ""
 author: "Franziska Löw"
 date: ""
@@ -52,9 +52,9 @@ quartzFonts(
 )
 
 theme_set(
-  theme_bw(base_family = "Roboto", base_size = 8) +
+  theme_bw(base_family = "Roboto", base_size = 10) +
     theme(
-      plot.title = element_text(size = 10,
+      plot.title = element_text(size = 12,
                                 margin = margin(0, 0, 4, 0, "pt")),
       plot.subtitle = element_text(size = 12),
       plot.caption = element_text(size = 6),
@@ -69,12 +69,18 @@ col <- brewer.pal(6,"Dark2")
 source("func/functions.R")
 ```
 
-# 2. Data 
 ```{r caching, echo = FALSE}
 load("../output/btw_out.Rda")
 ```
 
+I conduct a STM (Strucutral Topic Molde) estimation on a sample of 11,919 online news articles from seven news provider about domestic politics: Bild.de, DIE WELT, FOCUS ONLINE, SPIEGEL ONLINE, Stern.de, ZEIT ONLINE, Tagesschau.de. The articles are dated from 01.06.2017 to 31.12.2017 (German federal elections took place on 24th of September 2017.). I first extract all online articles using the the [Eventregistry API](http://eventregistry.org/documentation). Then all articles from the section "domestic policy" are filtered by checking the URL structure.
+
+To discover the latent topics in the corpus, the structural topic modeling (STM) developed by [Roberts (2016)](https://scholar.princeton.edu/sites/default/files/bstewart/files/a_model_of_text_for_experimentation_in_the_social_sciences.pdf) is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I will included the news provider as a control for both the topical content and the topical prevalence. Additional, the month an article was published is included as a control for the topical prevalence. The number of topics is set to 35.
+
 ## Distribution of articles
+
+The Figures below show the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th.  
+
 ```{r message=FALSE, warning=FALSE}
 ggsave({
   btw %>%
@@ -91,6 +97,7 @@ width = 6, height = 4,
         dpi = 600)
 ```
 
+![plot1](../figs/bar.png)
 ```{r message=FALSE, warning=FALSE}
 ggsave({
   btw %>%
@@ -115,48 +122,48 @@ dpi = 600
 
 ```
 
-# 3. Model Results
+![plot1](../figs/timeline.png)
+
+# 2. Model Results
+
 ```{r echo = FALSE}
 load("../output/models/STM 35 .Rda")
 k <- stmOut$settings$dim$K
 ```
 
 ## Label topics
+
+In order to improve readability and traceability, I assign a shorter name to the topics based on the most common words.
+
 ```{r}
 sagelabs <- sageLabels(stmOut, 20)
-```
 
-```{r}
-stmOut$settings$covariates$yvarlevels
-```
-
-### Label topics based on Bild.de
-
-After reviewing a sample of articles assigned to the respective topic, we assign a shorter name to the topics based on the most common words in order to improve readability and traceability.
-```{r}
-sagelabs$cov.betas[[1]]$problabels[,1:5]
+sagelabs$cov.betas[[2]]$problabels[,1:4]
 ```
 
 ```{r}
 topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 
-                   5, "H.Kohl", 6, "Federal Elections", 7, "EU policies, refugees", 8, "Political trends in GER", 
-                   9, "AfD in Parliament", 10, "A.Merkel", 11, "Deportation, radicalization, refugees", 
-                   12, "Christian, Berlin, Bruch", 13, "Climate policy, Die Grünen", 14, "Seehofer vs. Söder", 
-                   15, "D.Trump", 16, "Great coalition", 17, "CDU/CSU", 18, "Elections in Niedersachen", 
-                   19, "Budget statistics, Welfare policy", 20, "AfD in social media", 21, "DIE LINKE", 
-                   22, "German armed forces, Mali", 23, "Nuclear Waste, Weather reports", 
-                   24, "Innenministerium, Verfassungsschutz", 
-                   25, "Terror attack (Amri)", 26, "G20 in Hamburg", 27, "Spahn (CDU)", 
-                   28, "Steinmeier", 29, "German armed forces", 30, "AfD", 31, "Women empowerment", 
-                   32, "Diplomatic relations w Turkey, Russia", 33, "Election polls", 34, "Votings in parliament", 
-                   35, "F.Petri, Staatsanwaldschaft"), ncol=2, byrow=T)
+                   5, "H.Kohl", 6, "A.Merkel", 7, "Federal Election results", 8, "CSU, Seehofer, Söder", 
+                   9, "Deportation, radicalization, refugees", 10, "Parliament (Bundestag)", 
+                   11, "DIE LINKE, W.Schäuble", 12, "Refugees in GER", 13, "G.Schröder, IT Topics", 
+                   14, "B90/Die Grüne", 
+                   15, "D.Trump, antisemitism", 16, "Great coalition", 17, "AfD, in social media", 
+                   18, "Budget statistics, Welfare policy", 
+                   19, "Rubbish", 20, "Verfassungsschutz, Terror attacks", 21, "German armed forces, Drones, Mali", 
+                   22, "EU policies, Weather", 23, "Elections in Niedersachsen", 24, "CDU, social media", 
+                   25, "Political talkshows", 26, "Bundestag, Steinmeier, Maas", 
+                   27, "Surveys, public statistics", 28, "Election polls", 
+                   29, "AfD", 30, "Court sentences, NSU trial", 31, "German armed forces, v.d.Leyen", 
+                   32, "G20 in Hamburg", 33, "Diplomatic relations w Turkey, Russia", 
+                   34, "Terror attacks, polics reports", 35, "CDU/CSU H.Seehofer, Obergrenze"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
          topic = 1:k) 
 ```
 
-## Assign a topic to each document (choose by gamma)
+Next, we can assign a topic to each document (topic with highest postertior gamma)
+
 ```{r Extract wtp and dtp}
 # Document-topic probabilities
 stmOut %>% tidy("theta") -> theta
@@ -175,54 +182,56 @@ btw.2 <- btw %>%
   mutate(allocation = 1) 
 ```
 
-### now we can inspect the unclear topics
+##### How is the top-gamma value distributed among the corpus?
+
 ```{r}
-btw.2 %>% filter(topic==23) %>% select(title, gamma, url) %>%
+btw.2 %>%
+  ggplot(aes(gamma)) +
+  geom_density(color = col[3],
+               fill = col[3], alpha=.7) +
+  labs(x="Distribution of gamma value")
+```
+
+#### Inspect the unclear topics
+```{r}
+btw.2 %>% filter(topic==13) %>% select(title, gamma, url) %>%
   arrange(desc(gamma)) %>%
+  top_n(10) %>%
   htmlTable::htmlTable(align="l")
+```
+
+```{r}
+btw.2 %>% filter(topic==10) %>% select(title, gamma, url) %>%
+  arrange(desc(gamma)) %>%
+  top_n(10) %>%
+  htmlTable::htmlTable(align="l")
+```
+
+The plotQuote function allows to inspect die most common words of a topic for each covariate. Here I check for topic 3 (Jamaica coalition)
+
+```{r fig.height=11, fig.width=5}
+topic <- 3
+
+plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n")))
 ```
 
 ## 3.1. Topic proportions
 
-### in the overall corpus
+In order to get an initial overview of the results, Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles
+
+##### Here, I create a Dataframe that contains the columns means of theta (per topic and covariate level)
 
 ```{r}
 frequency <- as.data.frame(colMeans(stmOut$theta)) %>% 
   mutate(frequency = colMeans(stmOut$theta),
     topic=paste(topics[,1],topics[,2], sep=": ")) 
 
-p1 <- ggplot(frequency, aes(x=reorder(topic, frequency), y=frequency)) + 
-    geom_col(fill=col[1], alpha=0.8) +
-    coord_flip() +
-    labs(x="", y="expected frequency") +
-    theme(axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=11),
-          axis.title = element_text(size=10))
-
-p1
-```
-
-Alternatively we can show the expected frequency separated by ownership:
-
-```{r}
-freq %>% left_join(., topics.df, by = "topic") %>%
-  ggplot(aes(reorder(topic_name,freq), freq, fill=factor(ownership))) +
-  geom_col() +
-  scale_fill_manual(values = col[c(1,3)]) +
-  coord_flip() +
-  theme(#axis.text.y = element_blank(),
-          axis.text.y = element_text(size=9),
-          axis.title = element_text(size=10)) +
-    labs(x="", y="Expected frequency") 
-```
-
-### by site
-```{r}
-plotNewspaperHistogram(11)
-```
-
-Create a Df that contains the columns means of theta (per topic and covariate level)
-```{r}
 freq <- tapply(stmOut$theta[,1], stmOut$settings$covariates$betaindex, mean)
 freq <- as.data.frame(freq) %>% 
     mutate(site=stmOut$settings$covariates$yvarlevels,
@@ -245,44 +254,51 @@ freq <- freq %>%
             by = "topic")
 ```
 
-plots the expected proportion of topic use in public media minus the expected proportion of topic use in private media. Thus topics more associated with public media appear to the right of zero.
+#### Next, we can plot the expected proportion of topic use in the overall corpus vs. the expected proportion of topic use for each medium.
 
-```{r}
-ggplot(freq, aes(reorder(topic_name,frequency), freq)) +
-  geom_col(fill = col[1]) +
-  #scale_fill_manual(values = col[1]) +
-  coord_flip() +
-  facet_wrap(~site, ncol = 7)
-  theme(axis.text.y = element_blank(),
-          #axis.text.y = element_text(size=11),
-          axis.title = element_text(size=10)) +
-    labs(x="", y="difference in expected frequency (public-private)") 
+```{r fig.height=6}
+p1 <- ggplot(frequency, aes(x=reorder(topic, frequency), y=frequency)) + 
+    geom_col(fill=col[1], alpha=0.8) +
+    coord_flip() +
+    labs(x="", y="expected frequency") +
+    theme(axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=11),
+          axis.title = element_text(size=10))
 
-p2 
-
-# ggsave(filename = "../figs/topic_proportion.png", device = "png",width = 12, height = 10,
-# dpi = 600)
+p1
 ```
 
-```{r fig.height=11, fig.width=5}
-topic <- 11
+```{r fig.width=12}
+p2 <- ggplot(freq, aes(reorder(topic_name,frequency), freq)) +
+  geom_col(fill = col[3]) +
+  #scale_fill_manual(values = col[1]) +
+  coord_flip() +
+  facet_wrap(~site, ncol = 7) +
+  theme(
+    #axis.text.y = element_blank(),
+          axis.text.y = element_text(size=11),
+          axis.title = element_text(size=10)) +
+    labs(x="", y="expected frequency") 
 
-plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n")))
+p2 
 ```
 
 ## 3.2. Difference in topic prevalence
-The estimateEffect() function explores how prevalence of topics varies across documents according to document covariates (metadata). First, users must specify the variable that they wish to use for calculating an effect. If there are multiple variables specified in estimateEffect(), then all other variables are held at their sample median. These parameters include the expected proportion of a document that belongs to a topic as a function of a covariate, or a first difference type estimate, where topic prevalence for a particular topic is contrasted for two groups.
+
+To identify which of these differences is significant, the conditional expectation of topic prevalence for given document characteristics can be estimated. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation below). 
+
+$$
+\theta_d=\alpha+\beta_1x_{ownership}+\beta_2x_{month}+\epsilon
+$$
+
+The estimateEffect() uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results.
 
 ```{r}
 effect <- estimateEffect(c(1:k) ~site+s(month), stmOut, 
                          metadata = out$meta, uncertainty = "None")
 ```
+
+Here, I create a dataframe that contains the results of the estimation.
 
 ```{r}
 tables <- vector(mode="list", length = length(effect$topics))
@@ -304,9 +320,7 @@ for (i in seq_along(effect$topics)) {
 }
 
 out1 <- list(call=effect$call, topics=effect$topics, tables=tables)
-```
 
-```{r}
 coeff <- as.data.frame(do.call(rbind,out1$tables))
 
 coeff <- coeff %>% 
@@ -322,8 +336,9 @@ coeff <- coeff %>%
   left_join(., topics.df, by="topic")
 ```
 
-```{r}
+The following figure shows the regression results for each news page. The coefficients indicate the deviation from the base value of Bild.de.
 
+```{r fig.height=8, fig.width=12}
 p1 <- coeff %>% 
   filter(parameter %in% stmOut$settings$covariates$yvarlevels) %>%
   ggplot(aes(x = reorder(topic_name,topic, decreasing=F), y = Estimate, fill=factor(signifcant))) +
@@ -339,272 +354,19 @@ p1 <- coeff %>%
 
 p1
 
-# ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
-# dpi = 600)
-```
-
-## 3.4 Distance metric
-Compute different metrices and compare them.
-
-Compute the Jensen Shannon divergence of the word-topic probability. The K-by-V (number of words in the vocabulary) matrix logbeta contains the natural log of the probability of seeing each word conditional on the topic.
-
-```{r}
-k <- stmOut$settings$dim$K
-p <- length(stmOut$settings$covariates$yvarlevels)
-```
-
-```{r}
-## Find all combinations of ylevel
-comb.matrix <- matrix(0, 
-                      nrow= p^2, 
-                      ncol = 2)
-
-z <- 1
-for (i in 1:p) {
-  for (j in 1:p) {
-    comb.matrix[z,1] <- stmOut$settings$covariates$yvarlevels[i]
-    comb.matrix[z,2] <- stmOut$settings$covariates$yvarlevels[j]
-    z <- z+1
-  }
-}
-```
-
-### Calculate L1 Norm
-```{r}
-# Create empty matrix
-l1.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
-names(l1.matrix) <- 1:k
-
-# Populate matrix with JSD Values
-z <- 1
-for (i in 1:p) {
-  
-    #print(paste("ylevel = ", i))
-    base <- exp(stmOut$beta$logbeta[[i]])
-    compare1 <- exp(stmOut$beta$logbeta[[1]])
-    compare2 <- exp(stmOut$beta$logbeta[[2]])
-  
-  for (j in 1:k) {
-    
-    #print(paste("topic = ", j))
-    l1.matrix[z,j] <- sum(abs(base[j,]-compare1[j,]))
-    l1.matrix[z+1,j] <- sum(abs(base[j,]-compare2[j,]))
-
-  }
-    z <- z+p
-}
-
-```
-
-```{r}
-## Create DF
-l1.df <- as.data.frame(l1.matrix) 
-colnames(l1.df) <- 1:k
-
-l1.df <- l1.df %>% 
-  mutate(News1 = comb.matrix[,1],
-         News2 = comb.matrix[,2]) %>%
-  melt(.,id=c("News1","News2"), value.name="L1Norm",
-       variable.name = "topic") %>%
-  mutate(topic = as.integer(topic)) %>%
-  left_join(., topics.df, by="topic")
-```
-
-### Calculate Cosine Similarity
-```{r}
-# Create empty matrix
-cosine.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
-names(cosine.matrix) <- 1:k
-
-
-# Populate matrix with JSD Values
-z <- 1
-for (i in 1:p) {
-  
-    #print(paste("ylevel = ", i))
-    base <- exp(stmOut$beta$logbeta[[i]])
-    compare1 <- exp(stmOut$beta$logbeta[[1]])
-    compare2 <- exp(stmOut$beta$logbeta[[2]])
-  
-  for (j in 1:k) {
-    
-    #print(paste("topic = ", j))
-    cosine.matrix[z,j] <- CosSim(base[j,],compare1[j,])
-    cosine.matrix[z+1,j] <- CosSim(base[j,],compare2[j,])
-
-  }
-    z <- z+p
-}
-
-```
-
-```{r}
-## Create DF
-cosine.df <- as.data.frame(cosine.matrix) 
-colnames(cosine.df) <- 1:k
-
-cosine.df <- cosine.df %>% 
-  mutate(News1 = comb.matrix[,1],
-         News2 = comb.matrix[,2]) %>%
-  melt(.,id=c("News1","News2"), value.name="CosineSimilarity",
-       variable.name = "topic") %>%
-  mutate(topic = as.integer(topic)) %>%
-  left_join(., l1.df, by=c("News1","News2","topic"))
-```
-
-### Calculate KLD
-```{r}
-# Create empty matrix
-kld.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
-names(kld.matrix) <- 1:k
-
-# Populate matrix with JSD Values
-z <- 1
-for (i in 1:p) {
-  
-    #print(paste("ylevel = ", i))
-    base <- exp(stmOut$beta$logbeta[[i]])
-    compare1 <- exp(stmOut$beta$logbeta[[1]])
-    compare2 <- exp(stmOut$beta$logbeta[[2]])
-  
-  for (j in 1:k) {
-    
-    #print(paste("topic = ", j))
-    kld.matrix[z,j] <- KLD(base[j,],compare1[j,])
-    kld.matrix[z+1,j] <- KLD(base[j,],compare2[j,])
-
-  }
-    z <- z+p
-}
-```
-
-```{r}
-## Create DF
-kld.df <- as.data.frame(kld.matrix) 
-colnames(kld.df) <- 1:k
-
-kld.df <- kld.df %>% mutate(News1 = comb.matrix[,1],
-         News2 = comb.matrix[,2]) %>%
-  melt(.,id=c("News1","News2"), value.name="KLD",
-       variable.name = "topic") %>%
-  mutate(topic = as.integer(topic)) %>%
-  left_join(., cosine.df, by=c("News1","News2","topic"))
-```
-
-### Calculate JSD
-```{r}
-# Create empty matrix
-jsd.matrix <- matrix(0, nrow = nrow(comb.matrix), ncol = k)
-names(jsd.matrix) <- 1:k
-
-# Populate matrix with JSD Values
-z <- 1
-for (i in 1:p) {
-  
-    #print(paste("ylevel = ", i))
-    base <- exp(stmOut$beta$logbeta[[i]])
-    compare1 <- exp(stmOut$beta$logbeta[[1]])
-    compare2 <- exp(stmOut$beta$logbeta[[2]])
-  
-  for (j in 1:k) {
-    
-    #print(paste("topic = ", j))
-    jsd.matrix[z,j] <- JSD(base[j,],compare1[j,])
-    jsd.matrix[z+1,j] <- JSD(base[j,],compare2[j,])
-
-  }
-    z <- z+p
-}
-```
-
-```{r}
-## Create DF
-jsd.df <- as.data.frame(jsd.matrix) 
-colnames(jsd.df) <- 1:k
-
-distance.df <- jsd.df %>% mutate(News1 = comb.matrix[,1],
-         News2 = comb.matrix[,2]) %>% 
-  melt(.,id=c("News1","News2"), value.name="JSD",
-       variable.name = "topic") %>%
-  mutate(topic = as.integer(topic)) %>%
-  left_join(., kld.df, by=c("News1","News2","topic")) 
-
-rm(l1.df, jsd.df, cosine.df, kld.df)
-```
-
-### Plot 
-```{r}
-cols <- rev(brewer.pal(11, 'RdYlBu'))
-
-
-p1 <- distance.df %>%
-  filter(!topic %in% c("11","15")) %>%
-  filter(News1!=News2) %>%
-  filter(News1=="private") %>%
-  ggplot(aes(News1, reorder(factor(topic_name),JSD), fill = JSD)) + 
-  geom_tile() +
-  scale_fill_gradientn(colours = cols) +
-  labs(x="", y="") +
-  theme_bw(base_family = "Roboto", base_size = 11) +
-  theme(axis.text.x = element_blank(),
-        legend.position = "top",
-        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        axis.ticks = element_line(colour = 'transparent'))
-
-p2 <- distance.df %>%
-  filter(!topic %in% c("11","15")) %>%
-  filter(News1!=News2) %>%
-  ggplot(aes(News1, reorder(factor(topic_name),JSD), fill = KLD)) + 
-  geom_tile() +
-  scale_fill_gradientn(colours = cols) +
-  labs(x="", y="") +
-  theme_bw(base_family = "Roboto", base_size = 11) +
-  theme(axis.text.y = element_blank(),
-        legend.position = "top",
-        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        axis.ticks = element_line(colour = 'transparent'))
-
-p3 <- distance.df %>%
-  filter(!topic %in% c("11","15")) %>%
-  filter(News1!=News2) %>%
-  filter(News1=="private") %>%
-  ggplot(aes(News1, reorder(factor(topic_name),JSD), 
-             fill = CosineSimilarity)) + 
-  geom_tile() +
-  scale_fill_gradientn(colours = cols) +
-  labs(x="", y="") +
-  theme_bw(base_family = "Roboto", base_size = 11) +
-  theme(axis.text = element_blank(),
-        legend.position = "top",
-        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        axis.ticks = element_line(colour = 'transparent'))
-
-p4 <- distance.df %>%
-  filter(!topic %in% c("11","15")) %>%
-  filter(News1!=News2) %>%
-  filter(News1=="private") %>%
-  ggplot(aes(News1, reorder(factor(topic_name),JSD), 
-             fill = L1Norm)) + 
-  geom_tile() +
-  scale_fill_gradientn(colours = cols) +
-  labs(x="", y="") +
-  theme_bw(base_family = "Roboto", base_size = 11) +
-  theme(axis.text = element_blank(),
-        legend.position = "top",
-        plot.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        strip.background = element_rect(fill = 'transparent', colour = 'transparent'),
-        axis.ticks = element_line(colour = 'transparent'))
-
-(p1 | p2 | p3 | p4 )
-
-ggsave(filename = "../figs/distance.png", device = "png",width = 12, height = 8,
+ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
 dpi = 600)
 ```
 
 ## Sentiment analysis
+
+The idea of Sentiment analysis is to determine the attitude of a writer through online text data toward certain topic or the overall tonality of a document.
+
+Lexical or “bag-ofwords” approaches are commonly used. In that approach, the researcher provides pre-defined dictionaries (lists) of words associated with a given emotion, such as negativity. The target text is then deconstructed into individual words (or tokens) and the frequencies of words contained in a given dictionary are then calculated. 
+
+#### 1. Load sentiment dictionary.
+
+[SentimentWortschatz](http://wortschatz.uni-leipzig.de/de/download), or SentiWS for short, is a publicly available German-language resource for sentiment analysis, opinion mining etc. It lists positive and negative polarity bearing words weighted within the interval of [-1; 1] plus their part of speech tag, and if applicable, their inflections. The current version of SentiWS (v1.8b) contains 1,650 positive and 1,818 negative words, which sum up to 15,649 positive and 15,632 negative word forms incl. their inflections, respectively. It not only contains adjectives and adverbs explicitly expressing a sentiment, but also nouns and verbs implicitly containing one.
 
 ```{r}
 sent <- c(
@@ -627,11 +389,15 @@ sent <- c(
   group_by(word) %>% summarise(value = mean(value)) %>% ungroup
 ```
 
-Apply the dictionary on the artciles
+#### 2. Apply the dictionary on the artciles. 
+
+We now take each word in each article and assign a sentiment value for that word. I only use articles that have been assigned a topic with a probability of over 90% (gamma > 0.9).  
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # Tokenize text
 token <- btw.2 %>%
+  filter(gamma >= 0.9) %>%
+  filter(topic != 19) %>%
   unnest_tokens(word, text)
 
 # Combine with sentiment values
@@ -640,79 +406,199 @@ sentDF <- left_join(token, sent, by="word") %>%
   filter(!is.na(sentiment)) 
 ```
 
-Calculate the number of total articles to weight the senitiment value. 
+#### 3. Calculate sentiment value
+
+calculate weight: 
+
+$$
+\text{weight} = \frac{\text{Total Articles, by site & topic}}{\text{Total Articles, by site}}
+$$
 
 ```{r}
-sentDF.red <- sentDF %>%
+# Calculate weight
+btw.2 <- btw.2 %>%
   
-  # Count number of articles by medium
-  group_by(site) %>% 
+  # how many articles per site & topic?
+  group_by(site, topic) %>%
+  add_tally() %>%
+  ungroup() %>%
+  mutate(count = n) %>%
+  select(-n) %>%
+  
+  # how many articles per site?
+  group_by(site) %>%
   add_tally() %>%
   ungroup() %>%
   mutate(totalcount = n) %>%
   select(-n) %>%
   
-  # count number of articles by medium and topic
-  group_by(site, topic_name) %>%
-  add_tally() %>%
-  ungroup() %>%
-  mutate(count = n) %>%
-  mutate(weight = count/totalcount) %>%
-  
+  # calculate weight
+  mutate(weight = count/totalcount)
+```
+
+Group by article ID and calculate the mean sentiment value of each article.
+
+```{r}
+sentDF.red <- sentDF %>%
+
   # calculate weight and weighted sentiment score
-  group_by(site, topic_name) %>%
-  summarize(sent_value = mean(sentiment),
-            weight = mean(weight)) %>%
+  group_by(articleID) %>%
+  summarise(sent_value = mean(sentiment)) %>%
+
+  # leftjoin with btw
+  left_join(., btw.2 %>% select(articleID, topic, topic_name,
+                                title, url, site, gamma, weight),
+            by="articleID") %>%
   mutate(weighted = sent_value*weight)
 ```
 
 ### Plot Sentiment
 
-Unweighted
-```{r fig.height=12}
-sentDF.red %>%
-  ggplot(aes(topic_name, sent_value)) +
+#### 1. by topic
+```{r fig.height=10, fig.width=12}
+p1 <- sentDF.red %>%
+  group_by(topic_name, topic) %>%
+  summarise(sent_value = mean(sent_value)) %>%
+  ggplot(aes(reorder(topic_name, sent_value), sent_value)) +
   geom_col(fill=col[3], alpha=0.8) +
   coord_flip() +
-  facet_wrap(~site, ncol = 7) +
-  labs(x="", y="sentiment value") +
-  theme(axis.text.x = element_text(size=10, angle = 90))
+  labs(x="", y="sentiment value (unweighted)",
+       title = "sentiment value (unweighted)") +
+  theme(
+        axis.text.y = element_text(size = 10))
 
-ggsave(filename = "../figs/sentiment.png", device = "png",width = 12, height = 8,
-dpi = 600)
+p2 <- sentDF.red %>%
+  group_by(topic_name, topic) %>%
+  summarise(weighted = mean(weighted),
+            sent_value = mean(sent_value)) %>%
+  ggplot(aes(reorder(topic_name, sent_value), weighted)) +
+  geom_col(fill=col[1], alpha=0.8) +
+  coord_flip() +
+  labs(x="", y="sentiment value (weighted)",
+       title = "sentiment value (weighted)") +
+  theme(
+        axis.text.y = element_blank())
+
+p1 + p2
 ```
 
-weighted
-```{r fig.height=12}
+
+#### 2.by site 
+
+```{r fig.width=12}
+p1 <- sentDF.red %>%
+  group_by(site) %>%
+  summarise(sent_value = mean(sent_value)) %>%
+  ggplot(aes(reorder(site, sent_value), sent_value)) +
+  geom_col(fill=col[3], alpha=0.8) +
+  coord_flip() +
+  labs(x="", y="sentiment value (unweighted)",
+       title = "sentiment value (unweighted)") +
+  theme(
+        axis.text.y = element_text(size = 10))
+
+p2 <- sentDF.red %>%
+  group_by(site) %>%
+  summarise(weighted = mean(weighted),
+            sent_value = mean(sent_value)) %>%
+  ggplot(aes(reorder(site, sent_value), weighted)) +
+  geom_col(fill=col[1], alpha=0.8) +
+  coord_flip() +
+  labs(x="", y="sentiment value (weighted)",
+       title = "sentiment value (weighted)") +
+  theme(
+        axis.text.y = element_blank())
+
+p1 + p2
+```
+
+#### 3. By site and topic
+
+```{r fig.height=10, fig.width=12}
 sentDF.red %>%
-  ggplot(aes(topic_name, weighted)) +
+  group_by(site, topic_name, topic) %>%
+  summarise(sent_value = mean(sent_value)) %>%
+  ggplot(aes(reorder(topic_name, topic), sent_value)) +
   geom_col(fill=col[3], alpha=0.8) +
   coord_flip() +
   facet_wrap(~site, ncol = 7) +
-  labs(x="", y="sentiment value") +
-  theme(axis.text.x = element_text(size=10, angle = 90))
+  labs(x="", y="sentiment value (unweighted)",
+       title = "sentiment value (unweighted)") +
+  theme(axis.text.y = element_text(size=12))
 
 ggsave(filename = "../figs/sent_weighted.png", device = "png",width = 12, height = 8,
 dpi = 600)
 ```
 
+```{r fig.height=10, fig.width=12}
+sentDF.red %>%
+  group_by(site, topic_name, topic) %>%
+  summarise(weighted = mean(weighted)) %>%
+  ggplot(aes(reorder(topic_name, topic), weighted)) +
+  geom_col(fill=col[1], alpha=0.8) +
+  coord_flip() +
+  facet_wrap(~site, ncol = 7) +
+  labs(x="", y="sentiment value (weighted)",
+       title = "sentiment value (weighted)") +
+  theme(axis.text.y = element_text(size=12))
+```
+
+
 ### Radar plot
+
 ```{r}
 library(radarchart)
 ```
 
+Select topics to be analyzed: 
+
+1: "SPD, M.Schulz"
+2: "A.Merkel vs. Schulz"
+3: "Jamaica coalition"
+6: "A.Merkel"
+8: "CSU, Seehofer, Söder"
+14: "B90/Die Grüne"
+16: "Great coalition"
+17: "AfD, in social media",
+24: "CDU, social media"
+29: "AfD"
+
+```{r}
+keep <- c(1,2,3,6,8,14,16,17,24,29)
+```
+
+#### Unweighted
 ```{r}
 sentDF.red %>% 
-  select(site, topic_name, sent_value) %>%
+  filter(topic %in% keep) %>%
+  group_by(site, topic_name) %>%
+  summarise(sent_value = mean(sent_value)) %>%
   spread(key=site, value=sent_value) %>%
   ungroup() -> radar
 ```
 
 ```{r}
 chartJSRadar(scores = radar, labelSize = 8, 
-             scaleStartValue = -0.15,
-             maxScale = 0, 
+             scaleStartValue = -0.2,
+             maxScale = 0.1, 
              showToolTipLabel = TRUE,
              width = 8, height = 8)
 ```
 
+#### Weighted
+```{r}
+sentDF.red %>% 
+  filter(topic %in% keep) %>%
+  group_by(site, topic_name) %>%
+  summarise(weighted = mean(weighted)) %>%
+  spread(key=site, value=weighted) %>%
+  ungroup() -> radar
+```
+
+```{r}
+chartJSRadar(scores = radar, labelSize = 8, 
+             scaleStartValue = -0.005,
+             maxScale = 0.002, 
+             showToolTipLabel = TRUE,
+             width = 8, height = 8)
+```

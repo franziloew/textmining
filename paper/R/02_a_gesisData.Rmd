@@ -107,7 +107,7 @@ How do preferences change over time?
 ```{r}
 plot.df <- df %>%
   filter(year>2000) %>%
-  group_by(agerange, year) %>%
+  group_by(agerange) %>%
   summarise(spd = mean(spd, na.rm = T ),
             cdu = mean(cdu, na.rm = T),
             csu = mean(csu, na.rm = T),
@@ -120,12 +120,12 @@ plot.df <- df %>%
 
 ```{r fig.width=12}
 plot.df %>%
-  ggplot(aes(year, agerange, size=value, color=value)) +
-  geom_point(show.legend = F) +
-  facet_wrap(~party, ncol = 7) +
+  ggplot(aes(party, value)) +
+  geom_col(fill = col[1]) +
+  coord_flip() +
+  facet_wrap(~agerange, ncol = 6) +
   labs(x="", y="", color="") +
-  guides(color = guide_legend(ncol=10))+
-  theme(legend.position = "top")
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ## Alexa Data
@@ -154,7 +154,7 @@ ggplot(age, aes(site, value)) +
   geom_col(fill = col[1]) +
   coord_flip() +
   facet_wrap(~age, ncol = 6) +
-  labs(x="",y="",colour="age group") +
+  labs(x="",y="") +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
