@@ -127,7 +127,7 @@ dpi = 600
 # 2. Model Results
 
 ```{r echo = FALSE}
-load("../output/models/STM 35 .Rda")
+load("../output/models/STM 40 .Rda")
 k <- stmOut$settings$dim$K
 ```
 
@@ -138,24 +138,41 @@ In order to improve readability and traceability, I assign a shorter name to the
 ```{r}
 sagelabs <- sageLabels(stmOut, 20)
 
-sagelabs$cov.betas[[2]]$problabels[,1:4]
+sagelabs$cov.betas[[3]]$problabels[,1:5]
 ```
 
 ```{r}
-topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 
+topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "B90/Die Grüne, coalition talks", 4, "EU policies", 
                    5, "H.Kohl", 6, "A.Merkel", 7, "Federal Election results", 8, "CSU, Seehofer, Söder", 
-                   9, "Deportation, radicalization, refugees", 10, "Parliament (Bundestag)", 
-                   11, "DIE LINKE, W.Schäuble", 12, "Refugees in GER", 13, "G.Schröder, IT Topics", 
-                   14, "B90/Die Grüne", 
-                   15, "D.Trump, antisemitism", 16, "Great coalition", 17, "AfD, in social media", 
-                   18, "Budget statistics, Welfare policy", 
-                   19, "Rubbish", 20, "Verfassungsschutz, Terror attacks", 21, "German armed forces, Drones, Mali", 
-                   22, "EU policies, Weather", 23, "Elections in Niedersachsen", 24, "CDU, social media", 
-                   25, "Political talkshows", 26, "Bundestag, Steinmeier, Maas", 
+                   9, "Welt, Deutschland, Menschen", 10, "Parliament (Bundestag)", 
+                   11, "W.Schäuble", 12, "Refugees in GER", 13, "G.Schröder, IT Topics", 
+                   14, "B90/Die Grüne, climate/refugee policy", 
+                   15, "D.Trump, Israel", 16, "Great coalition", 17, "AfD, in media", 
+                   18, "Jamaica coalition", 
+                   19, "Rubbish", 20, "Terror attack Amri", 21, "German armed forces, Mali, Helicopter", 
+                   22, "Muslim, Ditib", 23, "Elections in Niedersachsen", 24, "CDU, Twitter, Saxony", 
+                   25, "Europa", 26, "Bundestag, Laws", 
                    27, "Surveys, public statistics", 28, "Election polls", 
                    29, "AfD", 30, "Court sentences, NSU trial", 31, "German armed forces, v.d.Leyen", 
                    32, "G20 in Hamburg", 33, "Diplomatic relations w Turkey, Russia", 
-                   34, "Terror attacks, polics reports", 35, "CDU/CSU H.Seehofer, Obergrenze"), ncol=2, byrow=T)
+                   34, "Left- & Right-wing Terror", 35, "CDU/CSU H.Seehofer, Obergrenze",
+                   36, "Church", 37, "Car industry, Stuttgart", 38, "AfD, F.Petry", 39, "Statistics, welfare policy",
+                   40, "J.Spahn"), ncol=2, byrow=T)
+
+# topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 
+#                    5, "H.Kohl", 6, "A.Merkel", 7, "Federal Election results", 8, "CSU, Seehofer, Söder", 
+#                    9, "Deportation, radicalization, refugees", 10, "Parliament (Bundestag)", 
+#                    11, "DIE LINKE, W.Schäuble", 12, "Refugees in GER", 13, "G.Schröder, IT Topics", 
+#                    14, "B90/Die Grüne", 
+#                    15, "D.Trump, antisemitism", 16, "Great coalition", 17, "AfD, in social media", 
+#                    18, "Budget statistics, Welfare policy", 
+#                    19, "Rubbish", 20, "Verfassungsschutz, Terror attacks", 21, "German armed forces, Drones, Mali", 
+#                    22, "EU policies, Weather", 23, "Elections in Niedersachsen", 24, "CDU, social media", 
+#                    25, "Political talkshows", 26, "Bundestag, Steinmeier, Maas", 
+#                    27, "Surveys, public statistics", 28, "Election polls", 
+#                    29, "AfD", 30, "Court sentences, NSU trial", 31, "German armed forces, v.d.Leyen", 
+#                    32, "G20 in Hamburg", 33, "Diplomatic relations w Turkey, Russia", 
+#                    34, "Terror attacks, polics reports", 35, "CDU/CSU H.Seehofer, Obergrenze"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
@@ -210,7 +227,7 @@ btw.2 %>% filter(topic==10) %>% select(title, gamma, url) %>%
 The plotQuote function allows to inspect die most common words of a topic for each covariate. Here I check for topic 3 (Jamaica coalition)
 
 ```{r fig.height=11, fig.width=5}
-topic <- 3
+topic <- 12
 
 plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
             paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
@@ -406,6 +423,7 @@ sentDF <- left_join(token, sent, by="word") %>%
   filter(!is.na(sentiment)) 
 ```
 
+
 #### 3. Calculate sentiment value
 
 calculate weight: 
@@ -450,6 +468,13 @@ sentDF.red <- sentDF %>%
                                 title, url, site, gamma, weight),
             by="articleID") %>%
   mutate(weighted = sent_value*weight)
+```
+
+```{r}
+sentDF.red %>% group_by(topic_name) %>%
+  top_n(5, gamma) %>%
+  select(topic_name, gamma, title) %>%
+  htmlTable::htmlTable(align="l")
 ```
 
 ### Plot Sentiment
@@ -546,8 +571,9 @@ sentDF.red %>%
 
 ### Radar plot
 
-```{r}
-library(radarchart)
+```{r message=FALSE, warning=FALSE}
+require(ggiraph)
+require(ggiraphExtra)
 ```
 
 Select topics to be analyzed: 
@@ -563,8 +589,28 @@ Select topics to be analyzed:
 24: "CDU, social media"
 29: "AfD"
 
+1, "SPD, M.Schulz"
+2, "A.Merkel vs. Schulz"
+3, "B90/Die Grüne, coalition talks"
+4, "EU policies"
+5, "H.Kohl", 
+6, "A.Merkel", 
+8, "CSU, Seehofer, Söder",
+12, "Refugees in GER"
+14, "B90/Die Grüne, climate/refugee policy",
+16, "Great coalition", 
+17, "AfD, in media", 
+18, "Jamaica coalition",
+29, "AfD",
+33, "Diplomatic relations w Turkey, Russia",
+35, "CDU/CSU H.Seehofer, Obergrenze",
+38, "AfD, F.Petry")
+
+
 ```{r}
-keep <- c(1,2,3,6,8,14,16,17,24,29)
+#keep <- c(1,2,3,6,8,14,16,17,24,29)
+
+keep <- c(1,3,4,5,6,8,14,16,17,18,29,33,35,38)
 ```
 
 #### Unweighted
@@ -573,16 +619,13 @@ sentDF.red %>%
   filter(topic %in% keep) %>%
   group_by(site, topic_name) %>%
   summarise(sent_value = mean(sent_value)) %>%
-  spread(key=site, value=sent_value) %>%
+  spread(key=topic_name, value=sent_value) %>%
   ungroup() -> radar
-```
 
-```{r}
-chartJSRadar(scores = radar, labelSize = 8, 
-             scaleStartValue = -0.2,
-             maxScale = 0.1, 
-             showToolTipLabel = TRUE,
-             width = 8, height = 8)
+radar %>%
+  ggRadar(aes(color=site), rescale = F,
+          alpha = 0, legend.position = "right") +
+  labs(title = "")
 ```
 
 #### Weighted
@@ -591,14 +634,11 @@ sentDF.red %>%
   filter(topic %in% keep) %>%
   group_by(site, topic_name) %>%
   summarise(weighted = mean(weighted)) %>%
-  spread(key=site, value=weighted) %>%
+  spread(key=topic_name, value=weighted) %>%
   ungroup() -> radar
-```
 
-```{r}
-chartJSRadar(scores = radar, labelSize = 8, 
-             scaleStartValue = -0.005,
-             maxScale = 0.002, 
-             showToolTipLabel = TRUE,
-             width = 8, height = 8)
+radar %>%
+  ggRadar(aes(color=site), rescale = F,
+          alpha = 0, legend.position = "right") +
+  labs(title = "")
 ```
