@@ -1,0 +1,17 @@
+(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 5, "H.Kohl", 6, "Federal Elections", 7, "EU policies, refugees", 8, "Political trends in GER", 9, "AfD in Parliament", 10, "A.Merkel", 11, "Hamburg G20", 12, "Christian, Berlin, Bruch", 13, "Climate policy, Die Grünen", 14, "Seehofer vs. Söder", 15, "D.Trump", 16, "Great coalition", 17, "CDU/CSU", 18, "Elections in Niedersachen", 19, "Budget statistics, Welfare policy", 20, "AfD in social media", 21, "DIE LINKE", 22, "German armed forces, Mali", 23, "Weather, Bahn", 24, "Innenministerium, Verfassungsschutz", 25, "Terror attack (Amri)", 26, "G20 in Hamburg", 27, "Spahn (CDU)", 28, "Steinmeier", 29, "German armed forces", 30, "AfD", 31, "Women empowerment", 32, "Diplomatic relations w Turkey, Russia", 33, "Election polls", 34, "Votings in parliament", 35, "F.Petri, Staatsanwaldschaft")
+
+(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "B90/Die Grüne, coalition talks",
+4, "EU topics: Diesel, Glyphosat, toll", 5, "H.Kohl", 6, "A.Merkel",
+7, "Federal Election results", 8, "Party congress (CSU and DIE LINKE)",
+9, "General societal issues", 10, "Information on Federal elections (e.g. Wahlomat, election programmes)",
+11, "W.Schäuble, F.Steinmeier", 12, "Refugees in GER", 13, "Auffangbecken ('Find us on Twitter')", 14, "B90/Die Grüne, climate/refugee policy", 15, "D.Trump, Israel, G20", 16, "Great coalition, minority government", 17, "AfD, in media", 
+                   18, "Jamaica coalition",
+                   19, "Rubbish", 20, "Mix (Amri, Berlin, Court)", 21, "German armed forces, Mali, Helicopter",
+                   22, "Mix (Ditib, Weather, DB)", 23, "Elections in Niedersachsen", 24, "CDU, regional politics (Saxony)",
+                   25, "Mix (Europa, political talkshows)", 26, "Votes in the Bundestag",
+                   27, "Mix, Surveys, public statistics", 28, "Election polls",
+                   29, "AfD in parliament", 30, "Mix: Sexism, Court sentences, NSU trial", 31, "German armed forces, v.d.Leyen",
+                   32, "G20 in Hamburg", 33, "Diplomatic relations w Turkey, Russia",
+                   34, "Terror in GER, Left- & Right-wing", 35, "CDU/CSU H.Seehofer, Obergrenze",
+                   36, "Church, Family", 37, "Car industry, Stuttgart (Mix)", 38, "AfD, F.Petry", 39, "Statistics, welfare policy",
+                   40, "J.Spahn")
