@@ -127,7 +127,7 @@ dpi = 600
 # 2. Model Results
 
 ```{r echo = FALSE}
-load("../output/models/STM 40 .Rda")
+load("../output/models/STM 45 .Rda")
 k <- stmOut$settings$dim$K
 ```
 
@@ -153,10 +153,12 @@ topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "B90/Die GrÃ
                    22, "Mix (Ditib, Weather, DB)", 23, "Elections in Niedersachsen", 24, "CDU, regional politics (Saxony)", 
                    25, "Mix (Europa, political talkshows)", 26, "Votes in the Bundestag", 
                    27, "Mix, Surveys, public statistics", 28, "Election polls", 
-                   29, "AfD in parliament", 30, "Mix: Sexism, Court sentences, NSU trial", 31, "German armed forces, v.d.Leyen", 
+                   29, "AfD in parliament", 30, "Mix: Sexism, Court sentences, NSU trial", 
+                   31, "German armed forces, v.d.Leyen", 
                    32, "G20 in Hamburg", 33, "Diplomatic relations w Turkey, Russia", 
                    34, "Terror in GER, Left- & Right-wing", 35, "CDU/CSU H.Seehofer, Obergrenze",
-                   36, "Church, Family", 37, "Car industry, Stuttgart (Mix)", 38, "AfD, F.Petry", 39, "Statistics, welfare policy",
+                   36, "Church, Family", 37, "Car industry, Stuttgart (Mix)", 38, "AfD, F.Petry", 
+                   39, "Statistics, welfare policy",
                    40, "J.Spahn"), ncol=2, byrow=T)
 
 # topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 
@@ -177,6 +179,20 @@ topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "B90/Die GrÃ
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
          topic = 1:k) 
+```
+
+The plotQuote function allows to inspect die most common words of a topic for each covariate.
+
+```{r fig.height=11, fig.width=5}
+topic <- 40
+
+plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n"),
+            paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n")))
 ```
 
 Next, we can assign a topic to each document (topic with highest postertior gamma)
@@ -222,20 +238,6 @@ btw.2 %>% filter(topic==10) %>% select(title, gamma, url) %>%
   arrange(desc(gamma)) %>%
   top_n(10) %>%
   htmlTable::htmlTable(align="l")
-```
-
-The plotQuote function allows to inspect die most common words of a topic for each covariate. Here I check for topic 3 (Jamaica coalition)
-
-```{r fig.height=11, fig.width=5}
-topic <- 40
-
-plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n")))
 ```
 
 ## 3.1. Topic proportions
@@ -296,7 +298,7 @@ p1 <- ggplot(frequency, aes(x=reorder(topic_name, frequency), y=frequency)) +
 p1
 ```
 
-```{r fig.width=12}
+```{r fig.height=8, fig.width=12}
 p2 <- ggplot(freq, aes(reorder(topic_name,frequency), freq)) +
   geom_col(fill = col[3]) +
   #scale_fill_manual(values = col[1]) +
@@ -383,8 +385,8 @@ p1 <- coeff %>%
 
 p1
 
-ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
-dpi = 600)
+# ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
+# dpi = 600)
 ```
 
 ## Sentiment analysis
@@ -425,18 +427,64 @@ We now take each word in each article and assign a sentiment value for that word
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # Tokenize text
 token <- btw.2 %>%
-  filter(gamma >= 0.9) %>%
+  filter(gamma >= 0.75) %>%
   filter(topic %in% keep) %>%
   unnest_tokens(word, text)
 
 # Combine with sentiment values
 sentDF <- left_join(token, sent, by="word") %>% 
-  mutate(sentiment = as.numeric(value)) %>% 
-  filter(!is.na(sentiment)) 
+  mutate(value = as.numeric(value)) %>% 
+  filter(!is.na(value)) %>%
+  mutate(polarity = ifelse(value < 0, "negative", "positive"))
 ```
 
+#### 3. Calculate sentiment value by document
 
-#### 3. Calculate sentiment value
+calculate sentiment value of document $d$: 
+
+$$
+\text{Sentiment}_d = \frac{|\text{Sum of positive tokens}_d| - |\text{Sum of negative tokens}_d|}{\text{Number ot tokens}_d}
+$$
+
+```{r}
+sentDF.values <- sentDF %>%
+  select(document, word, value, polarity) %>%
+  mutate(id = row_number()) %>%
+  spread(polarity, value) %>%
+  group_by(document) %>%
+  
+  # calculate sum of positive and negative values
+  summarise(sum_positive = sum(positive, na.rm = T),
+            sum_negative = sum(negative, na.rm = T)) %>%
+  ungroup() %>%
+  # calculate diff
+  mutate(sent_diff = abs(sum_positive) - abs(sum_negative)) %>%
+  # combine with dataframe
+  left_join(., btw.2 %>% filter(topic %in% keep), 
+            by = "document") %>%
+  # calculate sentiment
+  mutate(sentiment = sent_diff / text_length)
+```
+
+#### 4. Inspect sentiment value
+
+```{r fig.width=8, fig.height=12}
+p <- sentDF.values %>%
+  group_by(topic_name, date, site) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T))
+
+p %>%
+  filter(grepl("Merkel", topic_name)) %>%
+  ggplot(aes(date, sentiment,
+              fill = factor(topic_name))) +
+  geom_col() +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
+  facet_wrap(~site, ncol = 1) +
+  labs(x="", y="", fill="") +
+  theme(legend.position = "right")
+```
+
 
 calculate weight: 
 

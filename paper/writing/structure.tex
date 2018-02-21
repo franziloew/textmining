@@ -290,7 +290,22 @@ Figure \ref{fig_distance} displays the different distance measures
 	\end{center}
 \end{figure}
 
-\textcolor{red}{AUSWERTUNG}
+\subsection{Sentiment Analysis}
+
+The idea of Sentiment analysis is to determine the attitude of a writer through online text data toward certain topic or the overall tonality of a document.
+
+commonly used lexical or “bag-ofwords” approach. In that approach, the researcher provides pre-defined dictionaries (lists) of words associated with a given emotion, such as negativity. The target text is then deconstructed into individual words (or tokens) and the frequencies of words contained in a given dictionary are then calculated. For example, Loughran and McDonald (2011) construct a dictionary of words that express negativity in financial contexts, which they then use to measure the negativity in company 10-K filings and relate that negativity to financial outcomes.
+
+The psychology literature demonstrates that any emotion can be parsimoniously defined by assigning it a score along two primary dimensions: valence (i.e., positive or negative) and arousal (i.e., activation and deactivation). For comparison purposes, we also examine three additional measures: “worried,” “satisfied,” and a lexical “negativity” measure. 
+
+In financial market research: 
+\citep{nyman_news_2018}: This paper applies algorithmic analysis to large amounts of financial market text-based data to assess how narratives and sentiment play a role in driving developments in the financial system. For the summary statistic of a collection of texts T, we count the number of occurrences of excitement words and anxiety words and then scale these numbers by the total text size as measured by the number of characters: 
+
+\begin{equation}
+	\text{Sentiment}[T]=\frac{|\text{Excitement}|-|\text{Anxiety}|}{\text{size}[T]}
+\end{equation}
+
+Simplicity of this method also allows for an easier assessment of the robustness of the methodology: The apply a bootstrap technique to compute 95\% confidence intervals around the summary statistic. We sample new weights for each word in each dictionary (so that the sum of weights equals the size of the dictionary) and re-compute the statistic. Repeating the procedure gives a distribution from which to extract the confidence intervals. This technique gives us increased confidence that the meaning of individual words in our two lists does not change over time. Obviously, one can also imagine other methods of extracting confidence levels, e.g., to sample with replacement from the collection of texts.
 
 % ----------------------
 % Appendix

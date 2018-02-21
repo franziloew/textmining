@@ -14,4 +14,4 @@ This [website](https://franziloew.github.io/textmining/) gives an overview about
 
 [**Libraries**](libraries.md)
 
-An overview of the current status of my paper can be found [here](https://franziloew.github.io/textmining/paper/R/04_Modelresults.html)
+An overview of the current status of my paper can be found [here](https://franziloew.github.io/textmining/paper/docs/04_Modelresults.html)
