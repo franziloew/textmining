@@ -138,7 +138,7 @@ In order to improve readability and traceability, I assign a shorter name to the
 The plotQuote function allows to inspect die most common words of a topic for each covariate.
 
 ```{r eval=FALSE, fig.height=12, fig.width=5, include=FALSE}
-topic <- 45
+topic <- 35
 
 plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
             paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
@@ -150,7 +150,7 @@ plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
 ```
 
 ```{r}
-topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 5, "H.Kohl", 6, "Federal Elections", 7, "EU policies, refugees", 8, "Political trends in GER", 9, "AfD in Parliament", 10, "A.Merkel", 11, "Hamburg G20", 12, "Christian, Berlin, Bruch", 13, "Climate policy, Die Grünen", 14, "Seehofer vs. Söder", 15, "D.Trump", 16, "Great coalition", 17, "CDU/CSU", 18, "Elections in Niedersachen", 19, "Budget statistics, Welfare policy", 20, "AfD in social media", 21, "DIE LINKE", 22, "German armed forces, Mali", 23, "Weather, Bahn", 24, "Innenministerium, Verfassungsschutz", 25, "Terror attack (Amri)", 26, "G20 in Hamburg", 27, "Spahn (CDU)", 28, "Steinmeier", 29, "German armed forces", 30, "AfD", 31, "Women empowerment", 32, "Diplomatic relations w Turkey, Russia", 33, "Election polls", 34, "Votings in parliament", 35, "F.Petri, Staatsanwaldschaft"), ncol=2, byrow=T)
+topics <- matrix(c(1, "SPD, M.Schulz", 2, "A.Merkel vs. Schulz", 3, "Jamaica coalition", 4, "Diesel scandal", 5, "H.Kohl", 6, "A.Merkel", 7, "Federal Election Results", 8, "Seehover vs. Söder, CSU", 9, "EU policies, refugee policy", 10, "German Parliament, parliamentarians", 11, "Mix: DIE LINKE, W.Schäuble", 12, "Refugees, deportation", 13, "Mix: Schröder, IT Topics", 14, "B90/Die Grünen", 15, "USA, Russia, Israel", 16, "Great coalition", 17, "A.Weidel (AfD)", 18, "Budget statistics, Welfare policy", 19, "Process Error", 20, "Federal Constitutional Court, Ministry of the Interior", 21, "German armed forces, Mali", 22, "Mix: Weather, DB, nuclear transport, ...", 23, "Elections in Niedersachsen", 24, "CDU / CSU", 25, "Mix: political talkshows, Berxit, Macron", 26, "Mix: F.-W.Steinmeier, Constitution, H.Maas", 27, "public statistics", 28, "Election polls", 29, "F.Petry, Gauland (AfD)", 30, "Mix: NSU, sexism", 31, "German armed forces, V.d.Leyen", 32, "G20 in Hamburg", 33, "Turkey, S.Gabriel", 34, "police reports, terror (left-, right-wing, IS)", 35, "Seehofer, refugee cap"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
@@ -199,10 +199,8 @@ btw.2 %>% filter(topic==13) %>% select(title, gamma, url) %>%
 
 In order to get an initial overview of the results, the figure below displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles.
 
-Keep only those articles, that are clear & interessting to analyse.
-
 ```{r}
-keep <- c(1,2,6,8,14,16,17,18,24,29,31,35,38,40,41,43)
+keep <- seq(1:k)
 ```
 
 
@@ -265,6 +263,12 @@ p2 <- ggplot(freq, aes(reorder(topic_name,frequency), freq)) +
     labs(x="", y="expected frequency") 
 
 p2 
+```
+
+Keep only those articles, that are clear & interessting to analyse.
+
+```{r}
+keep <- c(1,16,24,29,3,6,8)
 ```
 
 ## 3.2. Difference in topic prevalence
@@ -401,7 +405,7 @@ We now take each word in each article and assign a sentiment value for that word
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 df <- btw.2 %>%
-  filter(gamma >= 0.75) %>%
+  filter(gamma >= 0.8) %>%
   filter(topic %in% keep)
 
 # Tokenize text
@@ -450,15 +454,16 @@ sentDF.values <- sentDF %>%
 
 #### 1. by topic
 ```{r fig.height=8, fig.width=6}
-
 p <- sentDF.values %>%
   group_by(topic_name) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
             obs = n())
   
 ggplot(p, aes(reorder(topic_name, sentiment), 
-              sentiment)) +
-  geom_col(aes(fill=p$obs)) +
+              sentiment,
+              label = obs)) +
+  geom_col(fill = col[1], alpha = 0.7) +
+  geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
@@ -478,8 +483,10 @@ p <- sentDF.values %>%
             obs = n())
   
 ggplot(p, aes(reorder(site, sentiment), 
-              sentiment)) +
-  geom_col(aes(fill=p$obs)) +
+              sentiment,
+              label = obs)) +
+  geom_col(fill = col[3], alpha = 0.7) +
+  geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
@@ -499,8 +506,9 @@ p <- sentDF.values %>%
 
 ggplot(p, 
        aes(reorder(topic_name, topic), 
-           sentiment)) +
-  geom_col(aes(fill=p$obs)) +
+           sentiment, label = obs)) +
+  geom_col(fill=col[1], alpha = 0.7) +
+  geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
@@ -508,6 +516,13 @@ ggplot(p,
   labs(x="", y="", fill= "Number of\nObservations",
        title = "Sentiment value") +
   theme(axis.text.y = element_text(size=12))
+```
+
+```{r}
+sentDF.values %>%
+  filter(topic == 6) %>%
+  select(title, sentiment, site) %>%
+  htmlTable::htmlTable(align = "l")
 ```
 
 ### Radar plot
@@ -546,10 +561,123 @@ for (i in stmOut$settings$covariates$yvarlevels) {
 
 ```
 
-<img src="../figs/radarchart_Bild.de45.png", width = "45%">
-<img src="../figs/radarchart_DIE WELT45.png", width = "45%">
-<img src="../figs/radarchart_FOCUS ONLINE45.png", width = "45%">
-<img src="../figs/radarchart_SPIEGEL ONLINE45.png", width = "45%">
-<img src="../figs/radarchart_stern.de45.png", width = "45%">
-<img src="../figs/radarchart_Tagesschau.de45.png", width = "45%">
-<img src="../figs/radarchart_ZEIT ONLINE45.png", width = "45%">
+<img src="../figs/radarchart_Bild.de35.png", width = "49%">
+<img src="../figs/radarchart_DIE WELT35.png", width = "49%">
+<img src="../figs/radarchart_FOCUS ONLINE35.png", width = "49%">
+<img src="../figs/radarchart_SPIEGEL ONLINE35.png", width = "49%">
+<img src="../figs/radarchart_stern.de35.png", width = "49%">
+<img src="../figs/radarchart_Tagesschau.de35.png", width = "49%">
+<img src="../figs/radarchart_ZEIT ONLINE35.png", width = "49%">
+
+### Compare with polls
+```{r eval=FALSE, include=FALSE}
+load("../output/polls.Rda")
+```
+
+Define Functions 
+
+```{r eval=FALSE, include=FALSE}
+calculate_month = function(month, year) {
+  date <- ymd(paste(year, 1, 1, sep="-"))
+  month(date) = month
+  return(date)
+}
+
+normalize_data <- function(x) {
+  y <- (x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))
+  return(y)
+}
+```
+
+Prepare Dataframes
+
+```{r eval=FALSE, include=FALSE}
+polls <- table_long %>%
+  mutate(month=month(Datum),
+         year = year(Datum),
+         yearmonth = calculate_month(month,year),
+         val_norm = normalize_data(value)) %>%
+  group_by(yearmonth,party) %>%
+  summarise(mean_val = mean(value, na.rm=T),
+            mean_val_norm = mean(val_norm)) %>%
+  ungroup() %>%
+  filter(mean_val != "NaN") %>%
+  select(party, yearmonth, mean_val_norm) %>%
+  spread(party, mean_val_norm)
+```
+
+```{r eval=FALSE, include=FALSE}
+sentDF.values %>%
+  mutate(year = year(date),
+         month = month(date),
+         yearmonth = calculate_month(month,year),
+         sentiment_norm = normalize_data(sentiment)) %>%
+  group_by(yearmonth, topic_name, topic, site) %>%
+  summarise(mean_sent = mean(sentiment, na.rm=T),
+            mean_sent_norm = mean(sentiment_norm, na.rm = T)) %>%
+  ungroup() %>%
+  left_join(polls, by="yearmonth") -> p
+```
+
+Plot 
+
+```{r eval=FALSE, include=FALSE}
+for (i in unique(p$site)) {
+  
+  p1 <- p %>%
+  filter(site == i) %>%
+  ggplot(aes(yearmonth, mean_sent_norm,
+               group = site)) +
+  geom_point(show.legend = F, color = col[1]) + 
+  geom_line(color = col[1]) +
+
+  scale_y_continuous(limits = c(0,1)) +
+  scale_x_date(breaks = date_breaks("1 month"), 
+               labels = date_format("%b", tz = "CET")) +
+  # AfD
+  geom_point(aes(yearmonth, AfD), size= 0.5,
+             color = "deepskyblue") +
+  geom_line(aes(yearmonth, AfD), color = "deepskyblue") +
+  
+  # CDU/CSU
+  geom_point(aes(yearmonth, Union), size= 0.5,
+             color = "black") +
+  geom_line(aes(yearmonth, Union),
+             color = "black") +
+  
+  # SPD
+  geom_point(aes(yearmonth, SPD), size= 0.5,
+             color = "red") +
+  geom_line(aes(yearmonth, SPD),
+             color = "red") +
+  
+  # Grüne
+  geom_point(aes(yearmonth, Grüne), size= 0.5,
+             color = "limegreen") +
+  geom_line(aes(yearmonth, Grüne),
+             color = "limegreen") +
+  
+  # DIE LINKE
+  geom_point(aes(yearmonth, Linke), size= 0.5,
+             color = "deeppink") +
+  geom_line(aes(yearmonth, Linke),
+             color = "deeppink") +
+  
+  # 
+  labs(x="", y="", title=paste(i)) +
+    theme(axis.text = element_text(size = 6)) +
+  facet_grid(topic_name ~.)
+  
+  ggsave(p1, file=paste0("../figs/polls_",i,".png"),
+         width = 4, height = 10)
+  
+}
+```
+
+<!-- <img src="../figs/polls_Bild.de.png", width = "49%"> -->
+<!-- <img src="../figs/polls_DIE WELT.png", width = "49%"> -->
+<!-- <img src="../figs/polls_FOCUS ONLINE.png", width = "49%"> -->
+<!-- <img src="../figs/polls_SPIEGEL ONLINE.png", width = "49%"> -->
+<!-- <img src="../figs/polls_stern.de.png", width = "49%"> -->
+<!-- <img src="../figs/polls_Tagesschau.de.png", width = "49%"> -->
+<!-- <img src="../figs/polls_ZEIT ONLINE.png", width = "49%"> -->

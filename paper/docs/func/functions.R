@@ -183,3 +183,12 @@ JSD<- function(x,y) {
 KLD <- function(x,y) {
   sum(x * log(x/y))
 }
+
+#####################
+## Standartization ##
+#####################
+
+normalize_data <- function(x) {
+  y <- (x - min(x)) / (max(x) - min(x))
+  return(y)
+}
