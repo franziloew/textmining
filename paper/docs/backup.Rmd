@@ -826,3 +826,27 @@ ggsave(filename = "../figs/distance.png", device = "png",width = 12, height = 8,
 dpi = 600)
 ```
 
+# FB Shares
+```{r}
+endpoint <- "https://api.sharedcount.com/?url="
+api1 <- "&apikey=24abe04472f42e5003938b0314844010d6425d37"
+api2 <- "&apikey=68d76247a02b3d39ff592aa5616ce9f73f182934"
+
+pattern <- 'share_count\\":[0-9]+'
+shares <- NULL
+
+for (i in (length(shares)+1):nrow(btw)){
+  page <- readLines(paste0(endpoint,btw$url[i],api2))
+  string <- str_extract(page, pattern)
+  shares <- append(shares, as.numeric(str_extract(string, "[0-9]+")))
+}
+```
+
+```{r}
+btw <- cbind(btw, shares)
+
+btw <- btw %>% mutate(fb_shares = shares) %>%
+  select(-shares)
+
+unique(btw$site)
+```

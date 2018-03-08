@@ -36,7 +36,6 @@ library(tidygraph)
 library(RColorBrewer) 
 library(ggrepel)
 library(scales)      # Scales
-library(viridis)     # Viridis color scales
 
 library(tidytext)    # Tidy text mining
 library(stringdist)  # String distances
@@ -65,7 +64,7 @@ theme_set(
 )
 
 rm(list=ls())
-col <- brewer.pal(6,"Dark2")
+col <- rcartocolor::carto_pal(12, "Bold")
 source("func/functions.R")
 ```
 
@@ -85,7 +84,7 @@ The Figures below show the distribution of the number of articles from the respe
 ggsave({
   btw %>%
   ggplot(aes(site)) +
-  geom_bar(fill=col[1], alpha= .8) +
+  geom_bar(fill=col[8], alpha = 0.8) +
   labs(x="", y="Number of articles") +
   theme(
       legend.position   = "none"
@@ -106,7 +105,7 @@ ggsave({
   ggplot(aes(date, obs)) +
   geom_line(color=col[3]) +
   geom_vline(aes(xintercept=as.Date("2017-09-24")),
-             linetype = 2, color=col[2]) +
+             linetype = 2, color=col[5]) +
   scale_color_manual(values = col) +
   labs(x="", y="number of articles",color="") +
   scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
@@ -157,12 +156,37 @@ topics.df <- as.data.frame(topics) %>%
          topic = 1:k) 
 ```
 
-Next, we can assign a topic to each document (topic with highest postertior gamma)
+## Posterior distribution (gamma)
+
+The theta Matrix is a DxK Matrix that gives us a probability for each topic (K) and each document (D) 
 
 ```{r Extract wtp and dtp}
 # Document-topic probabilities
 stmOut %>% tidy("theta") -> theta
+```
 
+The probability of each topic for documents 1-5 can be plotted as:
+
+```{r}
+theta %>%
+  filter(document < 6) %>%
+  ggplot(aes(factor(topic), gamma, 
+             fill = factor(document))) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = col,
+                    guide = guide_legend(
+                      nrow = 1
+                    )) +
+  labs(x = "Topic", fill = "Document",
+       title = "Gamma distribution of documents 1-5") +
+  theme(legend.position = "bottom") 
+```
+
+As you can see, only document 2 cannot be assigned to any topic with a high probability. In the case of the other documents, it is highly likely that it belongs to a particular topic. 
+
+To get a better understanding of the distribution of the "highest gamma", we assign a topic to each document (topic with highest postertior distribution).
+
+```{r}
 top_topics <- theta %>% 
   group_by(document) %>%
   mutate(therank = rank(-gamma)) %>%
@@ -177,18 +201,16 @@ btw.2 <- btw %>%
   mutate(allocation = 1) 
 ```
 
-##### How is the top-gamma value distributed among the corpus?
-
 ```{r}
-btw.2 %>%
-  ggplot(aes(gamma)) +
-  geom_density(color = col[3],
-               fill = col[3], alpha=.7) +
-  labs(x="Distribution of gamma value")
+ggplot(btw.2, aes(gamma)) +
+  geom_density(fill=col[3], alpha = 0.8,
+               color = col[3]) +
+  labs(title = "Density Plot / Posterior distribution",
+       y = "Theta")
 ```
 
-#### Inspect the unclear topics
 ```{r eval=FALSE, include=FALSE}
+# Inspect the unclear topics
 btw.2 %>% filter(topic==13) %>% select(title, gamma, url) %>%
   arrange(desc(gamma)) %>%
   top_n(10) %>%
@@ -252,7 +274,9 @@ p1
 ```
 
 ```{r fig.height=8, fig.width=12}
-p2 <- ggplot(freq, aes(reorder(topic_name,frequency), freq)) +
+p2 <- freq %>%
+  mutate(topic =  as.numeric(gsub(":.*$","",topic))) %>% 
+  ggplot(aes(reorder(topic_name,topic), freq)) +
   geom_col(fill = col[3]) +
   coord_flip() +
   facet_wrap(~site, ncol = 7) +
@@ -268,7 +292,7 @@ p2
 Keep only those articles, that are clear & interessting to analyse.
 
 ```{r}
-keep <- c(1,16,24,29,3,6,8)
+keep <- c(1,2,3,6,8,16,24,29)
 ```
 
 ## 3.2. Difference in topic prevalence
@@ -326,7 +350,7 @@ coeff <- coeff %>%
 
 The following figure shows the regression results for each news page. The coefficients indicate the deviation from the base value of Bild.de (keeping the month equal).
 
-```{r fig.height=8, fig.width=12}
+```{r fig.height=4, fig.width=10}
 p1 <- coeff %>% 
   filter(topic %in% keep) %>%
   filter(parameter %in% stmOut$settings$covariates$yvarlevels) %>%
@@ -349,7 +373,7 @@ p1
 
 The following figure shows the regression results for each month. The coefficients indicate the deviation from the base value of June 2017 (keeping the news source).
 
-```{r fig.height=8, fig.width=12}
+```{r fig.height=4, fig.width=10}
 p1 <- coeff %>% 
   filter(topic %in% keep) %>%
   filter(!parameter %in% stmOut$settings$covariates$yvarlevels) %>%
@@ -394,9 +418,13 @@ sent <- c(
 }) %>%
   bind_rows %>% 
   mutate(word = gsub("\\|.*", "", words) %>% tolower,
-         value = as.numeric(value)) %>% 
+         value = as.numeric(value)) %>%
   # manche Wörter kommen doppelt vor, hier nehmen wir den mittleren Wert
   group_by(word) %>% summarise(value = mean(value)) %>% ungroup
+
+sent %>% 
+  dplyr::top_n(10, desc(value)) %>%
+  htmlTable::htmlTable()
 ```
 
 #### 2. Apply the dictionary on the artciles. 
@@ -405,7 +433,7 @@ We now take each word in each article and assign a sentiment value for that word
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 df <- btw.2 %>%
-  filter(gamma >= 0.8) %>%
+  filter(gamma >= 0.85) %>%
   filter(topic %in% keep)
 
 # Tokenize text
@@ -416,116 +444,182 @@ token <- df %>%
 sentDF <- left_join(token, sent, by="word") %>% 
   mutate(value = as.numeric(value)) %>% 
   #filter(!is.na(value)) %>%
-  mutate(polarity = ifelse(value < 0, "negative", "NA"),
-         polarity = ifelse(value > 0, "positive", polarity))
+  mutate(negative = ifelse(value < 0, value, NA),
+         positive = ifelse(value > 0, value, NA),
+         negative_d = ifelse(value < 0, 1, 0),
+         positive_d = ifelse(value > 0, 1, 0)) 
+```
+
+##### Check the analysis for a set of example documents. 
+
+```{r}
+sentDF %>% filter(document == unique(sentDF$document)[3]) %>%
+  select(title, word, value, site) %>%
+  htmlTable::htmlTable()
 ```
 
 #### 3. Calculate sentiment value by document
 
-calculate sentiment value of document $d$: 
+We apply two different measurements:
 
+  1. **Weighted** calculates the score based on the weighted values for a word. As explained above, the dictionary places the words on an interval of -1 and 1. The score is then calculated from the sum of the words in a document (which can be assigned to a word from the dictionary) divided by the total number of words in that document. 
+  
 $$
-\text{Sentiment}_d = \frac{|\text{Sum of positive tokens}_d| - |\text{Sum of negative tokens}_d|}{\text{Number ot tokens}_d}
+\text{Weighted}_d = \frac{|\text{positive polarity score}_d| - |\text{negative polarity score}_d|}{\text{Total Words}_d}
 $$
+  
+  2. **Count** calculates the score as the difference of positive and negative words (dummy) divided divided by the total number of words in that document. This value therefore only reflects the relation between positive and negative words, without considering the weighting of these words. 
+  
+$$
+\text{Count}_d = \frac{\text{Sum of positive Words}_d - \text{Sum of negative Words}_d}{\text{Total Words}_d}
+$$
+
 
 ```{r}
 sentDF.values <- sentDF %>%
-  select(document, word, value, polarity) %>%
-  mutate(id = row_number()) %>%
-  spread(polarity, value) %>%
+  select(document, word, value, 
+         negative, positive,
+         negative_d, positive_d) %>%
   group_by(document) %>%
   
   # calculate sum of positive and negative values
   summarise(sum_positive = sum(positive, na.rm = T),
-            sum_negative = sum(negative, na.rm = T)) %>%
+            sum_negative = sum(negative, na.rm = T),
+            sum_positive_d = sum(positive_d, na.rm = T),
+            sum_negative_d = sum(negative_d, na.rm = T)) %>%
 
   # calculate diff
-  mutate(sent_diff = abs(sum_positive) - abs(sum_negative)) %>%
+  mutate(sent_diff = sum_positive + sum_negative,
+         sent_diff_d = sum_positive_d - sum_negative_d) %>%
   
   # combine with dataframe
   left_join(., df, 
             by = "document") %>%
   # calculate sentiment
-  mutate(sentiment = sent_diff / text_length)
+  mutate(sentiment_d = sent_diff_d / text_length,
+         sentiment = sent_diff / text_length)
 ```
 
 
-### Plot Sentiment
+#### 4. Plot Sentiment
 
-#### 1. by topic
-```{r fig.height=8, fig.width=6}
+
+##### 4.1. by topic
+```{r fig.height=4, fig.width=7}
 p <- sentDF.values %>%
   group_by(topic_name) %>%
-  summarise(sentiment = mean(sentiment, na.rm=T),
+  summarise(sentiment_d = mean(sentiment_d, na.rm=T),
+            sentiment = mean(sentiment, na.rm=T),
             obs = n())
-  
-ggplot(p, aes(reorder(topic_name, sentiment), 
+
+## weighted ##
+p1 <- ggplot(p, aes(reorder(topic_name, sentiment), 
               sentiment,
               label = obs)) +
   geom_col(fill = col[1], alpha = 0.7) +
-  geom_text() +
+  #geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
   labs(x="", y="",
-       title = "Grouped Sentiment value",
-       fill = "Number of\nObservations") +
-  theme(axis.text.y = element_text(size = 10))
+       title = "Weighted") +
+  theme(axis.text.y = element_text(size = 8))
+
+## unweighted ##
+p2 <- ggplot(p, aes(reorder(topic_name, sentiment), 
+              sentiment_d,
+              label = obs)) +
+  geom_col(fill = col[4], alpha = 0.7) +
+  #geom_text() +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
+  coord_flip() +
+  labs(x="", y="",
+       title = "Count") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+
+p1 + p2
 ```
 
+##### 4.2. by site 
 
-#### 2.by site 
-
-```{r}
+```{r fig.height=4, fig.width=7}
 p <- sentDF.values %>%
   group_by(site) %>%
-  summarise(sentiment = mean(sentiment, na.rm=T),
+  summarise(sentiment_d = mean(sentiment_d, na.rm=T),
+            sentiment = mean(sentiment, na.rm=T),
             obs = n())
-  
-ggplot(p, aes(reorder(site, sentiment), 
+
+## weighted ##
+p1 <- ggplot(p, aes(reorder(site, sentiment), 
               sentiment,
               label = obs)) +
-  geom_col(fill = col[3], alpha = 0.7) +
-  geom_text() +
+  geom_col(fill = col[1], alpha = 0.7) +
+  #geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
   labs(x="", y="",
-       title = "Grouped Sentiment value",
-       fill = "Number of\nObservations") +
-  theme(axis.text.y = element_text(size = 10))
+       title = "Weighted") +
+  theme(axis.text.y = element_text(size = 8))
+
+## unweighted ##
+p2 <- ggplot(p, aes(reorder(site, sentiment), 
+              sentiment_d,
+              label = obs)) +
+  geom_col(fill = col[4], alpha = 0.7) +
+  #geom_text() +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
+  coord_flip() +
+  labs(x="", y="",
+       title = "Count") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+
+p1 + p2
 ```
 
-#### 3. By site and topic
+##### 4.3. By site and topic
 
 ```{r fig.height=8, fig.width=12}
 p <- sentDF.values %>%
   group_by(site, topic_name, topic) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
+            sentiment_d = mean(sentiment_d, na.rm=T),
             obs = n())
 
-ggplot(p, 
+p1 <- ggplot(p, 
        aes(reorder(topic_name, topic), 
            sentiment, label = obs)) +
   geom_col(fill=col[1], alpha = 0.7) +
-  geom_text() +
+  #geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
   facet_wrap(~site, ncol = 7) +
-  labs(x="", y="", fill= "Number of\nObservations",
-       title = "Sentiment value") +
-  theme(axis.text.y = element_text(size=12))
+  labs(x="", y="",
+       title = "Weighted") +
+  theme(axis.text.y = element_text(size=8))
+
+p2 <- ggplot(p, 
+       aes(reorder(topic_name, topic), 
+           sentiment_d, label = obs)) +
+  geom_col(fill=col[4], alpha = 0.7) +
+  #geom_text() +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
+  coord_flip() +
+  facet_wrap(~site, ncol = 7) +
+  labs(x="", y="",
+       title = "Count") +
+  theme(axis.text.y = element_text(size=8))
+
+p1 + p2 + plot_layout(ncol = 1)
 ```
 
-```{r}
-sentDF.values %>%
-  filter(topic == 6) %>%
-  select(title, sentiment, site) %>%
-  htmlTable::htmlTable(align = "l")
-```
-
-### Radar plot
+##### 4.4. Radar plot
 
 ```{r message=FALSE, warning=FALSE}
 require(ggiraph)
@@ -542,10 +636,38 @@ radar %>%
   ggRadar(aes(color=site), 
           rescale = F,
           alpha = 0, legend.position = "right") +
-  labs(title = "")
+  labs(title = "Weighted")
+```
+
+```{r eval=FALSE, include=FALSE}
+for (i in stmOut$settings$covariates$yvarlevels) {
+
+  p <-radar %>%
+    filter(site == i) %>%
+    ggRadar(rescale = F,
+            alpha = 0, legend.position = "right") +
+    labs(title = i)
+  
+  ggsave(p, filename = paste0("../figs/radarchartWeighted_",i,k,".png"), 
+         device = "png", dpi = 600)
+  
+}
 ```
 
 ```{r}
+sentDF.values %>%
+  group_by(site, topic_name) %>%
+  summarise(sentiment = mean(sentiment_d, na.rm=T)) %>%
+  spread(key=topic_name, value=sentiment) -> radar
+
+radar %>%
+  ggRadar(aes(color=site), 
+          rescale = F,
+          alpha = 0, legend.position = "right") +
+  labs(title = "Count")
+```
+
+```{r eval=FALSE, include=FALSE}
 for (i in stmOut$settings$covariates$yvarlevels) {
 
   p <-radar %>%
@@ -558,8 +680,19 @@ for (i in stmOut$settings$covariates$yvarlevels) {
          device = "png", dpi = 600)
   
 }
-
 ```
+
+###### Weighted
+
+<img src="../figs/radarchartWeighted_Bild.de35.png", width = "49%">
+<img src="../figs/radarchartWeighted_DIE WELT35.png", width = "49%">
+<img src="../figs/radarchartWeighted_FOCUS ONLINE35.png", width = "49%">
+<img src="../figs/radarchartWeighted_SPIEGEL ONLINE35.png", width = "49%">
+<img src="../figs/radarchartWeighted_stern.de35.png", width = "49%">
+<img src="../figs/radarchartWeighted_Tagesschau.de35.png", width = "49%">
+<img src="../figs/radarchartWeighted_ZEIT ONLINE35.png", width = "49%">
+
+###### Count
 
 <img src="../figs/radarchart_Bild.de35.png", width = "49%">
 <img src="../figs/radarchart_DIE WELT35.png", width = "49%">
@@ -569,12 +702,48 @@ for (i in stmOut$settings$covariates$yvarlevels) {
 <img src="../figs/radarchart_Tagesschau.de35.png", width = "49%">
 <img src="../figs/radarchart_ZEIT ONLINE35.png", width = "49%">
 
-### Compare with polls
-```{r eval=FALSE, include=FALSE}
-load("../output/polls.Rda")
+### 5. SenitmantR
+
+```{r}
+pacman::p_load(sentimentr)
 ```
 
-Define Functions 
+```{r}
+sent %>%
+  mutate(polarity = value) %>%
+  as_key() -> sentiment_df
+```
+
+#### Output 
+
+We may wish to see the output from sentiment_by line by line with positive/negative sentences highlighted. The highlight function wraps a sentiment_by output to produces a highlighted HTML file (positive = green; negative = pink). Here we look at a random article for each site.
+
+```{r}
+df %>% 
+  mutate(text_split = get_sentences(text)) %$%
+  sentiment(text_split,
+               polarity_dt = sentiment_df) -> df_sent
+
+df %>% 
+  group_by(site) %>%
+  sample_n(1) %>%
+  mutate(text_split = get_sentences(title_text)) %$%
+  sentiment_by(text_split, site,
+               polarity_dt = sentiment_df) %>%
+  sentimentr::highlight()
+```
+
+[Polarity](polarity.html)
+
+<!-- ### 5. Compare with polls -->
+
+```{r eval=FALSE, include=FALSE}
+load("../output/polls.Rda")
+
+htmlTable::htmlTable(table[1:10,], align = "l")
+```
+
+<!-- Define Functions  -->
 
 ```{r eval=FALSE, include=FALSE}
 calculate_month = function(month, year) {
@@ -589,7 +758,7 @@ normalize_data <- function(x) {
 }
 ```
 
-Prepare Dataframes
+<!-- Prepare Dataframes -->
 
 ```{r eval=FALSE, include=FALSE}
 polls <- table_long %>%
@@ -619,7 +788,7 @@ sentDF.values %>%
   left_join(polls, by="yearmonth") -> p
 ```
 
-Plot 
+<!-- Plot  -->
 
 ```{r eval=FALSE, include=FALSE}
 for (i in unique(p$site)) {
