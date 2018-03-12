@@ -123,7 +123,7 @@ dpi = 600
 
 ![plot1](../figs/timeline.png)
 
-# 2. Model Results
+# Model Results
 
 ```{r echo = FALSE}
 load("../output/models/STM 50 .Rda")
@@ -131,32 +131,44 @@ k <- stmOut$settings$dim$K
 sagelabs <- sageLabels(stmOut, 20)
 ```
 
-## Label topics
+## 1. Topic
+
+### 1.1. Label topics
 
 In order to improve readability and traceability, I assign a shorter name to the topics based on the most common words.
 The plotQuote function allows to inspect die most common words of a topic for each covariate.
 
-```{r eval=FALSE, fig.height=12, fig.width=5}
-topic <- 50
+```{r eval=FALSE, fig.height=8, fig.width=4}
+topic <- 1
 
-plotQuote(c(paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n"),
-            paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n")))
+plotQuote(c(paste(sagelabs$covnames[1],":", 
+                  paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[2],":",
+                  paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[3],":", 
+                  paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[4],":", 
+                  paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[5],":", 
+                  paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[6],":",
+                  paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[7],":",
+                  paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n"))),
+          text.cex = 0.8, width = 40,
+          main = paste(topics.df$topic_name[topics.df$topic==topic])
+          )
 ```
 
 ```{r}
-topics <- matrix(c(1, "SPD, M.Schulz", 2, "B90/ Die Grüne", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "Merkel vs. Schulz", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Decision about GroKo in the SPD", 18, "Election in Niedersachsen", 19, "N.Lammert", 20, "AfD", 21, "German armed forces, v.d.Leyen", 22, "SPD, stuffing debates", 23, "CSU, Söder vs. Seehover, refugee cap", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Reelections after Jamaica failure", 27, "Jamaica caolition talks", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "F.Petri, AfD", 31, "D.Trump, Russia", 32, "Gauland, Weidel, AfD", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU, Spahn", 47, "Church", 48, "public budget statistics, Education and Healthcare", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
+topics <- matrix(c(1, "SPD", 2, "B90/ Die Grüne & DIE LINKE", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "Merkel vs. Schulz", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Intra-party vote (SPD) about the coalition w CDU/CSU", 18, "Election in Niedersachsen", 19, "R.Lammert", 20, "AfD, Right-wing extremist tendencies", 21, "German armed forces, v.d.Leyen", 22, "SPD, stuffing debates", 23, "CSU, Söder vs. Seehover, refugee cap", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Reelections vs. Great Coalition after Jamaica failure", 27, "Jamaica caolition talks", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "F.Petri, AfD", 31, "D.Trump, Russia", 32, "Gauland, Weidel, AfD", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU, Spahn", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
          topic = 1:k) 
 ```
 
-## Posterior distribution (gamma)
+### 1.2. Posterior distribution (gamma)
 
 The theta Matrix is a DxK Matrix that gives us a probability for each topic (K) and each document (D) 
 
@@ -164,25 +176,6 @@ The theta Matrix is a DxK Matrix that gives us a probability for each topic (K) 
 # Document-topic probabilities
 stmOut %>% tidy("theta") -> theta
 ```
-
-The probability of each topic for documents 1-5 can be plotted as:
-
-```{r}
-theta %>%
-  filter(document < 6) %>%
-  ggplot(aes(factor(topic), gamma, 
-             fill = factor(document))) +
-  geom_col(position = "dodge") +
-  scale_fill_manual(values = col,
-                    guide = guide_legend(
-                      nrow = 1
-                    )) +
-  labs(x = "Topic", fill = "Document",
-       title = "Gamma distribution of documents 1-5") +
-  theme(legend.position = "bottom") 
-```
-
-As you can see, only document 2 cannot be assigned to any topic with a high probability. In the case of the other documents, it is highly likely that it belongs to a particular topic. 
 
 To get a better understanding of the distribution of the "highest gamma", we assign a topic to each document (topic with highest postertior distribution).
 
@@ -217,7 +210,7 @@ btw.2 %>% filter(topic==13) %>% select(title, gamma, url) %>%
   htmlTable::htmlTable(align="l")
 ```
 
-## 3.1. Topic proportions
+### 1.3 Topic proportions
 
 In order to get an initial overview of the results, the figure below displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles.
 
@@ -261,7 +254,7 @@ freq <- freq %>%
 
 #### Next, we can plot the expected proportion of topic use in the overall corpus vs. the expected proportion of topic use for each medium.
 
-```{r fig.height=8, fig.width=6}
+```{r fig.height=8, fig.width=8}
 p1 <- ggplot(frequency, aes(x=reorder(topic_name, frequency), y=frequency)) + 
     geom_col(fill=col[1], alpha=0.8) +
     coord_flip() +
@@ -289,13 +282,20 @@ p2 <- freq %>%
 p2 
 ```
 
-Keep only those articles, that are clear & interessting to analyse.
-
-```{r}
-keep <- c(1,2,4,10,13,17,20,22,26,27,37,46)
+```{r eval=FALSE, include=FALSE}
+btw.2 %>% filter(topic == 46) %>%
+  filter(!grepl("Geißler", title)) %>%
+  select(title, url, site) %>%
+  htmlTable::htmlTable(align = "l")
 ```
 
-## 3.2. Difference in topic prevalence
+We will conduct our further analysis on 15 selected topics which relate to political parties.
+
+```{r}
+keep <- c(1,2,4,10,13,17,20,22,23,26,27,30,32,37,46)
+```
+
+### 1.4. Difference in topic prevalence
 
 To identify which of these differences is significant, the conditional expectation of topic prevalence for given document characteristics can be estimated. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation below). 
 
@@ -365,13 +365,64 @@ p1
 # dpi = 600)
 ```
 
-## Sentiment analysis
+## 2. Tone
+
+### 2.1. Plotquote
+
+The plotQuote function allows to inspect die most common words of a topic for each covariate.
+
+```{r eval=FALSE, fig.height=8, fig.width=4}
+for (topic in keep) {
+  
+  png(filename = paste0("../figs/plotquote",topic,".png"), width = 300,
+      height = 700)
+  
+  plotQuote(c(paste(sagelabs$covnames[1],":", 
+                  paste(sagelabs$cov.betas[[1]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[2],":",
+                  paste(sagelabs$cov.betas[[2]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[3],":", 
+                  paste(sagelabs$cov.betas[[3]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[4],":", 
+                  paste(sagelabs$cov.betas[[4]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[5],":", 
+                  paste(sagelabs$cov.betas[[5]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[6],":",
+                  paste(sagelabs$cov.betas[[6]]$problabels[topic,], collapse="\n")),
+            paste(sagelabs$covnames[7],":",
+                  paste(sagelabs$cov.betas[[7]]$problabels[topic,], collapse="\n"))),
+          text.cex = 0.8, width = 40,
+          main = paste(topics.df$topic_name[topics.df$topic==topic])
+          )
+  dev.off()
+}
+```
+
+<img src="../figs/plotquote1.png", width = "30%">
+<img src="../figs/plotquote2.png", width = "30%">
+<img src="../figs/plotquote4.png", width = "30%">
+<img src="../figs/plotquote10.png", width = "30%">
+<img src="../figs/plotquote13.png", width = "30%">
+<img src="../figs/plotquote17.png", width = "30%">
+<img src="../figs/plotquote20.png", width = "30%">
+<img src="../figs/plotquote22.png", width = "30%">
+<img src="../figs/plotquote23.png", width = "30%">
+<img src="../figs/plotquote26.png", width = "30%">
+<img src="../figs/plotquote27.png", width = "30%">
+<img src="../figs/plotquote30.png", width = "30%">
+<img src="../figs/plotquote32.png", width = "30%">
+<img src="../figs/plotquote37.png", width = "30%">
+<img src="../figs/plotquote46.png", width = "30%">
+
+
+
+### 2.2. Sentiment analysis
 
 The idea of Sentiment analysis is to determine the attitude of a writer through online text data toward certain topic or the overall tonality of a document.
 
 Lexical or “bag-ofwords” approaches are commonly used. In that approach, the researcher provides pre-defined dictionaries (lists) of words associated with a given emotion, such as negativity. The target text is then deconstructed into individual words (or tokens) and the frequencies of words contained in a given dictionary are then calculated. 
 
-#### 1. Load sentiment dictionary.
+#### 2.2.1. Load sentiment dictionary.
 
 [SentimentWortschatz](http://wortschatz.uni-leipzig.de/de/download), or SentiWS for short, is a publicly available German-language resource for sentiment analysis, opinion mining etc. It lists positive and negative polarity bearing words weighted within the interval of [-1; 1] plus their part of speech tag, and if applicable, their inflections. The current version of SentiWS (v1.8b) contains 1,650 positive and 1,818 negative words, which sum up to 15,649 positive and 15,632 negative word forms incl. their inflections, respectively. It not only contains adjectives and adverbs explicitly expressing a sentiment, but also nouns and verbs implicitly containing one.
 
@@ -394,20 +445,28 @@ sent <- c(
          value = as.numeric(value)) %>%
   # manche Wörter kommen doppelt vor, hier nehmen wir den mittleren Wert
   group_by(word) %>% summarise(value = mean(value)) %>% ungroup
-
-# sent %>% 
-#   dplyr::top_n(10, desc(value)) %>%
-#   htmlTable::htmlTable()
 ```
 
-#### 2. Apply the dictionary on the artciles. 
+#### 2.2.2. Apply the dictionary on the artciles. 
 
-We now take each word in each article and assign a sentiment value for that word. I only use articles that have been assigned a topic with a probability of over 90% (gamma > 0.9).  
+To carry out the sentiment analysis we filter some documents from the corpus:
+
+  1. Articles that have been assigned a topic with a probability of over 75% (gamma > 0.75).
+  2. Articles assigned to one of the above mentioned topics.
+  3. Some manual cleanups
+
+After applying these filters, we still have about 2500 articles left to conduct the sentiment analysis. We now take each word in each article and assign a sentiment value for that word.   
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 df <- btw.2 %>%
-  filter(gamma >= 0.85) %>%
-  filter(topic %in% keep)
+  filter(gamma >= 0.75) %>%
+  distinct(title, .keep_all = T) %>%
+  filter(topic %in% keep) %>%
+  # Filter documents about the death of H.Geißler
+  filter(!grepl("Geißler", title)) %>%
+  # Filter outliner article (wrong topic assignment)
+  filter(document != 9725) %>%
+  filter(!grepl("Thermilindner", title, ignore.case = T))
 
 # Tokenize text
 token <- df %>%
@@ -423,7 +482,7 @@ sentDF <- left_join(token, sent, by="word") %>%
          positive_d = ifelse(value > 0, 1, 0)) 
 ```
 
-##### Check the analysis for a set of example documents. 
+#### 2.2.3. Check the analysis for a set of example documents. 
 
 ```{r}
 sentDF %>% filter(document == unique(sentDF$document)[1]) %>%
@@ -431,23 +490,14 @@ sentDF %>% filter(document == unique(sentDF$document)[1]) %>%
   htmlTable::htmlTable(align = "l")
 ```
 
-#### 3. Calculate sentiment value by document
+#### 2.2.4. Calculate sentiment value by document
 
-We apply two different measurements:
-
-  1. **Weighted** calculates the score based on the weighted values for a word. As explained above, the dictionary places the words on an interval of -1 and 1. The score is then calculated from the sum of the words in a document (which can be assigned to a word from the dictionary) divided by the total number of words in that document. 
+The sentiment score is calculated based on the weighted polarity values for a word, defined on an interval between -1 and 1. The score is then calculated from the sum of the words in a document (which can be assigned to a word from the dictionary) divided by the total number of words in that document. 
   
 $$
 \text{Weighted}_d = \frac{|\text{positive polarity score}_d| - |\text{negative polarity score}_d|}{\text{Total Words}_d}
 $$
   
-  2. **Count** calculates the score as the difference of positive and negative words (dummy) divided divided by the total number of words in that document. This value therefore only reflects the relation between positive and negative words, without considering the weighting of these words. 
-  
-$$
-\text{Count}_d = \frac{\text{Sum of positive Words}_d - \text{Sum of negative Words}_d}{\text{Total Words}_d}
-$$
-
-
 ```{r}
 sentDF.values <- sentDF %>%
   select(document, word, value, 
@@ -470,93 +520,51 @@ sentDF.values <- sentDF %>%
             by = "document") %>%
   # calculate sentiment
   mutate(sentiment_d = sent_diff_d / text_length,
-         sentiment = sent_diff / text_length)
+         sentiment = sent_diff / text_length) %>%
+  
+  # generate week
+  mutate(week = week(date),
+         month = as.character(month)) %>%
+  mutate(week = paste(month,week, sep = "-"))
 ```
 
 
-#### 4. Plot Sentiment
+#### 2.2.5. Plot Sentiment Score
 
+The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspaper. Some conclusions can be drawn from this illustration. First of all, it is clear that topics concerning the AfD (20, 30, 32, 37) are discussed in a negative way over the entire period, with an exepction for topic 30, dealing with Frauk Petry and the AfD. The topic that is discussed most negatively is that of the right-wing extremist tendencies within the AfD. Another striking result is that the sentiment score of topics topics that deal with the SPD alone (1, 22) is diminishing in the course of time. The topic, which contains the CDU in isolation (46), is rather zigzagging, with a high peak in November 2017 and a low peak in January 2018, but there is only one observation this month, which is an article about Peter Tauber's illness.
 
-##### 4.1. by topic
-```{r fig.height=4, fig.width=7}
+Concerning the issues that discuss possible coalitions, it is evident that there was a month in which the Jamaican coalition was positively discussed (topic 27): October 2017, when coalition talks were in full swing. With the failure of the negotiations, the sentiment value of the articles also decreases, while the number of articles dealing with this topic increases sharply in the short term (to 210 articles) and decreases significantly in the following months. It is striking that precisely at this time (December 2017), both the observations, as well as the sentiment value of the articles that report on the grand coalition increase (topic 4). 
+
+##### By Month & Topic
+```{r fig.height=10, fig.width=12}
 p <- sentDF.values %>%
-  group_by(topic_name) %>%
-  summarise(sentiment_d = mean(sentiment_d, na.rm=T),
-            sentiment = mean(sentiment, na.rm=T),
-            obs = n())
+  group_by(month, topic_name, topic) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            sentiment_d = mean(sentiment_d, na.rm=T),
+            obs = n()) %>%
+  ungroup() 
 
-## weighted ##
-p1 <- ggplot(p, aes(reorder(topic_name, sentiment), 
-              sentiment,
-              label = obs)) +
+p1 <- ggplot(p, 
+       aes(month, sentiment, 
+           group = topic_name,
+           label = obs)) +
+  facet_wrap(~topic_name, nrow = 3) +
   geom_col(fill = col[1], alpha = 0.7) +
-  #geom_text() +
+ geom_line(color = col[2], size = 1) +
+  geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
-  coord_flip() +
   labs(x="", y="",
-       title = "Weighted") +
-  theme(axis.text.y = element_text(size = 8))
+       title = "Monthly Sentiment Score") +
+  theme(axis.text.y = element_text(size=8),
+        axis.text.x = element_text(angle = 90, size = 6))
 
-## unweighted ##
-p2 <- ggplot(p, aes(reorder(topic_name, sentiment), 
-              sentiment_d,
-              label = obs)) +
-  geom_col(fill = col[4], alpha = 0.7) +
-  #geom_text() +
-  geom_hline(yintercept = 0, linetype = 2,
-             color = "black") +
-  coord_flip() +
-  labs(x="", y="",
-       title = "Count") +
-  theme(axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())
-
-p1 + p2
+p1
 ```
 
-##### 4.2. by site 
+##### By Site and Topic
 
-```{r fig.height=4, fig.width=7}
-p <- sentDF.values %>%
-  group_by(site) %>%
-  summarise(sentiment_d = mean(sentiment_d, na.rm=T),
-            sentiment = mean(sentiment, na.rm=T),
-            obs = n())
-
-## weighted ##
-p1 <- ggplot(p, aes(reorder(site, sentiment), 
-              sentiment,
-              label = obs)) +
-  geom_col(fill = col[1], alpha = 0.7) +
-  #geom_text() +
-  geom_hline(yintercept = 0, linetype = 2,
-             color = "black") +
-  coord_flip() +
-  labs(x="", y="",
-       title = "Weighted") +
-  theme(axis.text.y = element_text(size = 8))
-
-## unweighted ##
-p2 <- ggplot(p, aes(reorder(site, sentiment), 
-              sentiment_d,
-              label = obs)) +
-  geom_col(fill = col[4], alpha = 0.7) +
-  #geom_text() +
-  geom_hline(yintercept = 0, linetype = 2,
-             color = "black") +
-  coord_flip() +
-  labs(x="", y="",
-       title = "Count") +
-  theme(axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())
-
-p1 + p2
-```
-
-##### 4.3. By site and topic
-
-```{r fig.height=8, fig.width=12}
+```{r fig.height=5, fig.width=10}
 p <- sentDF.values %>%
   group_by(site, topic_name, topic) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
@@ -566,40 +574,28 @@ p <- sentDF.values %>%
 p1 <- ggplot(p, 
        aes(reorder(topic_name, topic), 
            sentiment, label = obs)) +
-  geom_col(fill=col[1], alpha = 0.7) +
-  #geom_text() +
+  geom_col(fill=col[2], alpha = 0.7) +
+  geom_text(size = 2.5) +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
   facet_wrap(~site, ncol = 7) +
   labs(x="", y="",
-       title = "Weighted") +
-  theme(axis.text.y = element_text(size=8))
+       title = "Sentiment Score") +
+  theme(axis.text.y = element_text(size=8),
+        axis.text.x = element_text(angle = 90))
 
-p2 <- ggplot(p, 
-       aes(reorder(topic_name, topic), 
-           sentiment_d, label = obs)) +
-  geom_col(fill=col[4], alpha = 0.7) +
-  #geom_text() +
-  geom_hline(yintercept = 0, linetype = 2,
-             color = "black") +
-  coord_flip() +
-  facet_wrap(~site, ncol = 7) +
-  labs(x="", y="",
-       title = "Count") +
-  theme(axis.text.y = element_text(size=8))
-
-p1 + p2 + plot_layout(ncol = 1)
+p1
 ```
 
-##### 4.4. Radar plot
+##### Radar plot
 
 ```{r message=FALSE, warning=FALSE}
 require(ggiraph)
 require(ggiraphExtra)
 ```
 
-```{r}
+```{r fig.height=10, fig.width=10}
 sentDF.values %>%
   group_by(site, topic_name) %>%
   summarise(sentiment = mean(sentiment, na.rm=T)) %>%
@@ -609,104 +605,40 @@ radar %>%
   ggRadar(aes(color=site), 
           rescale = F,
           alpha = 0, legend.position = "right") +
-  labs(title = "Weighted")
+  labs(title = "Sentiment score Jun 2017-March 2018") +
+  guides(col = guide_legend(nrow = 1)) +
+  theme(legend.position = "bottom")
 ```
 
 ```{r eval=FALSE, include=FALSE}
-for (i in stmOut$settings$covariates$yvarlevels) {
-
-  p <-radar %>%
-    filter(site == i) %>%
-    ggRadar(rescale = F,
-            alpha = 0, legend.position = "right") +
-    labs(title = i)
+for (i in unique(sentDF.values$month)) {
   
-  ggsave(p, filename = paste0("../figs/radarchartWeighted_",i,k,".png"), 
-         device = "png", dpi = 600)
-  
-}
-```
-
-```{r}
-sentDF.values %>%
+  sentDF.values %>%
+  filter(month == i) %>%
   group_by(site, topic_name) %>%
-  summarise(sentiment = mean(sentiment_d, na.rm=T)) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T)) %>%
   spread(key=topic_name, value=sentiment) -> radar
 
-radar %>%
-  ggRadar(aes(color=site), 
+  p <-radar %>%
+    ggRadar(aes(color=site), 
           rescale = F,
           alpha = 0, legend.position = "right") +
-  labs(title = "Count")
-```
-
-```{r eval=FALSE, include=FALSE}
-for (i in stmOut$settings$covariates$yvarlevels) {
-
-  p <-radar %>%
-    filter(site == i) %>%
-    ggRadar(rescale = F,
-            alpha = 0, legend.position = "right") +
-    labs(title = i)
+  labs(title = paste("Sentiment Score", i))
   
-  ggsave(p, filename = paste0("../figs/radarchart_",i,k,".png"), 
+  ggsave(p, filename = paste0("../figs/radarchart_",i,".png"), 
          device = "png", dpi = 600)
   
 }
 ```
 
-###### Weighted
-
-<img src="../figs/radarchartWeighted_Bild.de35.png", width = "49%">
-<img src="../figs/radarchartWeighted_DIE WELT35.png", width = "49%">
-<img src="../figs/radarchartWeighted_FOCUS ONLINE35.png", width = "49%">
-<img src="../figs/radarchartWeighted_SPIEGEL ONLINE35.png", width = "49%">
-<img src="../figs/radarchartWeighted_stern.de35.png", width = "49%">
-<img src="../figs/radarchartWeighted_Tagesschau.de35.png", width = "49%">
-<img src="../figs/radarchartWeighted_ZEIT ONLINE35.png", width = "49%">
-
-###### Count
-
-<img src="../figs/radarchart_Bild.de35.png", width = "49%">
-<img src="../figs/radarchart_DIE WELT35.png", width = "49%">
-<img src="../figs/radarchart_FOCUS ONLINE35.png", width = "49%">
-<img src="../figs/radarchart_SPIEGEL ONLINE35.png", width = "49%">
-<img src="../figs/radarchart_stern.de35.png", width = "49%">
-<img src="../figs/radarchart_Tagesschau.de35.png", width = "49%">
-<img src="../figs/radarchart_ZEIT ONLINE35.png", width = "49%">
-
-### 5. SenitmantR
-
-```{r}
-pacman::p_load(sentimentr)
-```
-
-```{r}
-sent %>%
-  mutate(polarity = value) %>%
-  as_key() -> sentiment_df
-```
-
-#### Output 
-
-We may wish to see the output from sentiment_by line by line with positive/negative sentences highlighted. The highlight function wraps a sentiment_by output to produces a highlighted HTML file (positive = green; negative = pink). Here we look at a random article for each site.
-
-```{r}
-df %>% 
-  mutate(text_split = get_sentences(text)) %$%
-  sentiment(text_split,
-               polarity_dt = sentiment_df) -> df_sent
-
-df %>% 
-  group_by(site) %>%
-  sample_n(1) %>%
-  mutate(text_split = get_sentences(title_text)) %$%
-  sentiment_by(text_split, site,
-               polarity_dt = sentiment_df) %>%
-  sentimentr::highlight()
-```
-
-[Polarity](polarity.html)
+<!-- <img src="../figs/radarchart_2017-06.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2017-07.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2017-09.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2017-10.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2017-11.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2017-12.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2018-01.png", width = "49%"> -->
+<!-- <img src="../figs/radarchart_2018-02.png", width = "49%"> -->
 
 <!-- ### 5. Compare with polls -->
 

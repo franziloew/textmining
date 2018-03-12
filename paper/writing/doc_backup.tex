@@ -43,8 +43,6 @@ While these pre-defined resorts give an indication on the content of an article,
 Wettbewerb im "Gemischten Oligopol": Die kostenlosen Nachrichtenangebote von ZDF.de oder tagesschau.de im Internet konkurrieren hier mit den Online Angeboten der klassischen Printmedien. Die beitragsfinanzierten Angebote behindern in der Tendenz Prozesse, durch die sich ein selbst tragendes, qualitativ hochwertiges Subskriptionssystem privatwirtschaftlicher Anbieter (spiegel.de, faz.net, welt.de, ...) entwickeln kann. 
  
 
-
-
 \begin{itemize}
 	\item Reserach Question
 	\begin{itemize}
@@ -57,6 +55,21 @@ Wettbewerb im "Gemischten Oligopol": Die kostenlosen Nachrichtenangebote von ZDF
 		\item Topic distribution word-topic distribution are specified as a simple generalized linear model on an arbitrary number of document-level covariates (news source, time of release).
 	\end{itemize}
 \end{itemize}
+
+\begin{enumerate}
+	\item \textbf{Discovering Topics (Section \ref{ch_model})} To discover the latent topics in the corpus, the structural topic modeling (STM) developed by \citet{roberts_model_2016} is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I estimate a model, where the newswire service is included as a control for both the topical content and the topical prevalence. The result of the generative process of STM are the posterior distributions for topic prevalence and topical content, which can then be used to measure the similarity between private and public news providers in the further course of the paper: (1) $\beta$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary), where the entry $\beta_{kvc}$ can be interpreted as the probability of observing the $v$-th word in topic $k$ for the covariate level $c$. (2) $\theta$ is a $D$-by-$V$ matrix of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. 
+	 
+	\item \textbf{Measuring Similarity of news content} Different approaches are used to examine similarities and/or differences of content between the news provider:
+	\begin{enumerate}
+		\item\label{item_1}\textbf{Differences in topic prevalence:} As I allow prevalence of topics to evolve over time (by month) and vary across business models, the posterior topic-probability $\theta_{dk}$ of document can be used to estimate the conditional expectation of topic prevalence for given document characteristics. 
+		
+		\item\label{item_2} \textbf{Topic correlation} To get an idea of how topics are linked and framed differently across news wires, the correlation of the posterior probability of topics $\theta_{dk}$ is calculated.
+
+		\item\label{item_3} \textbf{Differences in word-topic distributions} As each row of $\beta_{kvc}$ corresponds to the word-distribution of a respective topic for the covariate level $c$, it can be used to calculate the similarity of the word-topic distribution between the news provider using established similarity measures. 
+		
+		\end{enumerate}
+	
+\end{enumerate}
 
 
 % ---- public vs. private media ---- %
