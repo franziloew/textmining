@@ -189,6 +189,22 @@ KLD <- function(x,y) {
 #####################
 
 normalize_data <- function(x) {
-  y <- (x - min(x)) / (max(x) - min(x))
+  y <- (x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))
   return(y)
+}
+
+###########
+## Dates ##
+###########
+
+calculate_month = function(month, year) {
+  date <- ymd(paste(year, 1, 1, sep="-"))
+  month(date) = month
+  return(date)
+}
+
+calculate_week = function(week, year) {
+  date <- ymd(paste(year, 1, 1, sep="-"))
+  week(date) = week
+  return(date)
 }

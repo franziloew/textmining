@@ -161,7 +161,7 @@ plotQuote(c(paste(sagelabs$covnames[1],":",
 ```
 
 ```{r}
-topics <- matrix(c(1, "SPD", 2, "B90/ Die Grüne & DIE LINKE", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "Merkel vs. Schulz", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Intra-party vote (SPD) about the coalition w CDU/CSU", 18, "Election in Niedersachsen", 19, "R.Lammert", 20, "AfD, Right-wing extremist tendencies", 21, "German armed forces, v.d.Leyen", 22, "SPD, stuffing debates", 23, "CSU, Söder vs. Seehover, refugee cap", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Reelections vs. Great Coalition after Jamaica failure", 27, "Jamaica caolition talks", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "F.Petri, AfD", 31, "D.Trump, Russia", 32, "Gauland, Weidel, AfD", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU, Spahn", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
+topics <- matrix(c(1, "SPD", 2, "B90/ Die Grüne & DIE LINKE", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "Merkel vs. Schulz", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Votes within SPD", 18, "Election in Niedersachsen", 19, "R.Lammert", 20, "AfD, Right-wing extremist tendencies", 21, "German armed forces, v.d.Leyen", 22, "SPD, stuffing debates", 23, "CSU, Söder vs. Seehover, refugee cap", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Jamaica failure", 27, "Jamaica Coalition debates", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "F.Petri, AfD", 31, "D.Trump, Russia", 32, "Gauland, Weidel, AfD", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU, J.Spahn, Tauber (Disease)", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
@@ -361,8 +361,8 @@ p1 <- coeff %>%
 
 p1
 
-# ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
-# dpi = 600)
+ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
+dpi = 600)
 ```
 
 ## 2. Tone
@@ -485,7 +485,7 @@ sentDF <- left_join(token, sent, by="word") %>%
 #### 2.2.3. Check the analysis for a set of example documents. 
 
 ```{r}
-sentDF %>% filter(document == unique(sentDF$document)[1]) %>%
+sentDF %>% filter(document == unique(sentDF$document)[2]) %>%
   select(title, word, value, site) %>%
   htmlTable::htmlTable(align = "l")
 ```
@@ -497,7 +497,6 @@ The sentiment score is calculated based on the weighted polarity values for a wo
 $$
 \text{Weighted}_d = \frac{|\text{positive polarity score}_d| - |\text{negative polarity score}_d|}{\text{Total Words}_d}
 $$
-  
 ```{r}
 sentDF.values <- sentDF %>%
   select(document, word, value, 
@@ -522,70 +521,151 @@ sentDF.values <- sentDF %>%
   mutate(sentiment_d = sent_diff_d / text_length,
          sentiment = sent_diff / text_length) %>%
   
-  # generate week
+  # generate month & week
   mutate(week = week(date),
-         month = as.character(month)) %>%
-  mutate(week = paste(month,week, sep = "-"))
+         month = month(date),
+         year = year(date),
+         yearmonth = calculate_month(month,year),
+         yearweek = calculate_week(week, year)) 
 ```
 
 
 #### 2.2.5. Plot Sentiment Score
+```{r}
+btw.2 %>% 
+  mutate(yearmonth = calculate_month(month(date), year(date))) %>%
+  group_by(yearmonth) %>%
+  summarise(total_obs = n()) -> tally_month
 
-The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspaper. Some conclusions can be drawn from this illustration. First of all, it is clear that topics concerning the AfD (20, 30, 32, 37) are discussed in a negative way over the entire period, with an exepction for topic 30, dealing with Frauk Petry and the AfD. The topic that is discussed most negatively is that of the right-wing extremist tendencies within the AfD. Another striking result is that the sentiment score of topics topics that deal with the SPD alone (1, 22) is diminishing in the course of time. The topic, which contains the CDU in isolation (46), is rather zigzagging, with a high peak in November 2017 and a low peak in January 2018, but there is only one observation this month, which is an article about Peter Tauber's illness.
+btw.2 %>%
+  group_by(site) %>%
+  summarise(total_obs = n()) -> tally_site
+
+btw.2 %>% 
+  mutate(yearmonth = calculate_month(month(date),year(date))) %>%
+  group_by(yearmonth, site) %>%
+  summarise(total_obs = n()) -> tally_month_site
+```
+
+
+The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspaper. Each sentiment value is weighted by the relative share of the topic in the overall reporting of that month.
+
+$$
+\text{w} = \frac{\text{# of obs per month & topic}}{\text{# of obs per month}}
+$$
+
+$$
+\text{weighted sentiment} = \text{sentiment} * \text{w}
+$$
+
+Some conclusions can be drawn from this illustration. First of all, it is clear that topics concerning the AfD (20, 30, 32, 37) are discussed in a negative way over the entire period, with an exepction for topic 30, dealing with Frauk Petry and the AfD. The topic that is discussed most negatively is that of the right-wing extremist tendencies within the AfD. Another striking result is that the sentiment score of topics topics that deal with the SPD alone (1, 22) is diminishing in the course of time. The topic, which contains the CDU in isolation (46), is rather zigzagging, with a high peak in November 2017 and a low peak in January 2018, but there is only one observation this month, which is an article about Peter Tauber's illness.
 
 Concerning the issues that discuss possible coalitions, it is evident that there was a month in which the Jamaican coalition was positively discussed (topic 27): October 2017, when coalition talks were in full swing. With the failure of the negotiations, the sentiment value of the articles also decreases, while the number of articles dealing with this topic increases sharply in the short term (to 210 articles) and decreases significantly in the following months. It is striking that precisely at this time (December 2017), both the observations, as well as the sentiment value of the articles that report on the grand coalition increase (topic 4). 
 
 ##### By Month & Topic
-```{r fig.height=10, fig.width=12}
+```{r fig.height=12, fig.width=10}
 p <- sentDF.values %>%
-  group_by(month, topic_name, topic) %>%
+  group_by(yearmonth, topic_name, topic) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
-            sentiment_d = mean(sentiment_d, na.rm=T),
             obs = n()) %>%
-  ungroup() 
+  left_join(., tally_month, by = "yearmonth") %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w)
 
 p1 <- ggplot(p, 
-       aes(month, sentiment, 
+       aes(yearmonth, sentiment, 
            group = topic_name,
            label = obs)) +
   facet_wrap(~topic_name, nrow = 3) +
   geom_col(fill = col[1], alpha = 0.7) +
- geom_line(color = col[2], size = 1) +
-  geom_text() +
+ geom_line(color = col[2], size = 0.8) +
+  #geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   labs(x="", y="",
-       title = "Monthly Sentiment Score") +
+       title = "Monthly Sentiment Score",
+       subtitle = "unweighted") +
   theme(axis.text.y = element_text(size=8),
-        axis.text.x = element_text(angle = 90, size = 6))
+        axis.text.x = element_text(size = 10))
 
-p1
+p2 <- ggplot(p, 
+       aes(yearmonth, sentiment_w, 
+           group = topic_name,
+           label = obs)) +
+  facet_wrap(~topic_name, nrow = 3) +
+  geom_col(fill = col[2], alpha = 0.7) +
+ geom_line(color = col[1], size = 0.8) +
+  #geom_text() +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
+  labs(x="", y="",
+       title = "",
+       subtitle = "weighted") +
+  theme(axis.text.y = element_text(size=8),
+        axis.text.x = element_text(size = 10))
+
+p1 + p2 + plot_layout(ncol = 1)
 ```
 
 ##### By Site and Topic
 
-```{r fig.height=5, fig.width=10}
+The following figure shows the results of the analysis for each topic and each newspaper, aggregated over time. Each sentiment value is weighted by the relative share of the topic in the overall political news coverage of that online newspaper.
+
+
+$$
+\text{w} = \frac{\text{# of obs per newspaper & topic}}{\text{# of obs per newspaper}}
+$$
+
+$$
+\text{weighted sentiment} = \text{sentiment} * \text{w}
+$$
+
+```{r fig.height=12, fig.width=10}
 p <- sentDF.values %>%
   group_by(site, topic_name, topic) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
-            sentiment_d = mean(sentiment_d, na.rm=T),
-            obs = n())
+            obs = n()) %>%
+  left_join(., tally_site, by = "site") %>%
+  mutate(w = obs/total_obs,
+         sentiment_w = sentiment * w)
 
 p1 <- ggplot(p, 
        aes(reorder(topic_name, topic), 
-           sentiment, label = obs)) +
+           sentiment, 
+           group = site,
+           label = obs)) +
   geom_col(fill=col[2], alpha = 0.7) +
-  geom_text(size = 2.5) +
+  #geom_line(color = col[1], size = 0.8) +
+  #geom_text(size = 2.5) +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
   facet_wrap(~site, ncol = 7) +
   labs(x="", y="",
-       title = "Sentiment Score") +
-  theme(axis.text.y = element_text(size=8),
-        axis.text.x = element_text(angle = 90))
+       title = "Sentiment Score",
+       subtitle = "unweighted") +
+  theme(axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=6))
 
-p1
+p2 <- ggplot(p, 
+       aes(reorder(topic_name, topic), 
+           sentiment_w, 
+           group = site,
+           label = obs)) +
+  geom_col(fill=col[1], alpha = 0.7) +
+  #geom_line(color = col[2], size = 0.8) +
+  #geom_text(size = 2.5) +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
+  coord_flip() +
+  facet_wrap(~site, ncol = 7) +
+  labs(x="", y="",
+       title = "",
+       subtitle = "weighted") +
+  theme(axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=6))
+
+p1 + p2 + plot_layout(ncol = 1)
 ```
 
 ##### Radar plot
@@ -605,7 +685,29 @@ radar %>%
   ggRadar(aes(color=site), 
           rescale = F,
           alpha = 0, legend.position = "right") +
-  labs(title = "Sentiment score Jun 2017-March 2018") +
+  labs(title = "Sentiment score Jun 2017-March 2018",
+       subtitle = "unweighted") +
+  guides(col = guide_legend(nrow = 1)) +
+  theme(legend.position = "bottom")
+```
+
+```{r fig.height=10, fig.width=10}
+sentDF.values %>%
+  group_by(site, topic_name) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  left_join(., tally_site, by = "site") %>%
+  mutate(w = obs/total_obs,
+         sentiment_w = sentiment * w) %>%
+  select(site, topic_name, sentiment_w) %>%
+  spread(key=topic_name, value=sentiment_w) -> radar
+
+radar %>%
+  ggRadar(aes(color=site), 
+          rescale = F,
+          alpha = 0, legend.position = "right") +
+  labs(title = "Sentiment score Jun 2017-March 2018",
+       subtitle = "weighted") +
   guides(col = guide_legend(nrow = 1)) +
   theme(legend.position = "bottom")
 ```
@@ -640,118 +742,412 @@ for (i in unique(sentDF.values$month)) {
 <!-- <img src="../figs/radarchart_2018-01.png", width = "49%"> -->
 <!-- <img src="../figs/radarchart_2018-02.png", width = "49%"> -->
 
-<!-- ### 5. Compare with polls -->
+## 3. Compare with polls
 
-```{r eval=FALSE, include=FALSE}
+```{r}
 load("../output/polls.Rda")
 
 htmlTable::htmlTable(table[1:10,], align = "l")
 ```
 
-<!-- Define Functions  -->
+Prepare Dataframes
 
-```{r eval=FALSE, include=FALSE}
-calculate_month = function(month, year) {
-  date <- ymd(paste(year, 1, 1, sep="-"))
-  month(date) = month
-  return(date)
-}
-
-normalize_data <- function(x) {
-  y <- (x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))
-  return(y)
-}
-```
-
-<!-- Prepare Dataframes -->
-
-```{r eval=FALSE, include=FALSE}
+```{r}
 polls <- table_long %>%
   mutate(month=month(Datum),
          year = year(Datum),
-         yearmonth = calculate_month(month,year),
-         val_norm = normalize_data(value)) %>%
+         yearmonth = calculate_month(month,year)) %>%
   group_by(yearmonth,party) %>%
-  summarise(mean_val = mean(value, na.rm=T),
-            mean_val_norm = mean(val_norm)) %>%
+  summarise(mean_val = mean(value, na.rm=T)) %>%
   ungroup() %>%
   filter(mean_val != "NaN") %>%
-  select(party, yearmonth, mean_val_norm) %>%
-  spread(party, mean_val_norm)
+  select(party, yearmonth, mean_val) %>%
+  spread(party, mean_val)
 ```
 
-```{r eval=FALSE, include=FALSE}
-sentDF.values %>%
-  mutate(year = year(date),
-         month = month(date),
-         yearmonth = calculate_month(month,year),
-         sentiment_norm = normalize_data(sentiment)) %>%
-  group_by(yearmonth, topic_name, topic, site) %>%
-  summarise(mean_sent = mean(sentiment, na.rm=T),
-            mean_sent_norm = mean(sentiment_norm, na.rm = T)) %>%
+#### CDU
+
+```{r fig.height=12, fig.width=10}
+polls.red <- polls %>%
+  filter(yearmonth > as.Date("2017-05-01")) %>%
+  mutate(Union = normalize_data(Union))
+
+topics.red <- sentDF.values %>%
+  filter(grepl(paste("CDU","CSU","coalition", sep="|"), 
+               topic_name, ignore.case = T))
+
+### plot by time
+p <-topics.red %>%
+  group_by(yearmonth, topic_name, topic) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
   ungroup() %>%
-  left_join(polls, by="yearmonth") -> p
+  left_join(., tally_month, by="yearmonth") %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 1  
+p1 <- ggplot() +
+  geom_col(data=p, aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           position = "dodge", 
+           alpha = 0.8) +
+  scale_fill_manual(values = col) +
+  guides(fill = guide_legend(ncol=3)) +
+  
+  # Add poll line
+  geom_line(data = polls.red, 
+            aes(yearmonth, Union),
+            color = "black",
+            size = 1) +
+  labs(y="", x="", fill="",
+       title = "Sentiment & Poll Values",
+       subtitle = "Both scores are normalized") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "bottom") 
+
+### plot by time and site
+p <- topics.red %>%
+  group_by(yearmonth, topic_name, topic, site) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month_site, by=c("yearmonth","site")) %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 2
+p2 <- ggplot() +
+  geom_col(data = p,
+           aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           alpha = 0.8,
+           position = "dodge") +
+  scale_fill_manual(values = col) +
+  facet_wrap(~site, ncol = 2) +
+   # Add poll line
+  geom_line(data = polls.red, 
+            aes(yearmonth, Union),
+            color = "black",
+            size = 1) +
+  labs(y="", x="", fill="") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+
+p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
 ```
 
-<!-- Plot  -->
+#### SPD
+```{r fig.height=12, fig.width=10}
+polls.red <- polls %>%
+  filter(yearmonth > as.Date("2017-05-01")) %>%
+  mutate(SPD = normalize_data(SPD))
 
-```{r eval=FALSE, include=FALSE}
-for (i in unique(p$site)) {
-  
-  p1 <- p %>%
-  filter(site == i) %>%
-  ggplot(aes(yearmonth, mean_sent_norm,
-               group = site)) +
-  geom_point(show.legend = F, color = col[1]) + 
-  geom_line(color = col[1]) +
+topics.red <- sentDF.values %>%
+  filter(grepl(paste("SPD", sep="|"), topic_name, ignore.case = T))
 
-  scale_y_continuous(limits = c(0,1)) +
-  scale_x_date(breaks = date_breaks("1 month"), 
-               labels = date_format("%b", tz = "CET")) +
-  # AfD
-  geom_point(aes(yearmonth, AfD), size= 0.5,
-             color = "deepskyblue") +
-  geom_line(aes(yearmonth, AfD), color = "deepskyblue") +
+### plot by time
+p <-topics.red %>%
+  group_by(yearmonth, topic_name, topic) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month, by="yearmonth") %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 1  
+p1 <- ggplot() +
+  geom_col(data=p, aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           position = "dodge", 
+           alpha = 0.8) +
+  scale_fill_manual(values = col) +
+  guides(fill = guide_legend(ncol=3)) +
   
-  # CDU/CSU
-  geom_point(aes(yearmonth, Union), size= 0.5,
-             color = "black") +
-  geom_line(aes(yearmonth, Union),
-             color = "black") +
-  
-  # SPD
-  geom_point(aes(yearmonth, SPD), size= 0.5,
-             color = "red") +
-  geom_line(aes(yearmonth, SPD),
-             color = "red") +
-  
-  # Grüne
-  geom_point(aes(yearmonth, Grüne), size= 0.5,
-             color = "limegreen") +
-  geom_line(aes(yearmonth, Grüne),
-             color = "limegreen") +
-  
-  # DIE LINKE
-  geom_point(aes(yearmonth, Linke), size= 0.5,
-             color = "deeppink") +
-  geom_line(aes(yearmonth, Linke),
-             color = "deeppink") +
-  
-  # 
-  labs(x="", y="", title=paste(i)) +
-    theme(axis.text = element_text(size = 6)) +
-  facet_grid(topic_name ~.)
-  
-  ggsave(p1, file=paste0("../figs/polls_",i,".png"),
-         width = 4, height = 10)
-  
-}
+  # Add poll line
+  geom_line(data = polls.red, 
+            aes(yearmonth, SPD),
+            color = "red",
+            size = 1) +
+  labs(y="", x="", fill="",
+       title = "Sentiment & Poll Values",
+       subtitle = "Both scores are normalized") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "bottom") 
+
+### plot by time and site
+p <- topics.red %>%
+  group_by(yearmonth, topic_name, topic, site) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month_site, by=c("yearmonth","site")) %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 2
+p2 <- ggplot() +
+  geom_col(data = p,
+           aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           alpha = 0.8,
+           position = "dodge") +
+  scale_fill_manual(values = col) +
+  facet_wrap(~site, ncol = 2) +
+   # Add poll line
+  geom_line(data = polls.red, 
+            aes(yearmonth, SPD),
+            color = "red",
+            size = 1) +
+  labs(y="", x="", fill="") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+
+p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
 ```
 
-<!-- <img src="../figs/polls_Bild.de.png", width = "49%"> -->
-<!-- <img src="../figs/polls_DIE WELT.png", width = "49%"> -->
-<!-- <img src="../figs/polls_FOCUS ONLINE.png", width = "49%"> -->
-<!-- <img src="../figs/polls_SPIEGEL ONLINE.png", width = "49%"> -->
-<!-- <img src="../figs/polls_stern.de.png", width = "49%"> -->
-<!-- <img src="../figs/polls_Tagesschau.de.png", width = "49%"> -->
-<!-- <img src="../figs/polls_ZEIT ONLINE.png", width = "49%"> -->
+
+
+#### FDP
+
+```{r fig.height=12, fig.width=10}
+polls.red <- polls %>%
+  filter(yearmonth > as.Date("2017-05-01")) %>%
+  mutate(FDP = normalize_data(FDP))
+
+topics.red <- sentDF.values %>%
+  filter(grepl(paste("Jamaica", sep="|"), 
+               topic_name, ignore.case = T))
+
+### plot by time
+p <-topics.red %>%
+  group_by(yearmonth, topic_name, topic) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month, by="yearmonth") %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 1  
+p1 <- ggplot() +
+  geom_col(data=p, aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           position = "dodge", 
+           alpha = 0.8) +
+  scale_fill_manual(values = col) +
+  guides(fill = guide_legend(ncol=3)) +
+  
+  # Add poll line (FDP)
+  geom_line(data = polls.red, 
+            aes(yearmonth, FDP),
+            color = col[4],
+            size = 1) +
+  labs(y="", x="", fill="",
+       title = "Sentiment & Poll Values",
+       subtitle = "Both scores are normalized") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "bottom") 
+
+### plot by time and site
+p <- topics.red %>%
+  group_by(yearmonth, topic_name, topic, site) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month_site, by=c("yearmonth","site")) %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 2
+p2 <- ggplot() +
+  geom_col(data = p,
+           aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           alpha = 0.8,
+           position = "dodge") +
+  scale_fill_manual(values = col) +
+  facet_wrap(~site, ncol = 2) +
+    # Add poll line (FDP)
+  geom_line(data = polls.red, 
+            aes(yearmonth, FDP),
+            color = col[4],
+            size = 1) +
+  labs(y="", x="", fill="") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+
+p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
+```
+
+#### B90 / Die Grüne
+
+```{r fig.height=12, fig.width=10}
+polls.red <- polls %>%
+  filter(yearmonth > as.Date("2017-05-01")) %>%
+  mutate(Grüne = normalize_data(Grüne))
+
+topics.red <- sentDF.values %>%
+  filter(grepl(paste("Jamaica","Grüne", sep="|"), 
+               topic_name, ignore.case = T))
+
+### plot by time
+p <-topics.red %>%
+  group_by(yearmonth, topic_name, topic) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month, by="yearmonth") %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 1  
+p1 <- ggplot() +
+  geom_col(data=p, aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           position = "dodge", 
+           alpha = 0.8) +
+  scale_fill_manual(values = col) +
+  guides(fill = guide_legend(ncol=3)) +
+  
+    # Add poll line (Grüne)
+  geom_line(data = polls.red, 
+            aes(yearmonth, Grüne),
+            color = "limegreen",
+            size = 1) +
+  labs(y="", x="", fill="",
+       title = "Sentiment & Poll Values",
+       subtitle = "Both scores are normalized") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "bottom") 
+
+### plot by time and site
+p <- topics.red %>%
+  group_by(yearmonth, topic_name, topic, site) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month_site, by=c("yearmonth","site")) %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 2
+p2 <- ggplot() +
+  geom_col(data = p,
+           aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           alpha = 0.8,
+           position = "dodge") +
+  scale_fill_manual(values = col) +
+  facet_wrap(~site, ncol = 2) +
+
+    # Add poll line (Grüne)
+  geom_line(data = polls.red, 
+            aes(yearmonth, Grüne),
+            color = "limegreen",
+            size = 1) +
+  labs(y="", x="", fill="") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+
+p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
+```
+
+#### AfD
+
+```{r fig.height=12, fig.width=10}
+polls.red <- polls %>%
+  filter(yearmonth > as.Date("2017-05-01")) %>%
+  mutate(AfD = normalize_data(AfD))
+
+topics.red <- sentDF.values %>%
+  filter(grepl(paste("AfD", sep="|"), 
+               topic_name, ignore.case = T))
+
+### plot by time
+p <-topics.red %>%
+  group_by(yearmonth, topic_name, topic) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month, by="yearmonth") %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 1  
+p1 <- ggplot() +
+  geom_col(data=p, aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           position = "dodge", 
+           alpha = 0.8) +
+  scale_fill_manual(values = col) +
+  guides(fill = guide_legend(ncol=3)) +
+  
+    # Add poll line (AfD)
+  geom_line(data = polls.red, 
+            aes(yearmonth, AfD),
+            color = "skyblue",
+            size = 1) +
+  labs(y="", x="", fill="",
+       title = "Sentiment & Poll Values",
+       subtitle = "Both scores are normalized") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "bottom") 
+
+### plot by time and site
+p <- topics.red %>%
+  group_by(yearmonth, topic_name, topic, site) %>%
+  summarise(sentiment = mean(sentiment, na.rm=T),
+            obs = n()) %>%
+  ungroup() %>%
+  left_join(., tally_month_site, by=c("yearmonth","site")) %>%
+  mutate(w = obs / total_obs,
+         sentiment_w = sentiment * w,
+         sentiment_n = normalize_data(sentiment_w))
+
+### Plot 2
+p2 <- ggplot() +
+  geom_col(data = p,
+           aes(yearmonth, sentiment_n, 
+             group = topic_name,
+             fill = topic_name),
+           alpha = 0.8,
+           position = "dodge") +
+  scale_fill_manual(values = col) +
+  facet_wrap(~site, ncol = 2) +
+
+    # Add poll line (AfD)
+  geom_line(data = polls.red, 
+            aes(yearmonth, AfD),
+            color = "skyblue",
+            size = 1) +
+  labs(y="", x="", fill="") +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+
+p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
+```
