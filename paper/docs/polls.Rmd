@@ -67,8 +67,7 @@ head(table) %>% htmlTable::htmlTable()
 
 ```{r}
 table_long <- table %>% 
-  gather(party, value, -Datum) %>%
-  mutate(value_scaled = scaling(value))
+  gather(party, value, -Datum) 
 ```
 
 # Plot Data

@@ -160,7 +160,7 @@ plotQuote(c(paste(sagelabs$covnames[1],":",
 ```
 
 ```{r}
-topics <- matrix(c(1, "SPD", 2, "B90/ Die Grüne & DIE LINKE", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "Merkel vs. Schulz", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Votes within SPD", 18, "Election in Niedersachsen", 19, "R.Lammert", 20, "AfD, Right-wing extremist tendencies", 21, "German armed forces, v.d.Leyen", 22, "SPD, stuffing debates", 23, "CSU, Söder vs. Seehover, refugee cap", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Jamaica failure", 27, "Jamaica Coalition debates", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "F.Petri, AfD", 31, "D.Trump, Russia", 32, "Gauland, Weidel, AfD", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU, J.Spahn, Tauber (Disease)", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
+topics <- matrix(c(1, "SPD, mainly M.Schulz", 2, "B90/ Die Grüne & DIE LINKE", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "M.Schulz, mainly vs. A.Merkel", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel, mainly election campaign", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Debates within SPD", 18, "Election in Niedersachsen", 19, "N.Lammert", 20, "AfD, mainly right-wing radicalism", 21, "German armed forces, v.d.Leyen", 22, "SPD, mainly stuffing debates", 23, "CSU, mainly Söder & Seehover", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Jamaica fail, Reelections or GroKo?", 27, "Jamaica Coalition debates", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "AfD, mainly F.Petry & Meuthen", 31, "D.Trump, Russia", 32, "AfD, mainly Gauland & Weidel", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD & DIE LINKE in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
@@ -202,10 +202,10 @@ ggplot(btw.2, aes(gamma)) +
 ```
 
 ```{r eval=FALSE, include=FALSE}
-# Inspect the unclear topics
-btw.2 %>% filter(topic==13) %>% select(title, gamma, url) %>%
+# Inspect some topics
+btw.2 %>% filter(topic==37) %>% 
+  select(title, gamma, site) %>%
   arrange(desc(gamma)) %>%
-  top_n(10) %>%
   htmlTable::htmlTable(align="l")
 ```
 
@@ -458,7 +458,7 @@ After applying these filters, we still have about 2500 articles left to conduct 
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 df <- btw.2 %>%
-  filter(gamma >= 0.75) %>%
+  filter(gamma >= 0.3) %>%
   distinct(title, .keep_all = T) %>%
   filter(topic %in% keep) %>%
   # Filter documents about the death of H.Geißler
@@ -536,6 +536,11 @@ btw.2 %>%
   group_by(yearmonth) %>%
   summarise(total_obs = n()) -> tally_month
 
+btw.2 %>% 
+  mutate(yearweek = calculate_week(week(date), year(date))) %>%
+  group_by(yearweek) %>%
+  summarise(total_obs = n()) -> tally_week
+
 btw.2 %>%
   group_by(site) %>%
   summarise(total_obs = n()) -> tally_site
@@ -544,6 +549,11 @@ btw.2 %>%
   mutate(yearmonth = calculate_month(month(date),year(date))) %>%
   group_by(yearmonth, site) %>%
   summarise(total_obs = n()) -> tally_month_site
+
+btw.2 %>% 
+  mutate(yearweek = calculate_week(week(date), year(date))) %>%
+  group_by(yearweek, site) %>%
+  summarise(total_obs = n()) -> tally_week_site
 ```
 
 
@@ -761,19 +771,17 @@ where $x = (x_1,...,x_n)$ and $z_i$ is the $i^{th}$ normalized data.
 load("../output/polls.Rda")
 
 polls <- table_long %>%
-  mutate(month=month(Datum),
-         year = year(Datum),
-         yearmonth = calculate_month(month,year)) %>%
+  mutate(yearmonth = calculate_month(month(Datum),year(Datum)),
+         yearweek = calculate_week(week(Datum), year(Datum))) 
+
+## Monthly
+polls_monthly <- polls %>%
   group_by(yearmonth,party) %>%
   summarise(mean_val = mean(value, na.rm=T)) %>%
   ungroup() %>%
   filter(mean_val != "NaN") %>%
   select(party, yearmonth, mean_val) %>%
-  spread(party, mean_val)
-```
-
-```{r fig.height=12, fig.width=10}
-polls.red <- polls %>%
+  spread(party, mean_val) %>%
   filter(yearmonth > as.Date("2017-05-01")) %>%
   transmute(Union = normalize_data(Union),
          SPD = normalize_data(SPD),
@@ -782,9 +790,19 @@ polls.red <- polls %>%
          AfD = normalize_data(AfD),
          yearmonth = yearmonth)
 
-# topics.red <- sentDF.values %>%
-#   filter(grepl(paste("CDU","CSU","coalition", sep="|"), 
-#                topic_name, ignore.case = T))
+polls_monthly %>%
+  gather(key = party, value = poll, Union:AfD) %>%
+  ggplot(aes(yearmonth, poll, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("skyblue", "gold", "limegreen", "red", "black")) +
+  labs(x="", y="", title = "Survey Value", 
+       subtitle = "weekly", color = "") +
+  geom_vline(xintercept = as.Date("2017-09-24"), 
+             linetype = 2, color = col[3]) +
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET"))
+```
+
+```{r fig.height=12, fig.width=10}
 ### by time
 group1 <- sentDF.values %>%
   group_by(yearmonth, topic_name, topic) %>%
@@ -808,32 +826,14 @@ group2 <- sentDF.values %>%
          sentiment_n = normalize_data(sentiment_w))
 ```
 
-```{r fig.height=5, fig.width=10}
-ggplot(group1, aes(yearmonth, 
-                   sentiment_n, 
-                   group = topic_name,
-                   color = topic_name)) +
-  geom_line(show.legend = F) +
-  facet_wrap(~topic_name, nrow = 3) +
-  labs(x="", y="", title="Sentiment Score")
-```
-
-```{r}
-polls.red %>%
-  gather(key = party, value = poll, Union:AfD) %>%
-  ggplot(aes(yearmonth, poll, color = party)) +
-  geom_line() +
-  labs(x="", y="", title = "Survey Value", color = "")
-```
 
 #### 3.1. Cross-Correlation
 ```{r}
 group1 %>%
   select(yearmonth, topic_name, sentiment_n) %>%
-  spread(topic_name, sentiment_n) %>%
-  select(- yearmonth) -> corr1
+  spread(topic_name, sentiment_n)  -> corr1
 
-polls.red %>% select(- yearmonth) -> corr2
+polls_monthly %>% select(- yearmonth) -> corr2
 
 corr <- expand.grid(names(corr1), names(corr2))
 corr$correlation <- NA
@@ -890,7 +890,7 @@ p1 <- ggplot() +
   scale_color_manual(values = col) +
   guides(fill = guide_legend(ncol=3)) +
   # Add poll line
-  geom_line(data = polls.red, 
+  geom_line(data = polls_monthly, 
             aes(yearmonth, Union),
             color = "black",
             size = 1) +
@@ -920,7 +920,7 @@ p2 <- ggplot() +
             show.legend = F) +
   facet_wrap(~site, ncol = 2) +
    # Add poll line
-  geom_line(data = polls.red, 
+  geom_line(data = polls_monthly, 
             aes(yearmonth, Union),
             color = "black",
             size = 1) +
@@ -953,7 +953,7 @@ p1 <- ggplot() +
              show.legend = F) +
   scale_color_manual(values = col) +
   # Add poll line
-  geom_line(data = polls.red, 
+  geom_line(data = polls_monthly, 
             aes(yearmonth, SPD),
             color = "red",
             size = 1) +
@@ -983,7 +983,7 @@ p2 <- ggplot() +
              show.legend = F) +
   scale_color_manual(values = col) +
    # Add poll line
-  geom_line(data = polls.red, 
+  geom_line(data = polls_monthly, 
             aes(yearmonth, SPD),
             color = "red",
             size = 1) +
