@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  8 FEB 2018 15:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  14 MAR 2018 10:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1099,7 +1099,7 @@ File: english.lbx 2015/04/19 v3.0 biblatex localization (PK/JW/AB)
 )
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
- (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.aux)
+ (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux)
 \openout1 = `structure.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
@@ -1123,7 +1123,49 @@ Package biblatex Info: Automatic encoding selection.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'structure.bbl' found.
- (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.bbl
+ (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                _media_2014
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                cage_information_2017
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                nyman_news_2018
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                hansen_shocking_2016
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                tetlock_more_2008
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
 
 Package biblatex Warning: The following entry could not be found
 (biblatex)                in the database:
@@ -1146,7 +1188,7 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 44.
 LaTeX Info: Redefining \pageref on input line 44.
 LaTeX Info: Redefining \nameref on input line 44.
- (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.out) (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.out)
+ (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.out) (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.out)
 \@outlinefile=\write5
 \openout5 = `structure.out'.
 
@@ -1182,103 +1224,105 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 52.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
+
+Overfull \hbox (105.81621pt too wide) in paragraph at lines 50--51
+\T1/cmr/m/n/12 ([]).
+ []
+
+[1
+
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for U+msa on input line 55.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 52.
+LaTeX Font Info:    Try loading font information for U+msb on input line 55.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
-
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
-Overfull \hbox (7.59055pt too wide) in paragraph at lines 99--100
+) [2] [3] [4]
+Overfull \hbox (7.59055pt too wide) in paragraph at lines 87--88
 \T1/cmr/m/n/12 Figure []1[] shows the largest providers of on-line news in terms of daily pageviews.[][][]
  []
 
-[5] <../figs/reach.png, id=123, 3613.5pt x 2409.0pt>
+<../figs/reach.png, id=108, 4215.75pt x 2409.0pt>
 File: ../figs/reach.png Graphic file (type png)
  <use ../figs/reach.png>
-Package pdftex.def Info: ../figs/reach.png used on input line 103.
-(pdftex.def)             Requested size: 390.0pt x 259.99168pt.
- [6 <../figs/reach.png>] <../figs/timeline.png, id=137, 3613.5pt x 2409.0pt>
+Package pdftex.def Info: ../figs/reach.png used on input line 91.
+(pdftex.def)             Requested size: 390.0pt x 222.82901pt.
+ [5] <../figs/timeline.png, id=124, 3613.5pt x 2409.0pt>
 File: ../figs/timeline.png Graphic file (type png)
  <use ../figs/timeline.png>
-Package pdftex.def Info: ../figs/timeline.png used on input line 115.
+Package pdftex.def Info: ../figs/timeline.png used on input line 103.
 (pdftex.def)             Requested size: 191.10214pt x 127.36761pt.
- <../figs/bar.png, id=138, 3613.5pt x 2409.0pt>
+ <../figs/bar.png, id=125, 3613.5pt x 2409.0pt>
 File: ../figs/bar.png Graphic file (type png)
  <use ../figs/bar.png>
-Package pdftex.def Info: ../figs/bar.png used on input line 120.
+Package pdftex.def Info: ../figs/bar.png used on input line 108.
 (pdftex.def)             Requested size: 191.10214pt x 127.36761pt.
- [7 <../figs/timeline.png> <../figs/bar.png>] [8] [9]
-Overfull \hbox (10.92207pt too wide) in paragraph at lines 168--169
+ [6 <../figs/reach.png>] [7 <../figs/timeline.png> <../figs/bar.png>]
+
+LaTeX Warning: Reference `ch_similarity' on page 8 undefined on input line 130.
+
+[8] [9]
+Overfull \hbox (10.92207pt too wide) in paragraph at lines 156--157
 []\T1/cmr/m/n/12 where the word prob-a-bil-ity $\OML/cmm/m/it/12 ^^L[]$ \T1/cmr/m/n/12 is pa-ram-e-ter-ized in terms of log-transformed
  []
 
 
-Overfull \hbox (18.40865pt too wide) in paragraph at lines 174--175
+Overfull \hbox (18.40865pt too wide) in paragraph at lines 162--163
 \T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
  []
 
-[10] [11] <../figs/topic_proportion.png, id=243, 7227.0pt x 6022.5pt>
+[10] [11] [12] <../figs/topic_proportion.png, id=251, 2107.875pt x 2107.875pt>
 File: ../figs/topic_proportion.png Graphic file (type png)
  <use ../figs/topic_proportion.png>
-Package pdftex.def Info: ../figs/topic_proportion.png used on input line 198.
-(pdftex.def)             Requested size: 390.0pt x 324.94366pt.
- [12] [13 <../figs/topic_proportion.png>] <../figs/estimates_site.png, id=261, 5420.25pt x 4215.75pt>
-File: ../figs/estimates_site.png Graphic file (type png)
- <use ../figs/estimates_site.png>
-Package pdftex.def Info: ../figs/estimates_site.png used on input line 217.
-(pdftex.def)             Requested size: 350.99762pt x 272.9398pt.
- <../figs/corrplot1.png, id=264, 2710.125pt x 1806.75pt>
-File: ../figs/corrplot1.png Graphic file (type png)
- <use ../figs/corrplot1.png>
-Package pdftex.def Info: ../figs/corrplot1.png used on input line 233.
-(pdftex.def)             Requested size: 272.99881pt x 181.98131pt.
- <../figs/corrplot2.png, id=265, 2710.125pt x 1806.75pt>
-File: ../figs/corrplot2.png Graphic file (type png)
- <use ../figs/corrplot2.png>
-Package pdftex.def Info: ../figs/corrplot2.png used on input line 237.
-(pdftex.def)             Requested size: 272.99881pt x 181.98131pt.
- [14 <../figs/estimates_site.png>] [15 <../figs/corrplot1.png> <../figs/corrplot2.png>] [16] <../figs/distance.png, id=305, 7227.0pt x 4818.0pt>
-File: ../figs/distance.png Graphic file (type png)
- <use ../figs/distance.png>
-Package pdftex.def Info: ../figs/distance.png used on input line 287.
-(pdftex.def)             Requested size: 390.0pt x 259.95493pt.
- [17] [18 <../figs/distance.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 299.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 299.
- (/Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 299.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 299.
+Package pdftex.def Info: ../figs/topic_proportion.png used on input line 207.
+(pdftex.def)             Requested size: 390.0pt x 389.98294pt.
+ [13 <../figs/topic_proportion.png>] <../figs/estimates.png, id=266, 6022.5pt x 4215.75pt>
+File: ../figs/estimates.png Graphic file (type png)
+ <use ../figs/estimates.png>
+Package pdftex.def Info: ../figs/estimates.png used on input line 223.
+(pdftex.def)             Requested size: 350.99762pt x 245.66513pt.
+ [14 <../figs/estimates.png>] [15] <../figs/sentscore_monthly.png, id=283, 3613.5pt x 2107.875pt>
+File: ../figs/sentscore_monthly.png Graphic file (type png)
+ <use ../figs/sentscore_monthly.png>
+Package pdftex.def Info: ../figs/sentscore_monthly.png used on input line 252.
+(pdftex.def)             Requested size: 350.99762pt x 204.72093pt.
+ <../figs/sentscore_site.png, id=284, 3613.5pt x 2107.875pt>
+File: ../figs/sentscore_site.png Graphic file (type png)
+ <use ../figs/sentscore_site.png>
+Package pdftex.def Info: ../figs/sentscore_site.png used on input line 260.
+(pdftex.def)             Requested size: 350.99762pt x 204.72093pt.
+ [16 <../figs/sentscore_monthly.png>] <../figs/sentscore_radar.png, id=291, 3613.5pt x 2107.875pt>
+File: ../figs/sentscore_radar.png Graphic file (type png)
+ <use ../figs/sentscore_radar.png>
+Package pdftex.def Info: ../figs/sentscore_radar.png used on input line 268.
+(pdftex.def)             Requested size: 350.99762pt x 204.72093pt.
+ [17 <../figs/sentscore_site.png> <../figs/sentscore_radar.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 279.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 279.
+ (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 279.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 279.
 Package rerunfilecheck Info: File `structure.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
+
+
+LaTeX Warning: There were undefined references.
+
 Package logreq Info: Writing requests to 'structure.run.xml'.
 \openout1 = `structure.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35429 strings out of 493089
- 785854 string characters out of 6134842
- 1294327 words of memory out of 5000000
- 38154 multiletter control sequences out of 15000+600000
+ 35386 strings out of 493089
+ 784763 string characters out of 6134842
+ 1296315 words of memory out of 5000000
+ 38106 multiletter control sequences out of 15000+600000
  23968 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,10n,92p,2378b,1536s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{cite.0@endres_new_2003} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@kim_topic_2011} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@chaney_visualizing_2012} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@wang_mining_2009} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@newman_distributed_2009} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@ramage_labeled_2009} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@he_detecting_2009} has been referenced but does not exist, replaced by a fixed one
+ 62i,8n,92p,2413b,1521s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{cite.0@tetlock_giving_2007} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@mimno_optimizing_2011} has been referenced but does not exist, replaced by a fixed one
 
@@ -1296,12 +1340,6 @@ pdfTeX warning (dest): name{cite.0@mueller_reading_2016} has been referenced but
 
 pdfTeX warning (dest): name{cite.0@baturo_what_2017} has been referenced but does not exist, replaced by a fixed one
 
-pdfTeX warning (dest): name{cite.0@mishler_using_2015} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@farrell_corporate_2016} has been referenced but does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{cite.0@roberts_structural_2014} has been referenced but does not exist, replaced by a fixed one
-
 pdfTeX warning (dest): name{cite.0@grimmer_text_2013} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@blei_probabilistic_2012} has been referenced but does not exist, replaced by a fixed one
@@ -1313,6 +1351,12 @@ pdfTeX warning (dest): name{cite.0@hofmann_probabilistic_1999} has been referenc
 pdfTeX warning (dest): name{cite.0@griffiths_finding_2004} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@griffiths_probabilistic_2002} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@mishler_using_2015} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@farrell_corporate_2016} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{cite.0@roberts_structural_2014} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.0@wiedmann_text_2016} has been referenced but does not exist, replaced by a fixed one
 
@@ -1349,10 +1393,10 @@ pdfTeX warning (dest): name{cite.0@rochet_platform_2003} has been referenced but
 pdfTeX warning (dest): name{cite.0@roberts_model_2016} has been referenced but does not exist, replaced by a fixed one
 
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/doc/.texpadtmp/structure.pdf (18 pages, 4789084 bytes).
+Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (17 pages, 4280629 bytes).
 PDF statistics:
- 398 PDF objects out of 1000 (max. 8388607)
- 341 compressed objects within 4 object streams
- 97 named destinations out of 1000 (max. 500000)
- 133 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 381 PDF objects out of 1000 (max. 8388607)
+ 325 compressed objects within 4 object streams
+ 102 named destinations out of 1000 (max. 500000)
+ 125 words of extra memory for PDF output out of 10000 (max. 10000000)
 

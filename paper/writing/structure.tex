@@ -47,22 +47,20 @@
 
 Pluralism is an essential principle of democratic societies. An important pillar of this principle is an opinion-forming process that incorporates as many different perspectives as possible. For the process of forming opinions, information conveyed by the media, in particular the mass media of journalism, plays a decisive role. They create the preconditions for making the social and cultural diversity of modern societies visible and manageable. Securing the diversity of opinion-forming processes and preventing concentration processes in the media sector is an essential prerequisite for a functioning democracy. 
 
-The new developments in digital media provide new opportunities and challenges for content creators, the public and politicians. The provision of information through the Internet is both faster and much cheaper compared to a time when information was mainly distributed through traditional media (TV, newspaper). The speed and (low)cost of information distribution could contribute to an informed electorate. On the other hand, this change also means that the incentive for media to produce primary information declines since the Internet has reduced the marginal utility of content. A study of French news websites from 2013 shows that only 38 percent of the online articles contained original content, with the remainder being copies of those originals \citep{cage_information_2017}. 
+Media outlets (TV, Radio, Newspaper) usually operate in two-sided markets, where they serve two customer groups (content consumer and advertiser) that are connected via indirect network effects. The new developments in digital media provide new opportunities and challenges for media outlets. The costs of providing and disseminating information have been reduced and the speed of information exchange has increased enormously. At first glance, these developments seem to have a positive effect on the provision of information. However, it also means that the incentive for media to produce primary information declines since the Internet has reduced the marginal utility of content. A study of French news websites from 2013 shows that only 38 percent of the online articles contained original content, with the remainder being copies of those originals \citep{cage_information_2017}. At the same time, the number of people who find out about current news on the Internet is increasing. According to a study on the media coverage of the German-speaking population, nearly 40\% of respondents used the internet at least once a week in 2017 to inform themselves about the current news compared to 34\% in 2016 \citep{vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017}. Recognizing the importance of media pluralism, the European Commission has endorsed several initiatives to discuss and promote media diversity in the European Union \citep{_media_2014}. 
 
-At the same time, the number of people who find out about current news on the Internet is also increasing. According to a study on the media coverage of the German-speaking population, nearly 40\% of respondents used the internet at least once a week in 2017 to inform themselves about the current news compared to 34\% in 2016 \citep{vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017}. 
-
-This paper examines to what extent the content of different online news resembles each other. More specifically, I use a data set of German online news articles about domestic politics dated from 01.06.2017 to 31.12.2017\footnote{German federal elections took place on 24th of September 2017.} from seven German news content providers. The final step is to check whether the tonality of reporting is reflected in the polls. The empirical strategy follows a novel approach combining "the two Ts": Topic and Tone \citep{hansen_shocking_2016}. That is, first the topics covered in the articles are identified, to find out how these topics are discussed (tone). More precisely, the research strategy is as follows:
+This paper examines the media pluralism in the market for German-language online news. More specifically, I use a data set of German online news articles about domestic politics dated from 01.06.2017 to 01.03.2018 from seven German news content providers. German federal elections took place on 24th of September 2017 and the formation of the government has taken up a period of about five month. The articles considered here thus inform their readers both about the election promises of the parties (before the election) and about the coalition talks (after the election). They thus make an important contribution to the public's opinion-forming process. The empirical strategy follows a novel approach combining "the two Ts": Topic and Tone \citep{hansen_shocking_2016}. That is, first the topics covered in the articles are identified, to find out how these topics are discussed (tone). The final step is to check whether the tonality of reporting is reflected in the survey results on voting preferences. More precisely, the research strategy is as follows:
 
 \begin{enumerate}
-	\item \textbf{Discovering Topics (Section \ref{ch_model})} To discover the latent topics in the corpus, the structural topic modeling (STM) developed by \citet{roberts_model_2016} is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I estimate a model, where the newswire service is included as a control for both the topical content and the topical prevalence. The result of the generative process of STM are the posterior distributions for topic prevalence and topical content, which can then be used to measure the similarity between the news providers in the further course of the paper: (1) $\beta$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary) containing the probability distribution for topic $k$ over the words in the predefined vocabulary. (2) $\theta$ is a $D$-by-$V$ matrix of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. As the prevalence of topics are allowed to vary across news wires, the posterior topic-probability $\theta_{dk}$ of an article (document) can be used to estimate the conditional expectation of topic prevalence for given article characteristics. 
-	 
-	\item \textbf{Measuring Tone} After assigning a topic to each article (document), a dictionary-based sentiment analysis is conducted to estimate how topics are discussed differently by different news wires.
+	\item\label{item_1} \textbf{Discovering Topics (Section \ref{ch_model})} To discover the latent topics in the corpus, the structural topic modeling (STM) developed by \citet{roberts_model_2016} is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I estimate a model, where the newswire service is included as a control for both the topical content and the topical prevalence. The result of the generative process of STM are the posterior distributions for topic prevalence and topical content, which can then be used to measure the similarity between the news providers in the further course of the paper: (1) $\beta$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary) containing the probability distribution for topic $k$ over the words in the predefined vocabulary. (2) $\theta$ is a $D$-by-$V$ matrix of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. As the prevalence of topics are allowed to vary across news wires, the posterior topic-probability $\theta_{dk}$ of an article (document) can be used to estimate the conditional expectation of topic prevalence for given article characteristics. 
+	\item\label{item_2} \textbf{Measuring Tone} After assigning a topic to each article (document), a dictionary-based sentiment analysis is conducted to estimate how topics are discussed differently by different news wires.
+	\item\label{item_3} \textbf{Comparing with polls} In order to check whether the transmitted content from the online media is reflected in the voting preferences, we compare the values from \ref{item_2} with the survey values of the Sunday survey ("Sonntagsumfrage") graphically and mathematically. The latter is done by means of correlations. Therefore, no causal relationships are calculated.
 	
 \end{enumerate}
 
-Approach \ref{item_1} has been used in \citet{roberts_model_2016}, among others, to examine differences in the content of news providers. However, I extend the analysis by comparing the sentiment score for a given topic between the news provider, to identify which topics are discussed similar or differently (\ref{item_2}). \citet{hansen_shocking_2016} applied a similar approach to a dataset of 142 FOMC decision statements to measure the effect of those statements on macroeconomic variables. 
+Approach \ref{item_1} has been used in \citet{roberts_model_2016}, among others, to examine differences in the content of news providers. However, I extend the analysis by comparing the sentiment score for a given topic between the news provider, to identify which topics are discussed similar or differently (\ref{item_2}). \citet{hansen_shocking_2016} applied a similar approach to a dataset of 142 FOMC decision statements to measure the effect of those statements on macroeconomic variables. An additional extension is the comparison with current poll values (\ref{item_3}). 
 
-The remaining course of the paper is as follows: In Section \ref{ch_onlinenews} the characteristics of the market for online news in Germany are outlined. The data used to conduct the model is described in Section \ref{ch_data}. Section \ref{ch_model} explains the generative process of the structural topic model as well as the selected parameters to run the model. The results of the STM, as well as the sentiment analysis are the evaluated in Section \ref{ch_empirical}. 
+The remaining course of the paper is as follows: In Section \ref{ch_onlinenews} the characteristics of the market for online news in Germany are outlined. The data used to conduct the model is described in Section \ref{ch_data}. Section \ref{ch_model} explains the generative process of the structural topic model as well as the selected parameters to run the model. The empirical analysis containing the above mentioned steps is conducted in Section \ref{ch_empirical}. 
  
 % ----------------------
 % the online news market
@@ -73,15 +71,13 @@ The market for media content in Germany is characterized by the coexistence of p
 
 Private media outlets naturally appear as two-sided platforms, that allow interaction between two categories of consumers: audiences and advertisers. As the demand on both consumer-sides are linked via indirect network externalities, the market in which media outlets operate are referred to as two-sided or multi-sided markets. The theoretical literature on two-sided markets originates from the analysis of credit card markets \citep{rochet_platform_2003} and was later transferred to the concept of other industries, such as dating agencies, real estate agents, and internet “business-to-business” websites \citep{caillaud_chicken_2003}. The basic concept of two-sided markets was already discussed decades ago in several economic studies, especially on media markets \citep{corden_maximisation_1952}, \citep{gustafsson_circulation_1978}, \citep{blair_pricing_1993}. However, comprehensive analyses have only been carried out in the last ten years, starting with the works of \citet{rochet_platform_2003}, \citet{evans_empirical_2003} and \citet{armstrong_competition_2006}.
 
-Advertising-supported media such as online newspapers are typical examples of two-sided markets where the newspaper can be conceived as platforms that allow interaction between audiences ("eyeballs") and advertisers. The newspaper creates (or buys) content to attract viewers which in turn attract advertisers who pay for readers' attention \citep{evans_industrial_2005}. The size and characteristics of the audience has a positive effect on the advertisers' willingness to pay, as advertisements are typically sold based on cost per viewer, often expressed in terms of the cost of reaching a thousand viewers (CPM). Advertising can also have an effect on the recipients, which can be either negative or positive, depending on the quality of the advertising. Based on the strength of the indirect network effects, private publishers maximize their revenue by balancing the demand from advertisers and subscribers using different business models \citep{evans_economics_2008}. Many traditional newspapers follow the subscription/advertising model, where the publisher charges both market sides: The audience pays a fee to obtain access to the content, and advertisers pay to obtain access to the viewers. Many online news agencies provide part of their editorial content for free and hide another, more exclusive part behind a paywall. However, since the Internet has considerably simplified the possibilities for obtaining information and thus reduced the marginal utility of content, such a business model can only be efficient if the content is very exclusive. As a result, many publishers rely on a free-media model, in which the publishers do not charge viewers for access to the media at all, in order to attract as many eyeballs as possible to their platform, and thus, exploit the indirect network effects on the advertising site. In fact, most advertising-financed online magazines earn their gross margin from advertising \citep{evans_industrial_2005}. In order to maximize their profits, these companies have an interest in attracting as many readers as possible. In addition to the quantity of the audience, the demographic characteristics of recipients also have an influence on the willingness to pay on the advertiser site. Online advertising makes it possible to target ads to particular consumers in real time.
+Advertising-supported media such as online newspapers are typical examples of two-sided markets where the newspaper can be conceived as platforms that allow interaction between audiences ("eyeballs") and advertisers. The newspaper creates (or buys) content to attract viewers which in turn attract advertisers who pay for readers' attention \citep{evans_industrial_2005}. The size and characteristics of the audience has a positive effect on the advertisers' willingness to pay, as advertisements are typically sold based on cost per viewer, often expressed in terms of the cost of reaching a thousand viewers (CPM). Advertising can also have an effect on the recipients, which can be either negative or positive, depending on the quality of the advertising. Based on the strength of the indirect network effects, private publishers maximize their revenue by balancing the demand from advertisers and subscribers using different business models \citep{evans_economics_2008}. Many traditional newspapers follow the subscription/advertising model, where the publisher charges both market sides: The audience pays a fee to obtain access to the content, and advertisers pay to obtain access to the viewers. Many online news agencies provide part of their editorial content for free and hide another, more exclusive part behind a paywall. However, since the Internet has considerably simplified the possibilities for obtaining information and thus reduced the marginal utility of content, such a business model can only be efficient if the content behind the paywall is very exclusive. As a result, many publishers rely on a free-media model, in which the publishers do not charge viewers for access to the media at all, in order to attract as many eyeballs as possible to their platform, and thus, exploit the indirect network effects on the advertising site. In fact, most advertising-financed online magazines earn a large part of their gross margin from advertising \citep{evans_industrial_2005}. In order to maximize their profits, these companies have an interest in attracting as many readers as possible. In addition to the quantity of the audience, the demographic characteristics of recipients also have an influence on the willingness to pay on the advertiser site. Online advertising makes it possible to target ads to particular consumers in real time.
  
 The two-sided market structure of the private news market results in news platforms striving to choose their content in such a way that its reach is as large as possible in order to maximize profits from advertising revenues. \citet{steiner_program_1952} concluded, that profit-maximizing media owners may choose to offer the same content, i.e. content aligned with the tastes of the majority. \citep{gabszewicz_press_2001} study the problem of diversity of the political content of newspapers. They find that the maximum differentiation only prevails if the readers sufficiently value the political differentiation between the newspapers the advertising market is small enough. On the other hand, advertising may also have a positive impact on the media, as it enables publishers to report independently of political parties. \citet{ellman_what_2009} analyze a theoretical framework of a two-sided market for newspaper, where readers value accuracy and advertisers value advert-receptive readers. They found that advertising increases the intensity of competition for readers and therefore raises accuracy of media coverage. However, in the monopolistic case, newspapers under-report news that sufficiently reduces advertiser profits. 
 
 Given the crucial role of the media in shaping opinion and promoting democracy, pluralism of opinion and accuracy of information is a major concern of public authorities. Public broadcasting in Germany originated in the post-war period and has always had the task of providing the entire population with independent media. This media offer is intended to guarantee diversity of opinion within the media landscape and to be economically and politically independent. The former is given by the fact that the public media are financed by compulsory fees. To take into account the distinct nature of digital media, the Interstate Broadcasting Agreement (Rundfunkstaatsvertrag) also regulates the scope for action of online services offered by public service broadcasting since 2007. Accordingly, public media are not allowed to distribute purchased content and must - depending on the category of content - set a time limit on its accessibility. In addition, there is a strict advertising ban and prohibition of regional reporting. 
 
-However, given today's media landscape, the role of public media provider and its mandate is questioned. The basic justification for a public media offer can be roughly divided into two categories: On the one hand, possible market failure and on the other hand, ensuring diversity. The former involves the pursuit of non-economic (e. g. democratic, social and cultural) objectives, as well as the provision of information that would not be made available by the market due to a lack of willingness to pay. Ensuring the diversity of media content is intended to counteract possible media bias. 
-
-As stated above, this paper examines whether imperfections in the market of online news exist, by comparing the topic prevalence between public and private online news with the supply of private news providers. In the event that there is no market failure in terms of information provision, the existence of public media could still be justified by the fact that socially relevant contents of private providers are systematically distorted and the existence of public offerings ensures the diversity of information and opinions transmitted. In order to examine this bias, the divergence of word-topic probabilities is calculated to analyze how the topics are discussed differently.
+However, given today's media landscape, the role of public media provider and its mandate is questioned. The basic justification for a public media offer can be roughly divided into two categories: On the one hand, possible market failure and on the other hand, ensuring diversity. The former involves the pursuit of non-economic (e. g. democratic, social and cultural) objectives, as well as the provision of information that would not be made available by the market due to a lack of willingness to pay. Ensuring the diversity of media content is intended to counteract possible media bias. As stated above, this paper examines content diversity in the market of online news, by comparing the topic prevalence between the news providers. 
 
 % -----
 % Data
@@ -173,18 +169,37 @@ The STM maximizes the posterior likelihood that the observed data were generated
 
 Inference of mixed-membership models, such as the one applied in this paper, has been a thread of research in applied statistics in the past few years \citep{blei_latent_2003} \citep{erosheva_mixed-membership_2004} \citep{braun_variational_2010}. Topic models are usually imprecise as the function to be optimized has multiple modes, such that the model results can be sensitive to the starting values. Since an ex ante valuation of a model is hardly possible, I compute a variety of different models and compare their posterior probability. This enables me to check how results vary for different model solution \citep{roberts_navigating_2016}. I then cross-checked some subset of assigned topic distributions to evaluate whether the estimates align with the concept of interest \citep{gentzkow_text_2017}. These manual audits are applied together with numeric optimization based on the topic coherence measure suggested by \citet{mimno_optimizing_2011}. 
 
-This process revealed that a model with 40 topics best reflects the structure in the corpus. Furthermore, the ownership of the news provider of each article (public or private) and the month it was published are used as covariates in the topic prevalence. In other words, the probability distribution of topics depends on the business-model as well as on the month the article was published. The ownership is also included as a covariate affecting topical content, following the assumption that the same topic is discussed in different ways in private and public media respectively. To address problems due to non-convexity, we rely on the spectral initialization approach advocated by \citet{roberts_navigating_2016}. 
+This process revealed that a model with 50 topics best reflects the structure in the corpus. Furthermore, the publisher of the article is used as covariates in the topic prevalence and topical content. In other words, the corresponding newswire of an article influences the probability distribution of topics and how the topics are discussed. To address problems due to non-convexity, we rely on the spectral initialization approach advocated by \citet{roberts_navigating_2016}. 
 
 % ----------------------
 % Model Results
 % ----------------------
 \section{Empirical Evaluation}\label{ch_empirical}
 
-This section summarizes the results of the STM. Subsequently different measures to analyze the content differences between public and private ownership are applied according to the following approaches: (1) To address the question whether market imperfections exist in that sense, that some topics are not covered by private but by public news provider, I use the document-topic probability $\theta$, to estimate the conditional expectation of topic prevalence for given document characteristics (See section \ref{subsectiona_topicprevalence}). (2) Next, I find all edges between topics where they exhibit a positive correlation of $\theta$ above 0.1 to examine how topics are correlated differently for different covariate levels, indicating how topics are connected and framed differently between private and public media (see section \ref{subsection_topiccorrelation}). Approaches (1) and (2) have been used in \citep{roberts_model_2016}. However, we extend the analysis by (3) calculating the similarity of the word-topic distribution $\beta$ between the news provider using various distance measures, to identify which topics are discussed similar or differently (see section \ref{subsection_similarity}). 
+This section summarizes the results of the STM. Subsequently "the two T's" (Topic and Tone) of the corpus are analyzed according to the following approaches: (1) The document-topic probability $\theta$ is used, to estimate the conditional expectation of topic prevalence for given document characteristics (See section \ref{subsection_topic}). A set of topics is selected, that most distinctly discuss a particular party (or a topic related to a party). (2) Articles that are assigned to the selected topics with the highest probability are then used to conduct a dictionary-based analysis (see section \ref{subsection_tone}). 
+
+\subsection{Topic}\label{subsection_topic}
 
 In order to get an initial overview of the results, Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles \citep{roberts_model_2016}. 
 
-It becomes apparent that the topic (topic 3) about the coalition talks between the so-called Jamaica parties (CDU/CSU, FDP and Bündnis 90/Die Grünen) is the topic with the highest expected frequency in the whole corpus, followed by the topics about refugees in Germany (topic 32) and the coalition talks between CDU/CSU and SPD (topic 1), that began shortly after the failure of the Jamaican coalition. Particularly in the latter case, there is no discernible difference between private and public providers, while topic 3 and 32 are more likely to be seen in public news. The biggest difference can be seen in Topic 23, which covers court proceedings, especially in relation to the NSU case. Private providers seem to be less likely to report on this topic, as it is of less likelihood of observing this topic in the corpus of private news. Topic 7, which deals with political trends in Germany, seems to be discussed more often in private than in public news.    
+It becomes apparent that the topic (topic 4) about the coalition talks between CDU/CSU and SPD - the "Great coalition" or "GroKo" (from the German word Große Koalition) - is the topic with the highest expected frequency in the whole corpus, followed by the topic about the so-called Jamaica parties (CDU/CSU, FDP and Bündnis 90/Die Grünen), which was the first alternative to be negotiated directly after the elections. The Figure also shows, that topics related to refugees in Germany (topics 12 and 42) are quite frequent within the corpus. We will select the following topics from the whole set (topic are ordered regarding their overall corpus frequency):
+
+\begin{enumerate}
+	\item Topic 4: Covering the debates about the great coalition talks, mainly after the failure of the Jamaica coalition talks. 
+	\item Topic 27: Covering the Jamaica coalition talks, mainly focusing on the smaller players Bündnis 90/Die Grünen and FDP.
+	\item Topic 23: About issues regarding the CSU, mainly about the competition between Horst Seehofer and Markus Söder and the negotiations with the CDU.
+	\item Topic 37: Covering debates of AfD and DIE LINKE in the parliament (Deutscher Bundestag).
+	\item Topic 17: Covering votes within the SPD, mainly regarding the vote about a possible coalition with CDU/CSU ("GroKo")
+	\item Topic 26: Discussing the failure of the Jamaica coalition talks and the two possible alternatives: Reelections or a great coalition.
+	\item Topic 13: About Angela Merkel, mainly right before the election.
+	\item Topic 1: About the SPD, mainly about the election campaign and Martin Schulz as candidate for the chancellor.
+	\item Topic 32: About the AfD, mainly about Alice Weidel and Alexander Gauland, voted as parliamentary party leaders after the resignation of Frauke Petry.
+	\item Topic 30: About the AfD, mainly about the resignation of Frauke Petry and Jörg Meuthen.
+	\item Topic 2: About Bündnis 90/Die Grünen, mainly covering issues regarding the party's personell debates.
+	\item Topic 22: About SPD, mainly covering issues regarding the party's personell debates
+	\item Topic 20: About the AfD, mainly about their relation to right-wing extremist groups.
+	\item Topic 46: Covering issues regarding the CDU.
+\end{enumerate}   
 
 \begin{figure}[H]
 	\begin{center}
@@ -194,15 +209,13 @@ It becomes apparent that the topic (topic 3) about the coalition talks between t
 \end{center}
 \end{figure}
 
-\subsection{Differences in topic prevalence}\label{subsectiona_topicprevalence}
-
-To identify which of these differences is significant, the conditional expectation of topic prevalence for given document characteristics can be estimated \citep{roberts_model_2016}. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation \ref{eq_1}). The stm-package provides a function that uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results \citep{roberts_stm:_2016}.
+Next, the differences of topic prevalence for given document characteristics can be estimated \citep{roberts_model_2016}. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation \ref{eq_1}). The stm-package provides a function that uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results \citep{roberts_stm:_2016}.
 
 \begin{equation}\label{eq_1}
-	\theta_d=\alpha+\beta_1x_{ownership}+\beta_2x_{month}+\epsilon
+	\theta_d=\alpha+\beta x_{ownership}+\epsilon
 \end{equation}
 
-Figure \ref{fig_estimateEffects} displays the regression results for private vs. public. 
+Figure \ref{fig_estimateEffects} shows the regression results for the above selected topics. The coefficients indicate the deviation from the base value of Bild.de.  
 
 \begin{figure}[H]
 	\caption{Regression results}
@@ -214,83 +227,48 @@ Figure \ref{fig_estimateEffects} displays the regression results for private vs.
 
 \textcolor{red}{AUSWERTUNG}
 
-\subsection{Topic correlations}\label{subsection_topiccorrelation}
 
-Next, the topic correlation is calculated, indicating how topics are connected and framed in public and private media. In Figure \ref{fig_topic_correlations}, indicates all edges between topics where they exhibit a positive correlation above 0.1 \citep{roberts_model_2016}.
+\subsection{Tone}\label{subsection_tone}
 
+Once we identifying the topics of interest, we use only these documents that are assigned to one of the topics with the highest probability. A dictionary-based method is then applied on the remaining 5611 documents with the aim to measure the tone (or sentiment) of a document. The idea of a sentiment analysis is to determine the attitude of a writer toward the overall tonality of a document. To conduct such an analysis, a lists of words (dictionary) associated with a given emotion, such as negativity is pre-defined by the analyst. The document is then deconstructed into individual words and the frequencies of words contained in a given dictionary are then calculated. 
 
-\begin{figure}[H]
-	\caption{Topic Correlation}
-		\begin{center}
-		\begin{subfigure}{.7\textwidth}
-			\includegraphics[width=\textwidth]{../figs/corrplot1.png}	
-			\subcaption{Private news provider}
-		\end{subfigure}
-		\begin{subfigure}{.7\textwidth}
-			\includegraphics[width=\textwidth]{../figs/corrplot2}
-			\caption{Public news provider}	
-		\end{subfigure}
-		\end{center}
-	\label{fig_topic_correlations}
-\end{figure}
+Such lexical or “bag-of-words” approaches are widely presented in the finance literature to  determine  the  effect  of  central  banks’  monetary  policy  communications on asset prices and real variables (\citet{nyman_news_2018} \citep{tetlock_giving_2007}, \citep{tetlock_more_2008}). \citet{hansen_shocking_2016} use a similar approach to measure "the two Ts" (Topic and tone). They explore the effects of FOMC statements on both market and real economic variables. To understand the multi-dimensional information a statement is transmitting, they apply LDA on a corpus of 142 FOMC decision statements split into sentences (topic). They then measure how the central bank is talking about that topic, using a dictionary approach (tone). To calculate their score, they subtract the negative words from the positive words und divide this by the number of total words of the statement. A similar score is used by \citet{nyman_news_2018}, who measure the effect of narratives and sentiment of financial market text-based data on developments in the financial system. They count the number of occurrences of excitement words and anxiety words and then scale these numbers by the total text size as measured by the number of characters.
 
-\textcolor{red}{AUSWERTUNG}
-
-\subsection{Differences in word-topic distributions}\label{subsection_similarity}
-
-Previous topic modeling research try to measure the similarity between topics, comparing the word-topic-distribution between the topics (most of the research uses LDA without metadata, so the word-topic-distribution is the same within the whole corpus). cosine similarity \citep{he_detecting_2009}, \citep{ramage_labeled_2009}, Kullback-Leibler (KL) \citep{newman_distributed_2009}, \citep{wang_mining_2009} and the average Log Odds Ratio \citep{chaney_visualizing_2012} are frequently used metrics to compare word probability distributions. \citet{kim_topic_2011} compare six popular similarity metrics in terms of log likelihood of data, concluding that Jensen-Shannon Divergence (the symmetric variation of KL divergence) is best in terms of performance and generality. 
-
-Since a topic is a multinomial distribution over the vocabulary, where $\beta_{kvi}$ indicates the probability of observing word $v$ in topic $k$ for covariate level $i$, we can analyze how similar a topic $k$ is for different levels of covariates. More precisely, we can calculate the similarity between $\beta_{kvi}$ and $\beta_{kvj}$. I use each row of that matrix (corresponding to each topic) to calculate the similarity of the word-topic distribution between the public and private media using the square root of the Jensen-Shannon (JS) Divergence. I will compare this metric with a set of other similarity measures recently used in the literature to measure the difference between word-topic distributions: The Kullback-Leibler (KL) divergence (\citet{newman_distributed_2009}, \citet{wang_mining_2009}), the cosine similarity (\citet{he_detecting_2009}, \citet{ramage_labeled_2009}) and the difference of the $L1$ norm of the vectors \citep{roberts_navigating_2016}. Before the results are presented, I will briefly explain these measures before I proceed to the results.
-
-Essentially, the KL divergence is the expectation of the log difference between probabilities $a$ and $b$. It can be defined as:
-
-\begin{align*}
-	D_{KL}(a,b)=\sum_{i=1}^T a_i \text{ln} \frac{a_i}{b_i},
-\end{align*}
-
-where $D_{kl} \to 0$ indicates stronger similarities. However, since the KL divergence is not symmetric, it cannot be used to measure the distance between two distributions, but as a divergence measure.
-
-The Jensen-Shannon Divergence is a positive definite measure, satisfying the following conditions: $D_{js}(a,b) \geq 0$, $D_{js}(a,b)=0$ iff $(a=b)$. It is also symmetric: $D_{js}(a,b)=D_{js}(b,a)$. The Jensen-Shannon distance $D_{js}(a,b)$ between the two distributions is defined as:
-
-\begin{align*}
-	D_{js}(a,b)=\frac{1}{2}D_{KL}(a,\frac{a+b}{2})+\frac{1}{2}D_{KL}(b,\frac{a+b}{2})
-\end{align*}
-
-where $D_{KL}$ is the Kullback-Leibler divergence. Since $D_{js}$ does not satisfy the triangular inequality condition $D_{js}(a,c)\leq D_{js}(a,c)+D_{js}(b,c)$, the JSD is not considered to be a real distance metric. However, we can use the square root of JSD as a real distance metric \citep{endres_new_2003}.
-
-\citet{roberts_navigating_2016} use the $L_1$ norm of the word-topic distributions to compare topics from different models. The $L_1$ norm is the sum of the absolute value of the difference between two vectors. Its defined as
-
-\begin{align*}
-	L_1=\sum_{i=1} |a_i-b_i|
-\end{align*}
-
-this measure has a range of $[0,2]$, where $ L_1 \to 0$ indicates strong similarities. \citet{roberts_navigating_2016} compare this measure with a cosine similarity metric, which is essentially the dot product rescaled by the $L_2$ norm of the vectors and is defined as.
-
-\begin{align*}
-	\text{cos}(\theta)=\frac{\sum_{i=1}a_i b_i}{\sqrt{\sum_{i=1}a_i^2}\sum_{i=1}b_i^2}
-\end{align*}
-
-However, different to the above mentioned metrics the cosine similarity has a range of $[0,1]$ and $cos(\theta) \to 0$ indicate less similarity.
-
-Figure \ref{fig_distance} displays the different distance measures 
-
-\begin{figure}[H]
-	\begin{center}
-		\caption{Similarity measures of word-topic probabilities}
-		\includegraphics[width=\textwidth,keepaspectratio]{../figs/distance}
-		\label{fig_distance}
-	\end{center}
-\end{figure}
-
-\subsection{Sentiment Analysis}
-
-Once we identifying the topics of interest, we use only these documents in which the posterior probability of topic $k$ is above the threshold of $0.75$, to apply a dictionary method with the aim to measure the tone of a document. To conduct such an analysis, a lists of words (dictionary) associated with a given emotion, such as negativity is pre-defined by the analyst. The target text is then deconstructed into individual words and the frequencies of words contained in a given dictionary are then calculated. Such lexical or “bag-of-words” approaches are widely presented in the finance literature to  determine  the  effect  of  central  banks’  monetary  policy  communications on asset prices and real variables (\citet{nyman_news_2018} \citep{tetlock_giving_2007}, \citep{tetlock_more_2008}). \citet{hansen_shocking_2016} use a similar approach to measure "the two Ts" (Topic and tone). They explore the effects of FOMC statements on both market and real economic variables. To understand the multi-dimensional information a statement is transmitting, they apply LDA on a corpus of 142 FOMC decision statements split into sentences (topic). They then measure how the central bank is talking about that topic, using a dictionary approach (tone). To calculate their score, they subtract the negative words from the positive words und divide this by the number of total words of the statement. A similar score is used by \citet{nyman_news_2018}, who measure the effect of narratives and sentiment of financial market text-based data on developments in the financial system. They count the number of occurrences of excitement words and anxiety words and then scale these numbers by the total text size as measured by the number of characters.
-
-To measure the tone of a document, we use a dictionary that lists words associated with positive and negative polarity weighted within the interval of $[-1; 1]$. SentimentWortschatz\footnote{SentiWS for short. available here: http://wortschatz.uni-leipzig.de/de/download}, is a publicly available German-language resource for sentiment analysis, opinion mining etc. The current version of SentiWS (v1.8b) contains 1,650 positive and 1,818 negative words, which sum up to 15,649 positive and 15,632 negative word forms incl. their inflections, respectively. The sentiment score for each document $d$ is calculated as follows:
+The present paper uses a dictionary that lists words associated with positive and negative polarity weighted within the interval of $[-1; 1]$. SentimentWortschatz\footnote{SentiWS for short. available here: http://wortschatz.uni-leipzig.de/de/download}, is a publicly available German-language resource for sentiment analysis, opinion mining etc. The current version of SentiWS (v1.8b) contains 1,650 positive and 1,818 negative words, which sum up to 15,649 positive and 15,632 negative word forms incl. their inflections, respectively. The sentiment score for each document $d$ is calculated  based on the weighted polarity values for a word, defined on an interval between -1 and 1. The score is then calculated from the sum of the words in a document (which can be assigned to a word from the dictionary) divided by the total number of words in that document:
  
 \begin{equation}
-	\text{SentScore}_d = \frac{|\text{positive}_d| - |\text{negative}_d|}{|\text{TotalWords}_d|}
+	\text{SentScore}_d = \frac{|\text{positive polarity score}_d| - |\text{negative polarity score}_d|}{|\text{TotalWords}_d|}
 \end{equation}
+
+The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspaper. Each sentiment value is weighted by the relative share of the topic in the overall reporting of that month.
+
+Some conclusions can be drawn from this illustration. First of all, it can be seen that, on average, all topics are discussed almost exclusively negatively. An exception is topic 27 concerning the Jaimiaca coalition negotiations, which shows a positive sentiment value for a short period of time (October 2017). In the following month (November 2017), after it became clear that there would be no coalition between the CDU/CSU, FDP and Die Grünen, the value of this topic as well as that of topic 26 drops rapidly. 
+
+Concerning the issues that discuss the great coaltion between CDU/CSU and SPD, it is evident that the overall tone is in which this topic is discussed is generally decreasing from November 2017 to January 2018, but in the following February, the sentiment value of this topic rises. However, the sentiment score of topics that deal with the SPD alone (1, 17, 22) is diminishing in the course of time, with topic 17 recording the largest decline. The topic, which contains the CDU in isolation (46), is rather zigzagging, with a low peak in October 2017.
+
+\begin{figure}[H]
+	\caption{Monthly Sentiment Score}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/sentscore_monthly.png}
+		\end{center}
+	\label{fig_sentscore_monthly}
+\end{figure}
+
+\begin{figure}[H]
+	\caption{Sentiment Score by news wire}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/sentscore_site.png}
+		\end{center}
+	\label{fig_sentscore_site}
+\end{figure}
+
+\begin{figure}[H]
+	\caption{Sentiment Score Radarplot}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/sentscore_radar.png}
+		\end{center}
+	\label{fig_sentscore_radar}
+\end{figure}
 
 
 % ----------------------

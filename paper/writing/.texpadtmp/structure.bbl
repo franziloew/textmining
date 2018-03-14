@@ -264,38 +264,6 @@
       \verb http://econpapers.repec.org/article/rjerandje/v_3a34_3ay_3a2003_3ai_3a2_3ap_3a309-28.htm
       \endverb
     \endentry
-    \entry{chaney_visualizing_2012}{inproceedings}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=0235522c0c6d4cb1ece920180aba7a75}{Chaney}{C\bibinitperiod}{Allison\bibnamedelima June-Barlow}{A\bibinitperiod\bibinitdelim J\bibinithyphendelim B\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=7441e4d372e854fc6d24d0d5a16a1687}{Blei}{B\bibinitperiod}{David\bibnamedelima M.}{D\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-      }
-      \list{language}{1}{%
-        {en}%
-      }
-      \strng{namehash}{29673b6ca622b10da655eb296a0a5313}
-      \strng{fullhash}{29673b6ca622b10da655eb296a0a5313}
-      \field{sortinit}{C}
-      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
-      \field{labelyear}{2012}
-      \field{labelmonth}{05}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Managing large collections of documents is an important problem for many areas of science, industry, and culture. Probabilistic topic modeling offers a promising solution. Topic modeling is an unsupervised machine learning method that learns the underlying themes in a large collection of otherwise unorganized documents. This discovered structure summarizes and organizes the documents. However, topic models are high-level statistical tools\&mdash;a user must scrutinize numerical distributions to understand and explore their results. In this paper, we present a method for visualizing topic models. Our method creates a navigator of the documents, allowing users to explore the hidden structure that a topic model discovers. These browsing interfaces reveal meaningful patterns in a collection, helping end-users explore and understand its contents in new ways. We provide open source software of our method.}
-      \field{booktitle}{Sixth {International} {AAAI} {Conference} on {Weblogs} and {Social} {Media}}
-      \field{month}{05}
-      \field{title}{Visualizing {Topic} {Models}}
-      \field{urlday}{23}
-      \field{urlmonth}{01}
-      \field{urlyear}{2018}
-      \field{year}{2012}
-      \verb{file}
-      \verb Full Text PDF:/Users/Franzi/Zotero/storage/968W9M2F/Chaney und Blei - 2012 - Visualizing Topic Models.pdf:application/pdf;Snapshot:/Users/Franzi/Zotero/storage/DXRG63IG/4645.html:text/html
-      \endverb
-      \verb{url}
-      \verb https://www.aaai.org/ocs/index.php/ICWSM/ICWSM12/paper/view/4645
-      \endverb
-    \endentry
     \entry{corden_maximisation_1952}{article}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=f4dfd047460584ed73fec235d4922b16}{Corden}{C\bibinitperiod}{W.\bibnamedelimi M.}{W\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
@@ -360,38 +328,6 @@
       \verb{url}
       \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1468-0297.2009.02218.x/abstract
       \endverb
-    \endentry
-    \entry{endres_new_2003}{article}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=c85573d09dabe3c1b9f179da6970908a}{Endres}{E\bibinitperiod}{D.\bibnamedelimi M.}{D\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=cf606fefcfc84d1a877d650817ff8220}{Schindelin}{S\bibinitperiod}{J.\bibnamedelimi E.}{J\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{5dff9a94d2201338dda2253b958e741a}
-      \strng{fullhash}{5dff9a94d2201338dda2253b958e741a}
-      \field{sortinit}{E}
-      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
-      \field{labelyear}{2003}
-      \field{labelmonth}{07}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{We introduce a metric for probability distributions, which is bounded, information-theoretically motivated, and has a natural Bayesian interpretation. The square root of the well-known χ2 distance is an asymptotic approximation to it. Moreover, it is a close relative of the capacitory discrimination and Jensen-Shannon divergence.}
-      \field{issn}{0018-9448}
-      \field{journaltitle}{IEEE Transactions on Information Theory}
-      \field{month}{07}
-      \field{number}{7}
-      \field{title}{A new metric for probability distributions}
-      \field{volume}{49}
-      \field{year}{2003}
-      \field{pages}{1858\bibrangedash 1860}
-      \range{pages}{3}
-      \verb{doi}
-      \verb 10.1109/TIT.2003.813506
-      \endverb
-      \verb{file}
-      \verb IEEE Xplore Abstract Record:/Users/Franzi/Zotero/storage/H6L3EIL4/1207388.html:text/html
-      \endverb
-      \keyw{Adaptive estimation,Algorithm design and analysis,asymptotic approximation,Bayes methods,Bayesian interpretation,Bayesian methods,bounded information-theoretically motivated metric,capacitory discrimination,Convergence,Gaussian noise,information theory,Iterative algorithms,Jensen-Shannon divergence,probability,Probability distribution,probability distributions,square root,Wavelet analysis,White noise,Writing,χ2 distance}
     \endentry
     \entry{erosheva_mixed-membership_2004}{article}{}
       \name{author}{3}{}{%
@@ -759,49 +695,6 @@
       \verb https://doi.org/10.1080/03585522.1978.10407893
       \endverb
     \endentry
-    \entry{he_detecting_2009}{inproceedings}{}
-      \name{author}{6}{}{%
-        {{uniquename=0,hash=954a8b117e47bd74e7e7fc588d404cc1}{He}{H\bibinitperiod}{Qi}{Q\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=e10d71b6f395bb0c6e3433b2cde03d25}{Chen}{C\bibinitperiod}{Bi}{B\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=56af930e1f5e2c9a791b71e7b347c0ba}{Pei}{P\bibinitperiod}{Jian}{J\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=261763dc36b8bb65ac9de154d1b279ee}{Qiu}{Q\bibinitperiod}{Baojun}{B\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=1830bc3848a0cda63f4a76b15fc00352}{Mitra}{M\bibinitperiod}{Prasenjit}{P\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=daeef099e93bccc14e0d6d066fa64e36}{Giles}{G\bibinitperiod}{Lee}{L\bibinitperiod}{}{}{}{}}%
-      }
-      \list{location}{1}{%
-        {New York, NY, USA}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{812d5e56fd8d1feeb26f5c9935811908}
-      \strng{fullhash}{4337f8f503b715ac07377dd557de9eab}
-      \field{sortinit}{H}
-      \field{sortinithash}{82012198d5dfa657b8c4a168793268a6}
-      \field{labelyear}{2009}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{Understanding how topics in scientific literature evolve is an interesting and important problem. Previous work simply models each paper as a bag of words and also considers the impact of authors. However, the impact of one document on another as captured by citations, one important inherent element in scientific literature, has not been considered. In this paper, we address the problem of understanding topic evolution by leveraging citations, and develop citation-aware approaches. We propose an iterative topic evolution learning framework by adapting the Latent Dirichlet Allocation model to the citation network and develop a novel inheritance topic model. We evaluate the effectiveness and efficiency of our approaches and compare with the state of the art approaches on a large collection of more than 650,000 research papers in the last 16 years and the citation network enabled by CiteSeerX. The results clearly show that citations can help to understand topic evolution better.}
-      \field{booktitle}{Proceedings of the 18th {ACM} {Conference} on {Information} and {Knowledge} {Management}}
-      \field{isbn}{978-1-60558-512-3}
-      \field{series}{{CIKM} '09}
-      \field{shorttitle}{Detecting {Topic} {Evolution} in {Scientific} {Literature}}
-      \field{title}{Detecting {Topic} {Evolution} in {Scientific} {Literature}: {How} {Can} {Citations} {Help}?}
-      \field{urlday}{23}
-      \field{urlmonth}{01}
-      \field{urlyear}{2018}
-      \field{year}{2009}
-      \field{pages}{957\bibrangedash 966}
-      \range{pages}{10}
-      \verb{doi}
-      \verb 10.1145/1645953.1646076
-      \endverb
-      \verb{url}
-      \verb http://doi.acm.org/10.1145/1645953.1646076
-      \endverb
-      \keyw{citations,inheritance topic model,topic evolution}
-    \endentry
     \entry{hofmann_probabilistic_1999}{inproceedings}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=ee42cfed2ff3020233d2de97c356eaee}{Hofmann}{H\bibinitperiod}{Thomas}{T\bibinitperiod}{}{}{}{}}%
@@ -832,45 +725,6 @@
       \endverb
       \verb{url}
       \verb http://doi.acm.org/10.1145/312624.312649
-      \endverb
-    \endentry
-    \entry{kim_topic_2011}{inproceedings}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=2a47dfbdf220e67592d9ecb09e825f7c}{Kim}{K\bibinitperiod}{Dongwoo}{D\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=89beda56532ed5958b1bf14ef77dddf8}{Oh}{O\bibinitperiod}{Alice}{A\bibinitperiod}{}{}{}{}}%
-      }
-      \list{language}{1}{%
-        {en}%
-      }
-      \list{publisher}{1}{%
-        {Springer, Berlin, Heidelberg}%
-      }
-      \strng{namehash}{b0482710291d5e905f2dc431c90eb0ac}
-      \strng{fullhash}{b0482710291d5e905f2dc431c90eb0ac}
-      \field{sortinit}{K}
-      \field{sortinithash}{a7d5b3aec5a0890aae7baf85a209abfc}
-      \field{labelyear}{2011}
-      \field{labelmonth}{02}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{The Web is a great resource and archive of news articles for the world. We present a framework, based on probabilistic topic modeling, for uncovering the meaningful structure and trends of important topics and issues hidden within the news archives on the Web. Central in the framework is a topic chain, a temporal organization of similar topics. We experimented with various topic similarity metrics and present our insights on how best to construct topic chains. We discuss how to interpret the topic chains to understand the news corpus by looking at long-term topics, temporary issues, and shifts of focus in the topic chains. We applied our framework to nine months of Korean Web news corpus and present our findings.}
-      \field{booktitle}{Computational {Linguistics} and {Intelligent} {Text} {Processing}}
-      \field{isbn}{978-3-642-19436-8 978-3-642-19437-5}
-      \field{month}{02}
-      \field{series}{Lecture {Notes} in {Computer} {Science}}
-      \field{title}{Topic {Chains} for {Understanding} a {News} {Corpus}}
-      \field{urlday}{23}
-      \field{urlmonth}{01}
-      \field{urlyear}{2018}
-      \field{year}{2011}
-      \field{pages}{163\bibrangedash 176}
-      \range{pages}{14}
-      \verb{doi}
-      \verb 10.1007/978-3-642-19437-5_13
-      \endverb
-      \verb{url}
-      \verb https://link.springer.com/chapter/10.1007/978-3-642-19437-5_13
       \endverb
     \endentry
     \entry{mimno_optimizing_2011}{inproceedings}{}
@@ -993,41 +847,6 @@
       \endverb
       \keyw{Civil War,conflict,Forecasting,Latent Dirichlet Allocation.,Machine Learning,panel data,Topic Models}
     \endentry
-    \entry{newman_distributed_2009}{article}{}
-      \name{author}{4}{}{%
-        {{uniquename=0,hash=c6e083f47bda3beece2d206379d5135b}{Newman}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=5ee61d3f5a1c8fbf9b4a01e430890d92}{Asuncion}{A\bibinitperiod}{Arthur}{A\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=4940852a16a84802eb98552d6deace24}{Smyth}{S\bibinitperiod}{Padhraic}{P\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=53d2880ad8047b61cdae2c6b2803e763}{Welling}{W\bibinitperiod}{Max}{M\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{d0e1e6913586430f6dbbe7a4e270e322}
-      \strng{fullhash}{5ae34298b930190cd8312450d9189931}
-      \field{sortinit}{N}
-      \field{sortinithash}{925374ca63e7594de7fafdb83e64d41d}
-      \field{labelyear}{2009}
-      \field{labelmonth}{12}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{We describe distributed algorithms for two widely-used topic models, namely the Latent Dirichlet Allocation (LDA) model, and the Hierarchical Dirichet Process (HDP) model. In our distributed algorithms the data is partitioned across separate processors and inference is done in a parallel, distributed fashion. We propose two distributed algorithms for LDA. The first algorithm is a straightforward mapping of LDA to a distributed processor setting. In this algorithm processors concurrently perform Gibbs sampling over local data followed by a global update of topic counts. The algorithm is simple to implement and can be viewed as an approximation to Gibbs-sampled LDA. The second version is a model that uses a hierarchical Bayesian extension of LDA to directly account for distributed data. This model has a theoretical guarantee of convergence but is more complex to implement than the first algorithm. Our distributed algorithm for HDP takes the straightforward mapping approach, and merges newly-created topics either by matching or by topic-id. Using five real-world text corpora we show that distributed learning works well in practice. For both LDA and HDP, we show that the converged test-data log probability for distributed learning is indistinguishable from that obtained with single-processor learning. Our extensive experimental results include learning topic models for two multi-million document collections using a 1024-processor parallel computer.}
-      \field{issn}{1532-4435}
-      \field{journaltitle}{J. Mach. Learn. Res.}
-      \field{month}{12}
-      \field{title}{Distributed {Algorithms} for {Topic} {Models}}
-      \field{urlday}{23}
-      \field{urlmonth}{01}
-      \field{urlyear}{2018}
-      \field{volume}{10}
-      \field{year}{2009}
-      \field{pages}{1801\bibrangedash 1828}
-      \range{pages}{28}
-      \verb{file}
-      \verb ACM Full Text PDF:/Users/Franzi/Zotero/storage/8WPWT44A/Newman et al. - 2009 - Distributed Algorithms for Topic Models.pdf:application/pdf
-      \endverb
-      \verb{url}
-      \verb http://dl.acm.org/citation.cfm?id=1577069.1755845
-      \endverb
-    \endentry
     \entry{pritchard_inference_2000}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=4709d6d04fb91c43b0b65f754c908ff9}{Pritchard}{P\bibinitperiod}{J.\bibnamedelimi K.}{J\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
@@ -1057,29 +876,6 @@
       \field{pages}{945\bibrangedash 959}
       \range{pages}{15}
       \keyw{Algorithms,Cluster Analysis,Genetics,Population,Genotype,Humans,Models,Genetic}
-    \endentry
-    \entry{ramage_labeled_2009}{book}{}
-      \name{author}{4}{}{%
-        {{uniquename=0,hash=86066638fba5b4dc33bcee0bcba473cf}{Ramage}{R\bibinitperiod}{Daniel}{D\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=787c1284a811cd99828ca8d83ec36001}{Hall}{H\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=c2c89f0960942c4cca8a09358fb380d1}{Nallapati}{N\bibinitperiod}{Ramesh}{R\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=016fc1e04b3b878ce0ba16c74854c0f6}{Manning}{M\bibinitperiod}{Christopher\bibnamedelima D.}{C\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{46e35a796e41a0c80edf02515ed1061e}
-      \strng{fullhash}{8797c581c971cabc7ea3ee76df8a7db8}
-      \field{sortinit}{R}
-      \field{sortinithash}{c7387613477035a752d935acfc3e3ea2}
-      \field{labelyear}{2009}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{A significant portion of the world’s text is tagged by readers on social bookmarking websites. Credit attribution is an inherent problem in these corpora because most pages have multiple tags, but the tags do not always apply with equal specificity across the whole document. Solving the credit attribution problem requires associating each word in a document with the most appropriate tags and vice versa. This paper introduces Labeled LDA, a topic model that constrains Latent Dirichlet Allocation by defining a one-to-one correspondence between LDA’s latent topics and user tags. This allows Labeled LDA to directly learn word-tag correspondences. We demonstrate Labeled LDA’s improved expressiveness over traditional LDA with visualizations of a corpus of tagged web pages from del.icio.us. Labeled LDA outperforms SVMs by more than 3 to 1 when extracting tag-specific document snippets. As a multi-label text classifier, our model is competitive with a discriminative baseline on a variety of datasets. 1}
-      \field{shorttitle}{Labeled {LDA}}
-      \field{title}{Labeled {LDA}: {A} supervised topic model for credit attribution in multi-labeled corpora}
-      \field{year}{2009}
-      \verb{file}
-      \verb Citeseer - Full Text PDF:/Users/Franzi/Zotero/storage/WD2TZ58J/Ramage et al. - Labeled LDA A supervised topic model for credit a.pdf:application/pdf;Citeseer - Snapshot:/Users/Franzi/Zotero/storage/W5DGAHT5/summary.html:text/html
-      \endverb
     \endentry
     \entry{roberts_model_2016}{article}{}
       \name{author}{3}{}{%
@@ -1304,45 +1100,42 @@
       \verb http://www.jstor.org/stable/1882942
       \endverb
     \endentry
-    \entry{wang_mining_2009}{inproceedings}{}
-      \name{author}{4}{}{%
-        {{uniquename=0,hash=8fde8559617f603b3e2b3cf30cb48e9b}{Wang}{W\bibinitperiod}{Xiang}{X\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=accfaf086a407bfb746d7875478d9130}{Zhang}{Z\bibinitperiod}{Kai}{K\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=3312b6f36ad76cb5ef06f87e7eb48d1c}{Jin}{J\bibinitperiod}{Xiaoming}{X\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=c7543f4960a684ee007442dabcaa12e2}{Shen}{S\bibinitperiod}{Dou}{D\bibinitperiod}{}{}{}{}}%
+    \entry{tetlock_giving_2007}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=43e620292c04ccd0b1bb834cc476d39f}{Tetlock}{T\bibinitperiod}{Paul\bibnamedelima C.}{P\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
       }
-      \list{location}{1}{%
-        {New York, NY, USA}%
+      \list{language}{1}{%
+        {en}%
       }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{35ac326fad78d42d0760cfb75887ea69}
-      \strng{fullhash}{de4a2d3766677a1deafac485e2b35ad7}
-      \field{sortinit}{W}
-      \field{sortinithash}{99e3ba1b3f78bb6f073e7fa7ac11636b}
-      \field{labelyear}{2009}
+      \strng{namehash}{43e620292c04ccd0b1bb834cc476d39f}
+      \strng{fullhash}{43e620292c04ccd0b1bb834cc476d39f}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{labelyear}{2007}
+      \field{labelmonth}{06}
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Text streams are becoming more and more ubiquitous, in the forms of news feeds, weblog archives and so on, which result in a large volume of data. An effective way to explore the semantic as well as temporal information in text streams is topic mining, which can further facilitate other knowledge discovery procedures. In many applications, we are facing multiple text streams which are related to each other and share common topics. The correlation among these streams can provide more meaningful and comprehensive clues for topic mining than those from each individual stream. However, it is nontrivial to explore the correlation with the existence of asynchronism among multiple streams, i.e. documents from different streams about the same topic may have different timestamps, which remains unsolved in the context of topic mining. In this paper, we formally address this problem and put forward a novel algorithm based on the generative topic model. Our algorithm consists of two alternate steps: the first step extracts common topics from multiple streams based on the adjusted timestamps by the second step; the second step adjusts the timestamps of the documents according to the time distribution of the discovered topics by the first step. We perform these two steps alternately and a monotone convergence of our objective function is guaranteed. The effectiveness and advantage of our approach were justified by extensive empirical studies on two real data sets consisting of six research paper streams and two news article streams, respectively.}
-      \field{booktitle}{Proceedings of the {Second} {ACM} {International} {Conference} on {Web} {Search} and {Data} {Mining}}
-      \field{isbn}{978-1-60558-390-7}
-      \field{series}{{WSDM} '09}
-      \field{title}{Mining {Common} {Topics} from {Multiple} {Asynchronous} {Text} {Streams}}
-      \field{urlday}{23}
-      \field{urlmonth}{01}
-      \field{urlyear}{2018}
-      \field{year}{2009}
-      \field{pages}{192\bibrangedash 201}
-      \range{pages}{10}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{I quantitatively measure the interactions between the media and the stock market using daily content from a popular Wall Street Journal column. I find that high media pessimism predicts downward pressure on market prices followed by a reversion to fundamentals, and unusually high or low pessimism predicts high market trading volume. These and similar results are consistent with theoretical models of noise and liquidity traders, and are inconsistent with theories of media content as a proxy for new information about fundamental asset values, as a proxy for market volatility, or as a sideshow with no relationship to asset markets.}
+      \field{issn}{1540-6261}
+      \field{journaltitle}{The Journal of Finance}
+      \field{month}{06}
+      \field{number}{3}
+      \field{shorttitle}{Giving {Content} to {Investor} {Sentiment}}
+      \field{title}{Giving {Content} to {Investor} {Sentiment}: {The} {Role} of {Media} in the {Stock} {Market}}
+      \field{volume}{62}
+      \field{year}{2007}
+      \field{pages}{1139\bibrangedash 1168}
+      \range{pages}{30}
       \verb{doi}
-      \verb 10.1145/1498759.1498826
+      \verb 10.1111/j.1540-6261.2007.01232.x
+      \endverb
+      \verb{file}
+      \verb Snapshot:/Users/Franzi/Zotero/storage/R4FBIJ83/abstract.html:text/html
       \endverb
       \verb{url}
-      \verb http://doi.acm.org/10.1145/1498759.1498826
+      \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.2007.01232.x/abstract
       \endverb
-      \keyw{topic model,asynchronous streams,temporal text mining}
     \endentry
     \entry{wiedmann_text_2016}{book}{}
       \name{author}{1}{}{%
@@ -1376,6 +1169,12 @@
       \endverb
     \endentry
   \endsortlist
+  \missing{_media_2014}
+  \missing{cage_information_2017}
+  \missing{nyman_news_2018}
+  \missing{vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017}
+  \missing{hansen_shocking_2016}
+  \missing{tetlock_more_2008}
   \missing{paul_cross-collection_2017}
 \endrefsection
 \endinput

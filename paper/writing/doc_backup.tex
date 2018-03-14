@@ -79,6 +79,8 @@ One fundamental question in this debate is whether the offer of public news on t
 
 On the basis of these justifications, this paper examines whether imperfections in the market of online news exist. In other words, whether socially desired content that meets the (social) needs of society - and is therefore politically desirable - is not, or very poorly provided by the market. In order to examine this, the online news content of public media is compared with the supply of private news providers. More specifically, I use a data set of German online news articles about domestic politics dated from 01.06.2017 to 31.12.2017\footnote{German federal elections took place on 24th of September 2017.} from six German news content providers. In the event that there is no market failure in terms of information provision (the prevalence of topics do not differ), the existence of public media could still be justified by the fact that socially relevant contents of private providers are systematically distorted and the existence of public offerings ensures the diversity of information and opinions transmitted. In order to examine this bias, I analyze how the topics are discussed differently in public and private news.
 
+As stated above, this paper examines whether imperfections in the market of online news exist, by comparing the topic prevalence between public and private online news with the supply of private news providers. In the event that there is no market failure in terms of information provision, the existence of public media could still be justified by the fact that socially relevant contents of private providers are systematically distorted and the existence of public offerings ensures the diversity of information and opinions transmitted. In order to examine this bias, the divergence of word-topic probabilities is calculated to analyze how the topics are discussed differently.
+
 \section{Competitor Analysis}
 \subsection{Competitor analysis}
 
@@ -296,6 +298,82 @@ On repeating the last step a large number of times, the algorithm reaches a stea
 Caution against the over-interpretation of unsupervised models: posterior distributions informing parameter estimates are highly multimodal, and multiple topic model runs can lead to multiple different interpretations. Add some supervision (\citet{airoldi_improving_2016}, \citet{gentzkow_text_2017})  
 
 % ----------------------
+% Model Results
+% ----------------------
+\section{Empirical Evaluation}\label{ch_empirical}
+
+This section summarizes the results of the STM. Subsequently different measures to analyze the content differences between public and private ownership are applied according to the following approaches: (1) To address the question whether market imperfections exist in that sense, that some topics are not covered by private but by public news provider, I use the document-topic probability $\theta$, to estimate the conditional expectation of topic prevalence for given document characteristics (See section \ref{subsectiona_topicprevalence}). (2) Next, I find all edges between topics where they exhibit a positive correlation of $\theta$ above 0.1 to examine how topics are correlated differently for different covariate levels, indicating how topics are connected and framed differently between private and public media (see section \ref{subsection_topiccorrelation}). Approaches (1) and (2) have been used in \citep{roberts_model_2016}. However, we extend the analysis by (3) calculating the similarity of the word-topic distribution $\beta$ between the news provider using various distance measures, to identify which topics are discussed similar or differently (see section \ref{subsection_similarity}). 
+
+\subsection{Topic correlations}\label{subsection_topiccorrelation}
+
+Next, the topic correlation is calculated, indicating how topics are connected and framed in public and private media. In Figure \ref{fig_topic_correlations}, indicates all edges between topics where they exhibit a positive correlation above 0.1 \citep{roberts_model_2016}.
+
+
+\begin{figure}[H]
+	\caption{Topic Correlation}
+		\begin{center}
+		\begin{subfigure}{.7\textwidth}
+			\includegraphics[width=\textwidth]{../figs/corrplot1.png}	
+			\subcaption{Private news provider}
+		\end{subfigure}
+		\begin{subfigure}{.7\textwidth}
+			\includegraphics[width=\textwidth]{../figs/corrplot2}
+			\caption{Public news provider}	
+		\end{subfigure}
+		\end{center}
+	\label{fig_topic_correlations}
+\end{figure}
+
+\textcolor{red}{AUSWERTUNG}
+
+\subsection{Differences in word-topic distributions}\label{subsection_similarity}
+
+Previous topic modeling research try to measure the similarity between topics, comparing the word-topic-distribution between the topics (most of the research uses LDA without metadata, so the word-topic-distribution is the same within the whole corpus). cosine similarity \citep{he_detecting_2009}, \citep{ramage_labeled_2009}, Kullback-Leibler (KL) \citep{newman_distributed_2009}, \citep{wang_mining_2009} and the average Log Odds Ratio \citep{chaney_visualizing_2012} are frequently used metrics to compare word probability distributions. \citet{kim_topic_2011} compare six popular similarity metrics in terms of log likelihood of data, concluding that Jensen-Shannon Divergence (the symmetric variation of KL divergence) is best in terms of performance and generality. 
+
+Since a topic is a multinomial distribution over the vocabulary, where $\beta_{kvi}$ indicates the probability of observing word $v$ in topic $k$ for covariate level $i$, we can analyze how similar a topic $k$ is for different levels of covariates. More precisely, we can calculate the similarity between $\beta_{kvi}$ and $\beta_{kvj}$. I use each row of that matrix (corresponding to each topic) to calculate the similarity of the word-topic distribution between the public and private media using the square root of the Jensen-Shannon (JS) Divergence. I will compare this metric with a set of other similarity measures recently used in the literature to measure the difference between word-topic distributions: The Kullback-Leibler (KL) divergence (\citet{newman_distributed_2009}, \citet{wang_mining_2009}), the cosine similarity (\citet{he_detecting_2009}, \citet{ramage_labeled_2009}) and the difference of the $L1$ norm of the vectors \citep{roberts_navigating_2016}. Before the results are presented, I will briefly explain these measures before I proceed to the results.
+
+Essentially, the KL divergence is the expectation of the log difference between probabilities $a$ and $b$. It can be defined as:
+
+\begin{align*}
+	D_{KL}(a,b)=\sum_{i=1}^T a_i \text{ln} \frac{a_i}{b_i},
+\end{align*}
+
+where $D_{kl} \to 0$ indicates stronger similarities. However, since the KL divergence is not symmetric, it cannot be used to measure the distance between two distributions, but as a divergence measure.
+
+The Jensen-Shannon Divergence is a positive definite measure, satisfying the following conditions: $D_{js}(a,b) \geq 0$, $D_{js}(a,b)=0$ iff $(a=b)$. It is also symmetric: $D_{js}(a,b)=D_{js}(b,a)$. The Jensen-Shannon distance $D_{js}(a,b)$ between the two distributions is defined as:
+
+\begin{align*}
+	D_{js}(a,b)=\frac{1}{2}D_{KL}(a,\frac{a+b}{2})+\frac{1}{2}D_{KL}(b,\frac{a+b}{2})
+\end{align*}
+
+where $D_{KL}$ is the Kullback-Leibler divergence. Since $D_{js}$ does not satisfy the triangular inequality condition $D_{js}(a,c)\leq D_{js}(a,c)+D_{js}(b,c)$, the JSD is not considered to be a real distance metric. However, we can use the square root of JSD as a real distance metric \citep{endres_new_2003}.
+
+\citet{roberts_navigating_2016} use the $L_1$ norm of the word-topic distributions to compare topics from different models. The $L_1$ norm is the sum of the absolute value of the difference between two vectors. Its defined as
+
+\begin{align*}
+	L_1=\sum_{i=1} |a_i-b_i|
+\end{align*}
+
+this measure has a range of $[0,2]$, where $ L_1 \to 0$ indicates strong similarities. \citet{roberts_navigating_2016} compare this measure with a cosine similarity metric, which is essentially the dot product rescaled by the $L_2$ norm of the vectors and is defined as.
+
+\begin{align*}
+	\text{cos}(\theta)=\frac{\sum_{i=1}a_i b_i}{\sqrt{\sum_{i=1}a_i^2}\sum_{i=1}b_i^2}
+\end{align*}
+
+However, different to the above mentioned metrics the cosine similarity has a range of $[0,1]$ and $cos(\theta) \to 0$ indicate less similarity.
+
+Figure \ref{fig_distance} displays the different distance measures 
+
+\begin{figure}[H]
+	\begin{center}
+		\caption{Similarity measures of word-topic probabilities}
+		\includegraphics[width=\textwidth,keepaspectratio]{../figs/distance}
+		\label{fig_distance}
+	\end{center}
+\end{figure}
+
+
+% ----------------------
 % Regression
 % ----------------------
 \section{Causal relationship between topics and social media shares.}\label{ch_regression}
@@ -339,23 +417,7 @@ Model:
 \end{align*}
 
 \include{lm1}
-%
-%One way to model this type of situation is to assume that the data come from a mixture of two populations, one where the counts is always zero, and another where the count has a Poisson distribution with mean $\mu$. In this model zero counts can come from either population, while positive counts come only from the second one. 
-%
-%The distribution of the outcome can then be modeled in terms of two parameters, $\pi$ the probability of 'always zero', and $\mu$, the mean number of publications for those not in the 'always zero' group. A natural way to introduce covariates is to model the logit of the probability $\pi$ of always zero and the log of the mean $\mu$ for those not in the always zero class.
-%
-%The two-part model relaxes the assumption that the zeros (whether or not the article is shared) and positives (how often it is shared) come from the same data generating process. The zero-inflated model lets the zeros occur in two different ways: as a realization of the binary process (z=0) and as a realization of the count process when the binary variable z=1. 
-%
-%If the process generating the zeros is $f_1(.)$ and the process generating the positive responses is $f_2(.)$ then the two-part hurdle model is defined by the following probabilities. 
-%
-%\begin{align*}
-%	g(y)=\begin{cases}
-%		f_1(0) + 1(f_i(0))f_2(0) if y=0 \\
-%		(1-f_1(0))f_2(y) if y\geq 1
-%	\end{cases}
-%\end{align*}
-%
-%The model for the zero versus positive responses is a binary model with the specified distribution, but we usually estimate it with the probit/logit model.
+
 
 
 \end{document}
