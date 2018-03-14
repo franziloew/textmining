@@ -52,8 +52,8 @@ Media outlets (TV, Radio, Newspaper) usually operate in two-sided markets, where
 This paper examines the media pluralism in the market for German-language online news. More specifically, I use a data set of German online news articles about domestic politics dated from 01.06.2017 to 01.03.2018 from seven German news content providers. German federal elections took place on 24th of September 2017 and the formation of the government has taken up a period of about five month. The articles considered here thus inform their readers both about the election promises of the parties (before the election) and about the coalition talks (after the election). They thus make an important contribution to the public's opinion-forming process. The empirical strategy follows a novel approach combining "the two Ts": Topic and Tone \citep{hansen_shocking_2016}. That is, first the topics covered in the articles are identified, to find out how these topics are discussed (tone). The final step is to check whether the tonality of reporting is reflected in the survey results on voting preferences. More precisely, the research strategy is as follows:
 
 \begin{enumerate}
-	\item\label{item_1} \textbf{Discovering Topics (Section \ref{ch_model})} To discover the latent topics in the corpus, the structural topic modeling (STM) developed by \citet{roberts_model_2016} is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I estimate a model, where the newswire service is included as a control for both the topical content and the topical prevalence. The result of the generative process of STM are the posterior distributions for topic prevalence and topical content, which can then be used to measure the similarity between the news providers in the further course of the paper: (1) $\beta$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary) containing the probability distribution for topic $k$ over the words in the predefined vocabulary. (2) $\theta$ is a $D$-by-$V$ matrix of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. As the prevalence of topics are allowed to vary across news wires, the posterior topic-probability $\theta_{dk}$ of an article (document) can be used to estimate the conditional expectation of topic prevalence for given article characteristics. 
-	\item\label{item_2} \textbf{Measuring Tone} After assigning a topic to each article (document), a dictionary-based sentiment analysis is conducted to estimate how topics are discussed differently by different news wires.
+	\item\label{item_1} \textbf{Discovering Topics (Section \ref{subsection_topic})} To discover the latent topics in the corpus, the structural topic modeling (STM) developed by \citet{roberts_model_2016} is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I estimate a model, where the newswire service is included as a control for both the topical content and the topical prevalence. The result of the generative process of STM are the posterior distributions for topic prevalence and topical content, which can then be used to measure the similarity between the news providers in the further course of the paper: (1) $\beta$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary) containing the probability distribution for topic $k$ over the words in the predefined vocabulary. (2) $\theta$ is a $D$-by-$V$ matrix of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. As the prevalence of topics are allowed to vary across news wires, the posterior topic-probability $\theta_{dk}$ of an article (document) can be used to estimate the conditional expectation of topic prevalence for given article characteristics. 
+	\item\label{item_2} \textbf{Measuring Tone (Section \ref{subsection_tone}) After assigning a topic to each article (document), a dictionary-based sentiment analysis is conducted to estimate how topics are discussed differently by different news wires.
 	\item\label{item_3} \textbf{Comparing with polls} In order to check whether the transmitted content from the online media is reflected in the voting preferences, we compare the values from \ref{item_2} with the survey values of the Sunday survey ("Sonntagsumfrage") graphically and mathematically. The latter is done by means of correlations. Therefore, no causal relationships are calculated.
 	
 \end{enumerate}
@@ -220,7 +220,7 @@ Figure \ref{fig_estimateEffects} shows the regression results for the above sele
 \begin{figure}[H]
 	\caption{Regression results}
 		\begin{center}
-			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/estimates.png}
+			\includegraphics[width=\textwidth,keepaspectratio]{../figs/estimates.png}
 		\end{center}
 	\label{fig_estimateEffects}
 \end{figure}
@@ -242,32 +242,32 @@ The present paper uses a dictionary that lists words associated with positive an
 
 The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspaper. Each sentiment value is weighted by the relative share of the topic in the overall reporting of that month.
 
-Some conclusions can be drawn from this illustration. First of all, it can be seen that, on average, all topics are discussed almost exclusively negatively. An exception is topic 27 concerning the Jaimiaca coalition negotiations, which shows a positive sentiment value for a short period of time (October 2017). In the following month (November 2017), after it became clear that there would be no coalition between the CDU/CSU, FDP and Die Grünen, the value of this topic as well as that of topic 26 drops rapidly. 
+Some conclusions can be drawn from this illustration. First of all, it can be seen that, on average, all topics are discussed almost exclusively negatively. An exception is topic 27 concerning the Jaimaica coalition negotiations, which shows a positive sentiment value for a short period of time (October 2017). In the following month (November 2017), after it became clear that there would be no coalition between the CDU/CSU, FDP and Die Grünen, the value of this topic as well as that of topic 26 drops rapidly. 
 
-Concerning the issues that discuss the great coaltion between CDU/CSU and SPD, it is evident that the overall tone is in which this topic is discussed is generally decreasing from November 2017 to January 2018, but in the following February, the sentiment value of this topic rises. However, the sentiment score of topics that deal with the SPD alone (1, 17, 22) is diminishing in the course of time, with topic 17 recording the largest decline. The topic, which contains the CDU in isolation (46), is rather zigzagging, with a low peak in October 2017.
+Concerning the issues that discuss the great coalition between CDU/CSU and SPD, it is evident that the overall tone is in which this topic is discussed is generally decreasing from November 2017 to January 2018, but in the following February, the sentiment value of this topic rises. However, the sentiment score of topics that deal with the SPD alone (1, 17, 22) is diminishing in the course of time, with topic 17 recording the largest decline. The topic, which contains the CDU in isolation (46), is rather zigzagging, with a low peak in October 2017.
+
+If aggregated by news provider, some differences between the sites are discernible (Figure \ref{fig_sentscore_site}). To begin with, it should be noted that on average all topics are discussed negatively by all news providers, except topic 22, which mainly covers the personnel debates of the SPD and has a positive value at Tagesschau.de. One striking feature is the way in which the Jamaica negotiations are reported. Although all providers discuss this topic in a negative light, Bild.de reports this topic particularly negative. The same applies to the reports on the grand coalition, where the value of ZEIT ONLINE is the most negative. A good overview of how differently the topics are discussed by the providers is also shown in Figure \ref{fig_sentscore_radar}. This also clearly shows that the sentiment value of the media differs most notably with regard to topic 27 and topic 4, i. e. the topics on which the coalition negotiations are reported. Furthermore, it becomes evident that the negative sentiment value of FOCUS ONLINE regarding topic 17 is high in relation to the other media. FOCUS ONLINE thus reports comparatively more negatively on the debates within the SPD. This includes in particular the vote on a possible coalition with CDU/CSU. For topic 1, which also deals with the SPD, the value of FOCUS ONLINE is rather negative, only undercut by Bild.de.
 
 \begin{figure}[H]
 	\caption{Monthly Sentiment Score}
 		\begin{center}
-			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/sentscore_monthly.png}
+			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_monthly.png}
 		\end{center}
 	\label{fig_sentscore_monthly}
 \end{figure}
 
 \begin{figure}[H]
 	\caption{Sentiment Score by news wire}
-		\begin{center}
-			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/sentscore_site.png}
+	\begin{center}
+		\begin{subfigure}[normla]{\textwidth}
+			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_site.png}
+			\label{fig_sentscore_site}
+		\end{subfigure}
+		\begin{subfigure}[normla]{0.7\textwidth}
+			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_radar.png}
+			\label{fig_sentscore_radar}
+		\end{subfigure}
 		\end{center}
-	\label{fig_sentscore_site}
-\end{figure}
-
-\begin{figure}[H]
-	\caption{Sentiment Score Radarplot}
-		\begin{center}
-			\includegraphics[width=0.9\textwidth,keepaspectratio]{../figs/sentscore_radar.png}
-		\end{center}
-	\label{fig_sentscore_radar}
 \end{figure}
 
 

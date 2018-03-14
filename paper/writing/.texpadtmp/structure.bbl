@@ -231,6 +231,32 @@
       \endverb
       \keyw{Statistics - Machine Learning,Statistics - Computation,Statistics - Methodology}
     \endentry
+    \entry{cage_information_2017}{book}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=45da8b501bcfb51ffdb6f7397ff8c8ed}{Cagé}{C\bibinitperiod}{Julia}{J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0445d78c0525c264d604079564ea9d09}{Hervé}{H\bibinitperiod}{Nicolas}{N\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=ad7d91101b9b6c93fcf9157183847745}{Viaud}{V\bibinitperiod}{Marie-Luce}{M\bibinithyphendelim L\bibinitperiod}{}{}{}{}}%
+      }
+      \list{language}{1}{%
+        {fr}%
+      }
+      \list{publisher}{1}{%
+        {Éditions de l’INA}%
+      }
+      \strng{namehash}{db20148cfa742caab017c4dd2718740f}
+      \strng{fullhash}{db20148cfa742caab017c4dd2718740f}
+      \field{sortinit}{C}
+      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
+      \field{labelyear}{2017}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{L'information à tout prix}
+      \field{year}{2017}
+      \verb{file}
+      \verb Snapshot:/Users/Franzi/Zotero/storage/E5Z7FALC/Lire-L-information-a-tout-prix-de-Julia-Cage.html:text/html
+      \endverb
+    \endentry
     \entry{caillaud_chicken_2003}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=5fa3ef1e684c3fdaf8c579e50678a0d2}{Caillaud}{C\bibinitperiod}{Bernard}{B\bibinitperiod}{}{}{}{}}%
@@ -451,12 +477,12 @@
       \field{number}{11603}
       \field{title}{The {Industrial} {Organization} of {Markets} with {Two}-{Sided} {Platforms}}
       \field{type}{Working {Paper}}
-      \field{urlday}{20}
-      \field{urlmonth}{10}
-      \field{urlyear}{2016}
       \field{year}{2005}
+      \verb{doi}
+      \verb 10.3386/w11603
+      \endverb
       \verb{file}
-      \verb NBER Full Text PDF:/Users/Franzi/Zotero/storage/NCANQR55/Evans und Schmalensee - 2005 - The Industrial Organization of Markets with Two-Si.pdf:application/pdf
+      \verb NBER Full Text PDF:/Users/Franzi/Zotero/storage/EWJINGI8/Evans und Schmalensee - 2005 - The Industrial Organization of Markets with Two-Si.pdf:application/pdf
       \endverb
       \verb{url}
       \verb http://www.nber.org/papers/w11603
@@ -559,11 +585,13 @@
       \field{labeltitlesource}{title}
       \field{abstract}{An ever increasing share of human interaction, communication, and culture is recorded as digital text. We provide an introduction to the use of text as an input to economic research. We discuss the features that make text different from other forms of data, offer a practical overview of relevant statistical methods, and survey a variety of applications.}
       \field{month}{03}
-      \field{note}{DOI: 10.3386/w23276}
       \field{number}{23276}
       \field{title}{Text as {Data}}
       \field{type}{Working {Paper}}
       \field{year}{2017}
+      \verb{doi}
+      \verb 10.3386/w23276
+      \endverb
       \verb{url}
       \verb http://www.nber.org/papers/w23276
       \endverb
@@ -695,6 +723,45 @@
       \verb https://doi.org/10.1080/03585522.1978.10407893
       \endverb
     \endentry
+    \entry{hansen_shocking_2016}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=06a66038d2938d53f3996217db5f8aaf}{Hansen}{H\bibinitperiod}{Stephen}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=878be333c2c50f71ef95cfbbba7fd363}{McMahon}{M\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{1d35ed31caea43903635255b5f43b5f4}
+      \strng{fullhash}{1d35ed31caea43903635255b5f43b5f4}
+      \field{sortinit}{H}
+      \field{sortinithash}{82012198d5dfa657b8c4a168793268a6}
+      \field{labelyear}{2016}
+      \field{labelmonth}{03}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{We explore how the multi-dimensional aspects of information released by the FOMC has effects on both market and real economic variables. Using tools from computational linguistics, we measure the information released by the FOMC on the state of economic conditions, as well as the guidance the FOMC provides about future monetary policy decisions. Employing these measures within a FAVAR framework, we find that shocks to forward guidance are more important than the FOMC communication of current economic conditions in terms of their effects on market and real variables. Nonetheless, neither communication has particularly strong effects on real economic variables.}
+      \field{issn}{0022-1996}
+      \field{journaltitle}{Journal of International Economics}
+      \field{month}{03}
+      \field{series}{38th {Annual} {NBER} {International} {Seminar} on {Macroeconomics}}
+      \field{shorttitle}{Shocking language}
+      \field{title}{Shocking language: {Understanding} the macroeconomic effects of central bank communication}
+      \field{urlday}{07}
+      \field{urlmonth}{03}
+      \field{urlyear}{2018}
+      \field{volume}{99}
+      \field{year}{2016}
+      \field{pages}{S114\bibrangedash S133}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1016/j.jinteco.2015.12.008
+      \endverb
+      \verb{file}
+      \verb ScienceDirect Full Text PDF:/Users/Franzi/Zotero/storage/AINER6IR/Hansen und McMahon - 2016 - Shocking language Understanding the macroeconomic.pdf:application/pdf;ScienceDirect Snapshot:/Users/Franzi/Zotero/storage/39TT2SW9/S0022199615001828.html:text/html
+      \endverb
+      \verb{url}
+      \verb http://www.sciencedirect.com/science/article/pii/S0022199615001828
+      \endverb
+      \keyw{Communication,Monetary policy,Vector autoregression}
+    \endentry
     \entry{hofmann_probabilistic_1999}{inproceedings}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=ee42cfed2ff3020233d2de97c356eaee}{Hofmann}{H\bibinitperiod}{Thomas}{T\bibinitperiod}{}{}{}{}}%
@@ -725,6 +792,36 @@
       \endverb
       \verb{url}
       \verb http://doi.acm.org/10.1145/312624.312649
+      \endverb
+    \endentry
+    \entry{vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017}{report}{}
+      \name{editor}{1}{}{%
+        {{uniquename=0,hash=201db4c585f44193eea08cbc995cc82d}{Medienanalyse)}{M\bibinitperiod}{VuMA\bibnamedelimb (Arbeitsgemeinschaft\bibnamedelima Verbrauchs-}{V\bibinitperiod\bibinitdelim (\bibinitperiod\bibinitdelim V\bibinithyphendelim \bibinitperiod}{und}{u\bibinitperiod}{}{}}%
+      }
+      \list{language}{1}{%
+        {de}%
+      }
+      \strng{namehash}{201db4c585f44193eea08cbc995cc82d}
+      \strng{fullhash}{201db4c585f44193eea08cbc995cc82d}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{2017}
+      \field{labelmonth}{11}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{month}{11}
+      \field{title}{Verbrauchs- und {Medienanalyse} - {VuMA} 2018}
+      \field{type}{techreport}
+      \field{urlday}{12}
+      \field{urlmonth}{03}
+      \field{urlyear}{2018}
+      \field{year}{2017}
+      \verb{file}
+      \verb Snapshot:/Users/Franzi/Zotero/storage/MLZDKCVD/nachrichten-und-informationen---internetnutzung.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://de.statista.com/statistik/daten/studie/183128/umfrage/nachrichten-und-informationen---internetnutzung/
       \endverb
     \endentry
     \entry{mimno_optimizing_2011}{inproceedings}{}
@@ -846,6 +943,59 @@
       \verb https://papers.ssrn.com/abstract=2843535
       \endverb
       \keyw{Civil War,conflict,Forecasting,Latent Dirichlet Allocation.,Machine Learning,panel data,Topic Models}
+    \endentry
+    \entry{nyman_news_2018}{article}{}
+      \name{author}{6}{}{%
+        {{uniquename=0,hash=94b2021fa4290e442407bf6458c14e39}{Nyman}{N\bibinitperiod}{Rickard}{R\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=b523ac20bc9927932c826ae07f349113}{Kapadia}{K\bibinitperiod}{Sujit}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=07414e413593e9c52fdb50ac8cd0bbbc}{Tuckett}{T\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=7c9ec81f997afa0a1abd66e0e4773cd5}{Gregory}{G\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=9825531f35a109b46539ebea85ebe886}{Ormerod}{O\bibinitperiod}{Paul}{P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a0b47a66c48bc7434c754ae9cb5c8e6e}{Smith}{S\bibinitperiod}{Robert}{R\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{734616a76405d986b731ff0834abe895}
+      \strng{fullhash}{b67ad1d0eb247487758578df71ffe70d}
+      \field{sortinit}{N}
+      \field{sortinithash}{925374ca63e7594de7fafdb83e64d41d}
+      \field{labelyear}{2018}
+      \field{labelmonth}{01}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Bank of England Working Paper}
+      \field{month}{01}
+      \field{title}{News and narratives in financial systems: exploiting big data for systemic risk assessment {|} {Bank} of {England}}
+      \field{urlday}{21}
+      \field{urlmonth}{02}
+      \field{urlyear}{2018}
+      \field{volume}{704}
+      \field{year}{2018}
+      \verb{file}
+      \verb News and narratives in financial systems\: exploiting big data for systemic risk assessment | Bank of England:/Users/Franzi/Zotero/storage/BK83G72M/news-and-narratives-in-financial-systems.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://www.bankofengland.co.uk/working-paper/2018/news-and-narratives-in-financial-systems
+      \endverb
+    \endentry
+    \entry{paul_cross-collection_2017}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=6cc6047d07f4738097aadaae1385729b}{Paul}{P\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{6cc6047d07f4738097aadaae1385729b}
+      \strng{fullhash}{6cc6047d07f4738097aadaae1385729b}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{2017}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{This paper describes cross-collection latent Dirichlet allocation (ccLDA), a probabilistic topic model that captures meaningful word co-occurrences across multiple text collections. The model is applied to three different applications: discovering cultural differences in blogs and forums from different countries, discovering research topics across multiple scientific disciplines, and comparing editorial differences between multiple media sources. A variety of qualitative and quantitative evaluations of ccLDA are performed, including log-likelihood measurements and performance measurements of the model used as a generative classifier. Improvements over previous work are demonstrated. Finally, possible extensions and modifications to the model are presented with promising results. 1}
+      \field{shorttitle}{Cross-{Collection} {Topic} {Models}}
+      \field{title}{Cross-{Collection} {Topic} {Models}: {Automatically} {Comparing} and {Contrasting} {Text}}
+      \field{year}{2017}
+      \verb{file}
+      \verb Citeseer - Full Text PDF:/Users/Franzi/Zotero/storage/H2I347RL/Paul - Cross-Collection Topic Models Automatically Compa.pdf:application/pdf;Citeseer - Snapshot:/Users/Franzi/Zotero/storage/KGFW8BSS/summary.html:text/html
+      \endverb
     \endentry
     \entry{pritchard_inference_2000}{article}{}
       \name{author}{3}{}{%
@@ -1137,6 +1287,48 @@
       \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.2007.01232.x/abstract
       \endverb
     \endentry
+    \entry{tetlock_more_2008}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=43e620292c04ccd0b1bb834cc476d39f}{Tetlock}{T\bibinitperiod}{Paul\bibnamedelima C.}{P\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c8d3795e2f790e26a58220f89db9371a}{Saar-Tsechansky}{S\bibinithyphendelim T\bibinitperiod}{Maytal}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=4be2ffd1242472b4b91610680460f71d}{Macskassy}{M\bibinitperiod}{Sofus}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{bc27662581efcfb0f2ef4623105a667a}
+      \strng{fullhash}{bc27662581efcfb0f2ef4623105a667a}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{labelyear}{2008}
+      \field{labelmonth}{06}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{We examine whether a simple quantitative measure of language can be used to predict individual firms' accounting earnings and stock returns. Our three main findings are: (1) the fraction of negative words in firm-specific news stories forecasts low firm earnings; (2) firms' stock prices briefly underreact to the information embedded in negative words; and (3) the earnings and return predictability from negative words is largest for the stories that focus on fundamentals. Together these findings suggest that linguistic media content captures otherwise hard-to-quantify aspects of firms' fundamentals, which investors quickly incorporate into stock prices.}
+      \field{issn}{1540-6261}
+      \field{journaltitle}{The Journal of Finance}
+      \field{month}{06}
+      \field{number}{3}
+      \field{shorttitle}{More {Than} {Words}}
+      \field{title}{More {Than} {Words}: {Quantifying} {Language} to {Measure} {Firms}' {Fundamentals}}
+      \field{urlday}{07}
+      \field{urlmonth}{03}
+      \field{urlyear}{2018}
+      \field{volume}{63}
+      \field{year}{2008}
+      \field{pages}{1437\bibrangedash 1467}
+      \range{pages}{31}
+      \verb{doi}
+      \verb 10.1111/j.1540-6261.2008.01362.x
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:/Users/Franzi/Zotero/storage/NTZB3TUK/Tetlock et al. - 2008 - More Than Words Quantifying Language to Measure F.pdf:application/pdf
+      \endverb
+      \verb{url}
+      \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.2008.01362.x/abstract
+      \endverb
+    \endentry
     \entry{wiedmann_text_2016}{book}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=fd14ef1140b31ebe35bac6aac6221997}{Wiedmann}{W\bibinitperiod}{Gregor}{G\bibinitperiod}{}{}{}{}}%
@@ -1170,12 +1362,6 @@
     \endentry
   \endsortlist
   \missing{_media_2014}
-  \missing{cage_information_2017}
-  \missing{nyman_news_2018}
-  \missing{vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017}
-  \missing{hansen_shocking_2016}
-  \missing{tetlock_more_2008}
-  \missing{paul_cross-collection_2017}
 \endrefsection
 \endinput
 

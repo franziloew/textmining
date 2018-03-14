@@ -2245,6 +2245,7 @@
     <bcf:citekey order="7">roberts_model_2016</bcf:citekey>
     <bcf:citekey order="8">roberts_model_2016</bcf:citekey>
     <bcf:citekey order="9">hansen_shocking_2016</bcf:citekey>
+    <bcf:citekey order="10">hansen_shocking_2016</bcf:citekey>
     <bcf:citekey order="11">rochet_platform_2003</bcf:citekey>
     <bcf:citekey order="12">caillaud_chicken_2003</bcf:citekey>
     <bcf:citekey order="13">corden_maximisation_1952</bcf:citekey>
@@ -2289,6 +2290,7 @@
     <bcf:citekey order="52">wiedmann_text_2016</bcf:citekey>
     <bcf:citekey order="53">wiedmann_text_2016</bcf:citekey>
     <bcf:citekey order="54">paul_cross-collection_2017</bcf:citekey>
+    <bcf:citekey order="55">paul_cross-collection_2017</bcf:citekey>
     <bcf:citekey order="56">roberts_structural_2014</bcf:citekey>
     <bcf:citekey order="57">roberts_structural_2014</bcf:citekey>
     <bcf:citekey order="58">farrell_corporate_2016</bcf:citekey>
@@ -2322,9 +2324,12 @@
     <bcf:citekey order="86">roberts_model_2016</bcf:citekey>
     <bcf:citekey order="87">roberts_stm:_2016</bcf:citekey>
     <bcf:citekey order="88">nyman_news_2018</bcf:citekey>
+    <bcf:citekey order="89">nyman_news_2018</bcf:citekey>
     <bcf:citekey order="90">tetlock_giving_2007</bcf:citekey>
     <bcf:citekey order="91">tetlock_more_2008</bcf:citekey>
     <bcf:citekey order="92">hansen_shocking_2016</bcf:citekey>
+    <bcf:citekey order="93">hansen_shocking_2016</bcf:citekey>
     <bcf:citekey order="94">nyman_news_2018</bcf:citekey>
+    <bcf:citekey order="95">nyman_news_2018</bcf:citekey>
   </bcf:section>
 </bcf:controlfile>

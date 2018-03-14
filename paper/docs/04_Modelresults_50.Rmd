@@ -455,7 +455,7 @@ sent <- c(
 
 To carry out the sentiment analysis we filter some documents from the corpus:
 
-  1. Articles that have been assigned a topic with a probability of over 75% (gamma > 0.75).
+  1. Articles that have been assigned a topic with a probability of over 30% (gamma > 0.3).
   2. Articles assigned to one of the above mentioned topics.
   3. Some manual cleanups
 
@@ -702,7 +702,7 @@ radar %>%
   theme(legend.position = "bottom")
 ```
 
-```{r eval=FALSE, fig.height=10, fig.width=10, include=FALSE}
+```{r eval=FALSE, include=FALSE}
 sentDF.values %>%
   group_by(site, topic_name) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
@@ -716,13 +716,15 @@ sentDF.values %>%
 p <- radar %>%
   ggRadar(aes(color=site), 
           rescale = F,
-          alpha = 0, legend.position = "right") +
+          alpha = 0) +
   labs(title = "Sentiment scores Jun 2017-March 2018",
        subtitle = "weighted") +
   guides(col = guide_legend(nrow = 1)) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        axis.text = element_text(size = 8))
 
-ggsave(filename = "../figs/sentscore_radar.png", plot = p, width = 12)
+ggsave(filename = "../figs/sentscore_radar.png", 
+       plot = p)
 ```
 
 ![Radarplot Sentiment Score](../figs/sentscore_radar.png)
