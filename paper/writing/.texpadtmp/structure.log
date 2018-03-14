@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  14 MAR 2018 16:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  14 MAR 2018 22:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1197,17 +1197,17 @@ Overfull \hbox (7.59055pt too wide) in paragraph at lines 87--88
 \T1/cmr/m/n/12 Figure []1[] shows the largest providers of on-line news in terms of daily pageviews.[][][]
  []
 
-<../figs/reach.png, id=115, 4215.75pt x 2409.0pt>
+<../figs/reach.png, id=116, 4215.75pt x 2409.0pt>
 File: ../figs/reach.png Graphic file (type png)
  <use ../figs/reach.png>
 Package pdftex.def Info: ../figs/reach.png used on input line 91.
 (pdftex.def)             Requested size: 390.0pt x 222.82901pt.
- [5] <../figs/timeline.png, id=131, 3613.5pt x 2409.0pt>
+ [5] <../figs/timeline.png, id=132, 3613.5pt x 2409.0pt>
 File: ../figs/timeline.png Graphic file (type png)
  <use ../figs/timeline.png>
 Package pdftex.def Info: ../figs/timeline.png used on input line 103.
 (pdftex.def)             Requested size: 191.10214pt x 127.36761pt.
- <../figs/bar.png, id=132, 3613.5pt x 2409.0pt>
+ <../figs/bar.png, id=133, 3613.5pt x 2409.0pt>
 File: ../figs/bar.png Graphic file (type png)
  <use ../figs/bar.png>
 Package pdftex.def Info: ../figs/bar.png used on input line 108.
@@ -1226,37 +1226,55 @@ Overfull \hbox (18.40865pt too wide) in paragraph at lines 162--163
 \T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
  []
 
-[10] [11] [12] <../figs/topic_proportion.png, id=260, 2407.99625pt x 2407.99625pt>
+[10] [11] [12] <../figs/topic_proportion.png, id=261, 2107.875pt x 3011.25pt>
 File: ../figs/topic_proportion.png Graphic file (type png)
  <use ../figs/topic_proportion.png>
 Package pdftex.def Info: ../figs/topic_proportion.png used on input line 207.
-(pdftex.def)             Requested size: 390.0pt x 389.99037pt.
- [13 <../figs/topic_proportion.png>] <../figs/estimates.png, id=275, 6022.5pt x 4215.75pt>
+(pdftex.def)             Requested size: 390.0pt x 557.11848pt.
+ [13]
+Overfull \vbox (17.11847pt too high) has occurred while \output is active []
+
+ [14 <../figs/topic_proportion.png>] <../figs/estimates.png, id=280, 4818.0pt x 3011.25pt>
 File: ../figs/estimates.png Graphic file (type png)
  <use ../figs/estimates.png>
 Package pdftex.def Info: ../figs/estimates.png used on input line 223.
-(pdftex.def)             Requested size: 390.0pt x 272.9398pt.
- [14 <../figs/estimates.png>] [15] <../figs/sentscore_monthly.png, id=297, 3613.5pt x 2107.875pt>
+(pdftex.def)             Requested size: 390.0pt x 243.70775pt.
+ [15] [16 <../figs/estimates.png>] [17]
+
+Package caption Warning: \label without proper \caption on input line 261.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig_sentscore_site' on page 18 undefined on input line 246.
+
+
+Package caption Warning: \label without proper \caption on input line 265.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig_sentscore_radar' on page 18 undefined on input line 246.
+
+<../figs/sentscore_monthly.png, id=310, 2710.125pt x 1505.625pt>
 File: ../figs/sentscore_monthly.png Graphic file (type png)
  <use ../figs/sentscore_monthly.png>
-Package pdftex.def Info: ../figs/sentscore_monthly.png used on input line 252.
-(pdftex.def)             Requested size: 390.0pt x 227.49272pt.
- [16] <../figs/sentscore_site.png, id=303, 3613.5pt x 2107.875pt>
+Package pdftex.def Info: ../figs/sentscore_monthly.png used on input line 251.
+(pdftex.def)             Requested size: 390.0pt x 216.66739pt.
+ <../figs/sentscore_site.png, id=311, 2710.125pt x 1505.625pt>
 File: ../figs/sentscore_site.png Graphic file (type png)
  <use ../figs/sentscore_site.png>
-Package pdftex.def Info: ../figs/sentscore_site.png used on input line 261.
-(pdftex.def)             Requested size: 390.0pt x 227.49272pt.
- <../figs/sentscore_radar.png, id=304, 3613.5pt x 2107.875pt>
+Package pdftex.def Info: ../figs/sentscore_site.png used on input line 260.
+(pdftex.def)             Requested size: 390.0pt x 216.66739pt.
+ <../figs/sentscore_radar.png, id=312, 2107.875pt x 2107.875pt>
 File: ../figs/sentscore_radar.png Graphic file (type png)
  <use ../figs/sentscore_radar.png>
-Package pdftex.def Info: ../figs/sentscore_radar.png used on input line 265.
-(pdftex.def)             Requested size: 272.99881pt x 159.24168pt.
- [17 <../figs/sentscore_monthly.png>] [18 <../figs/sentscore_site.png> <../figs/sentscore_radar.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 277.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 277.
+Package pdftex.def Info: ../figs/sentscore_radar.png used on input line 264.
+(pdftex.def)             Requested size: 272.99881pt x 272.97197pt.
+ [18 <../figs/sentscore_monthly.png>] [19 <../figs/sentscore_site.png> <../figs/sentscore_radar.png>] [20]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 276.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 276.
  (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 277.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 277.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 276.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 276.
 Package rerunfilecheck Info: File `structure.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
 
@@ -1268,8 +1286,8 @@ Package logreq Info: Writing requests to 'structure.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35413 strings out of 493089
- 785472 string characters out of 6134842
+ 35415 strings out of 493089
+ 785486 string characters out of 6134842
  1296557 words of memory out of 5000000
  38127 multiletter control sequences out of 15000+600000
  23968 words of font info for 69 fonts, out of 8000000 for 9000
@@ -1358,10 +1376,10 @@ pdfTeX warning (dest): name{cite.0@vuma_arbeitsgemeinschaft_verbrauchs-_und_medi
 pdfTeX warning (dest): name{cite.0@cage_information_2017} has been referenced but does not exist, replaced by a fixed one
 
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (18 pages, 4289909 bytes).
+Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (20 pages, 3771864 bytes).
 PDF statistics:
- 400 PDF objects out of 1000 (max. 8388607)
- 343 compressed objects within 4 object streams
- 108 named destinations out of 1000 (max. 500000)
+ 414 PDF objects out of 1000 (max. 8388607)
+ 355 compressed objects within 4 object streams
+ 110 named destinations out of 1000 (max. 500000)
  125 words of extra memory for PDF output out of 10000 (max. 10000000)
 
