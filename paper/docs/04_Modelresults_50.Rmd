@@ -160,7 +160,7 @@ plotQuote(c(paste(sagelabs$covnames[1],":",
 ```
 
 ```{r}
-topics <- matrix(c(1, "SPD, mainly M.Schulz", 2, "B90/ Die Grünen, mainly personell debates", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "M.Schulz, mainly vs. A.Merkel", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel, mainly election campaign", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Debates within SPD", 18, "Election in Niedersachsen", 19, "N.Lammert", 20, "AfD, mainly right-wing radicalism", 21, "German armed forces, v.d.Leyen", 22, "SPD, mainly stuffing debates", 23, "CSU, mainly Söder & Seehover", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Jamaica fail, Reelections or GroKo?", 27, "Jamaica Coalition debates", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "AfD, mainly F.Petry & Meuthen", 31, "D.Trump, Russia", 32, "AfD, mainly Gauland & Weidel", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD & DIE LINKE in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
+topics <- matrix(c(1, "SPD, M.Schulz", 2, "B90/ Die Grünen", 3, "Mix: Akhanli, Guttenberg, Bayern", 4, "Great Coalition debates", 5, "Diesel scandal", 6, "H.Kohl", 7, "Federal Election results", 8, "Europa, Macron, Schäuble", 9, "Mix: political trends, twitter", 10, "M.Schulz, vs. A.Merkel", 11, "politics & democracy in GER", 12, "Deportation of criminal Refugees", 13, "A.Merkel, election campaign", 14, "Text processing fail", 15, "Israel, antisemitism, D.Trump", 16, "Mix: political talkshows, Refugees", 17, "Debates within SPD", 18, "Election in Niedersachsen", 19, "N.Lammert", 20, "AfD, right-wing radicalism", 21, "German armed forces, v.d.Leyen", 22, "SPD, stuffing debates", 23, "CSU, Söder & Seehover", 24, "Bundespräsident F.-W.Steinmeier", 25, "Election polls", 26, "Jamaica fail, Reelections or GroKo?", 27, "Jamaica Coalition debates", 28, "G20 in Hamburg", 29, "Federal Constitutional Court, Ministry of the Interior", 30, "AfD, F.Petry & Meuthen", 31, "D.Trump, Russia", 32, "AfD, Gauland & Weidel", 33, "German armed forces, Mali", 34, "Mix: Children, Education, Women", 35, "Left- rightwing Terror, police reports", 36, "Mix: people, Germany, democracy", 37, "AfD & DIE LINKE in parliament", 38, "EU policies", 39, "Mix: Terror attacks", 40, "Mix: Metoo, SPD", 41, "Terror attack Berlin (Amri)", 42, "Refugee family reunion", 43, "Mix: studies", 44, "Federal Constitutional Court (NSU, Franco, Terror)", 45, "Mix: minister of the interior, environment", 46, "CDU", 47, "Church", 48, "public (budget) statistics, Education/ Healthcare/ Digital policies", 49, "Turkey", 50, "Höcke, Holocaust"), ncol=2, byrow=T)
 
 topics.df <- as.data.frame(topics) %>%
   transmute(topic_name = paste(V1, V2, sep=": "),
@@ -253,16 +253,16 @@ freq <- freq %>%
 
 #### Next, we can plot the expected proportion of topic use in the overall corpus vs. the expected proportion of topic use for each medium.
 
-```{r fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 p <- ggplot(frequency, aes(x=reorder(topic_name, frequency), y=frequency)) + 
-    geom_col(fill=col[2], alpha=0.8) +
+    geom_col(fill=col[3], alpha=0.8) +
     coord_flip() +
     labs(x="", y="expected frequency") +
     theme(axis.text.x = element_text(size=8),
           axis.text.y = element_text(size=9),
           axis.title = element_text(size=10))
 
-ggsave(filename = "../figs/topic_proportion.png")
+ggsave(filename = "../figs/topic_proportion.png", height = 10)
 ```
 
 ![Topic Proportion](../figs/topic_proportion.png)
@@ -354,18 +354,18 @@ p1 <- coeff %>%
   filter(parameter %in% stmOut$settings$covariates$yvarlevels) %>%
   ggplot(aes(x = reorder(topic_name,topic, decreasing=F), y = Estimate, fill=factor(signifcant))) +
   geom_col(alpha = 0.8) +
-  scale_fill_manual(values = col[c(2,1)]) +
+  scale_fill_manual(values = col[c(5,3)]) +
   scale_x_discrete(position = "top") +
+  geom_hline(yintercept = 0, linetype = 2,
+             color = "black") +
   coord_flip() +
   facet_wrap(~parameter, ncol = 8, scales = "free_x") +
   labs(x="", fill="significant at the 5% level") +
   theme(legend.position = "top", 
         axis.text.y = element_text(size=9),
-        axis.text.x = element_text(angle=90)) 
+        axis.text.x = element_text(angle=90))
 
-p1
-
-ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 10, height = 7,
+ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 8, height = 5,
 dpi = 600)
 ```
 
@@ -501,7 +501,7 @@ The sentiment score is calculated based on the weighted polarity values for a wo
 $$
 \text{SentScore}_d = \frac{|\text{positive polarity score}_d| - |\text{negative polarity score}_d|}{\text{Total Words}_d}
 $$
-```{r}
+```{r message=FALSE, warning=FALSE}
 sentDF.values <- sentDF %>%
   select(document, word, value, 
          negative, positive,
@@ -578,28 +578,12 @@ p <- sentDF.values %>%
          sentiment_w = sentiment * w)
 
 p1 <- ggplot(p, 
-       aes(yearmonth, sentiment, 
-           group = topic_name,
-           label = obs)) +
-  facet_wrap(~topic_name, nrow = 3) +
-  geom_col(fill = col[1], alpha = 0.7) +
- geom_line(color = col[2], size = 0.8) +
-  #geom_text() +
-  geom_hline(yintercept = 0, linetype = 2,
-             color = "black") +
-  labs(x="", y="",
-       title = "Monthly Sentiment Score",
-       subtitle = "unweighted") +
-  theme(axis.text.y = element_text(size=8),
-        axis.text.x = element_text(size = 10))
-
-p2 <- ggplot(p, 
        aes(yearmonth, sentiment_w, 
            group = topic_name,
            label = obs)) +
   facet_wrap(~topic_name, nrow = 3) +
-  geom_col(fill = col[2], alpha = 0.7) +
- geom_line(color = col[1], size = 0.8) +
+  geom_col(fill = col[3], alpha = 0.8) +
+ geom_line(color = col[5], size = 0.6) +
   #geom_text() +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
@@ -611,7 +595,8 @@ p2 <- ggplot(p,
   theme(axis.text.y = element_text(size=8),
         axis.text.x = element_text(size = 8, angle = 90))
 
-ggsave(filename = "../figs/sentscore_monthly.png", plot = p2, width = 12)
+ggsave(filename = "../figs/sentscore_monthly.png", plot = p1,  width = 9,
+       height = 5)
 ```
 
 ![Monthly Sentiment Score](../figs/sentscore_monthly.png)
@@ -629,7 +614,7 @@ $$
 \text{weighted sentiment} = \text{sentiment} * \text{w}
 $$
 
-```{r eval=FALSE, fig.height=12, fig.width=10, include=FALSE}
+```{r eval=FALSE, include=FALSE}
 p <- sentDF.values %>%
   group_by(site, topic_name, topic) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
@@ -640,30 +625,12 @@ p <- sentDF.values %>%
 
 p1 <- ggplot(p, 
        aes(reorder(topic_name, topic), 
-           sentiment, 
-           group = site,
-           label = obs)) +
-  geom_col(fill=col[2], alpha = 0.7) +
-  #geom_line(color = col[1], size = 0.8) +
-  #geom_text(size = 2.5) +
-  geom_hline(yintercept = 0, linetype = 2,
-             color = "black") +
-  coord_flip() +
-  facet_wrap(~site, ncol = 7) +
-  labs(x="", y="",
-       title = "Sentiment Score",
-       subtitle = "unweighted") +
-  theme(axis.text.y = element_text(size = 10),
-        axis.text.x = element_text(size=6))
-
-p2 <- ggplot(p, 
-       aes(reorder(topic_name, topic), 
            sentiment_w, 
            group = site,
            label = obs)) +
-  geom_col(fill=col[1], alpha = 0.7) +
+  geom_col(fill=col[3], alpha = 0.8) +
   #geom_line(color = col[2], size = 0.8) +
-  #geom_text(size = 2.5) +
+  geom_text(size = 2) +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
@@ -671,13 +638,15 @@ p2 <- ggplot(p,
   labs(x="", y="Sentiment Score (weighted)",
        title = "",
        subtitle = "") +
-  theme(axis.text.y = element_text(size = 10),
+  theme(axis.text.y = element_text(size =8),
         axis.text.x = element_text(size=6, angle = 90))
 
-ggsave(filename = "../figs/sentscore_site.png", plot = p2, width = 12)
+ggsave(filename = "../figs/sentscore_site.png", plot = p1, width = 9,
+       height = 5)
 ```
 
 ![Sentiment Score by Newssite](../figs/sentscore_site.png)
+
 
 ##### Radar plot
 
