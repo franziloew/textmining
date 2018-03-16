@@ -189,8 +189,13 @@ KLD <- function(x,y) {
 #####################
 
 normalize_data <- function(x) {
-  y <- (x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))
-  return(y)
+  if (is.numeric(x)) {
+    y <- (x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))
+    return(y)
+  } else {
+    return(x)
+  }
+
 }
 
 ###########

@@ -57,8 +57,6 @@ theme_set(
                                 margin = margin(0, 0, 4, 0, "pt")),
       plot.subtitle = element_text(size = 8),
       plot.caption = element_text(size = 6),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      panel.background  = element_rect("#fafafa"),
       panel.border = element_blank()
     )
 )
@@ -70,6 +68,13 @@ source("func/functions.R")
 
 ```{r caching, echo = FALSE}
 load("../output/btw_out2.Rda")
+
+btw <- btw %>%
+  mutate(site = ifelse(site == "welt.de", "DIE WELT", site),
+         site = ifelse(site == "zeit.de", "ZEIT ONLINE", site),
+         site = ifelse(site == "focus.de", "FOCUS ONLINE", site),
+         site = ifelse(site == "spiegel.de", "SPIEGEL ONLINE", site),
+         site = ifelse(site == "tagesschau.de", "Tagesschau.de", site))
 ```
 
 I conduct a STM (Strucutral Topic Model) estimation on a sample of 14,936 online news articles from seven news provider about domestic politics: Bild.de, DIE WELT, FOCUS ONLINE, SPIEGEL ONLINE, Stern.de, ZEIT ONLINE, Tagesschau.de. The articles are dated from 01.06.2017 to 31.12.2017 (German federal elections took place on 24th of September 2017.). I first extract all online articles using the the [Eventregistry API](http://eventregistry.org/documentation). Then all articles from the section "domestic policy" are filtered by checking the URL structure.
@@ -304,7 +309,7 @@ keep <- c(1,2,4,10,13,17,20,22,23,26,27,30,32,37,46)
 To identify which of these differences is significant, the conditional expectation of topic prevalence for given document characteristics can be estimated. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation below). 
 
 $$
-\theta_d=\alpha+\beta_1x_{ownership}+\beta_2x_{month}+\epsilon
+\theta_d=\alpha+\beta x_{ownership}+\epsilon
 $$
 
 The estimateEffect() uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results.
@@ -368,6 +373,8 @@ p1 <- coeff %>%
 ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 8, height = 5,
 dpi = 600)
 ```
+
+![Estimates](../figs/estimates.png)
 
 ## 2. Tone
 
@@ -752,34 +759,76 @@ polls <- table_long %>%
          yearweek = calculate_week(week(Datum), year(Datum))) 
 
 ## Monthly
+# polls_monthly <- polls %>%
+#   group_by(yearmonth,party) %>%
+#   summarise(mean_val = mean(value, na.rm=T)) %>%
+#   ungroup() %>%
+#   filter(!party %in% c("Piraten", "Sonstige")) %>%
+#   filter(mean_val != "NaN") %>%
+#   mutate(mean_val = normalize_data(mean_val)) %>%
+#   select(party, yearmonth, mean_val) %>%
+#   spread(party, mean_val) %>%
+#   filter(yearmonth > as.Date("2017-05-01"))
+
 polls_monthly <- polls %>%
   group_by(yearmonth,party) %>%
   summarise(mean_val = mean(value, na.rm=T)) %>%
   ungroup() %>%
+  filter(!party %in% c("Piraten", "Sonstige")) %>%
   filter(mean_val != "NaN") %>%
   select(party, yearmonth, mean_val) %>%
   spread(party, mean_val) %>%
   filter(yearmonth > as.Date("2017-05-01")) %>%
-  transmute(Union = normalize_data(Union),
-         SPD = normalize_data(SPD),
-         Grüne = normalize_data(Grüne),
+  filter(yearmonth < as.Date("2018-03-01")) %>%
+  mutate(AfD = normalize_data(AfD),
          FDP = normalize_data(FDP),
-         AfD = normalize_data(AfD),
-         yearmonth = yearmonth)
+         Grüne = normalize_data(Grüne),
+         Linke = normalize_data(Linke),
+         SPD = normalize_data(SPD),
+         Union = normalize_data(Union))
 
 polls_monthly %>%
-  gather(key = party, value = poll, Union:AfD) %>%
+  gather(key = party, value = poll, AfD:Union) %>%
   ggplot(aes(yearmonth, poll, color = party)) +
   geom_line() +
-  scale_color_manual(values = c("skyblue", "gold", "limegreen", "red", "black")) +
+  scale_color_manual(values =  c("deepskyblue", "gold", "limegreen", "deeppink", "red", "black")) +
   labs(x="", y="", title = "Survey Value", 
        subtitle = "weekly", color = "") +
   geom_vline(xintercept = as.Date("2017-09-24"), 
              linetype = 2, color = col[3]) +
-  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET"))
+  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%b", tz="CET")) +
+    theme(axis.text.x = element_text(size = 10))
 ```
 
+Normalize topic-sentiment value 
+
+A)
 ```{r fig.height=12, fig.width=10}
+### by time
+# group1 <- sentDF.values %>%
+#   group_by(yearmonth, topic_name, topic) %>%
+#   summarise(sentiment = mean(sentiment, na.rm=T),
+#             obs = n()) %>%
+#   ungroup() %>%
+#   left_join(., tally_month, by="yearmonth") %>%
+#   mutate(w = obs / total_obs,
+#          sentiment_w = sentiment * w,
+#          sentiment_n = normalize_data(sentiment_w))
+
+### by time and site
+# group2 <- sentDF.values %>%
+#   group_by(yearmonth, topic_name, topic, site) %>%
+#   summarise(sentiment = mean(sentiment, na.rm=T),
+#             obs = n()) %>%
+#   ungroup() %>%
+#   left_join(., tally_month_site, by=c("yearmonth","site")) %>%
+#   mutate(w = obs / total_obs,
+#          sentiment_w = sentiment * w,
+#          sentiment_n = normalize_data(sentiment_w))
+```
+
+B)
+```{r}
 ### by time
 group1 <- sentDF.values %>%
   group_by(yearmonth, topic_name, topic) %>%
@@ -788,8 +837,16 @@ group1 <- sentDF.values %>%
   ungroup() %>%
   left_join(., tally_month, by="yearmonth") %>%
   mutate(w = obs / total_obs,
-         sentiment_w = sentiment * w,
-         sentiment_n = normalize_data(sentiment_w)) 
+         sentiment_w = sentiment * w) 
+  
+group1 <- group1 %>%
+  select(yearmonth, topic, sentiment_w) %>%
+  spread(topic, sentiment_w) %>%
+  lapply(normalize_data) %>%
+  as.data.frame() %>%
+  gather(topic, sentiment_n, -yearmonth) %>%
+  mutate(topic = as.numeric(gsub("X","", topic))) %>%
+  merge(., group1, by = c("topic", "yearmonth"))
 
 ### by time and site
 group2 <- sentDF.values %>%
@@ -799,176 +856,210 @@ group2 <- sentDF.values %>%
   ungroup() %>%
   left_join(., tally_month_site, by=c("yearmonth","site")) %>%
   mutate(w = obs / total_obs,
-         sentiment_w = sentiment * w,
-         sentiment_n = normalize_data(sentiment_w))
+         sentiment_w = sentiment * w)
+
+group2 <- group2 %>%
+  select(yearmonth, topic, site, sentiment_w) %>%
+  spread(topic, sentiment_w) %>%
+  lapply(normalize_data) %>%
+  as.data.frame() %>%
+  gather(topic, sentiment_n, -yearmonth, -site) %>%
+  mutate(topic = as.numeric(gsub("X","", topic))) %>%
+  merge(., group2, by = c("topic", "yearmonth","site"))
 ```
 
 
 #### 3.1. Cross-Correlation
-```{r}
-group1 %>%
-  select(yearmonth, topic_name, sentiment_n) %>%
-  spread(topic_name, sentiment_n)  -> corr1
-
-polls_monthly %>% select(- yearmonth) -> corr2
-
-corr <- expand.grid(names(corr1), names(corr2))
-corr$correlation <- NA
-```
 
 ```{r}
-x <- 1
-
-for (corr1Id in 1:ncol(corr2)) {
-  c1 = corr2[,corr1Id]
-  #print(names(corr2[,corr1Id]))
-  for(corr2Id in 1:ncol(corr1)) {
-    c2 = corr1[,corr2Id]
-    #print(names(corr1[,corr2Id]))
-    correlation = ccf(c1, c2, lag.max = 0,
-                      na.action = na.contiguous, plot=F)
-    corr[x,3] <- correlation$acf[1]
+plot_ccf <- function(corr1, corr2, ...){
+  
+  # Create empty matrix
+  corr <- expand.grid(names(corr1), names(corr2))
+  corr$correlation <- NA
+  
+  x <- 1
+  
+  for (corr1Id in 1:ncol(corr2)) {
+    c1 = corr2[,corr1Id]
+    #print(names(corr2[,corr1Id]))
     
-    x<- x+1
+    for(corr2Id in 1:ncol(corr1)) {
+      c2 = corr1[,corr2Id]
+      #print(names(corr1[,corr2Id]))
+      correlation = ccf(c1, c2, lag.max = 0,
+                      na.action = na.contiguous, plot=F)
+      corr[x,3] <- correlation$acf[1]
+    
+      x<- x+1
+    }
   }
+      
+      ### Plot Corr ##
+      ggplot(corr, aes(Var2, Var1,
+                 fill = correlation,
+                 label = round(correlation,2))) +
+        geom_tile(color="white", ...) +
+        geom_text(size = 3.5, color = col[5]) +
+        viridis::scale_fill_viridis(limits=c(-1, 1)) +
+        labs(x="", y="", fill="",
+             title = "Cross-Correlation / Polls vs. Sentiment Value",
+             ...)
 }
 ```
 
-```{r}
-ggplot(corr, aes(Var2, Var1,
-                 fill = correlation,
-                 label = round(correlation,2))) +
-  geom_tile(color="white") +
-  geom_text(size = 3, color = col[5]) +
-  viridis::scale_fill_viridis() +
-  labs(x="", y="", title = "Cross Correlation of Polls vs. Sentiment Value")
+##### 3.1.1. Overall
+```{r fig.height=6, fig.width=8}
+group1 %>%
+  select(yearmonth, topic_name, sentiment_n) %>%
+  spread(topic_name, sentiment_n) %>%
+  select(- yearmonth) -> corr1
+
+polls_monthly %>% select(- yearmonth) -> corr2
+
+plot_ccf(corr1, corr2)
 ```
 
+##### 3.1.2. By Media
+```{r eval=FALSE, include=FALSE}
+for (i in unique(group2$site)) {
+  
+  group2 %>%
+  filter(site == i) %>%
+  select(yearmonth, topic_name, sentiment_n) %>%
+  spread(topic_name, sentiment_n) %>%
+  select(- yearmonth) -> corr1
+  
+  p <- plot_ccf(corr1, corr2,
+                show.legend = F,
+                subtitle = paste(i)
+                )
+  
+  ggsave(filename = paste0("../figs/corrplot_",i,".png"),
+         height = 5)
+}
+
+```
+
+<img src="../figs/corrplot_Bild.de.png", width = "49%">
+<img src="../figs/corrplot_DIE WELT.png", width = "49%">
+<img src="../figs/corrplot_FOCUS ONLINE.png", width = "49%">
+<img src="../figs/corrplot_SPIEGEL ONLINE.png", width = "49%">
+<img src="../figs/corrplot_stern.de.png", width = "49%">
+<img src="../figs/corrplot_Tagesschau.de.png", width = "49%">
+<img src="../figs/corrplot_ZEIT ONLINE.png", width = "49%">
 
 #### 3.2. Graphical analysis
 
-##### 3.2.1. CDU
-```{r fig.height=10, fig.width=12}
-### Plot 1  
-plot1 <- group1 %>%
-  filter(grepl(paste("CDU","CSU",sep="|"), topic_name))
-
-p1 <- ggplot() +
-  geom_col(data=plot1, aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             fill = topic_name),
-           position = "dodge", 
-           alpha = 0.8) +
-  scale_fill_manual(values = col) +
-    geom_line(data=plot1, aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             color = topic_name),
-             show.legend = F) +
-  scale_color_manual(values = col) +
-  guides(fill = guide_legend(ncol=3)) +
-  # Add poll line
-  geom_line(data = polls_monthly, 
-            aes(yearmonth, Union),
-            color = "black",
-            size = 1) +
-  labs(y="", x="", fill="",
-       title = "Sentiment & Poll Values",
-       subtitle = "Both scores are normalized") +
-  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
-  theme(legend.position = "bottom") 
-
-### Plot 2
-plot2 <- group2 %>%
-  filter(grepl(paste("CDU","CSU",sep="|"), topic_name))
-
-p2 <- ggplot() +
-  geom_col(data = plot2,
-           aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             fill = topic_name),
-           alpha = 0.8,
-           position = "dodge") +
+```{r}
+plot_Poll_Sent <- function(filters, party_str, color_str) {
+  
+  ### Plot 1  
+  plot1 <- group1 %>%
+    filter(grepl(filters, topic_name))
+  
+  p1 <- ggplot() +
+    geom_col(data=plot1, aes(yearmonth, sentiment_n,
+                             group = topic_name,
+                             fill = topic_name),
+             position = "dodge",
+             alpha = 0.5) +
+    scale_fill_manual(values = col) +
+    
+    geom_line(data=plot1, aes(yearmonth, 
+                              sentiment_n,
+                              group = topic_name,
+                              color = topic_name),
+              show.legend = F) +
+    scale_color_manual(values = col) +
+    guides(fill = guide_legend(ncol=3)) +
+    
+    # Add poll line
+    geom_line(data = polls_monthly,
+              aes_string("yearmonth", party_str),
+              color = color_str,
+                            size = 0.9,
+              linetype = 2) +
+    labs(y="", x="", fill="",
+         title = "Sentiment & Poll Values",
+         subtitle = party_str,
+         caption = "Both scores are normalized") +
+    scale_x_date(breaks = date_breaks("1 month"), 
+                 labels=date_format("%B", tz="CET")) +
+    theme(legend.position = "bottom") 
+  
+  ### Plot 2
+  plot2 <- group2 %>%
+    filter(grepl(filters, topic_name))
+  
+  p2 <- ggplot() +
+    geom_col(data = plot2,
+             aes(yearmonth, sentiment_n, 
+                 group = topic_name,
+                 fill = topic_name),
+             alpha = 0.5,
+             position = "dodge") +
     scale_fill_manual(values = col) +
     scale_color_manual(values = col) +
-  geom_line(data = plot2,
-            aes(yearmonth, sentiment_n,
-                group = topic_name,
-                color = topic_name),
-            show.legend = F) +
-  facet_wrap(~site, ncol = 2) +
-   # Add poll line
-  geom_line(data = polls_monthly, 
-            aes(yearmonth, Union),
-            color = "black",
-            size = 1) +
-  labs(y="", x="", fill="") +
-  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
-  theme(legend.position = "none",
+    
+    geom_line(data = plot2,
+              aes(yearmonth, sentiment_n,
+                  group = topic_name,
+                  color = topic_name),
+              show.legend = F) +
+    facet_wrap(~site, ncol = 2) +
+    
+    # Add poll line
+    geom_line(data = polls_monthly, 
+              aes_string("yearmonth", party_str),
+              color = color_str,
+              size = 0.9,
+              linetype = 2) +
+    labs(y="", x="", fill="") +
+    scale_x_date(breaks = date_breaks("1 month"), 
+                 labels=date_format("%B", tz="CET")) +
+    theme(legend.position = "none",
         axis.text.x = element_text(angle = 90))
+  
+  p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
+  
+}
+```
 
-p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
+
+##### 3.2.1. CDU
+```{r fig.height=12, fig.width=10}
+filters <- paste("CDU","CSU","Great Coalition", sep="|")
+
+### Plot 1  
+plot_Poll_Sent(filters, "Union", "black")
 ```
 
 
 #### SPD
 ```{r fig.height=12, fig.width=10}
-plot1 <- group1 %>%
-  filter(grepl(paste("SPD", sep="|"), topic_name, ignore.case = T))
+filters <- paste("SPD","Great Coalition", sep="|")
 
-### Plot 1  
-p1 <- ggplot() +
-  geom_col(data=plot1, aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             fill = topic_name),
-           position = "dodge", 
-           alpha = 0.8) +
-  scale_fill_manual(values = col) +
-  guides(fill = guide_legend(ncol=3)) +
-   geom_line(data=plot1, aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             color = topic_name),
-             show.legend = F) +
-  scale_color_manual(values = col) +
-  # Add poll line
-  geom_line(data = polls_monthly, 
-            aes(yearmonth, SPD),
-            color = "red",
-            size = 1) +
-  labs(y="", x="", fill="",
-       title = "Sentiment & Poll Values",
-       subtitle = "Both scores are normalized") +
-  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
-  theme(legend.position = "bottom") 
-
-### plot by time and site
-plot2 <- group2 %>%
-  filter(grepl(paste("SPD", sep="|"), topic_name, ignore.case = T))
-
-### Plot 2
-p2 <- ggplot() +
-  geom_col(data = plot2,
-           aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             fill = topic_name),
-           alpha = 0.8,
-           position = "dodge") +
-  scale_fill_manual(values = col) +
-  facet_wrap(~site, ncol = 2) +
-     geom_line(data=plot2, aes(yearmonth, sentiment_n, 
-             group = topic_name,
-             color = topic_name),
-             show.legend = F) +
-  scale_color_manual(values = col) +
-   # Add poll line
-  geom_line(data = polls_monthly, 
-            aes(yearmonth, SPD),
-            color = "red",
-            size = 1) +
-  labs(y="", x="", fill="") +
-  scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
-  theme(legend.position = "none",
-        axis.text.x = element_text(angle = 90))
-
-p1 + p2 + plot_layout(ncol = 1, heights = c(1,4))
+plot_Poll_Sent(filters, "SPD", "black")
 ```
 
+##### 3.2.3. AfD
+```{r fig.height=12, fig.width=10}
+filters <- paste("AfD", sep="|")
+
+plot_Poll_Sent(filters, "AfD", "black")
+```
+
+#### FDP
+```{r fig.height=12, fig.width=10}
+filters <- paste("Jamaica", sep="|")
+
+plot_Poll_Sent(filters, "FDP", "black")
+```
+
+#### Grüne
+```{r fig.height=12, fig.width=10}
+filters <- paste("Grüne","Jamaica", sep="|")
+
+plot_Poll_Sent(filters, "Grüne", "black")
+```
