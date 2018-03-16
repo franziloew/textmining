@@ -249,22 +249,38 @@ Some conclusions can be drawn from this illustration. First of all, it can be se
 	\label{fig_sentscore_monthly}
 \end{figure}
 
-If aggregated by news provider, some differences between the sites are discernible (Figure \ref{fig_sentscore_site}). To begin with, it should be noted that on average all topics are discussed negatively by all news providers, except topic 22, which mainly covers the personnel debates of the SPD and has a positive value at Tagesschau.de. One striking feature is the way in which the Jamaica negotiations are reported. Although all providers discuss this topic in a negative light, Bild.de reports this topic particularly negative. The same applies to the reports on the grand coalition, where the value of ZEIT ONLINE is the most negative. A good overview of how differently the topics are discussed by the providers is also shown in Figure \ref{fig_sentscore_radar}. This also clearly shows that the sentiment value of the media differs most notably with regard to topic 27 and topic 4, i. e. the topics on which the coalition negotiations are reported. Furthermore, it becomes evident that the negative sentiment value of FOCUS ONLINE regarding topic 17 is high in relation to the other media. FOCUS ONLINE thus reports comparatively more negatively on the debates within the SPD. This includes in particular the vote on a possible coalition with CDU/CSU. For topic 1, which also deals with the SPD, the value of FOCUS ONLINE is rather negative, only undercut by Bild.de.
+If aggregated by news provider, some differences between the sites are discernible (Figure \ref{fig_sentscore_site}\footnote{The numbers reflect the number of observations.}). To begin with, it can be noted that on average all topics are discussed negatively by all news providers, except topic 22, which mainly covers the personnel debates of the SPD and has a positive value at Tagesschau.de. One striking feature is the way in which the Jamaica negotiations and their failure are reported (topics 27 and 26). Although all providers discuss this topics in a negative light, Bild.de reports them particularly negative. The same applies to the reports on the grand coalition, where the value of ZEIT ONLINE is the most negative. 
+
+Barplot um die Topic-Tendenzen innerhalb eines Mediums zu betrachten, Radarplot um die Unterschiede besser dazustellen.
+Barplot: 
+- Insgesamt alle Themen negativ (bis auf topic 23 bei tagesschau.de). 
+- Bei Bild.de sind die Themen, die die Koalitionsverhandlungen (26,27,4) und die SPD (1,17) am stärksten negativ. Auch die Themen bezüglich der AfD (20,30,32,37) werden stärker negativ besprochen.
+- WELT ONLINE: Zwei Themen bezüglich der AfD (32,20) am stärksten negativ, sowie die Topics bzgl. der Jamaika Koalition (27) und der Großen Koalition (4).
+- FOCUS ONLINE sind es vor allem Themen, die die SPD betreffen (27, 17, 4, 1), die einen negativen Sentiment Wert haben. Auch topic 32 und 37 sind vergleichsweise stark negativ.
+- Bei SPIEGEL ONLINE ist zunächst auffällig, dass hier der Unterschied des Sentiment Wertes zwischen den einzelnen Themen weniger stark ist. Dabei stechen die Themen 13, als vergleichsweise weniger negativ heraus (allerdings sind diese Themen auch bei den anderen Medien die, die am wenigsten negativ besprochen werden.) 
+- Auch bei stern.de ist der Unterschied des Sentiment Wertes weniger groß und insgesamt weniger stark negativ. Am positivsten (bzw. am wenigsten negativ) schneidet das Theme zur CDU (46) und zu Martin Schulz (10).
+- Tagesschau.de ist bei den meisten Themen am wenigsten negativ , bzw. sogar einmal positiv. Dies trifft allerdings nicht auf topic 23 (CSU) zu, wo tagesschau.de im Vergleich zu den anderen Medien am stärksten negativ ist.
+- Wie schon bei Bild.de, schneiden die Themen in Bezug auf die Koalitionsverhandlungen (27 und 4) auch bei ZEIT ONLINE eher schlecht ab.  Allerdings sind die Themen rund um die AfD (30, 32,37 und 20) noch negativer als bei Bild.de. 
 
 \begin{figure}[H]
 	\caption{Sentiment Score by news wire}
 	\begin{center}
-		\begin{subfigure}[normla]{\textwidth}
 			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_site.png}
 			\label{fig_sentscore_site}
-		\end{subfigure}
-		\begin{subfigure}[normla]{0.7\textwidth}
-			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_radar.png}
-			\label{fig_sentscore_radar}
-		\end{subfigure}
-		\end{center}
+	\end{center}
 \end{figure}
 
+A good overview of how differently the topics are discussed by the providers is shown in Figure \ref{fig_sentscore_radar}. It gets evident that the sentiment value of the media differs most notably with regard to topic 27 and topic 4, i. e. the topics on which the coalition negotiations are reported. With regard to the Jamaica coalition, Bild.de reports the most and tagesschau.de the least negative. The reporting of ZEIT ONLINE concerning the grand coalition is the one with the most negative sentiment value and again Tagesschau.de, together with stern.de, the one with the value which is least negative. Furthermore, it becomes evident that the negative sentiment value of FOCUS ONLINE regarding topic 17 is high in relation to the other media. FOCUS ONLINE thus reports comparatively more negatively on the debates within the SPD. This includes in particular the vote on a possible coalition with CDU/CSU. For topic 1, which also deals with the SPD, the value of FOCUS ONLINE is rather negative, only undercut by Bild.de. Topics related to AfD do not show striking differences. 
+
+\begin{figure}[H]
+	\caption{Sentiment Score by news wire}
+	\begin{center}
+			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_radar.png}
+			\label{fig_sentscore_radar}
+	\end{center}
+\end{figure}
+
+After the above figures have been analyzed, the following points can be summarized: (a) The sentiment value of the SPD is decreasing over time, especially in regard to internal votes. (b) The topics relating to the coalition talks on Jamaica (26, 27) and the grand coalition (4) are discussed rather critically, but they also show the greatest differences within the media. In contrast, the tonality of the topics in relation to the AfD shows rather small differences. (c) Overall, the sentiment value at Tagesschau.de is the least negative and only shows a comparatively strong negative value at topic 23, concerning the CSU. 
 
 % ----------------------
 % Appendix

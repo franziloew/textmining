@@ -267,7 +267,7 @@ p <- ggplot(frequency, aes(x=reorder(topic_name, frequency), y=frequency)) +
           axis.text.y = element_text(size=9),
           axis.title = element_text(size=10))
 
-ggsave(filename = "../figs/topic_proportion.png", height = 10)
+ggsave(filename = "../figs/topic_proportion.png", height = 8)
 ```
 
 ![Topic Proportion](../figs/topic_proportion.png)
@@ -644,9 +644,10 @@ p1 <- ggplot(p,
   facet_wrap(~site, ncol = 7) +
   labs(x="", y="Sentiment Score (weighted)",
        title = "",
-       subtitle = "") +
+       subtitle = "Numbers indicate the ") +
   theme(axis.text.y = element_text(size =8),
-        axis.text.x = element_text(size=6, angle = 90))
+        axis.text.x = element_text(size=6, angle = 90),
+        axis.title.x = element_text(size = 8))
 
 ggsave(filename = "../figs/sentscore_site.png", plot = p1, width = 9,
        height = 5)
