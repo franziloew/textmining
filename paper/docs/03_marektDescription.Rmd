@@ -60,8 +60,6 @@ theme_set(
                                 margin = margin(0, 0, 4, 0, "pt")),
       plot.subtitle = element_text(size = 12),
       plot.caption = element_text(size = 6),
-      plot.background   = element_rect("#fafafa", "#fafafa"),
-      panel.background  = element_rect("#fafafa"),
       panel.border = element_blank()
     )
 )
@@ -107,7 +105,7 @@ views <- views %>%
        site = ifelse(site=="deutschlandfunk.de", "DLF", site))
 
 keepsite <- c("Tagesschau.de", "SPIEGEL ONLINE", "ZEIT ONLINE", 
-              "Bild.de", "DIE WELT", "FOCUS ONLINE")
+              "Bild.de", "DIE WELT", "FOCUS ONLINE", "stern.de")
 ```
 
 ```{r}
@@ -125,7 +123,7 @@ p1 <- views %>%
   theme(
       legend.position   = "right",
       legend.text       =  element_text(size=6),
-      axis.text.y       = element_text(size = 8)
+      axis.text       = element_text(size = 6)
     ) +
   labs(x="", y="pageviews", color="", title = "", 
       caption = "Source: Alexa Internet, Inc. (www.alexa.com)" )
