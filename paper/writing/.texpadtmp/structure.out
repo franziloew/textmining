@@ -1,9 +1,12 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{The online news market}{}% 2
-\BOOKMARK [1][-]{section.3}{Dataset and data preparation}{}% 3
-\BOOKMARK [1][-]{section.4}{The structural topic model}{}% 4
-\BOOKMARK [2][-]{subsection.4.1}{Generative Process of STM}{section.4}% 5
-\BOOKMARK [2][-]{subsection.4.2}{Model and parameter selection}{section.4}% 6
-\BOOKMARK [1][-]{section.5}{Empirical Evaluation}{}% 7
-\BOOKMARK [2][-]{subsection.5.1}{Topic}{section.5}% 8
-\BOOKMARK [2][-]{subsection.5.2}{Tone}{section.5}% 9
+\BOOKMARK [1][-]{section.2}{Background on the federal election in Germany \(2017\)}{}% 2
+\BOOKMARK [1][-]{section.3}{The online news market}{}% 3
+\BOOKMARK [1][-]{section.4}{Dataset and data preparation}{}% 4
+\BOOKMARK [1][-]{section.5}{The structural topic model}{}% 5
+\BOOKMARK [2][-]{subsection.5.1}{Generative Process of STM}{section.5}% 6
+\BOOKMARK [2][-]{subsection.5.2}{Model and parameter selection}{section.5}% 7
+\BOOKMARK [1][-]{section.6}{Empirical Evaluation}{}% 8
+\BOOKMARK [2][-]{subsection.6.1}{Topic}{section.6}% 9
+\BOOKMARK [2][-]{subsection.6.2}{Tone}{section.6}% 10
+\BOOKMARK [2][-]{subsection.6.3}{News sentiment and poll data}{section.6}% 11
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 12

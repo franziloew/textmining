@@ -192,6 +192,34 @@
       \field{pages}{993\bibrangedash 1022}
       \range{pages}{30}
     \endentry
+    \entry{box_time_2008}{book}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=55911e7dd73a9ab7592c871dd1115249}{Box}{B\bibinitperiod}{George\bibnamedelimb E.\bibnamedelimi P.}{G\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0b4c326c6f8c91b78b2d8f9730425439}{Jenkins}{J\bibinitperiod}{Gwilym\bibnamedelima M.}{G\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=64d31e8a99cec253b4fe363ecff48428}{Reinsel}{R\bibinitperiod}{Gregory\bibnamedelima C.}{G\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {Hoboken, NJ}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{1dcfa80011a9fb7e0cb755811f68fde2}
+      \strng{fullhash}{1dcfa80011a9fb7e0cb755811f68fde2}
+      \field{sortinit}{B}
+      \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
+      \field{labelyear}{2008}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{edition}{4}
+      \field{isbn}{978-0-470-27284-8}
+      \field{series}{Wiley series in probability and statistics}
+      \field{shorttitle}{Time series analysis}
+      \field{title}{Time series analysis: forecasting and control}
+      \field{year}{2008}
+      \keyw{*Time-series analysis / Prediction theory / Transfer functions / Feedback control systems -- Mathematical models,*Zeitreihenanalyse / Kontrolltheorie / Rückkopplung / Mathematisches Modell}
+    \endentry
     \entry{braun_variational_2010}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=6549fe610fc1d75fcf918a8b6ee89636}{Braun}{B\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
@@ -527,6 +555,46 @@
       \verb http://www.pnas.org/content/113/1/92
       \endverb
       \keyw{politics,funding,polarization,computational social science,climate change}
+    \endentry
+    \entry{fu_analyzing_2013}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=78c52eee52b1a744cbeb14527e497b2d}{Fu}{F\bibinitperiod}{King-wa}{K\bibinithyphendelim w\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=bec4bb2f2eed9f462138242fd3586f37}{Chan}{C\bibinitperiod}{Chee-hon}{C\bibinithyphendelim h\bibinitperiod}{}{}{}{}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{a362aacda2598c5445f3d5ec744231c6}
+      \strng{fullhash}{a362aacda2598c5445f3d5ec744231c6}
+      \field{sortinit}{F}
+      \field{sortinithash}{c6a7d9913bbd7b20ea954441c0460b78}
+      \field{labelyear}{2013}
+      \field{labelmonth}{09}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The telephone survey is a common social science research method for capturing public opinion, for example, an individual’s values or attitudes, or the government’s approval rating. However, reducing domestic landline usage, increasing nonresponse rate, and suffering from response bias of the interviewee’s self-reported data pose methodological challenges to such an approach. Because of the labor cost of administration, a phone survey is often conducted on a biweekly or monthly basis, and therefore a daily reﬂection of public opinion is usually not available. Recently, online sentiment analysis of user-generated content has been deployed to predict public opinion and human behavior. However, its overall effectiveness remains uncertain. This study seeks to examine the temporal association between online sentiment reﬂected in social media content and phone survey poll results in Hong Kong. Speciﬁcally, it aims to ﬁnd the extent to which online sentiment can predict phone survey results. Using autoregressive integrated moving average time-series analysis, this study suggested that online sentiment scores can lead phone survey results by about 8–15 days, and their correlation coefﬁcients were about 0.16. The ﬁnding is signiﬁcant to the study of social media in social science research, because it supports the conclusion that daily sentiment observed in social media content can serve as a leading predictor for phone survey results, keeping as much as 2 weeks ahead of the monthly announcement of opinion polls. We also discuss the practical and theoretical implications of this study.}
+      \field{issn}{2152-2715, 2152-2723}
+      \field{journaltitle}{Cyberpsychology, Behavior, and Social Networking}
+      \field{month}{09}
+      \field{number}{9}
+      \field{title}{Analyzing {Online} {Sentiment} to {Predict} {Telephone} {Poll} {Results}}
+      \field{urlday}{19}
+      \field{urlmonth}{03}
+      \field{urlyear}{2018}
+      \field{volume}{16}
+      \field{year}{2013}
+      \field{pages}{702\bibrangedash 707}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1089/cyber.2012.0375
+      \endverb
+      \verb{file}
+      \verb Fu und Chan - 2013 - Analyzing Online Sentiment to Predict Telephone Po.pdf:/Users/Franzi/Zotero/storage/MPTLP2XU/Fu und Chan - 2013 - Analyzing Online Sentiment to Predict Telephone Po.pdf:application/pdf
+      \endverb
+      \verb{url}
+      \verb http://online.liebertpub.com/doi/abs/10.1089/cyber.2012.0375
+      \endverb
     \endentry
     \entry{gabszewicz_press_2001}{article}{}
       \name{author}{3}{}{%
@@ -977,6 +1045,42 @@
       \verb https://www.bankofengland.co.uk/working-paper/2018/news-and-narratives-in-financial-systems
       \endverb
     \endentry
+    \entry{padmaja_evaluating_2014}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=aec625a03bf3420e380f334bec2a630c}{Padmaja}{P\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=7d3a1ecf6977068df81f997e8bb9a637}{Fatima}{F\bibinitperiod}{Prof\bibnamedelimb S.\bibnamedelimi Sameen}{P\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=8f21e58c6824dcd37800ba0e2d1c5621}{Bandu}{B\bibinitperiod}{Sasidhar}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{0f534f9fd5a414a56af786a0ab35860c}
+      \strng{fullhash}{0f534f9fd5a414a56af786a0ab35860c}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{2014}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Automatic detection of linguistic negation in free text is a demanding need for many text processing applications including Sentiment Analysis. Our system uses online news archives from two different resources namely NDTV and The Hindu. While dealing with news articles, we performed three subtasks namely identifying the target; separation of good and bad news content from the good and bad sentiment expressed on the target and analysis of clearly marked opinion that is expressed explicitly, not needing interpretation or the use of world knowledge. In this paper, our main focus was on evaluating and comparing three sentiment analysis methods (two machine learning based and one lexical based) and also identifying the scope of negation in news articles for two political parties namely BJP and UPA by using three existing methodologies. They were Rest of the Sentence (RoS), Fixed Window Length (FWL) and Dependency Analysis (DA). Among the sentiment methods the best F-measure was SVM with the values 0.688 and 0.657 for BJP and UPA respectively. On the other hand, the F measures for RoS, FWL and DA were 0.58, 0.69 and 0.75 respectively. We observed that DA was performing better than the other two. Among 1675 sentences in the corpus, according to annotator I, 1,137 were positive and 538 were negative whereas according to annotator II, 1,130 were positive and 545 were negative. Further we also identified the score of each sentence and calculated the accuracy on the basis of average score of both the annotators.}
+      \field{journaltitle}{International Journal of Advanced Research in Artificial Intelligence (IJARAI)}
+      \field{number}{11}
+      \field{title}{Evaluating {Sentiment} {Analysis} {Methods} and {Identifying} {Scope} of {Negation} in {Newspaper} {Articles}}
+      \field{urlday}{19}
+      \field{urlmonth}{03}
+      \field{urlyear}{2018}
+      \field{volume}{3}
+      \field{year}{2014}
+      \verb{doi}
+      \verb 10.14569/IJARAI.2014.031101
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:/Users/Franzi/Zotero/storage/3NRWA2F2/Padmaja et al. - 2014 - Evaluating Sentiment Analysis Methods and Identify.pdf:application/pdf;Snapshot:/Users/Franzi/Zotero/storage/RY3NFDRX/ViewPaper.html:text/html
+      \endverb
+      \verb{url}
+      \verb http://thesai.org/Publications/ViewPaper?Volume=3&Issue=11&Code=IJARAI&SerialNo=1
+      \endverb
+    \endentry
     \entry{paul_cross-collection_2017}{article}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=6cc6047d07f4738097aadaae1385729b}{Paul}{P\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
@@ -1329,6 +1433,42 @@
       \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.2008.01362.x/abstract
       \endverb
     \endentry
+    \entry{tumasjan_predicting_2010}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=478771634ee86d4ef56bb7d93e21aa00}{Tumasjan}{T\bibinitperiod}{Andranik}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a8f37d1a07b9e25df300aab51e5cc13e}{Sprenger}{S\bibinitperiod}{Timm\bibnamedelima Oliver}{T\bibinitperiod\bibinitdelim O\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=4f84a325c1f05cd8bca73cd94f99ce16}{Sandner}{S\bibinitperiod}{Philipp}{P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=cf4a90b92e43a6da9696377501e1fc8f}{Welpe}{W\bibinitperiod}{Isabell}{I\bibinitperiod}{}{}{}{}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{location}{1}{%
+        {Washington}%
+      }
+      \strng{namehash}{3d75a230c57b75413684805db4c5a2d6}
+      \strng{fullhash}{ac8d6496937129549be4d446516d86b5}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{labelyear}{2010}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Twitter is a microblogging website where users read and write millions of short messages on a variety of topics every day. This study uses the context of the German federal election to investigate whether Twitter is used as a forum for political deliberation and whether online messages on Twitter validly mirror offline political sentiment. Using LIWC text analysis software, we conducted a contentanalysis of over 100,000 messages containing a reference to either a political party or a politician. Our results show that Twitter is indeed used extensively for political deliberation. We find that the mere number of messages mentioning a party reflects the election result. Moreover, joint mentions of two parties are in line with real world political ties and coalitions. An analysis of the tweets' political sentiment demonstrates close correspondence to the parties' and politicians' political positions indicating that the content of Twitter messages plausibly reflects the offline political landscape. We discuss the use of microblogging message content as a valid indicator of political sentiment and derive suggestions for further research.}
+      \field{booktitle}{Proceedings of the {Fourth} {International} {Conference} on {Weblogs} and {Social} {Media}}
+      \field{shorttitle}{Predicting {Elections} with {Twitter}}
+      \field{title}{Predicting {Elections} with {Twitter}: {What} 140 {Characters} {Reveal} about {Political} {Sentiment}}
+      \field{urlday}{17}
+      \field{urlmonth}{03}
+      \field{urlyear}{2018}
+      \field{year}{2010}
+      \verb{file}
+      \verb Snapshot:/Users/Franzi/Zotero/storage/JHIPIJAW/215776042_Predicting_Elections_with_Twitter_What_140_Characters_Reveal_about_Political_Sentimen.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://www.researchgate.net/publication/215776042_Predicting_Elections_with_Twitter_What_140_Characters_Reveal_about_Political_Sentiment
+      \endverb
+    \endentry
     \entry{wiedmann_text_2016}{book}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=fd14ef1140b31ebe35bac6aac6221997}{Wiedmann}{W\bibinitperiod}{Gregor}{G\bibinitperiod}{}{}{}{}}%
@@ -1361,7 +1501,6 @@
       \endverb
     \endentry
   \endsortlist
-  \missing{_media_2014}
 \endrefsection
 \endinput
 

@@ -1,17 +1,15 @@
-[1] Config.pm:324> INFO - This is Biber 2.1
-[1] Config.pm:327> INFO - Logfile is '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.blg'
-[84] biber-darwin:276> INFO - === Fri Mar 16, 2018, 07:56:44
-[86] Biber.pm:333> INFO - Reading '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bcf'
-[236] Biber.pm:645> INFO - Found 42 citekeys in bib section 0
-[265] Biber.pm:2977> INFO - Processing section 0
-[291] Biber.pm:3115> INFO - Looking for bibtex format file '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib' for section 0
-[321] bibtex.pm:1021> INFO - Decoding LaTeX character macros into UTF-8
-[353] bibtex.pm:895> INFO - Found BibTeX data source '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib'
-[474] Utils.pm:146> WARN - I didn't find a database entry for '_media_2014' (section 0)
-[1281] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1281] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1281] Biber.pm:2854> INFO - Sorting list 'nyt' of type 'entry' with scheme 'nyt' and locale 'en-US'
-[1282] Biber.pm:2858> INFO - No sort tailoring available for locale 'en-US'
-[1477] bbl.pm:505> INFO - Writing '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl' with encoding 'UTF-8'
-[1488] bbl.pm:596> INFO - Output to /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl
-[1489] Biber.pm:106> INFO - WARNINGS: 1
+[0] Config.pm:324> INFO - This is Biber 2.1
+[0] Config.pm:327> INFO - Logfile is '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.blg'
+[75] biber-darwin:276> INFO - === Mon Mar 19, 2018, 17:56:44
+[75] Biber.pm:333> INFO - Reading '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bcf'
+[228] Biber.pm:645> INFO - Found 45 citekeys in bib section 0
+[259] Biber.pm:2977> INFO - Processing section 0
+[299] Biber.pm:3115> INFO - Looking for bibtex format file '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib' for section 0
+[336] bibtex.pm:1021> INFO - Decoding LaTeX character macros into UTF-8
+[374] bibtex.pm:895> INFO - Found BibTeX data source '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib'
+[1228] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1228] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1228] Biber.pm:2854> INFO - Sorting list 'nyt' of type 'entry' with scheme 'nyt' and locale 'en-US'
+[1229] Biber.pm:2858> INFO - No sort tailoring available for locale 'en-US'
+[1373] bbl.pm:505> INFO - Writing '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl' with encoding 'UTF-8'
+[1388] bbl.pm:596> INFO - Output to /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl

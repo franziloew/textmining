@@ -92,6 +92,7 @@ ggsave({
   geom_bar(fill=col[8], alpha = 0.8) +
   labs(x="", y="Number of articles") +
   theme(
+    axis.text = element_text(size = 6),
       legend.position   = "none"
     )
   
@@ -938,7 +939,7 @@ p <- plot_ccf(corr1, corr2, alpha = 0.8,
               subtitle = "Election polls vs. topic sentiment value (monthly)")
 
 ggsave(filename = "../figs/ccf.png", plot = p,
-       height = 6, width = 8)
+       height = 6, width = 8, dpi = 600)
 ```
 
 ![Cross-correlation](../figs/ccf.png)
