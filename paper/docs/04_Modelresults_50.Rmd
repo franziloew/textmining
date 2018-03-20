@@ -77,9 +77,9 @@ btw <- btw %>%
          site = ifelse(site == "tagesschau.de", "Tagesschau.de", site))
 ```
 
-I conduct a STM (Strucutral Topic Model) estimation on a sample of 14,936 online news articles from seven news provider about domestic politics: Bild.de, DIE WELT, FOCUS ONLINE, SPIEGEL ONLINE, Stern.de, ZEIT ONLINE, Tagesschau.de. The articles are dated from 01.06.2017 to 31.12.2017 (German federal elections took place on 24th of September 2017.). I first extract all online articles using the the [Eventregistry API](http://eventregistry.org/documentation). Then all articles from the section "domestic policy" are filtered by checking the URL structure.
+I conduct a STM (Strucutral Topic Model) estimation on a sample of 14,936 online news articles from seven news provider about domestic politics: Bild.de, DIE WELT, FOCUS ONLINE, SPIEGEL ONLINE, Stern.de, ZEIT ONLINE, Tagesschau.de. The articles are dated from 01.06.2017 to 01.03.2018 (German federal elections took place on 24th of September 2017.). I first extract all online articles using the the [Eventregistry API](http://eventregistry.org/documentation). Then all articles from the section "domestic policy" are filtered by checking the URL structure. The data cleaning process is documented [here](https://github.com/franziloew/textmining/blob/gh-pages/paper/docs/02_cleanAndCombine.Rmd).
 
-To discover the latent topics in the corpus, the structural topic modeling (STM) developed by [Roberts (2016)](https://scholar.princeton.edu/sites/default/files/bstewart/files/a_model_of_text_for_experimentation_in_the_social_sciences.pdf) is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I will included the news provider as a control for both the topical content and the topical prevalence. Additional, the month an article was published is included as a control for the topical prevalence. The number of topics is set to 35.
+To discover the latent topics in the corpus, the structural topic modeling (STM) developed by [Roberts (2016)](https://scholar.princeton.edu/sites/default/files/bstewart/files/a_model_of_text_for_experimentation_in_the_social_sciences.pdf) is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I will included the news provider as a control for both the topical content and the topical prevalence. The number of topics is set to 50.
 
 ## Distribution of articles
 
@@ -217,7 +217,7 @@ btw.2 %>% filter(topic==2) %>%
 
 ### 1.3 Topic proportions
 
-In order to get an initial overview of the results, the figure below displays the topics ordered by their expected frequency across the corpus (left side of the Figure) and the expected proportion of a topic in public media minus the expected proportion of topic use in private media (right side of the Figure). Thus topics more associated with public media appear to the right of zero. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles.
+In order to get an initial overview of the results, the figure below displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles.
 
 ```{r}
 keep <- seq(1:k)
@@ -371,7 +371,7 @@ p1 <- coeff %>%
         axis.text.y = element_text(size=9),
         axis.text.x = element_text(angle=90))
 
-ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 8, height = 6,
+ggsave(plot = p1, filename = "../figs/estimates.png", device = "png",width = 9, height = 6,
 dpi = 600)
 ```
 
@@ -604,7 +604,7 @@ p1 <- ggplot(p,
         axis.text.x = element_text(size = 8, angle = 90))
 
 ggsave(filename = "../figs/sentscore_monthly.png", plot = p1,  width = 9,
-       height = 5)
+       height = 6)
 ```
 
 ![Monthly Sentiment Score](../figs/sentscore_monthly.png)
@@ -647,8 +647,8 @@ p1 <- ggplot(p,
        title = "",
        subtitle = "Numbers indicate the ") +
   theme(axis.text.y = element_text(size =8),
-        axis.text.x = element_text(size=6, angle = 90),
-        axis.title.x = element_text(size = 8))
+        axis.text.x = element_text(size=4, angle = 90),
+        axis.title.x = element_text(size = 5))
 
 ggsave(filename = "../figs/sentscore_site.png", plot = p1, width = 9,
        height = 5)
@@ -664,24 +664,23 @@ require(ggiraph)
 require(ggiraphExtra)
 ```
 
-```{r eval=FALSE, fig.height=10, fig.width=10, include=FALSE}
+```{r eval=FALSE, fig.height=8, fig.width=10, include=FALSE}
 sentDF.values %>%
-  group_by(site, topic_name) %>%
-  summarise(sentiment = mean(sentiment, na.rm=T)) %>%
-  spread(key=topic_name, value=sentiment) -> radar
-
-radar %>%
-  ggRadar(aes(color=site), 
-          rescale = F,
-          alpha = 0, legend.position = "right") +
-  labs(title = "Sentiment score Jun 2017-March 2018",
-       subtitle = "unweighted") +
-  guides(col = guide_legend(nrow = 1)) +
-  theme(legend.position = "bottom")
-```
-
-```{r eval=FALSE, include=FALSE}
-sentDF.values %>%
+  mutate(topic_name = ifelse(grepl("B90", topic_name),
+                             "B90/\nDie Grünen", topic_name),
+         topic_name = ifelse(grepl("17", topic_name),
+                             "17: Debates\nwithin SPD", topic_name),
+         topic_name = ifelse(grepl("13", topic_name),
+                             "13: A.Merkel,\nelection campaign", topic_name),
+         topic_name = ifelse(grepl("30", topic_name),
+                             "30: AfD,\nF.Petry & Meuthen", topic_name),
+         topic_name = ifelse(grepl("32", topic_name),
+                             "32: AfD,\nGauland & Weidel", topic_name),
+         topic_name = ifelse(grepl("37", topic_name),
+                             "37: AfD & DIE LINKE\nin parliament", topic_name),
+         topic_name = ifelse(grepl("20", topic_name),
+                             "20: AfD, right-wing\nradicalism", topic_name)
+         ) %>%
   group_by(site, topic_name) %>%
   summarise(sentiment = mean(sentiment, na.rm=T),
             obs = n()) %>%
@@ -697,9 +696,11 @@ p <- radar %>%
           alpha = 0) +
   labs(title = "Sentiment scores Jun 2017-March 2018",
        subtitle = "weighted") +
-  guides(col = guide_legend(nrow = 1)) +
-  theme(legend.position = "bottom",
-        axis.text = element_text(size = 8))
+  guides(col = guide_legend(ncol = 1)) +
+  theme(legend.position = "right",
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
 
 ggsave(filename = "../figs/sentscore_radar.png", 
        plot = p)
@@ -819,33 +820,6 @@ polls_monthly %>%
 
 Normalize topic-sentiment value 
 
-A)
-```{r fig.height=12, fig.width=10}
-### by time
-# group1 <- sentDF.values %>%
-#   group_by(yearmonth, topic_name, topic) %>%
-#   summarise(sentiment = mean(sentiment, na.rm=T),
-#             obs = n()) %>%
-#   ungroup() %>%
-#   left_join(., tally_month, by="yearmonth") %>%
-#   mutate(w = obs / total_obs,
-#          sentiment_w = sentiment * w,
-#          sentiment_n = normalize_data(sentiment_w))
-
-### by time and site
-# group2 <- sentDF.values %>%
-#   group_by(yearmonth, topic_name, topic, site) %>%
-#   summarise(sentiment = mean(sentiment, na.rm=T),
-#             obs = n()) %>%
-#   ungroup() %>%
-#   left_join(., tally_month_site, by=c("yearmonth","site")) %>%
-#   mutate(w = obs / total_obs,
-#          sentiment_w = sentiment * w,
-#          sentiment_n = normalize_data(sentiment_w))
-```
-
-B) Normalize each time series by its own. 
-
 ```{r}
 ### by time
 group1 <- sentDF.values %>%
@@ -943,6 +917,7 @@ ggsave(filename = "../figs/ccf.png", plot = p,
 ```
 
 ![Cross-correlation](../figs/ccf.png)
+
 ##### 3.1.2. By Media
 ```{r eval=FALSE, include=FALSE}
 for (i in unique(group2$site)) {
@@ -974,27 +949,29 @@ for (i in unique(group2$site)) {
 
 #### 3.2. Graphical analysis
 
+For each party, we plot the topics that most strongly correlate with the poll data. 
+
 ```{r}
-plot_Poll_Sent <- function(filters, party_str, color_str) {
+plot_Poll_Sent <- function(topics_number, party_str, color_str) {
   
   ### Plot 1  
   plot1 <- group1 %>%
-    filter(grepl(filters, topic_name))
+    filter(topic %in% topic_number)
   
   p1 <- ggplot() +
-    # geom_col(data=plot1, aes(yearmonth, sentiment_n,
-    #                          group = topic_name,
-    #                          fill = topic_name),
-    #          position = "dodge",
-    #          alpha = 0.5) +
-    # scale_fill_manual(values = col) +
+    geom_col(data=plot1, aes(yearmonth, sentiment_n,
+                             group = topic_name,
+                             fill = topic_name),
+             position = "dodge",
+             alpha = 0.5) +
+    scale_fill_manual(values = col) +
     
     geom_line(data=plot1, aes(yearmonth, 
                               sentiment_n,
                               group = topic_name,
                               color = topic_name),
               show.legend = F) +
-    #scale_color_manual(values = col) +
+    scale_color_manual(values = col) +
     guides(fill = guide_legend(ncol=3)) +
     
     # Add poll line
@@ -1013,7 +990,7 @@ plot_Poll_Sent <- function(filters, party_str, color_str) {
   
   ### Plot 2
   plot2 <- group2 %>%
-    filter(grepl(filters, topic_name))
+    filter(topic %in% topic_number)
   
   p2 <- ggplot() +
     # geom_col(data = plot2,
@@ -1023,7 +1000,6 @@ plot_Poll_Sent <- function(filters, party_str, color_str) {
     #          alpha = 0.5,
     #          position = "dodge") +
     # scale_fill_manual(values = col) +
-    # scale_color_manual(values = col) +
     
     geom_line(data = plot2,
               aes(yearmonth, sentiment_n,
@@ -1031,6 +1007,7 @@ plot_Poll_Sent <- function(filters, party_str, color_str) {
                   color = topic_name),
               show.legend = F) +
     facet_wrap(~site, ncol = 2) +
+    scale_color_manual(values = col) +
     
     # Add poll line
     geom_line(data = polls_monthly, 
@@ -1052,37 +1029,44 @@ plot_Poll_Sent <- function(filters, party_str, color_str) {
 
 ##### 3.2.1. CDU
 ```{r fig.height=12, fig.width=10}
-filters <- paste(":", sep="|")
+topic_number <- c(10,13,23,26)
 
 ### Plot 1  
-plot_Poll_Sent(filters, "Union", "black")
+plot_Poll_Sent(topic_number, "Union", "black")
 ```
 
 
 #### SPD
 ```{r fig.height=12, fig.width=10}
-filters <- paste("SPD","Great Coalition", sep="|")
+topic_number <- c(1,17,22)
 
-plot_Poll_Sent(filters, "SPD", "black")
+plot_Poll_Sent(topic_number, "SPD", "black")
 ```
 
 ##### 3.2.3. AfD
 ```{r fig.height=12, fig.width=10}
-filters <- paste("AfD", sep="|")
+topic_number <- c(17,22, 30)
 
-plot_Poll_Sent(filters, "AfD", "black")
+plot_Poll_Sent(topic_number, "AfD", "black")
 ```
 
 #### FDP
 ```{r fig.height=12, fig.width=10}
-filters <- paste("Jamaica", sep="|")
+topic_number <- c(23,26,27)
 
-plot_Poll_Sent(filters, "FDP", "black")
+plot_Poll_Sent(topic_number, "FDP", "black")
 ```
 
 #### Grüne
 ```{r fig.height=12, fig.width=10}
-filters <- paste("Grüne","Jamaica", sep="|")
+topic_number <- c(26,27,17)
 
-plot_Poll_Sent(filters, "Grüne", "black")
+plot_Poll_Sent(topic_number, "Grüne", "black")
+```
+
+#### DIE LINKE
+```{r fig.height=12, fig.width=10}
+topic_number <- c(1,17,22)
+
+plot_Poll_Sent(topic_number, "Linke", "black")
 ```
