@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  19 MAR 2018 17:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  19 MAR 2018 20:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1228,11 +1228,7 @@ File: ../figs/topic_proportion.png Graphic file (type png)
  <use ../figs/topic_proportion.png>
 Package pdftex.def Info: ../figs/topic_proportion.png used on input line 225.
 (pdftex.def)             Requested size: 390.0pt x 445.6948pt.
- [13]
-
-LaTeX Warning: Reference `fig_plotquote' on page 14 undefined on input line 230.
-
-[14 <../figs/topic_proportion.png>] [15] <../figs/estimates.png, id=309, 4818.0pt x 3613.5pt>
+ [13] [14 <../figs/topic_proportion.png>] [15] <../figs/estimates.png, id=309, 4818.0pt x 3613.5pt>
 File: ../figs/estimates.png Graphic file (type png)
  <use ../figs/estimates.png>
 Package pdftex.def Info: ../figs/estimates.png used on input line 260.
@@ -1265,94 +1261,90 @@ Package pdftex.def Info: ../figs/ccf.png used on input line 332.
  [24] [25 <../figs/ccf.png>] <../figs/plotquote1.png, id=396, 301.125pt x 702.625pt>
 File: ../figs/plotquote1.png Graphic file (type png)
  <use ../figs/plotquote1.png>
-Package pdftex.def Info: ../figs/plotquote1.png used on input line 347.
+Package pdftex.def Info: ../figs/plotquote1.png used on input line 350.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [26] <../figs/plotquote2.png, id=401, 301.125pt x 702.625pt>
+ <../figs/plotquote2.png, id=397, 301.125pt x 702.625pt>
 File: ../figs/plotquote2.png Graphic file (type png)
  <use ../figs/plotquote2.png>
-Package pdftex.def Info: ../figs/plotquote2.png used on input line 352.
+Package pdftex.def Info: ../figs/plotquote2.png used on input line 353.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- <../figs/plotquote4.png, id=402, 301.125pt x 702.625pt>
+ [26] <../figs/plotquote4.png, id=402, 301.125pt x 702.625pt>
 File: ../figs/plotquote4.png Graphic file (type png)
  <use ../figs/plotquote4.png>
-Package pdftex.def Info: ../figs/plotquote4.png used on input line 357.
+Package pdftex.def Info: ../figs/plotquote4.png used on input line 362.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [27 <../figs/plotquote1.png>] [28 <../figs/plotquote2.png>] <../figs/plotquote10.png, id=416, 301.125pt x 702.625pt>
+ <../figs/plotquote10.png, id=403, 301.125pt x 702.625pt>
 File: ../figs/plotquote10.png Graphic file (type png)
  <use ../figs/plotquote10.png>
-Package pdftex.def Info: ../figs/plotquote10.png used on input line 363.
+Package pdftex.def Info: ../figs/plotquote10.png used on input line 365.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [29 <../figs/plotquote4.png>] <../figs/plotquote13.png, id=423, 301.125pt x 702.625pt>
+ [27 <../figs/plotquote1.png> <../figs/plotquote2.png>] <../figs/plotquote13.png, id=412, 301.125pt x 702.625pt>
 File: ../figs/plotquote13.png Graphic file (type png)
  <use ../figs/plotquote13.png>
-Package pdftex.def Info: ../figs/plotquote13.png used on input line 369.
+Package pdftex.def Info: ../figs/plotquote13.png used on input line 374.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- <../figs/plotquote17.png, id=424, 301.125pt x 702.625pt>
+ <../figs/plotquote17.png, id=413, 301.125pt x 702.625pt>
 File: ../figs/plotquote17.png Graphic file (type png)
  <use ../figs/plotquote17.png>
-Package pdftex.def Info: ../figs/plotquote17.png used on input line 374.
+Package pdftex.def Info: ../figs/plotquote17.png used on input line 377.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [30 <../figs/plotquote10.png>] [31 <../figs/plotquote13.png>] <../figs/plotquote20.png, id=438, 301.125pt x 702.625pt>
+ [28 <../figs/plotquote4.png> <../figs/plotquote10.png>] <../figs/plotquote20.png, id=421, 301.125pt x 702.625pt>
 File: ../figs/plotquote20.png Graphic file (type png)
  <use ../figs/plotquote20.png>
-Package pdftex.def Info: ../figs/plotquote20.png used on input line 380.
+Package pdftex.def Info: ../figs/plotquote20.png used on input line 386.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- <../figs/plotquote23.png, id=439, 301.125pt x 702.625pt>
+ <../figs/plotquote23.png, id=422, 301.125pt x 702.625pt>
 File: ../figs/plotquote23.png Graphic file (type png)
  <use ../figs/plotquote23.png>
-Package pdftex.def Info: ../figs/plotquote23.png used on input line 385.
+Package pdftex.def Info: ../figs/plotquote23.png used on input line 389.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [32 <../figs/plotquote17.png>] <../figs/plotquote26.png, id=446, 301.125pt x 702.625pt>
+ [29 <../figs/plotquote13.png> <../figs/plotquote17.png>] <../figs/plotquote26.png, id=430, 301.125pt x 702.625pt>
 File: ../figs/plotquote26.png Graphic file (type png)
  <use ../figs/plotquote26.png>
-Package pdftex.def Info: ../figs/plotquote26.png used on input line 390.
+Package pdftex.def Info: ../figs/plotquote26.png used on input line 398.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [33 <../figs/plotquote20.png>] <../figs/plotquote27.png, id=453, 301.125pt x 702.625pt>
+ <../figs/plotquote27.png, id=431, 301.125pt x 702.625pt>
 File: ../figs/plotquote27.png Graphic file (type png)
  <use ../figs/plotquote27.png>
-Package pdftex.def Info: ../figs/plotquote27.png used on input line 395.
+Package pdftex.def Info: ../figs/plotquote27.png used on input line 401.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [34 <../figs/plotquote23.png>] <../figs/plotquote30.png, id=460, 301.125pt x 702.625pt>
+ [30 <../figs/plotquote20.png> <../figs/plotquote23.png>] <../figs/plotquote30.png, id=440, 301.125pt x 702.625pt>
 File: ../figs/plotquote30.png Graphic file (type png)
  <use ../figs/plotquote30.png>
-Package pdftex.def Info: ../figs/plotquote30.png used on input line 400.
+Package pdftex.def Info: ../figs/plotquote30.png used on input line 410.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [35 <../figs/plotquote26.png>] <../figs/plotquote32.png, id=468, 301.125pt x 702.625pt>
+ <../figs/plotquote32.png, id=441, 301.125pt x 702.625pt>
 File: ../figs/plotquote32.png Graphic file (type png)
  <use ../figs/plotquote32.png>
-Package pdftex.def Info: ../figs/plotquote32.png used on input line 405.
+Package pdftex.def Info: ../figs/plotquote32.png used on input line 413.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [36 <../figs/plotquote27.png>] <../figs/plotquote37.png, id=476, 301.125pt x 702.625pt>
+ [31 <../figs/plotquote26.png> <../figs/plotquote27.png>] <../figs/plotquote37.png, id=449, 301.125pt x 702.625pt>
 File: ../figs/plotquote37.png Graphic file (type png)
  <use ../figs/plotquote37.png>
-Package pdftex.def Info: ../figs/plotquote37.png used on input line 410.
+Package pdftex.def Info: ../figs/plotquote37.png used on input line 422.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [37 <../figs/plotquote30.png>] <../figs/plotquote46.png, id=483, 301.125pt x 702.625pt>
+ <../figs/plotquote46.png, id=450, 301.125pt x 702.625pt>
 File: ../figs/plotquote46.png Graphic file (type png)
  <use ../figs/plotquote46.png>
-Package pdftex.def Info: ../figs/plotquote46.png used on input line 415.
+Package pdftex.def Info: ../figs/plotquote46.png used on input line 425.
 (pdftex.def)             Requested size: 191.10214pt x 445.92604pt.
- [38 <../figs/plotquote32.png>] [39 <../figs/plotquote37.png>] [40 <../figs/plotquote46.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 421.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 421.
+ [32 <../figs/plotquote30.png> <../figs/plotquote32.png>] [33 <../figs/plotquote37.png> <../figs/plotquote46.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 432.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 432.
  (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 421.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 421.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 432.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 432.
 Package rerunfilecheck Info: File `structure.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
-
-
-LaTeX Warning: There were undefined references.
-
 Package logreq Info: Writing requests to 'structure.run.xml'.
 \openout1 = `structure.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35568 strings out of 493089
- 788622 string characters out of 6134842
+ 35553 strings out of 493089
+ 788439 string characters out of 6134842
  1295844 words of memory out of 5000000
- 38216 multiletter control sequences out of 15000+600000
+ 38215 multiletter control sequences out of 15000+600000
  27988 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,8n,92p,2324b,1534s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1447,10 +1439,10 @@ pdfTeX warning (dest): name{cite.0@vuma_arbeitsgemeinschaft_verbrauchs-_und_medi
 pdfTeX warning (dest): name{cite.0@cage_information_2017} has been referenced but does not exist, replaced by a fixed one
 
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (41 pages, 5384513 bytes).
+Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (34 pages, 5381586 bytes).
 PDF statistics:
- 603 PDF objects out of 1000 (max. 8388607)
- 487 compressed objects within 5 object streams
- 156 named destinations out of 1000 (max. 500000)
+ 562 PDF objects out of 1000 (max. 8388607)
+ 453 compressed objects within 5 object streams
+ 142 named destinations out of 1000 (max. 500000)
  229 words of extra memory for PDF output out of 10000 (max. 10000000)
 
