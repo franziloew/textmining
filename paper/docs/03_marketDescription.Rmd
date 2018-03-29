@@ -166,6 +166,36 @@ width = 6, height = 4,
 )
 ```
 
+## Unique User
+```{r}
+unique_user <- read_excel("paper/data/ddf_Februar_2018_Angebote_Ranking_Digital.xlsx", sheet = "export")
+```
+
+```{r}
+keepsite <- c("Tagesschau.de", "SPIEGEL ONLINE", "ZEIT ONLINE", 
+              "BILD", "DIE WELT", "FOCUS ONLINE", "stern.de")
+```
+
+```{r fig.height=12, fig.width=8}
+drop <- paste("ebay", "T Online", "WEB.DE", "chefkoch", "chip",
+              "gmx", "gutefrage", "Wetter", "mobile", "immo",
+              "computer","Telefonbuch","örtliche","auto","wunderweib",
+              "sport", "apotheke", "giga","kicker","xing","duden",
+              "bunte","upday","brigitte","meda","gala","kino","check",
+              "kauf","motor","doktor","feminin","koch","TV","Urbia","1&1",
+              "esse","gelbe","lecker", sep="|")
+
+keep <- paste("focus","bild","spiegel","welt","stern","süddeutsche","faz","funke","merkur","RP Online", "Express Online", "tz.de", "Huffpost","heise","Handelsblatt","Allgemeine","Tagesspiegel", sep="|")
+
+unique_user %>%
+  filter(grepl(keep, medium, ignore.case = T)) %>%
+  #dplyr::top_n(50) %>%
+  ggplot(aes(reorder(medium, UniqueUser_Mio), UniqueUser_Mio)) +
+  geom_col() +
+  coord_flip() +
+  labs(x="")
+```
+
 ## Traffic source
 
 ```{r}

@@ -25,6 +25,9 @@ library(data.table)
 library(stm)
 library(readxl)
 library(Matrix)
+library(psych)
+library(xtable)
+library(quanteda)
 
 library(igraph)
 library(corrplot)
@@ -81,6 +84,8 @@ I conduct a STM (Strucutral Topic Model) estimation on a sample of 14,936 online
 
 To discover the latent topics in the corpus, the structural topic modeling (STM) developed by [Roberts (2016)](https://scholar.princeton.edu/sites/default/files/bstewart/files/a_model_of_text_for_experimentation_in_the_social_sciences.pdf) is applied. The STM is an unsupervised machine learning approach that models topics as multinomial distributions of words and documents as multinomial distributions of topics, allowing to incorporate external variables that effect both, topical content and topical prevalence. I will included the news provider as a control for both the topical content and the topical prevalence. The number of topics is set to 50.
 
+# Data Exploratory Analysis 
+
 ## Distribution of articles
 
 The Figures below show the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th.  
@@ -128,6 +133,88 @@ dpi = 600
 ```
 
 ![plot1](../figs/timeline.png)
+
+## Word Count
+
+```{r}
+output <- describeBy(btw$text_length, btw$site, mat=T)%>%
+  select(group1, n, mean, sd, median, min, max, se)
+rownames(output) <- c()
+
+print(xtable(output, type="latex"), file="../writing/tables/wordcount.tex" )
+
+describeBy(btw$text_length, btw$site)
+```
+
+```{r}
+btw$text_length.cut <- cut(btw$text_length, c(seq(0,2000,1), Inf))
+btw <- btw %>% group_by(site) %>%
+  mutate(text_length.mean = mean(text_length)) %>%
+  ungroup()
+
+ggsave(plot = {
+  btw %>%
+    ggplot(aes(as.numeric(text_length.cut),
+                       group = site)) +
+    geom_histogram(aes(y=..density..), alpha=.8, fill = col[3]) + 
+    scale_x_continuous(labels = c(seq(0,1500,500), ">2000")) +
+    facet_wrap(~site, ncol = 4) +
+    labs(x = "Word count", color = "") +
+    theme(axis.title = element_text(size = 8),
+          axis.text = element_text(size = 6))
+  
+}, filename = "../figs/wordcount.png", width = 8, height = 4)
+```
+
+![Word Count](../figs/wordcount.png)
+
+## Wordclouds
+
+To summarise the content of the texts, wordclouds help to get a first impression, as they represent the number of words in a corpus. Intuitively the term frequency (tf) of a word is a measure of how important that word may be. The following word cloud is derived from the whole corpus. As can be seen, problems arise with high frequency words. For example "die", "der", and "in" are extremly common but unrelated to the quantity of interest. These terms, often called "stop words", are important to the grammatical structure of a text, but typically don't add any additional meaning and can therefore be neglected.  We use a pre-defined stop word list from the Snowball stemmer project\footnote{http://svn.tartarus.org/snowball/trunk/website/algorithms/*/stop.txt} together with a customized list of stop-words that are redundant superfluous or distorting. We also remove punctuation character (e.g. ., ,, !, ?, etc.) and all numbers from our corpus. 
+
+### Unprocessed Text
+```{r message=FALSE, warning=FALSE}
+all.corpus <- corpus(btw$text)
+df.corpus <- dfm(all.corpus, removePunct = TRUE, removeSymbols = T)
+```
+
+```{r message=FALSE, warning=FALSE}
+png("../figs/wordcloud.png")
+textplot_wordcloud(df.corpus, max.word=300)
+dev.off()
+```
+![Wordcloud 1](../figs/wordcloud.png)
+
+### Processed Text
+
+After completing this steps we were left with 68.576 unique terms in our vocabulary. The following wordclouds is derived from the corpus for each news provider. It becomes evident that these are texts discussing domestic policy issues. The SPD in particular seems to be higly frequent. However, at first glance, there are no obvious differences between the corpus of the different news provider. 
+
+```{r eval=FALSE, include=FALSE}
+wordclouds <- function(select_site) {
+  corp <- btw %>% filter(site %in% select_site)
+  corp <- corpus(corp$text_cleaned1)
+  corp <- dfm(corp)
+
+  textplot_wordcloud(corp, max.word=200)
+}
+```
+
+```{r eval=FALSE, include=FALSE}
+for (i in unique(btw$site)) {
+  png(paste0("../figs/wordcloud_",i,".png"))
+  wordclouds(i)
+  dev.off()
+}
+```
+
+<img src="../figs/wordcloud_Bild.de.png", width = "49%" title="Bild.de">
+<img src="../figs/wordcloud_DIE WELT.png", width = "49%" title="DIE WELT">
+<img src="../figs/wordcloud_FOCUS ONLINE.png", width = "49%" title="FOCUS ONLINE">
+<img src="../figs/wordcloud_SPIEGEL ONLINE.png", width = "49%" title="SPIEGEL ONLINE">
+<img src="../figs/wordcloud_stern.de.png", width = "49%" title="Stern.de">
+<img src="../figs/wordcloud_Tagesschau.de.png", width = "49%" title="Tagesschau.de">
+<img src="../figs/wordcloud_ZEIT ONLINE.png", width = "49%" title="ZEIT ONLINE">
+
 
 # Model Results
 
