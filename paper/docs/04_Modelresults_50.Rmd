@@ -88,7 +88,7 @@ To discover the latent topics in the corpus, the structural topic modeling (STM)
 
 ## Distribution of articles
 
-The Figures below show the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th.  
+The Figures below show the distribution of the number of articles from the respective news sources by date. There is a high peak around the federal elections on September, 24th and another one shortly after the failure of the Jamaica coalition talks on November, 19th (indicated by the red dotted lines). The Figure on the right shows, that DIE WELT published most articles on domestic policy, followed by stern.de and FOCUS ONLINE.
 
 ```{r message=FALSE, warning=FALSE}
 ggsave({
@@ -117,6 +117,8 @@ ggsave({
   geom_line(color=col[3]) +
   geom_vline(aes(xintercept=as.Date("2017-09-24")),
              linetype = 2, color=col[5]) +
+  geom_vline(aes(xintercept=as.Date("2017-11-19")),
+             linetype = 2, color=col[5]) +
   scale_color_manual(values = col) +
   labs(x="", y="number of articles",color="") +
   scale_x_date(breaks = date_breaks("1 month"), labels=date_format("%B", tz="CET")) +
@@ -135,6 +137,10 @@ dpi = 600
 ![plot1](../figs/timeline.png)
 
 ## Word Count
+
+Most of the articles have a word length between 200 and 1000 words (articles with less than 200 words were filtered out in advance, as these are mostly reader comments). The distribution at Bild.de, DIE WELT, FOCUS ONLINE and stern.de is left-skewed, whereby stern.de has comparatively many articles with a word length of over 2000. 
+
+The longest article at Tagesschau.de has 2006 words, nevertheless the median value is comparatively large (see the Table below). ZEIT ONLINE has the highest median value of 459 words. 
 
 ```{r}
 output <- describeBy(btw$text_length, btw$site, mat=T)%>%
@@ -156,7 +162,7 @@ ggsave(plot = {
   btw %>%
     ggplot(aes(as.numeric(text_length.cut),
                        group = site)) +
-    geom_histogram(aes(y=..density..), alpha=.8, fill = col[3]) + 
+    geom_histogram(alpha=.8, fill = col[3]) + 
     scale_x_continuous(labels = c(seq(0,1500,500), ">2000")) +
     facet_wrap(~site, ncol = 4) +
     labs(x = "Word count", color = "") +
@@ -170,7 +176,7 @@ ggsave(plot = {
 
 ## Wordclouds
 
-To summarise the content of the texts, wordclouds help to get a first impression, as they represent the number of words in a corpus. Intuitively the term frequency (tf) of a word is a measure of how important that word may be. The following word cloud is derived from the whole corpus. As can be seen, problems arise with high frequency words. For example "die", "der", and "in" are extremly common but unrelated to the quantity of interest. These terms, often called "stop words", are important to the grammatical structure of a text, but typically don't add any additional meaning and can therefore be neglected.  We use a pre-defined stop word list from the Snowball stemmer project\footnote{http://svn.tartarus.org/snowball/trunk/website/algorithms/*/stop.txt} together with a customized list of stop-words that are redundant superfluous or distorting. We also remove punctuation character (e.g. ., ,, !, ?, etc.) and all numbers from our corpus. 
+To summarise the content of the texts, wordclouds help to get a first impression, as they represent the number of words in a corpus. Intuitively the term frequency (tf) of a word is a measure of how important that word may be. The following word cloud is derived from the whole corpus. As can be seen, problems arise with high frequency words. For example "die", "der", and "in" are extremely common but unrelated to the quantity of interest. These terms, often called "stop words", are important to the grammatical structure of a text, but typically don't add any additional meaning and can therefore be neglected.  We use a pre-defined stop word list from the Snowball stemmer project\footnote{http://svn.tartarus.org/snowball/trunk/website/algorithms/*/stop.txt} together with a customized list of stop-words that are redundant or distorting. We also remove punctuation character (e.g. ., ,, !, ?, etc.) and all numbers from our corpus. 
 
 ### Unprocessed Text
 ```{r message=FALSE, warning=FALSE}
@@ -187,7 +193,7 @@ dev.off()
 
 ### Processed Text
 
-After completing this steps we were left with 68.576 unique terms in our vocabulary. The following wordclouds is derived from the corpus for each news provider. It becomes evident that these are texts discussing domestic policy issues. The SPD in particular seems to be higly frequent. However, at first glance, there are no obvious differences between the corpus of the different news provider. 
+After completing this steps we were left with 68.576 unique terms in our vocabulary. The following wordclouds are derived from the corpus for each news provider. It becomes evident that these are texts discussing domestic policy issues. The SPD in particular seems to be higly frequent. However, at first glance, there are no obvious differences between the corpus of the different news provider. 
 
 ```{r eval=FALSE, include=FALSE}
 wordclouds <- function(select_site) {

@@ -19,33 +19,6 @@
 
 \refsection{0}
   \sortlist{nyt}{nyt}
-    \entry{armstrong_competition_2006}{article}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=2e381f0784053652dae51c069503bf47}{Armstrong}{A\bibinitperiod}{Mark}{M\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{2e381f0784053652dae51c069503bf47}
-      \strng{fullhash}{2e381f0784053652dae51c069503bf47}
-      \field{sortinit}{A}
-      \field{sortinithash}{b685c7856330eaee22789815b49de9bb}
-      \field{labelyear}{2006}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{1756-2171}
-      \field{journaltitle}{The RAND Journal of Economics}
-      \field{number}{3}
-      \field{title}{Competition in two-sided markets}
-      \field{volume}{37}
-      \field{year}{2006}
-      \field{pages}{668\bibrangedash 691}
-      \range{pages}{24}
-      \verb{doi}
-      \verb 10.1111/j.1756-2171.2006.tb00037.x
-      \endverb
-      \verb{url}
-      \verb http://dx.doi.org/10.1111/j.1756-2171.2006.tb00037.x
-      \endverb
-    \endentry
     \entry{baturo_what_2017}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=70c1ec991aa14a790bc80151caff3e6c}{Baturo}{B\bibinitperiod}{Alexander}{A\bibinitperiod}{}{}{}{}}%
@@ -106,34 +79,6 @@
       \endverb
       \verb{url}
       \verb http://www.academia.edu/13430482/Text_mining_for_central_banks
-      \endverb
-    \endentry
-    \entry{blair_pricing_1993}{article}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=7854872177139f0509a9d3e27dfd41f8}{Blair}{B\bibinitperiod}{Roger\bibnamedelima D.}{R\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=4798a71fce939709323fa511b417902f}{Romano}{R\bibinitperiod}{Richard\bibnamedelima E.}{R\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{9ba8804b69f0a7325e3a28d42d0f59e4}
-      \strng{fullhash}{9ba8804b69f0a7325e3a28d42d0f59e4}
-      \field{sortinit}{B}
-      \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
-      \field{labelyear}{1993}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{0038-4038}
-      \field{journaltitle}{Southern Economic Journal}
-      \field{number}{4}
-      \field{title}{Pricing {Decisions} of the {Newspaper} {Monopolist}}
-      \field{volume}{59}
-      \field{year}{1993}
-      \field{pages}{721\bibrangedash 732}
-      \range{pages}{12}
-      \verb{doi}
-      \verb 10.2307/1059734
-      \endverb
-      \verb{url}
-      \verb http://www.jstor.org/stable/1059734
       \endverb
     \endentry
     \entry{blei_probabilistic_2012}{article}{}
@@ -285,66 +230,6 @@
       \verb Snapshot:/Users/Franzi/Zotero/storage/E5Z7FALC/Lire-L-information-a-tout-prix-de-Julia-Cage.html:text/html
       \endverb
     \endentry
-    \entry{caillaud_chicken_2003}{article}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=5fa3ef1e684c3fdaf8c579e50678a0d2}{Caillaud}{C\bibinitperiod}{Bernard}{B\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=87795c52871c3960a3458857421f7727}{Jullien}{J\bibinitperiod}{Bruno}{B\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{03008b6c501f96e495a8a0717e3e84b7}
-      \strng{fullhash}{03008b6c501f96e495a8a0717e3e84b7}
-      \field{sortinit}{C}
-      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
-      \field{labelyear}{2003}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{We analyze a model of imperfect price competition between intermediation service providers. We insist on features that are relevant for informational intermediation via the Internet: the presence of indirect network externalities, the possibility of using the nonexclusive services of several intermediaries, and the widespread practice of price discrimination based on users' identity and on usage. Efficient market structures emerge in equilibrium, as well as some specific form of inefficient structures. Intermediaries have incentives to propose non-exclusive services, as this moderates competition and allows them to exert market power. We analyze in detail the pricing and business strategies followed by intermediation services providers. Copyright 2003 by the RAND Corporation.}
-      \field{issn}{0741-6261}
-      \field{journaltitle}{RAND Journal of Economics}
-      \field{number}{2}
-      \field{shorttitle}{Chicken \& {Egg}}
-      \field{title}{Chicken \& {Egg}: {Competition} among {Intermediation} {Service} {Providers}}
-      \field{urlday}{18}
-      \field{urlmonth}{10}
-      \field{urlyear}{2016}
-      \field{volume}{34}
-      \field{year}{2003}
-      \field{pages}{309\bibrangedash 28}
-      \range{pages}{20}
-      \verb{file}
-      \verb RePEc Snapshot:/Users/Franzi/Zotero/storage/GD5R58G2/v_3a34_3ay_3a2003_3ai_3a2_3ap_3a309-28.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://econpapers.repec.org/article/rjerandje/v_3a34_3ay_3a2003_3ai_3a2_3ap_3a309-28.htm
-      \endverb
-    \endentry
-    \entry{corden_maximisation_1952}{article}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=f4dfd047460584ed73fec235d4922b16}{Corden}{C\bibinitperiod}{W.\bibnamedelimi M.}{W\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{f4dfd047460584ed73fec235d4922b16}
-      \strng{fullhash}{f4dfd047460584ed73fec235d4922b16}
-      \field{sortinit}{C}
-      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
-      \field{labelyear}{1952}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{0034-6527}
-      \field{journaltitle}{The Review of Economic Studies}
-      \field{number}{3}
-      \field{title}{The {Maximisation} of {Profit} by a {Newspaper}}
-      \field{volume}{20}
-      \field{year}{1952}
-      \field{pages}{181\bibrangedash 190}
-      \range{pages}{10}
-      \verb{doi}
-      \verb 10.2307/2295888
-      \endverb
-      \verb{url}
-      \verb http://www.jstor.org/stable/2295888
-      \endverb
-    \endentry
     \entry{ellman_what_2009}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=6006fd7bc066752b7c919011c3fca1fd}{Ellman}{E\bibinitperiod}{Matthew}{M\bibinitperiod}{}{}{}{}}%
@@ -422,98 +307,6 @@
       \endverb
       \verb{url}
       \verb http://www.pnas.org/content/101/suppl_1/5220
-      \endverb
-    \endentry
-    \entry{evans_empirical_2003}{article}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=8c243ec63eae723c8373f506fcffd3b7}{Evans}{E\bibinitperiod}{David\bibnamedelima S.}{D\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{8c243ec63eae723c8373f506fcffd3b7}
-      \strng{fullhash}{8c243ec63eae723c8373f506fcffd3b7}
-      \field{sortinit}{E}
-      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
-      \field{labelyear}{2003}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Multi-sided platform markets have two or more different groups of customers that businesses have to get and keep on board to succeed. These industries range from dating clubs (men and women), to video game consoles (game developers and users), to payment cards (cardholders and merchants), to operating system software (application developers and users). They include some of the most important industries in the economy. A survey of businesses in these industries shows that multi-sided platform businesses devise entry strategies to get multiple sides of the market on board and devise pricing, product, and other competitive strategies to keep multiple customer groups on a common platform that internalizes externalities across members of these groups.}
-      \field{issn}{1446-9022}
-      \field{journaltitle}{Review of Network Economics}
-      \field{number}{3}
-      \field{title}{Some {Empirical} {Aspects} of {Multi}-sided {Platform} {Industries}}
-      \field{volume}{2}
-      \field{year}{2003}
-      \verb{doi}
-      \verb 10.2202/1446-9022.1026
-      \endverb
-      \verb{file}
-      \verb Full Text PDF:/Users/Franzi/Zotero/storage/JXJD8ZCR/Evans - 2003 - Some Empirical Aspects of Multi-sided Platform Ind.pdf:application/pdf
-      \endverb
-      \verb{url}
-      \verb https://www.degruyter.com/view/j/rne.2003.2.issue-3/rne.2003.2.3.1026/rne.2003.2.3.1026.xml
-      \endverb
-    \endentry
-    \entry{evans_economics_2008}{article}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=8c243ec63eae723c8373f506fcffd3b7}{Evans}{E\bibinitperiod}{David\bibnamedelima S.}{D\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{8c243ec63eae723c8373f506fcffd3b7}
-      \strng{fullhash}{8c243ec63eae723c8373f506fcffd3b7}
-      \field{sortinit}{E}
-      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
-      \field{labelyear}{2008}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Internet-based technologies are revolutionizing the stodgy \$625 billion global advertising industry. There are a number of public policy issues to consider. Will a single ad platform emerge or will several remain viable? What are the consequences of alternative market structures for a web economy that is increasingly based on selling eyeballs to advertisers? This article describes the online advertising industry. The industry is populated by a number of multi-sided platforms that facilitate connecting advertisers to viewers. Search-based advertising platforms, the most developed of these, have interesting economic features that result from the combination of keyword bidding by advertisers and single-homing.}
-      \field{journaltitle}{Review of Network Economics}
-      \field{number}{3}
-      \field{title}{The {Economics} of the {Online} {Advertising} {Industry}}
-      \field{urlday}{11}
-      \field{urlmonth}{08}
-      \field{urlyear}{2016}
-      \field{volume}{7}
-      \field{year}{2008}
-      \field{pages}{1\bibrangedash 33}
-      \range{pages}{33}
-      \verb{file}
-      \verb RePEc Snapshot:/Users/Franzi/Zotero/storage/Z6B7DBRS/v7y2008i3n2.html:text/html
-      \endverb
-      \verb{url}
-      \verb https://ideas.repec.org/a/bpj/rneart/v7y2008i3n2.html
-      \endverb
-    \endentry
-    \entry{evans_industrial_2005}{report}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=8c243ec63eae723c8373f506fcffd3b7}{Evans}{E\bibinitperiod}{David\bibnamedelima S.}{D\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=4a248c42806779a485fb89901cb0d821}{Schmalensee}{S\bibinitperiod}{Richard}{R\bibinitperiod}{}{}{}{}}%
-      }
-      \list{institution}{1}{%
-        {National Bureau of Economic Research}%
-      }
-      \strng{namehash}{7dd0ebb121c5bf12bbd0a22d8722846f}
-      \strng{fullhash}{7dd0ebb121c5bf12bbd0a22d8722846f}
-      \field{sortinit}{E}
-      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
-      \field{labelyear}{2005}
-      \field{labelmonth}{09}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Two-sided platforms (2SPs) cater to two or more distinct groups of customers, facilitating value-creating interactions between them. The village market and the village matchmaker were 2SPs; eBay and Match.com are more recent examples. Other examples include payment card systems, magazines, shopping malls, and personal computer operating systems. Building on the seminal work of Rochet and Tirole (2003), a rapidly growing literature has illuminated the economic principles that apply to 2SPs generally. One key result is that 2SPs may find it profit-maximizing to charge prices for one customer group that are below marginal cost or even negative, and such skewed pricing pattern is prevalent, although not universal, in industries that appear to be based on 2SPs. Over the years, courts have also recognized that certain industries, notably payment card systems and newspapers, now understood to be based on 2SPs, are governed by unusual economic relationships. This chapter provides an introduction to the economics of 2SPs and its application to several competition policy issues.}
-      \field{month}{09}
-      \field{number}{11603}
-      \field{title}{The {Industrial} {Organization} of {Markets} with {Two}-{Sided} {Platforms}}
-      \field{type}{Working {Paper}}
-      \field{year}{2005}
-      \verb{doi}
-      \verb 10.3386/w11603
-      \endverb
-      \verb{file}
-      \verb NBER Full Text PDF:/Users/Franzi/Zotero/storage/EWJINGI8/Evans und Schmalensee - 2005 - The Industrial Organization of Markets with Two-Si.pdf:application/pdf
-      \endverb
-      \verb{url}
-      \verb http://www.nber.org/papers/w11603
       \endverb
     \endentry
     \entry{farrell_corporate_2016}{article}{}
@@ -756,39 +549,6 @@
       \range{pages}{31}
       \verb{file}
       \verb Text as Data\: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts | Brandon Stewart:/Users/Franzi/Zotero/storage/FF9QRDJ4/text-data-promise-and-pitfalls-automatic-content-analysis-methods-political.html:text/html
-      \endverb
-    \endentry
-    \entry{gustafsson_circulation_1978}{article}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=2386d5dbe8d606a16ab35b598d9e56c2}{Gustafsson}{G\bibinitperiod}{Karl\bibnamedelima Erik}{K\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{2386d5dbe8d606a16ab35b598d9e56c2}
-      \strng{fullhash}{2386d5dbe8d606a16ab35b598d9e56c2}
-      \field{sortinit}{G}
-      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
-      \field{labelyear}{1978}
-      \field{labelmonth}{01}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{The growth of oligopoly within the newspaper industry is a widespread phenomenon which has been examined by both researchers into the mass media and public enquiries into the press in a number of countries. Politicians recognise the development and want to modify the process of concentration, prevent newspaper closures, and even promote new ventures. Many western countries have taken measures to try to control forces bearing toward concentration in the newspaper industry. Such efforts, however, require a thorough knowledge of the market and its mechanism.}
-      \field{issn}{0358-5522}
-      \field{journaltitle}{Scandinavian Economic History Review}
-      \field{month}{01}
-      \field{number}{1}
-      \field{title}{The circulation spiral and the principle of household coverage}
-      \field{volume}{26}
-      \field{year}{1978}
-      \field{pages}{1\bibrangedash 14}
-      \range{pages}{14}
-      \verb{doi}
-      \verb 10.1080/03585522.1978.10407893
-      \endverb
-      \verb{file}
-      \verb Snapshot:/Users/Franzi/Zotero/storage/D8TJWJWK/03585522.1978.html:text/html
-      \endverb
-      \verb{url}
-      \verb https://doi.org/10.1080/03585522.1978.10407893
       \endverb
     \endentry
     \entry{hansen_shocking_2016}{article}{}
@@ -1284,46 +1044,6 @@
       \field{year}{2013}
       \verb{file}
       \verb The Structural Topic Model and Applied Social Science | Brandon Stewart:/Users/Franzi/Zotero/storage/69G2KU2F/structural-topic-model-and-applied-social-science.html:text/html
-      \endverb
-    \endentry
-    \entry{rochet_platform_2003}{article}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=c774e33c3153ef9db1c5d50a7f69799d}{Rochet}{R\bibinitperiod}{Jean-Charles}{J\bibinithyphendelim C\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=00e537376470e49a45c05eab98111caa}{Tirole}{T\bibinitperiod}{Jean}{J\bibinitperiod}{}{}{}{}}%
-      }
-      \list{language}{1}{%
-        {en}%
-      }
-      \strng{namehash}{c07e4308d805a2d585fcfabf9ba4ca1d}
-      \strng{fullhash}{c07e4308d805a2d585fcfabf9ba4ca1d}
-      \field{sortinit}{R}
-      \field{sortinithash}{c7387613477035a752d935acfc3e3ea2}
-      \field{labelyear}{2003}
-      \field{labelmonth}{06}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Many if not most markets with network externalities are two-sided. To succeed, platforms in industries such as software, portals and media, payment systems and the Internet, must “get both sides of the market on board.” Accordingly, platforms devote much attention to their business model, that is, to how they court each side while making money overall. This paper builds a model of platform competition with two-sided markets. It unveils the determinants of price allocation and end-user surplus for different governance structures (profit-maximizing platforms and not-for-profit joint undertakings), and compares the outcomes with those under an integrated monopolist and a Ramsey planner. (JEL: L5, L82, L86, L96)}
-      \field{issn}{1542-4774}
-      \field{journaltitle}{Journal of the European Economic Association}
-      \field{month}{06}
-      \field{number}{4}
-      \field{title}{Platform {Competition} in {Two}-{Sided} {Markets}}
-      \field{urlday}{04}
-      \field{urlmonth}{08}
-      \field{urlyear}{2016}
-      \field{volume}{1}
-      \field{year}{2003}
-      \field{pages}{990\bibrangedash 1029}
-      \range{pages}{40}
-      \verb{doi}
-      \verb 10.1162/154247603322493212
-      \endverb
-      \verb{file}
-      \verb Snapshot:/Users/Franzi/Zotero/storage/WJI5PS42/abstract.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://onlinelibrary.wiley.com/doi/10.1162/154247603322493212/abstract
       \endverb
     \endentry
     \entry{steiner_program_1952}{article}{}
