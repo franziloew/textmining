@@ -39,7 +39,7 @@
 \usepackage{eurosym}
 \usepackage{pdflscape}
 \usepackage{geometry}
-\geometry{a4paper,left=40mm,right=30mm, top=1cm, bottom=2cm} 
+\geometry{a4paper,left=40mm,right=30mm, top=2cm, bottom=2cm} 
 
 \addbibresource{Textmining.bib}
 
@@ -93,7 +93,7 @@ The articles analyzed in this paper cover a period from June 1, 2017 to March 1,
 
 On the right side of the political spectrum, AfD (alternative for Germany) managed to be elected to the German Bundestag for the first time in 2017. The political debate about the high refugee numbers of the past years brought the AfD a political upswing by taking up the dissatisfaction of parts of the population and using it to raise its own profile. Leading party members of the AfD as well as party supporters repeatedly accused the mass media in the course of the reporting on the federal elections to report unilaterally and to present the AfD intentionally badly.
 
-After the election, the formation of a government was difficult due to the large number of parties elected to the Bundestag and the considerable loss of votes by the major parties CDU/CSU and SPD. Since all parties rejected a coalition with the AfD, numerically only two coalitions with an absolute parliamentary majority were possible: a grand coalition ("GroKo") of CDU/CSU and SPD, and a Jamaica coalition (coalition of CDU/CSU, FDP (economic liberal party) and B90/Die Grünen (Bündnis 90/Die Grünen, green party)). The grand coalition was initially rejected by the SPD. The four-week exploratory talks on the possible formation of a Jamaica coalition officially failed on 19 November 2017 after the FDP announced its withdrawal from the negotiations. FDP party leader Christian Lindner said that there had been no trust between the parties during the negotiations. The main points of contention were climate and refugee policy. CDU and CSU regretted this result, while B90/Die Grünen sharply criticized the withdrawal of the Liberals. The then Green leader Cem Özdemir accused the FDP of lacking the will to reach an agreement.
+After the election, the formation of a government was difficult due to the large number of parties elected to the Bundestag and the considerable loss of votes by the major parties CDU/CSU and SPD. Since all parties rejected a coalition with the AfD, numerically only two coalitions with an absolute parliamentary majority were possible: a grand coalition ("GroKo" - from the German word Große Koalition) of CDU/CSU and SPD, and a Jamaica coalition (coalition of CDU/CSU, FDP (economic liberal party) and B90/Die Grünen (Bündnis 90/Die Grünen, green party)). The grand coalition was initially rejected by the SPD. The four-week exploratory talks on the possible formation of a Jamaica coalition officially failed on 19 November 2017 after the FDP announced its withdrawal from the negotiations. FDP party leader Christian Lindner said that there had been no trust between the parties during the negotiations. The main points of contention were climate and refugee policy. CDU and CSU regretted this result, while B90/Die Grünen sharply criticized the withdrawal of the Liberals. The then Green leader Cem Özdemir accused the FDP of lacking the will to reach an agreement.
 
 After the failure of the Jamaica coalition, a possible re-election or a minority government as alternatives were discussed in the media before the SPD decided to hold coalition talks with the CDU/CSU. This led to great resistance from the party base, which called for a party-internal vote on a grand coalition. After the party members voted in favor of the grand coalition, a government was formed 171 days after the federal elections. 
 
@@ -116,7 +116,7 @@ Figure \ref{fig_polls} shows that support for the two major popular parties has 
 
 I conduct the estimation on a sample of 14,937 online news articles from seven german news provider about domestic politics\footnote{Bild.de, DIE WELT, FOCUS ONLINE, SPIEGEL ONLINE, stern.de, ZEIT ONLINE, Tagesschau.de}.  The articles are dated from 01.06.2017 to 01.03.2018. I first extract all online articles using the the Webhose.io API.\footnote{For more information see https://docs.webhose.io/v1.0/docs/getting-started. The scraping code was written in Python and can be made available on request.} Then all articles from the section "domestic policy" are filtered by using the URL of an article. Overall, the selected news providers are among the top ten German online news providers - in terms of unique user\footnote{The term unique user refers to a number of different visitors to a website within a certain period of time. Multiple visits from the same user are only considered once.} - in the period under review, with only Tagesschau.de belonging to the public media. The reason for this is that the content structure of Tagesschau.de is most similar to that of the private providers. ZDF.de offers predominantly video content and DLF (Deutschlandfunk) website mainly offers audio content in the form of interviews, which makes it hard to include it in the model. 
 
- Figure \ref{fig_distr1} shows the distribution of the number of articles from the respective news sources by date.  There is a high peak around the federal elections on September, 24th and another one shortly after the failure of the Jamaica coalition talks on November, 19th (indicated by the red dotted lines). Figure \ref{fig_distr2} shows, that DIE WELT published most articles on domestic policy, followed by stern.de and FOCUS ONLINE.  
+ Figure \ref{fig_distr1} shows the distribution of the number of articles by date. There is a high peak around the federal elections on September, 24th and another one shortly after the failure of the Jamaica coalition talks on November, 19th (indicated by the red dotted lines). Figure \ref{fig_distr2} shows, that DIE WELT published most articles on domestic policy, followed by stern.de and FOCUS ONLINE.  
 
 \begin{figure}[H]
 	\caption{Article distribution...}
@@ -140,26 +140,30 @@ Looking at the histograms of the word counts (Figure \ref{fig_wordcount}), it be
 	\caption{Word Count}
 	\begin{center}
 		\includegraphics[width=\textwidth]{../figs/wordcount.png}
-		\caption{Word counts}
 		\label{fig_wordcount}
 	\end{center}
 \end{figure}
 
-The longest article at Tagesschau.de has 2006 words, nevertheless the median value is comparatively large (see the Table below). ZEIT ONLINE has the highest median value of 459 words. 
+The longest article at Tagesschau.de has 2006 words, nevertheless the median value is comparatively large (see Table \label{t_wordcloud}). ZEIT ONLINE has the highest median value of 459 words. 
 
-\include{tables/wordcount}
+\input{tables/wordcount}
 
-To summarize the content of the texts, wordclouds help to get a first impression, as the frequency of words in a corpus are represented by their size. Intuitively the term frequency (tf) of a word is a measure of how important that word may be. The word cloud in Figure \ref{fig_wordcloud1} is derived from all articles within the dataset. As can be seen, problems arise with words that are highly frequent. For example "die", "der", and "in" are extremely common but unrelated to the quantity of interest. These terms, often called "stop words", are important to the grammatical structure of a text, but typically don't add any additional meaning and can therefore be neglected. A common strategy to reduce the number of language elements is to pre-process the text by imposing some preliminary restrictions (stop-word removal and stemming) based on the nature of the data (twitter text, newspaper articles, speeches, etc.) \citep{gentzkow_text_2017}. In fact, to use text as data and reduce the dimensionality to avoid unnecessary computational complexity and overfitting, pre-processsing the text is a central task in text mining \citep{bholat_text_2015}.  
+To summarize the content of the texts, wordclouds help to get a first impression, as the frequency of words in a corpus are represented by their size. Intuitively the term frequency (tf) of a word is a measure of how important that word may be. The word cloud in Figure \ref{fig_wordcloud1} is derived from all articles within the dataset. As can be seen, problems arise with words that are highly frequent. For example "die" ("the"), "und" ("and"), and "in" ("in") are extremely common but unrelated to the quantity of interest. These terms, often called "stop words", are important to the grammatical structure of a text, but typically don't add any additional meaning and can therefore be neglected. A common strategy to reduce the number of language elements is to pre-process the text by imposing some preliminary restrictions (stop-word removal and stemming) based on the nature of the data (twitter text, newspaper articles, speeches, etc.) \citep{gentzkow_text_2017}. In fact, to use text as data and reduce the dimensionality to avoid unnecessary computational complexity and overfitting, pre-processsing the text is a central task in text mining \citep{bholat_text_2015}.  
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=\textwidth]{../figs/wordcloud.png}
+		\includegraphics[width=0.7\textwidth]{../figs/wordcloud.png}
 		\caption{Word Cloud (whole corpus)}
 		\label{fig_wordcloud1}
 	\end{center}
 \end{figure}
 
-Stemming is a process by which different morphological variants of a word are traced back to their common root. For example, ‘voting’ and ‘vote’ would be treated as two instances of the same token after the stemming process. There are many different techniques for the stemming process. I use the widely used Porter-Stemmer algorithm, which is based on a set of shortening rules that are applied to a word until it has a minimum number of syllables.\footnote{https://tartarus.org/martin/PorterStemmer/} To remove distorting words, the pre-defined stop word list from the Snowball project\footnote{http://snowball.tartarus.org/algorithms/german/stop.txt} together with a customized list of stop-words is used. Additionally punctuation character (e.g. ., ,, !, ?, etc.) and all numbers are removed from our corpus. After completing this steps we were left with 68.576 unique terms in our vocabulary. The following wordclouds are derived from the corpus for each news provider. It becomes evident that these are texts discussing domestic policy issues. The SPD in particular seems to be highly frequent. However, at first glance, there are no obvious differences between the corpus of the different news provider.  
+Stemming is a process by which different morphological variants of a word are traced back to their common root. For example, "voting" and "vote" would be treated as two instances of the same token after the stemming process. There are many different techniques for the stemming process. I apply the widely used Porter-Stemmer algorithm, which is based on a set of shortening rules that are applied to a word until it has a minimum number of syllables.\footnote{https://tartarus.org/martin/PorterStemmer/} To remove distorting words, the pre-defined stop word list from the Snowball project\footnote{http://snowball.tartarus.org/algorithms/german/stop.txt} together with a customized list of stop-words is used. Additionally punctuation character (e.g. ., ,, !, ?, etc.) and all numbers are removed from our corpus. After completing this steps we were left with 68.576 unique terms in our vocabulary. The following wordclouds are derived from the corpus for each news provider. It becomes evident that these are texts discussing domestic policy issues. The SPD in particular seems to be highly frequent. However, at first glance, there are no obvious differences between the corpus of the different news provider.  
+
+% --------------------
+% Document-term-matrix
+% --------------------
+To use the data for statistical analysis, the next step is to divide the whole corpus into individual documents and to represent these documents as a finite list of unique terms. In this setting, each news article represents a document $d$, whereby each of these documents can be assigned to a news website. Next, for each document $d \in \lbrace 1,...,D \rbrace$ the number of occurrences of term $v$ in document $d$ is computed, to obtain the count $x_{d,v}$, where each unique term in the corpus is indexed by some $v \in \lbrace 1,...,V \rbrace$ where $V$ is the number of unique terms. The $D$ x $V$ matrix $\boldsymbol{X}$ of all such counts is called the document-term matrix. This representation is often referred to as the bag of words model, since the order in which words are used within a document is disregarded. The sum of all documents forms what is called the corpus.
 
 \begin{figure}[H]
 	\caption{Word Clouds}
@@ -194,28 +198,26 @@ Stemming is a process by which different morphological variants of a word are tr
 		\end{subfigure}
 	\end{center}
 \end{figure}
-
-% --------------------
-% Document-term-matrix
-% --------------------
-To use the data for statistical analysis, the next step is to divide the whole corpus into individual documents and to represent these documents as a finite list of unique terms. In this setting, each news article represents a document $d$, whereby each of these documents can be assigned to a news website. Next, for each document $d \in \lbrace 1,...,D \rbrace$ the number of occurrences of term $v$ in document $d$ is computed, to obtain the count $x_{d,v}$.\footnote{Each unique term in the corpus is indexed by some $v \in \lbrace 1,...,V \rbrace$ where $V$ is the number of unique terms.} The $D$ x $V$ matrix $\boldsymbol{X}$ of all such counts is called the document-term matrix. This representation is often referred to as the bag of words model, since the order in which words are used within a document is disregarded. The sum of all documents forms what is called the corpus. 
+ 
 % ----------------------
 % Structural topic Model
 % ----------------------
 \section{The structural topic model}\label{ch_model}
 % Kapitel mehr mit eigenen Worten beschreiben. 
 
-To find out the latent structure of each document, a Structural topic model (STM) is estimated. In general, topic models formalize the idea that documents are formed by hidden variables (topics) that generate correlations among observed terms. They belong to the group of unsupervised generative models, meaning that the true attributes (topics) cannot be observed. One crucial assumption to be made for such models is the number of topics that occur over the entire corpus ($K$). Each individual topic potentially contains all of the unique terms within the vocabulary $V$ with different probability. Therefore, each topic $k$ can be represented as a probability vector $\beta_k$ over all unique terms $V$. Simultaneously, each individual document $d$ in the corpus can be represented as a probability distribution $\theta_d$ over the $K$ topics. To generate each individual word $w_{d,n}$ in a document $d$ for the $n^{th}$ word-position, (1) a topic allocation $z_{d,n}$ is drawn from the topic distribution for that document $\theta_d$. (2) Then, a word is drawn from the term distribution for the selected topic $\beta_{z_{d,n}}$.
+To find out the latent structure of each document, a Structural topic model (STM) is estimated. In general, topic models formalize the idea that documents are formed by hidden variables (topics) that generate correlations among observed terms. They belong to the group of unsupervised generative models, meaning that the true attributes (topics) cannot be observed. One crucial assumption to be made for such models is the number of topics that occur over the entire corpus ($K$). 
 
-The STM developed by \citet{roberts_model_2016} is a recent extension of the standard topic modeling technique, labeled as "latent Dirichlet allocation" (LDA), which refers to the Bayesian model in \citet{blei_latent_2003} that treats each word in a topic and each topic in a document as generated from a Dirichlet - distributed prior.\footnote{See also \citet{griffiths_probabilistic_2002}, \citet{griffiths_finding_2004} and \citet{hofmann_probabilistic_1999}. \citet{pritchard_inference_2000} introduced the same model in genetics for factorizing gene expression as a function of latent populations.} Since its introduction into text analysis, LDA has become hugely popular and especially useful in political science.\footnote{see \citet{blei_probabilistic_2012}, \citet{grimmer_text_2013} and \citet{wiedmann_text_2016} for an overview in social science and \citet{gentzkow_text_2017} give an overview of text mining applications in economics.} \citet{wiedmann_text_2016} uses topic model methods on large amounts of news articles from two german newspapers published between 1959 and 2011, to reveal how democratic demarcation was performed in Germany over the past six decades. \citet{paul_cross-collection_2017} compares editorial differences between media sources, using cross-collection latent Dirichlet allocation (ccLDA), an LDA-based approach that incorporates differences in document metadata. They use a dataset of 623 news articles from August 2008 from two American media outlets - msnbc.com and foxnews.com - to compare how they discuss topics. Reviewing the top words of the word-topic distribution, they find some content differences between the two. 
+Each individual topic potentially contains all of the unique terms within the vocabulary $V$ with different probability. Therefore, each topic $k$ can be represented as a probability vector $\phi_k$ over all unique terms $V$. Simultaneously, each individual document $d$ in the corpus can be represented as a probability distribution $\theta_d$ over the $K$ topics. To generate each individual word $w_{d,n}$ in a document $d$ for the $n^{th}$ word-position, a topic allocation $z_{d,n}$ is drawn from the topic distribution for that document $\theta_d$. Then, a word is drawn from the term distribution for the selected topic $\phi_{z_{d,n}}$.
 
-The STM allows to incorporate document specific covariates (e.g. the author or date of a document). The model has been applied to multiple academic fields: \citet{roberts_structural_2014} uses STM to analyze open-ended responses from surveys and experiments, \citet{farrell_corporate_2016} applies the model to scientific texts on climate change, revealing links between corporate funding and the framing of scientific studies. \citet{mishler_using_2015} show that "STM can be used to detect significant events such as the downing of Malaysia Air Flight 17" when applied to twitter data. Another study shows how STM can be used to explore the main international development topics of countries’ annual statements in the UN General Debate and examine the country-specific drivers of international development rhetoric \citep{baturo_what_2017}. \citet{mueller_reading_2016} use newspaper text to predict armed conflicts in different regions. They use the estimated topic shares in linear fixed effects regression to forecast conflict out-of-sample. \citet{roberts_navigating_2016} use STM to examine the role of partisanship in topical coverage using a corpus of 13,246 posts that were written for 6 political blogs during the course of the 2008 U.S. presidential election. With the aim of revealing the effect of partisan membership on topic prevalence, each blog is assigned to be either liberal or conservative. To explore the differences between the two, they look at the expected proportion of topic and examine the posts most associated with a respective topic. This approach is similar to \citet{roberts_model_2016}. They also use different measures of distance between the topic-word distributions of the same topic within different models.
+The STM developed by \citet{roberts_model_2016} is a recent extension of the standard topic modeling technique, labeled as "latent Dirichlet allocation" (LDA), which refers to the Bayesian model in \citet{blei_latent_2003} that treats each word in a topic and each topic in a document as generated from a Dirichlet - distributed prior.\footnote{See also \citet{griffiths_probabilistic_2002}, \citet{griffiths_finding_2004} and \citet{hofmann_probabilistic_1999}. \citet{pritchard_inference_2000} introduced the same model in genetics for factorizing gene expression as a function of latent populations.} Since its introduction into text analysis, LDA has become hugely popular and especially useful in political science.\footnote{see \citet{blei_probabilistic_2012}, \citet{grimmer_text_2013} and \citet{wiedmann_text_2016} for an overview in social science and \citet{gentzkow_text_2017} give an overview of text mining applications in economics.} \citet{wiedmann_text_2016} uses topic model methods on large amounts of news articles from two german newspapers published between 1959 and 2011, to reveal how democratic demarcation was performed in Germany over the past six decades. \citet{paul_cross-collection_2017} compares editorial differences between media sources, using cross-collection latent Dirichlet allocation (ccLDA), an LDA-based approach that incorporates differences in document metadata. They use a dataset of 623 news articles from August 2008 from two American media outlets - msnbc.com and foxnews.com - to compare how they discuss topics. Reviewing the top words of the word-topic distribution, they find some content differences between the two media sources under review. 
+
+The STM allows to incorporate document specific covariates (e.g. the author or date of a document). The model has been applied to multiple academic fields: \citet{roberts_structural_2014} uses STM to analyze open-ended responses from surveys and experiments, \citet{farrell_corporate_2016} applies the model to scientific texts on climate change, revealing links between corporate funding and the framing of scientific studies. \citet{mishler_using_2015} show that "STM can be used to detect significant events such as the downing of Malaysia Air Flight 17" when applied to twitter data. Another study shows how STM can be used to explore the main international development topics of countries’ annual statements in the UN General Debate and examine the country-specific drivers of international development rhetoric \citep{baturo_what_2017}. \citet{mueller_reading_2016} use newspaper text to predict armed conflicts in different regions. They use the estimated topic shares in linear fixed effects regression to forecast conflict out-of-sample. \citet{roberts_navigating_2016} use STM to examine the role of partisanship in topical coverage using a corpus of 13,246 posts that were written for 6 political blogs during the course of the 2008 U.S. presidential election. With the aim of revealing the effect of partisan membership on topic prevalence, each blog is assigned to be either liberal or conservative. To explore the differences between the two, they look at the expected proportion of topic and examine the posts most associated with a respective topic. This approach is similar to \citet{roberts_model_2016}. 
 
 % Topic Modeling
 % --------------
 \subsection{Generative Process of STM}\label{ch_generativeProcess}
 
- As mentioned above, the STM allows to incorporate observed document metadata which is able to affect both topical prevalence and topical content. These assumptions are reflected in the prior distributions. The following describes the generative process for filling the $n^{th}$ word-position in document $d$ in the case of the STM \citep{roberts_structural_2013}: As in the case of conventional models, (1) a specific topic $z_{dn}$ is assigned, according to the topic distribution for that document $\theta$ through the process:
+ As mentioned above, the STM allows to incorporate observed document metadata which is able to affect both topical prevalence and topical content. These assumptions are reflected in the prior distributions. The following describes the generative process for filling the $n^{th}$ word-position in document $d$ in the case of the STM \citep{roberts_structural_2013}: As in the case of conventional models, first a specific topic $z_{dn}$ is assigned, according to the topic distribution for that document $\theta$ through the process:
 
 \begin{equation}
 	z_{dn}|\theta_d \sim \textrm{Multinomial}(\theta_d).
@@ -224,27 +226,33 @@ The STM allows to incorporate document specific covariates (e.g. the author or d
 To incorporate the covariate values for that document, a topic-prevalence vector $\theta_d$ is drawn from a logistic-normal distribution:
 
 \begin{equation}
-	\theta_d|x_{d\gamma},\Sigma \sim \textrm{LogisticNormal}(\mu = x_{d\gamma}\Sigma),
+	\theta_d|y_{d\gamma},\Sigma \sim \textrm{LogisticNormal}(\mu = y_{d\gamma}\Sigma),
 \end{equation}
 
-where $x_d\gamma$ lists the values of all metadata covariates for document $d$, where $\gamma$ relates these covariate values to the topic-prevalence. The structure of $\Sigma$ implies the possibility of correlations across documents in the topic-prevalence vector. 
+where $y_d\gamma$ lists the values of all metadata covariates for document $d$, where $\gamma$ relates these covariate values to the topic-prevalence. The structure of $\Sigma$ implies the possibility of correlations across documents in the topic-prevalence vector. 
 
-Then again, (2) conditional in the topic chosen ($z_{dn}$), a specific word $w_{dn}$, is chosen from the overall corpus vocabulary $V$, using the following process:
+Conditional in the topic chosen ($z_{dn}$), a specific word $w_{dn}$, is chosen from the overall corpus vocabulary $V$, using the following process:
 
 \begin{equation}
-	w_{dn}|z_{dn},\beta_{dkv} \sim \textrm{Multinomial}(\beta_{dk1},...,\beta_{dkV}),
+	w_{dn}|z_{dn},\phi_{dkv} \sim \textrm{Multinomial}(\phi_{dk1},...,\phi_{dkV}),
 \end{equation}
 
-where the word probability $\beta_{dkv}$ is parameterized in terms of log-transformed rate deviations from the rates of a corpus-wide background distribution $m_v$ \citep{roberts_structural_2013}. The log-transformed rate deviations can then be specified by a collection of parameters $\lbrace \boldsymbol{\kappa} \rbrace$, where $\kappa^{(t)}$ is a $K$-by-$V$ matrix containing the log-transformed rate deviations for each topic $k$ and term $v$, over the baseline log-transformed rate for term $v$. This matrix is the same for all $A$ levels of covariates. To put it differently, $\kappa^{(t)}$ indicates the importance of the term $v$ given topic $k$ regardless of the covariates. Similarly, $\kappa^{(c)}$ is a $A$-by-$V$ matrix, indicating the importance of the term $v$ given the covariate level $c$ regardless of the topic. Finally, $\kappa^{(i)}$ is a $A$-by-$K$-by-$V$ matrix, collecting the covariate-topic effects:
+where the word probability $\phi_{dkv}$ is parameterized in terms of log-transformed rate deviations from the rates of a corpus-wide background distribution $m_v$ \citep{roberts_structural_2013}. The log-transformed rate deviations can then be specified by a collection of parameters $\lbrace \boldsymbol{\kappa} \rbrace$, where $\kappa^{(t)}$ is a $K$-by-$V$ matrix containing the log-transformed rate deviations for each topic $k$ and term $v$, over the baseline log-transformed rate for term $v$. This matrix is the same for all $A$ levels of covariates. To put it differently, $\kappa^{(t)}$ indicates the importance of the term $v$ given topic $k$ regardless of the covariates. Similarly, $\kappa^{(c)}$ is a $A$-by-$V$ matrix, indicating the importance of the term $v$ given the covariate level $c$ regardless of the topic. Finally, $\kappa^{(i)}$ is a $A$-by-$K$-by-$V$ matrix, collecting the covariate-topic effects:
 
 \begin{equation}
-	\beta_{dkv}|z_{dn}=\frac{\textrm{exp}(m_v+\kappa^{(t)}_{kv},\kappa^{(c)}_{y_dv}+\kappa^{(i)}_{y_dkv})}{\sum_v \textrm{exp}(m_v+\kappa^{(t)}_{kv},\kappa^{(c)}_{y_dv}+\kappa^{(i)}_{y_dkv})}.
+	\phi_{dkv}|z_{dn}=\frac{\textrm{exp}(m_v+\kappa^{(t)}_{kv},\kappa^{(c)}_{y_dv}+\kappa^{(i)}_{y_dkv})}{\sum_v \textrm{exp}(m_v+\kappa^{(t)}_{kv},\kappa^{(c)}_{y_dv}+\kappa^{(i)}_{y_dkv})}.
 \end{equation}
 
 The STM maximizes the posterior likelihood that the observed data were generated by the above data-generating process using an iterative approximation-based variational expectation-maximization algorithm\footnote{A technical description of this maximization process can be found in \citet{roberts_model_2016}} available in R's stm package \citep{roberts_stm:_2016}. 
 
-This process generates two posterior distribution parameter: (1) $\beta$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary), where the entry $\beta_{kvc}$ can be interpreted as the probability of observing the $v$-th word in topic $k$ for the covariate level $c$. (2) $\theta$ is a $D$-by-$V$ matrix of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. These probability distributions are used to compare the content of the different news provider in section \ref{ch_empirical}.
+This process generates two posterior distribution parameter: 
 
+\begin{enumerate}
+	\item $\phi$ is a $K$-by-$V$ matrix (where $K=$ number of topics and $V=$ vocabulary), where the entry $\phi_{kvc}$ can be interpreted as the probability of observing the $v$-th word in topic $k$ for the covariate level $c$ (the news website). 
+	\item $\theta$ is a $D$-by-$V$ matrix (where $D=$ number of documents and $V=$ vocabulary) of the document-topic distributions, where the entry $\theta_{dk}$ can be interpreted as the proportion of words in document $d$ which arise from topic $k$, or rather as the probability that document $d$ deals about topic $k$. 
+\end{enumerate}
+
+In Section \ref{subsection_topic} $\theta$ is used to estimate the conditional expectation of topic prevalence for given document characteristics. To calculate the sentiment value, in Section \ref{subsection_tone} each document $d$ is assigned to the topic with the highest probability ($\max (\theta_{k})$ for each document $d$).
 
 % ----------------------
 % Model Selection
@@ -253,7 +261,7 @@ This process generates two posterior distribution parameter: (1) $\beta$ is a $K
 
 Inference of mixed-membership models, such as the one applied in this paper, has been a thread of research in applied statistics in the past few years \citep{blei_latent_2003} \citep{erosheva_mixed-membership_2004} \citep{braun_variational_2010}. Topic models are usually imprecise as the function to be optimized has multiple modes, such that the model results can be sensitive to the starting values (e.g. the number of topics). Since an ex ante valuation of a model is hardly possible, I compute a variety of different models and compare their posterior probability. This enables me to check how results vary for different model solution \citep{roberts_navigating_2016}. I then cross-checked some subset of assigned topic distributions to evaluate whether the estimates align with the concept of interest \citep{gentzkow_text_2017}. These manual audits are applied together with numeric optimization based on the topic coherence measure suggested by \citet{mimno_optimizing_2011}. 
 
-This process revealed that a model with 50 topics best reflects the structure in the corpus. Furthermore, the media outlet of the article is used as covariates in the topic prevalence and topical content. In other words, the corresponding newswire of an article influences the probability distribution of topics and how the topics are discussed. 
+This process revealed that a model with 50 topics best reflects the structure in the corpus. Furthermore, the news website of the article is used as covariates in the topic prevalence and the topical content. In other words, the corresponding news website of an article influences the probability distribution of topics and how the topics are discussed. 
 
 % ----------------------
 % Model Results
@@ -261,13 +269,13 @@ This process revealed that a model with 50 topics best reflects the structure in
 \section{Empirical Evaluation}\label{ch_empirical}
 % Besser strukturieren. Tabellen mit Ergebnissen zeigen (nicht nur Abbildungen).
 
-This section summarizes the results of the STM. Subsequently "the two T's" (Topic and Tone) of the corpus are analyzed according to the following approaches: (1) The document-topic probability $\theta$ is used, to estimate the conditional expectation of topic prevalence for given document characteristics (See section \ref{subsection_topic}). A set of topics is selected, that most distinctly discuss a particular party or a topic related to the federal elections. (2) Articles that are assigned to the selected topics with the highest probability are then used to conduct a dictionary-based analysis (see section \ref{subsection_tone}). In order to check whether the sentiment value of certain topics are correlated with the results of voting preferences, the cross-correlation function between these two concepts is calculated in \ref{ch_correlation}.
+This section summarizes the results of the STM. Subsequently "the two T's" (Topic and Tone) of the corpus are analyzed according to the following approaches: (1) The document-topic probability $\theta_{dk}$ is used, to estimate the conditional expectation of topic prevalence for given document characteristics (See section \ref{subsection_topic}). A set of topics is selected, that most distinctly discuss a particular party or a topic related to the federal elections. (2) Articles that are assigned to the selected topics with the highest probability are then used to conduct a dictionary-based analysis (see section \ref{subsection_tone}). In order to check whether the sentiment value of certain topics are correlated with the results of voting preferences, the cross-correlation function between these two concepts is calculated in \ref{ch_correlation}.
 
 \subsection{Topic}\label{subsection_topic}
 
 In order to get an initial overview of the results, Figure \ref{fig_topic_proportion} displays the topics ordered by their expected frequency across the corpus. To assign a label to each topic, I looked at the most frequent words in that topic and the most representative articles \citep{roberts_model_2016}. 
 
-It becomes apparent that the topic (topic 4) about the coalition talks between CDU/CSU and SPD - the "Grand coalition" or "GroKo" (from the German word Große Koalition) - is the topic with the highest expected frequency in the whole corpus, followed by the topic about the so-called Jamaica parties (CDU/CSU, FDP and B90/Die Grünen), which was the first alternative to be negotiated directly after the elections. The Figure also shows, that topics related to refugees in Germany (topics 12 and 42) are quite frequent within the corpus. 
+It becomes apparent that topic 4 about the coalition talks between CDU/CSU and SPD - the "Grand coalition" or "GroKo" - is the topic with the highest expected frequency in the whole corpus, followed by the topic about the so-called Jamaica parties (CDU/CSU, FDP and B90/Die Grünen), which was the first alternative to be negotiated directly after the elections. The Figure also shows, that topics related to refugees in Germany (topics 12 and 42) are quite frequent within the corpus. 
 
 \begin{figure}[H]
 	\begin{center}
@@ -277,31 +285,33 @@ It becomes apparent that the topic (topic 4) about the coalition talks between C
 \end{center}
 \end{figure}
 
-We will select the following topics from the whole set (topics are ordered regarding their overall corpus frequency). The most frequent words of these topics can be seen in the appendix:
+We will select the following topics from the whole set. The most frequent words of these topics at each news website can be seen in Appendix \ref{apx_tf}: 
 
 \begin{enumerate}
-	\item Topic 4: Covering the debates about the great coalition talks, mainly after the failure of the Jamaica coalition talks. 
-	\item Topic 27: Covering the Jamaica coalition talks, mainly focusing on the smaller players Bündnis B90/Die Grünen and FDP.
-	\item Topic 23: About issues regarding the CSU, mainly about the competition between Horst Seehofer and Markus Söder and the negotiations with the CDU.
-	\item Topic 37: Covering debates of AfD and DIE LINKE in the parliament (Deutscher Bundestag).
-	\item Topic 17: Covering votes within the SPD, mainly regarding the vote about a possible coalition with CDU/CSU ("GroKo")
-	\item Topic 26: Discussing the failure of the Jamaica coalition talks and the two possible alternatives: Reelections or a great coalition.
-	\item Topic 13: About Angela Merkel, mainly right before the election.
-	\item Topic 1: About the SPD, mainly about the election campaign and Martin Schulz as candidate for the chancellor.
-	\item Topic 32: About the AfD, mainly about Alice Weidel and Alexander Gauland, voted as parliamentary party leaders after the resignation of Frauke Petry.
-	\item Topic 30: About the AfD, mainly about the resignation of Frauke Petry and Jörg Meuthen.
+	\item Topic 1: About the SPD, mainly about the election campaign and Martin Schulz as candidate for the chancellor.	
 	\item Topic 2: About B90/Die Grünen, mainly covering issues regarding the party's personell debates.
-	\item Topic 22: About SPD, mainly covering issues regarding the party's personell debates
+	\item Topic 4: Covering the debates about the great coalition talks, mainly after the failure of the Jamaica coalition talks.
+	\item Topic 13: About Angela Merkel, mainly right before the election. 
+	\item Topic 17: Covering votes within the SPD, mainly regarding the vote about a possible coalition with CDU/CSU ("GroKo").	
 	\item Topic 20: About the AfD, mainly about their relation to right-wing extremist groups.
+	\item Topic 22: About SPD, mainly covering issues regarding the party's personell debates
+	\item Topic 23: About issues regarding the CSU, mainly about the competition between Horst Seehofer and Markus Söder and the negotiations with the CDU.
+	\item Topic 26: Discussing the failure of the Jamaica coalition talks and the two possible alternatives: Reelections or a great coalition.
+	\item Topic 27: Covering the Jamaica coalition talks, mainly focusing on the smaller players Bündnis B90/Die Grünen and FDP.	
+	\item Topic 30: About the AfD, mainly about the resignation of Frauke Petry and Jörg Meuthen.
+	\item Topic 32: About the AfD, mainly about Alice Weidel and Alexander Gauland, voted as parliamentary party leaders after the resignation of Frauke Petry.
+	\item Topic 37: Covering debates of AfD and DIE LINKE in the parliament (Deutscher Bundestag).
 	\item Topic 46: Covering issues regarding the CDU.
 \end{enumerate}   
 
-Next, the differences of topic prevalence for given document characteristics can be estimated \citep{roberts_model_2016}. More specifically, I estimate a linear model, where the documents are observations, the dependent variable is the posterior probability of a topic and the covariates are the metadata of documents (see equation \ref{eq_1}). The stm-package provides a function that uses the method of composition to incorporate uncertainty in the dependent variable, drawing a set of topic proportions from the variational posterior repeated times and compute the coefficients as the average over all results \citep{roberts_stm:_2016}.
-% Letzten satz umschreiben! hört sich sonst so an als würde ich nicht wissen, was die macht. 
-% Formel erklären! 
+Next, the differences of topic prevalence for given document characteristics can be estimated \citep{roberts_model_2016}. For each topic $k$ a linear model is estimated, where the documents $d$ are observations, the dependent variable is the posterior probability of that topic ($\theta_{d}$) and the covariates are dummy variables that are 1 if the document was published by the respective website and 0 otherwise (see equation \ref{eq_1}). As the dependent variable is a vector containing proportions that sum up to 1, the QR decomposition of the model is computed prior to the estimation of the coefficients. To incorporate uncertainty in the dependent variable, a set of topic proportions are drawn from the variational posterior (the unnormalized topic proportions) repeated times. Then, the coefficients are computed as the average over all results \citep{roberts_stm:_2016}.
 
 \begin{equation}\label{eq_1}
-	\theta_d=\alpha+\beta x_{newswire}+\epsilon
+\begin{split}
+	\theta_{d}=\beta_0+\beta_1 x_{\text{FOCUS ONLINE,d}}+\beta_2 x_{\text{SPIEGEL ONLINE,d}}+\\
+	\beta_3 x_{\text{stern.de,d}}+\beta_4 x_{\text{Tagesschau.de,d}}+\beta_5 x_{\text{DIE WELT,d}}+\\
+	\beta_6 x_{\text{ZEIT ONLINE,d}}+\epsilon
+\end{split}
 \end{equation}
 
 Figure \ref{fig_estimateEffects} shows the regression results for the above selected topics. The coefficients indicate the deviation from the base value of Bild.de. Starting from above it becomes apparent that the topic prevalence of topic 46 (regarding the CDU) is significantly less for Tagesschau.de and Stern.de. The other media do not show any significant difference to Bild.de for this topic. The opposite is true for topic 37: With the exception of Stern.de and DIE WELT, topic prevalence for this topic is significantly higher for all media than for Bild.de. With the following two topics on AfD it is striking that the topic prevalence at Tagesschau.de is significantly lower compared to Bild.de. The topics concerning the Jamaican coalition (topic 27) and the failure (topic 26) seem to be discussed most likely at Bild.de. The case is different for the CSU issue (Topic 23), where SPIEGEL ONLINE has the highest probability. The same applies to the topic related to the personnel debates of the SPD (22). However, Bild.de has the highest topic prevalence for the topic related to votes within the SPD, especially the vote on the grand coalition. The same applies to the topic regarding the SPD in general and Martin Schulz in particular (1). Overall, topics concerning the SPD seem to be more frequent at Bild.de than in the other media. Moreover, the distribution of topics at FOCUS ONLINE seems to be the most similar to that of Bild.de, while the biggest differences exist between Bild.de and Tagesschau.de. 
@@ -396,6 +406,7 @@ The purpose of this paper was to examine (1) whether the political reporting of 
 
 \section*{Appendix}
 
+\subsection{Most frequent words}\label{apx_tf}
 % 1, 2
 \begin{figure}[H]
 	\begin{center}
