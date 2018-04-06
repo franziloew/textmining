@@ -715,7 +715,7 @@ p1 <- ggplot(p,
   theme(axis.text.y = element_text(size=8),
         axis.text.x = element_text(size = 8, angle = 90))
 
-ggsave(filename = "../figs/sentscore_monthly.png", plot = p1,  width = 9,
+ggsave(filename = "../figs/sentscore_monthly.png", plot = p1, 
        height = 6)
 ```
 
@@ -750,19 +750,18 @@ p1 <- ggplot(p,
            label = obs)) +
   geom_col(fill=col[3], alpha = 0.8) +
   #geom_line(color = col[2], size = 0.8) +
-  geom_text(size = 2) +
+  #geom_text(size = 2) +
   geom_hline(yintercept = 0, linetype = 2,
              color = "black") +
   coord_flip() +
   facet_wrap(~site, ncol = 7) +
   labs(x="", y="Sentiment Score (weighted)",
-       title = "",
-       subtitle = "Numbers indicate the ") +
+       title = "") +
   theme(axis.text.y = element_text(size =8),
         axis.text.x = element_text(size=4, angle = 90),
         axis.title.x = element_text(size = 5))
 
-ggsave(filename = "../figs/sentscore_site.png", plot = p1, width = 9,
+ggsave(filename = "../figs/sentscore_site.png", plot = p1, 
        height = 5)
 ```
 
@@ -975,60 +974,107 @@ group2 <- group2 %>%
 
 #### 3.1. Cross-Correlation
 
-```{r}
-plot_ccf <- function(corr1, corr2, ...){
-  
-  # Create empty matrix
-  corr <- expand.grid(names(corr1), names(corr2))
-  corr$correlation <- NA
-  
-  x <- 1
-  
-  for (corr1Id in 1:ncol(corr2)) {
-    c1 = corr2[,corr1Id]
-    #print(names(corr2[,corr1Id]))
-    
-    for(corr2Id in 1:ncol(corr1)) {
-      c2 = corr1[,corr2Id]
-      #print(names(corr1[,corr2Id]))
-      correlation = ccf(c1, c2, lag.max = 0,
-                      na.action = na.contiguous, plot=F)
-      corr[x,3] <- correlation$acf[1]
-    
-      x<- x+1
-    }
-  }
-      
-      ### Plot Corr ##
-      ggplot(corr, aes(Var2, Var1,
-                 fill = correlation,
-                 label = round(correlation,2))) +
-        geom_tile(color="white", ...) +
-        geom_text(size = 3.5, color = col[5]) +
-        viridis::scale_fill_viridis(limits=c(-1, 1)) +
-        labs(x="", y="", fill="",
-             title = "",
-             ...)
-}
-```
-
 ##### 3.1.1. Overall
-```{r fig.height=6, fig.width=8}
+```{r}
 group1 %>%
   select(yearmonth, topic_name, sentiment_n) %>%
   spread(topic_name, sentiment_n) %>%
   select(- yearmonth) -> corr1
 
 polls_monthly %>% select(- yearmonth) -> corr2
+```
 
-p <- plot_ccf(corr1, corr2, alpha = 0.8,
-              subtitle = "Election polls vs. topic sentiment value (monthly)")
+```{r}
+# Create empty matrix
+corr <- expand.grid(names(corr1), names(corr2))
+
+corr$`-3` <- NA
+corr$`-2` <- NA
+corr$`-1` <- NA
+corr$`0` <- NA
+corr$`1` <- NA
+corr$`2` <- NA
+corr$`3` <- NA
+
+x <- 1
+  
+for (corr1Id in 1:ncol(corr2)) {
+  c1 = corr2[,corr1Id]
+    
+  for(corr2Id in 1:ncol(corr1)) {
+    c2 = corr1[,corr2Id]
+    correlation = ccf(c1, c2, lag.max = 3,
+                      na.action = na.contiguous, plot=F)
+      
+    corr[x,"-3"] <- correlation$acf[1]
+    corr[x,"-2"] <- correlation$acf[2]
+    corr[x,"-1"] <- correlation$acf[3]
+    corr[x,"0"] <- correlation$acf[4]
+    corr[x,"1"] <- correlation$acf[5]
+    corr[x,"2"] <- correlation$acf[6]
+    corr[x,"3"] <- correlation$acf[7]
+
+    x<- x+1
+  }
+}
+
+corr <- corr %>%
+  gather(lag, correlation, `-3`:`3`) %>%
+  mutate(lag = as.numeric(lag))
+```
+
+```{r fig.height=6, fig.width=8}
+p <- corr %>%
+  filter(lag == 0) %>%
+  ggplot(aes(Var2, Var1,
+                 fill = correlation,
+                 label = round(correlation,2))) +
+        geom_tile(color="white", alpha=0.8) +
+        geom_text(size = 3.5) +
+        #viridis::scale_fill_viridis(limits=c(-1, 1)) +
+        labs(x="", y="", fill="",
+             title = "",
+             subtitle = "Election polls vs. topic sentiment value (monthly)")
 
 ggsave(filename = "../figs/ccf.png", plot = p,
        height = 6, width = 8, dpi = 600)
 ```
 
 ![Cross-correlation](../figs/ccf.png)
+
+The variance of the cross-correlation coefficient under the null hypothesis of zero correlation is approx $1/n$ where $n$ is the length of the series. The coefficients are also asymptotically normal. So approximate critical values (at the 5% level) are $±2/\sqrt{n}$.
+
+```{r}
+critical_val <- 2/sqrt(nrow(corr1))
+```
+
+```{r}
+# insert linebreak for long strings
+linebreak <- function(s) {
+  gsub('(.{1,12})(\\s|$)', '\\1\n', s)
+}
+```
+
+```{r fig.height=7, fig.width=14}
+p <- ggplot(corr, aes(lag, correlation,
+                 #fill = Var1,
+                 group=Var2)) +
+  geom_col(fill = col[3]) +
+  scale_x_continuous(breaks = c(-3:3)) +
+  labs(x="Lag",y="Cross Correlation") +
+  geom_hline(yintercept = critical_val, linetype = 2, color = col[5]) +
+  geom_hline(yintercept = -(critical_val), linetype = 2, color = col[5]) +
+  facet_grid(Var2~Var1, labeller=labeller(Var1 = linebreak)) +
+  theme(strip.text = element_text(size=12),
+        strip.text.y = element_text(size=12),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size=12))
+
+ggsave(filename = "../figs/ccf2.png", plot = p,
+       width = 16,
+       height = 10,
+       dpi = 600)
+```
 
 ##### 3.1.2. By Media
 ```{r eval=FALSE, include=FALSE}

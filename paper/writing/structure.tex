@@ -285,7 +285,7 @@ It becomes apparent that topic 4 about the coalition talks between CDU/CSU and S
 \end{center}
 \end{figure}
 
-We will select the following topics from the whole set. The most frequent words of these topics at each news website can be seen in Appendix \ref{apx_tf}: 
+The remaining analysis is limited to topics closely related to one or more parties. For this reason, the following topics were selected. The most frequent words of these topics at each news website can be seen in Appendix \ref{apx_tf}: 
 
 \begin{enumerate}
 	\item Topic 1: About the SPD, mainly about the election campaign and Martin Schulz as candidate for the chancellor.	
@@ -304,7 +304,7 @@ We will select the following topics from the whole set. The most frequent words 
 	\item Topic 46: Covering issues regarding the CDU.
 \end{enumerate}   
 
-Next, the differences of topic prevalence for given document characteristics can be estimated \citep{roberts_model_2016}. For each topic $k$ a linear model is estimated, where the documents $d$ are observations, the dependent variable is the posterior probability of that topic ($\theta_{d}$) and the covariates are dummy variables that are 1 if the document was published by the respective website and 0 otherwise (see equation \ref{eq_1}). As the dependent variable is a vector containing proportions that sum up to 1, the QR decomposition of the model is computed prior to the estimation of the coefficients. To incorporate uncertainty in the dependent variable, a set of topic proportions are drawn from the variational posterior (the unnormalized topic proportions) repeated times. Then, the coefficients are computed as the average over all results \citep{roberts_stm:_2016}.
+To estimate the differences of topic prevalence of the mentioned topics for the different websites, a linear model is calculated for each topic $k$, where the documents $D$ are observations, the dependent variable is the posterior probability of the respective topic ($\theta_{d}$) and the covariates are dummy variables that are 1 if the document was published by the respective website and 0 otherwise (see equation \ref{eq_1}). As the dependent variable is a vector containing proportions that sum up to 1, the QR decomposition of the model is computed prior to the estimation of the coefficients. To incorporate uncertainty in the dependent variable, a set of topic proportions are drawn from the variational posterior (the unnormalized topic proportions) repeated times. Then, the coefficients are computed as the average over all results \citep{roberts_model_2016}.
 
 \begin{equation}\label{eq_1}
 \begin{split}
@@ -314,7 +314,7 @@ Next, the differences of topic prevalence for given document characteristics can
 \end{split}
 \end{equation}
 
-Figure \ref{fig_estimateEffects} shows the regression results for the above selected topics (See Appendix \ref{apx_coeff} for the result table). The coefficients indicate the deviation from the base value of Bild.de. Starting from above it becomes apparent that the topic prevalence of topic 46 (regarding the CDU) is significantly less for Tagesschau.de and Stern.de. The other media do not show any significant difference to Bild.de for this topic. The opposite is true for topic 37: With the exception of Stern.de and DIE WELT, topic prevalence for this topic is significantly higher for all media than for Bild.de. With the following two topics on AfD it is striking that the topic prevalence at Tagesschau.de is significantly lower compared to Bild.de. The topics concerning the Jamaican coalition (topic 27) and the failure (topic 26) seem to be discussed most likely at Bild.de. The case is different for the CSU issue (Topic 23), where SPIEGEL ONLINE has the highest probability. The same applies to the topic related to the personnel debates of the SPD (22). However, Bild.de has the highest topic prevalence for the topic related to votes within the SPD, especially the vote on the grand coalition. The same applies to the topic regarding the SPD in general and Martin Schulz in particular (1). Overall, topics concerning the SPD seem to be more frequent at Bild.de than in the other media. Moreover, the distribution of topics at FOCUS ONLINE seems to be the most similar to that of Bild.de, while the biggest differences exist between Bild.de and Tagesschau.de. 
+Figure \ref{fig_estimateEffects} shows the regression results for the above selected topics (See Appendix \ref{apx_coeff} for the result tables). The coefficients indicate the deviation from the base value of Bild.de. Starting from above it becomes apparent that the topic prevalence of topic 46 (regarding the CDU) is significantly less for Tagesschau.de and Stern.de. The other media do not show any significant difference to Bild.de for this topic. The opposite is true for topic 37: With the exception of Stern.de and DIE WELT, topic prevalence for this topic is significantly higher for all media than for Bild.de. With the following two topics on AfD it is striking that the topic prevalence at Tagesschau.de is significantly lower compared to Bild.de. The topics concerning the Jamaican coalition (topic 27) and the failure (topic 26) seem to be discussed most likely at Bild.de. The case is different for the CSU issue (Topic 23), where SPIEGEL ONLINE has the highest probability. The same applies to the topic related to the personnel debates of the SPD (22). However, Bild.de has the highest topic prevalence for the topic related to votes within the SPD, especially the vote on the grand coalition. The same applies to the topic regarding the SPD in general and Martin Schulz in particular (1). Overall, topics concerning the SPD seem to be more frequent at Bild.de than in the other media. Moreover, the distribution of topics at FOCUS ONLINE seems to be the most similar to that of Bild.de, while the biggest differences exist between Bild.de and Tagesschau.de. 
 
 \begin{figure}[H]
 	\caption{Regression results}
@@ -336,7 +336,7 @@ The present paper uses a dictionary that lists words associated with positive an
 	\text{SentScore}_d = \frac{|\text{positive polarity score}_d| - |\text{negative polarity score}_d|}{|\text{TotalWords}_d|}
 \end{equation}
 
-The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspaper. Each sentiment value is weighted by the relative share of the topic in the overall reporting of that month.
+The following figure shows the results of the analysis for each topic on a monthly basis, aggregated on all newspapers. Each sentiment value is weighted by the relative share of the topic in the overall reporting of that month.
 
 Some conclusions can be drawn from this illustration. First of all, it can be seen that, on average, all topics are discussed almost exclusively negatively. An exception is topic 27 concerning the Jamaica coalition negotiations, which shows a positive sentiment value for a short period of time (October 2017). In the following month (November 2017), after it became clear that there would be no coalition between the CDU/CSU, FDP and Die Grünen, the value of this topic as well as that of topic 26 drops rapidly, but then rises again in February. Concerning the issues that discuss the great coalition between CDU/CSU and SPD, it is evident that the overall tone is in which this topic is discussed is generally decreasing from November 2017 to January 2018, but in the following February, the sentiment value of this topic rises. However, the sentiment score of topics that deal with the SPD (1, 17, 22) is diminishing in the course of time, with topic 17 recording the largest decline. For the other parties the process is rather zigzag-like.
 
@@ -348,21 +348,21 @@ Some conclusions can be drawn from this illustration. First of all, it can be se
 	\label{fig_sentscore_monthly}
 \end{figure}
 
-If aggregated by news provider, some differences between the sites are discernible (Figure \ref{fig_sentscore_site}\footnote{The numbers reflect the number of observations.}). To begin with, it can be noted that on average all topics are discussed negatively by all news providers, except topic 22, which mainly covers the personnel debates of the SPD and has a positive value at Tagesschau.de. One striking feature is the way in which the Jamaica negotiations and their failure are reported (topics 27 and 26). Although all providers discuss this topics in a negative light, Bild.de reports them particularly negative. The same applies to the reports on the grand coalition, where the value of ZEIT ONLINE is the most negative. 
+If aggregated by news provider, some differences between the sites are discernible (Figure \ref{fig_sentscore_site}). To begin with, it can be noted that on average all topics are discussed negatively by all news providers, except topic 22, which mainly covers the personnel debates of the SPD and has a positive value at Tagesschau.de. One striking feature is the way in which the Jamaica negotiations and their failure are reported (topics 27 and 26). Although all providers discuss this topics in a negative light, Bild.de reports them particularly negative. The same applies to the reports on the grand coalition, where the value of ZEIT ONLINE is the most negative. 
 
-We use two different Figures to analyze the differences between the media outlets graphically: We use the bar plot to examine the polarity tendencies of the individual topics within a medium (\ref{fig_sentscore_site}) and the radar plot to observe the differences between the media (\ref{fig_sentscore_radar}).
+We use two different Figures to analyze the differences between the media outlets graphically: We use the bar plot to examine the polarity tendencies of the individual topics within a medium (Figure \ref{fig_sentscore_site}) and the radar plot to observe the differences between the media (Figure \ref{fig_sentscore_radar}).
 
 Starting with the bar plot it becomes apparent that all topics are discussed negatively, except topic 23 at Tagesschau.de. At Bild.de, the topics that include the coalition negotiations (26,27,4) and the SPD (1,17) are the most negative. The topics relating to AfD (20,30,32,37) are also discussed more negatively. Looking at the values of WELT ONLINE, two of the AfD topics have the most negative value (32.20). Topic 27 concerning the Jamaica Coalition (27) and the Grand Coalition (4) also score relatively negatively. Concerning FOCUS ONLINE, it is mainly topics that relate to the SPD (27, 17, 4, 1) that have a strong negative sentiment value, together with topic 32 and 37. Turning to SPIEGEL ONLINE, it is noticeable that the difference in sentiment value between the individual topics is less pronounced. Topics 13 and 10 stand out as comparatively less negative. However, these issues are also the least negatively discussed in the other media. Also at stern.de the difference in sentiment value is less significant and overall less negative. The topics regarding CDU (46) and Martin Schulz (10) score the most positively (or least negatively). Tagesschau.de is the least negative on most topics, or even once positive. However, this does not apply to topic 23 (CSU), where tagesschau.de is most negative in comparison to the other media. As with Bild.de, the issues relating to the coalition negotiations (27 and 4) also come off rather badly with ZEIT ONLINE. However, the issues surrounding AfD (30, 32, 37 and 20) are even more negative than at Bild.de. 
 
 \begin{figure}[H]
-	\caption{Sentiment Score by news wire}
+	\caption{Sentiment Score by news website}
 	\begin{center}
 			\includegraphics[width=\textwidth,keepaspectratio]{../figs/sentscore_site.png}
 			\label{fig_sentscore_site}
 	\end{center}
 \end{figure}
 
-A good overview of how differently the topics are discussed by the providers is shown in Figure \ref{fig_sentscore_radar}. It gets evident that the sentiment value of the media differs most notably with regard to topic 27 and topic 4, i. e. the topics on which the coalition negotiations are reported. With regard to the Jamaica coalition, Bild.de reports the most and tagesschau.de the least negative. The reporting of ZEIT ONLINE concerning the grand coalition is the one with the most negative sentiment value and again Tagesschau.de, together with stern.de, the one with the value which is least negative. Furthermore, it becomes evident that the negative sentiment value of FOCUS ONLINE regarding topic 17 is high in relation to the other media. FOCUS ONLINE thus reports comparatively more negatively on the debates within the SPD. This includes in particular the vote on a possible coalition with CDU/CSU. For topic 1, which also deals with the SPD, the value of FOCUS ONLINE is rather negative, only undercut by Bild.de. Topics related to AfD do not show striking differences. 
+A good overview of how differently the topics are discussed by the providers is shown in Figure \ref{fig_sentscore_radar}. It becomes evident that the sentiment value of the media differs most notably with regard to topic 27 and topic 4, i. e. the topics on which the coalition negotiations are reported. With regard to the Jamaica coalition, Bild.de reports the most and tagesschau.de the least negative. The reporting of ZEIT ONLINE concerning the grand coalition is the one with the most negative sentiment value and again Tagesschau.de, together with stern.de, the one with the value which is least negative. Furthermore, it becomes evident that the negative sentiment value of FOCUS ONLINE regarding topic 17 is high in relation to the other media. FOCUS ONLINE thus reports comparatively more negatively on the debates within the SPD. This includes in particular the vote on a possible coalition with CDU/CSU. For topic 1, which also deals with the SPD, the value of FOCUS ONLINE is rather negative, only undercut by Bild.de. Topics related to AfD do not show striking differences. 
 
 \begin{figure}[H]
 	\caption{Sentiment Score by news wire}
@@ -372,11 +372,17 @@ A good overview of how differently the topics are discussed by the providers is 
 	\end{center}
 \end{figure}
 
-After the above figures have been analyzed, the following points can be summarized: (a) The sentiment value of the SPD is decreasing over time, especially in regard to internal votes. (b) The topics relating to the coalition talks on Jamaica (26, 27) and the grand coalition (4) are discussed rather critically, but they also show the greatest differences within the media. In contrast, the tonality of the topics in relation to the AfD shows rather small differences. (c) Overall, the sentiment value at Tagesschau.de is the least negative and only shows a comparatively strong negative value at topic 23, concerning the CSU. 
+After the above figures have been analyzed, the following points can be summarized:
+
+\begin{enumerate}
+	\item The sentiment value of the SPD is decreasing over time, especially in regard to internal votes. 
+	\item The topics relating to the coalition talks on Jamaica (26, 27) and the grand coalition (4) are discussed rather critically, but they also show the greatest differences within the media. In contrast, the tonality of the topics in relation to the AfD shows rather small differences. 
+	\item Overall, the sentiment value at Tagesschau.de is the least negative and only shows a comparatively strong negative value at topic 23, concerning the CSU.
+\end{enumerate} 
 
 \subsection{News sentiment and poll data}\label{ch_correlation}
 
-This section seeks to examine the temporal association between sentiment reflected in online news content and phone survey poll results in Germany. Specifically, it aims to find the extent to which online sentiment and phone survey results correlate. I use the data from the "Sonntagsumfrage" (Sunday survey) from infratest dimap\footnote{https://www.infratest-dimap.de/umfragen-analysen/bundesweit/sonntagsfrage/}. The institution regularly asks at least 1000 German citizens the question: "Which party would you choose if federal elections take place next Sunday?" The survey thus measures the current election tendencies and therefore reflects an intermediate state in the opinion-forming process of the electoral population.
+This section seeks to examine the temporal association between sentiment reflected in online news content and phone survey poll results in Germany. Specifically, it aims to find the extent to which online sentiment and phone survey results correlate. I use the data from the "Sonntagsumfrage" (Sunday survey) from infratest dimap.\footnote{https://www.infratest-dimap.de/umfragen-analysen/bundesweit/sonntagsfrage/} The institution regularly asks at least 1000 German citizens the question: "Which party would you choose if federal elections take place next Sunday?" The survey thus measures the current election tendencies and therefore reflects an intermediate state in the opinion-forming process of the electoral population.
 
 Much of the research on online content and political trends have focused on traditional weblogs and social media websites, such as Twitter, Facebook, MySpace, and YouTube. These studies have shown that social media is used to spread political opinions and that these considerations reflect the political landscape of the offline world. \citet{tumasjan_predicting_2010} investigate Tweets between August 13th and September 19th, 2009, prior to the German national elections to examine whether Twitter messages reflect the current offline political sentiment and whether it can be used to predict the popularity of parties or coalitions in the real world. With regard to the later question, they compare the share of attention the political parties receive on Twitter with the election result to examine whether the activity on Twitter can serve as a predictor of the election outcome. They found that the number of tweets reflects the election result and even comes close to traditional election polls.
 
@@ -389,9 +395,9 @@ In the present paper, the comparison between monthly average of both the sentime
 Based on the contemporary coefficients of the cross-correlation estimation shown in Figure \ref{fig_ccf}, the most noticeable topics for each party are evaluated below. The AfD's survey results correlate negatively with topics relating to the SPD. The strongest positive correlation with regard to AfD-related topics can be found for topic 30. Since there are no isolated topics about the FDP, the issues surrounding the Jamaica negotiations are examined, which show a negative correlation. It is also striking that the poll results of the FDP correlate strongly negatively with the CSU topic (23). With regard to B90/Die Grünen, there is also a negative correlation to the Jamaica topics, however, it is slightly above the correlation-coefficient of the FDP. It is striking that there seems to be a strong negative correlation between the SPD issues and the poll results of the Left Party. Conversely, the survey results of the SPD correlate very positively with the SPD topics. The CDU's survey results correlate most positively with topics relating to coalition negotiations.
 
 \begin{figure}[H]
-	\caption{Cross-Correlation at lag 0}
+	\caption{Cross-Correlation}
 	\begin{center}
-			\includegraphics[width=\textwidth,keepaspectratio]{../figs/ccf.png}
+			\includegraphics[width=\textwidth,keepaspectratio]{../figs/ccf2.png}
 			\label{fig_ccf}
 	\end{center}
 \end{figure}
@@ -404,9 +410,10 @@ These results suggest that there is a link between the way parties are reported 
 
 The purpose of this paper was to examine (1) whether the political reporting of different content providers distinguishes itself and (2) whether this reporting has an influence on the opinion-forming process of the voters. Regarding (1) the analysis revealed that there are differences between the media considered, both in terms of topic prevalence and the way in which these topics are discussed. Although the issues are discussed negatively overall, there are still differences, especially regarding to the coalition negotiations. The smallest differences can be found for topic concerning the AfD. With regard to (2), the analysis has shown that the tonality of topics discussed by the SPD shows a strong positive correlation to current survey results. For CDU/CSU, issues relating to the various coalition negotiations tend to correlate positively with the survey results.  Overall, there seems to be a link between reporting on political issues and electoral preferences. Further research should focus on the exact causal relationships between these two concepts. 
 
+\printbibliography
 \section*{Appendix}
 
-\subsection{Most frequent words}\label{apx_tf}
+\subsection*{Most frequent words\label{apx_tf}
 % 1, 2
 \begin{figure}[H]
 	\begin{center}
@@ -491,7 +498,7 @@ The purpose of this paper was to examine (1) whether the political reporting of 
 	\end{center}
 \end{figure}
 
-\subsection{Regression Results}\label{apx_coeff}
+\subsection*{Regression Results}\label{apx_coeff}
 
 \input{tables/coeff1}
 \input{tables/coeff2}

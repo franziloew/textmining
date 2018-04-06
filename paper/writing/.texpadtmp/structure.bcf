@@ -2304,21 +2304,50 @@
     <bcf:citekey order="66">mimno_optimizing_2011</bcf:citekey>
     <bcf:citekey order="67">roberts_model_2016</bcf:citekey>
     <bcf:citekey order="68">roberts_model_2016</bcf:citekey>
-    <bcf:citekey order="69">roberts_stm:_2016</bcf:citekey>
+    <bcf:citekey order="69">nyman_news_2018</bcf:citekey>
     <bcf:citekey order="70">nyman_news_2018</bcf:citekey>
-    <bcf:citekey order="71">nyman_news_2018</bcf:citekey>
-    <bcf:citekey order="72">tetlock_giving_2007</bcf:citekey>
-    <bcf:citekey order="73">tetlock_more_2008</bcf:citekey>
+    <bcf:citekey order="71">tetlock_giving_2007</bcf:citekey>
+    <bcf:citekey order="72">tetlock_more_2008</bcf:citekey>
+    <bcf:citekey order="73">hansen_shocking_2016</bcf:citekey>
     <bcf:citekey order="74">hansen_shocking_2016</bcf:citekey>
-    <bcf:citekey order="75">hansen_shocking_2016</bcf:citekey>
+    <bcf:citekey order="75">nyman_news_2018</bcf:citekey>
     <bcf:citekey order="76">nyman_news_2018</bcf:citekey>
-    <bcf:citekey order="77">nyman_news_2018</bcf:citekey>
+    <bcf:citekey order="77">tumasjan_predicting_2010</bcf:citekey>
     <bcf:citekey order="78">tumasjan_predicting_2010</bcf:citekey>
-    <bcf:citekey order="79">tumasjan_predicting_2010</bcf:citekey>
+    <bcf:citekey order="79">fu_analyzing_2013</bcf:citekey>
     <bcf:citekey order="80">fu_analyzing_2013</bcf:citekey>
-    <bcf:citekey order="81">fu_analyzing_2013</bcf:citekey>
-    <bcf:citekey order="82">box_time_2008</bcf:citekey>
+    <bcf:citekey order="81">box_time_2008</bcf:citekey>
+    <bcf:citekey order="82">padmaja_evaluating_2014</bcf:citekey>
     <bcf:citekey order="83">padmaja_evaluating_2014</bcf:citekey>
-    <bcf:citekey order="84">padmaja_evaluating_2014</bcf:citekey>
   </bcf:section>
+  <bcf:sortlist section="0" name="nyt" type="entry" sortscheme="nyt">
+  <bcf:sorting>
+    <bcf:sort order="1">
+      <bcf:sortitem order="1">presort</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="2" final="1">
+      <bcf:sortitem order="1">sortkey</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="3">
+      <bcf:sortitem order="1">sortname</bcf:sortitem>
+      <bcf:sortitem order="2">author</bcf:sortitem>
+      <bcf:sortitem order="3">editor</bcf:sortitem>
+      <bcf:sortitem order="4">translator</bcf:sortitem>
+      <bcf:sortitem order="5">sorttitle</bcf:sortitem>
+      <bcf:sortitem order="6">title</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="4">
+      <bcf:sortitem order="1">sortyear</bcf:sortitem>
+      <bcf:sortitem order="2">year</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="5">
+      <bcf:sortitem order="1">sorttitle</bcf:sortitem>
+      <bcf:sortitem order="2">title</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="6">
+      <bcf:sortitem order="1" pad_side="left" pad_width="4" pad_char="0">volume</bcf:sortitem>
+      <bcf:sortitem order="2">0000</bcf:sortitem>
+    </bcf:sort>
+  </bcf:sorting>
+  </bcf:sortlist>
 </bcf:controlfile>
