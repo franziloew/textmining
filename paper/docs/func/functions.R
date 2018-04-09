@@ -213,3 +213,11 @@ calculate_week = function(week, year) {
   week(date) = week
   return(date)
 }
+
+###################################
+# insert linebreak for long strings
+###################################
+
+linebreak <- function(s) {
+  gsub('(.{1,12})(\\s|$)', '\\1\n', s)
+}
