@@ -1,15 +1,15 @@
 [1] Config.pm:324> INFO - This is Biber 2.1
 [1] Config.pm:327> INFO - Logfile is '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.blg'
-[86] biber-darwin:276> INFO - === Fri Apr  6, 2018, 16:00:22
-[86] Biber.pm:333> INFO - Reading '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bcf'
-[224] Biber.pm:645> INFO - Found 36 citekeys in bib section 0
-[270] Biber.pm:2977> INFO - Processing section 0
-[301] Biber.pm:3115> INFO - Looking for bibtex format file '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib' for section 0
-[332] bibtex.pm:1021> INFO - Decoding LaTeX character macros into UTF-8
+[75] biber-darwin:276> INFO - === Mon Apr  9, 2018, 18:08:53
+[75] Biber.pm:333> INFO - Reading '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bcf'
+[244] Biber.pm:645> INFO - Found 36 citekeys in bib section 0
+[279] Biber.pm:2977> INFO - Processing section 0
+[309] Biber.pm:3115> INFO - Looking for bibtex format file '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib' for section 0
+[334] bibtex.pm:1021> INFO - Decoding LaTeX character macros into UTF-8
 [362] bibtex.pm:895> INFO - Found BibTeX data source '/Users/Franzi/GitHub/textmining/paper/writing/Textmining.bib'
-[1060] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1061] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1061] Biber.pm:2854> INFO - Sorting list 'nyt' of type 'entry' with scheme 'nyt' and locale 'en-US'
-[1061] Biber.pm:2858> INFO - No sort tailoring available for locale 'en-US'
-[1178] bbl.pm:505> INFO - Writing '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl' with encoding 'UTF-8'
-[1190] bbl.pm:596> INFO - Output to /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl
+[998] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[998] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[998] Biber.pm:2854> INFO - Sorting list 'nyt' of type 'entry' with scheme 'nyt' and locale 'en-US'
+[999] Biber.pm:2858> INFO - No sort tailoring available for locale 'en-US'
+[1098] bbl.pm:505> INFO - Writing '/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl' with encoding 'UTF-8'
+[1107] bbl.pm:596> INFO - Output to /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.bbl
