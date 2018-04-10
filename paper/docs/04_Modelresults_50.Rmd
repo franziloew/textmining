@@ -456,8 +456,10 @@ coeff_tab <- coeff %>%
   filter(topic %in% keep) %>%
   select(topic_name,parameter,Estimate, `Std. Error`, `t value`, p) 
 
-print(xtable(coeff_tab[1:56,], type="latex"), file="../writing/tables/coeff1.tex" )
-print(xtable(coeff_tab[57:nrow(coeff_tab),], type="latex"), file="../writing/tables/coeff2.tex" )
+print(xtable(coeff_tab[1:56,], type="latex", digits=3), 
+      file="../writing/tables/coeff1.tex" )
+print(xtable(coeff_tab[57:nrow(coeff_tab),], type="latex", digits=3), 
+      file="../writing/tables/coeff2.tex" )
 ```
 
 
@@ -701,7 +703,8 @@ p1 <- ggplot(p,
        aes(yearmonth, sentiment_w, 
            group = topic_name,
            label = obs)) +
-  facet_wrap(~topic_name, nrow = 3, labeller=labeller(topic_name = linebreak)) +
+  facet_wrap(~topic_name, nrow = 3, 
+             labeller=labeller(topic_name = linebreak)) +
   geom_col(fill = col[3], alpha = 0.8) +
  geom_line(color = col[5], size = 0.6) +
   #geom_text() +
@@ -711,13 +714,14 @@ p1 <- ggplot(p,
         title = "",
        subtitle = "") +
   scale_x_date(breaks = date_breaks("1 month"), 
-               labels = date_format("%b", tz ="CET")) +
+               labels = date_format("%b-%y", tz ="CET")) +
   theme(strip.text = element_text(size=14),
     axis.text.y = element_text(size=10),
-        axis.text.x = element_text(size = 10, angle = 45))
+    axis.title.y = element_text(size=12),
+        axis.text.x = element_text(size = 12, angle = 45))
 
 ggsave(filename = "../figs/sentscore_monthly.png", plot = p1, 
-       height = 10, width = 12)
+       height = 10, width = 13)
 ```
 
 ![Monthly Sentiment Score](../figs/sentscore_monthly.png)
@@ -759,7 +763,7 @@ p1 <- ggplot(p,
   labs(x="", y="Sentiment Score",
        title = "") +
   theme(strip.text = element_text(size = 11),
-    axis.text.y = element_text(size = 12),
+    axis.text.y = element_text(size = 14),
         axis.text.x = element_text(size=8, angle = 90),
         axis.title.x = element_text(size = 12))
 
@@ -1011,7 +1015,21 @@ corr <- corr %>%
   mutate(lag = as.numeric(lag))
 ```
 
+Cross correlation at lag 0
+```{r}
+# Table
+corr %>% 
+  filter(lag == 0) %>%
+  select(-lag) %>% 
+  spread(Var2, correlation) -> corr_tab
+
+print(xtable(corr_tab, type="latex", digits=3,
+                   caption = "Cross Correlation at lag 0"),
+      file="../writing/tables/corr.tex" )
+```
+
 ```{r fig.height=6, fig.width=8}
+# Figure
 p <- corr %>%
   filter(lag == 0) %>%
   ggplot(aes(Var2, Var1,

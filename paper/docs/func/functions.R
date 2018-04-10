@@ -219,5 +219,9 @@ calculate_week = function(week, year) {
 ###################################
 
 linebreak <- function(s) {
-  gsub('(.{1,12})(\\s|$)', '\\1\n', s)
+  gsub('(.{1,15})(\\s|$)', '\\1\n', s)
+}
+
+linebreak_n <- function(s,n) {
+  gsub(paste0('(.{1,',n,'})(\\s|$)'), '\\1\n', s)
 }
