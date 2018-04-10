@@ -797,15 +797,17 @@ p <- radar %>%
   ggRadar(aes(color=site), 
           rescale = F,
           alpha = 0) +
-  labs(title = "Sentiment scores Jun 2017-March 2018") +
-  guides(col = guide_legend(ncol = 1)) +
-  theme(legend.position = "right",
-        axis.text.x = element_text(size = 10),
+  labs(title = "") +
+  guides(col = guide_legend(ncol = 7)) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(size=14),
+        legend.title = element_text(size=0),
+        axis.text.x = element_text(size = 16),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank())
 
-ggsave(filename = "../figs/sentscore_radar.png", width = 9,
-       height = 7,
+ggsave(filename = "../figs/sentscore_radar.png", width = 12,
+       height = 10,
        plot = p)
 ```
 
