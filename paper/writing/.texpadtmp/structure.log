@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  10 APR 2018 14:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.5.12)  10 APR 2018 23:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1113,7 +1113,11 @@ File: english.lbx 2015/04/19 v3.0 biblatex localization (PK/JW/AB)
 )
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
- (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux)
+ (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux
+
+LaTeX Warning: Label `t_wordcount' multiply defined.
+
+)
 \openout1 = `structure.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
@@ -1144,8 +1148,7 @@ Package biblatex Info: Reference segment=0 on input line 50.
 Package hyperref Info: Link coloring OFF on input line 50.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+ (/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count335
@@ -1197,14 +1200,14 @@ Package caption Info: End \AtBeginDocument code.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(113.81102pt, 398.3386pt, 85.35826pt)
+* h-part:(L,W,R)=(85.35826pt, 455.24411pt, 56.9055pt)
 * v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=398.3386pt
+* \textwidth=455.24411pt
 * \textheight=731.23584pt
-* \oddsidemargin=41.54103pt
-* \evensidemargin=41.54103pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
 * \topmargin=-52.36449pt
 * \headheight=12.0pt
 * \headsep=25.0pt
@@ -1232,275 +1235,234 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 52.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.toc)
+\tf@toc=\write6
+\openout6 = `structure.toc'.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.71 
-      [1] [2] [3] <../figs/polls.png, id=110, 3613.5pt x 2409.0pt>
+l.70 
+      [1] [2]
+Overfull \hbox (2.46057pt too wide) in paragraph at lines 77--78
+[]\T1/cmr/bx/n/12 Measuring Tone (Sec-tion []5.2[]) \T1/cmr/m/n/12 Af-ter as-sign-ing a topic to each ar-ti-cle, a dictionary-
+ []
+
+
+Overfull \hbox (4.82744pt too wide) in paragraph at lines 88--88
+[]\T1/cmr/bx/n/17.28 Background on the fed-eral elec-tion in Ger-many (2017) 
+ []
+
+[3] <../figs/polls.png, id=142, 3613.5pt x 2409.0pt>
 File: ../figs/polls.png Graphic file (type png)
  <use ../figs/polls.png>
-Package pdftex.def Info: ../figs/polls.png used on input line 105.
-(pdftex.def)             Requested size: 318.67209pt x 212.4264pt.
- [4 <../figs/polls.png>] <../figs/timeline.png, id=126, 3613.5pt x 2409.0pt>
+Package pdftex.def Info: ../figs/polls.png used on input line 103.
+(pdftex.def)             Requested size: 364.19667pt x 242.78879pt.
+ [4 <../figs/polls.png>] <../figs/timeline.png, id=156, 3613.5pt x 2409.0pt>
 File: ../figs/timeline.png Graphic file (type png)
  <use ../figs/timeline.png>
-Package pdftex.def Info: ../figs/timeline.png used on input line 125.
-(pdftex.def)             Requested size: 195.1881pt x 130.1245pt.
- <../figs/bar.png, id=127, 3613.5pt x 2409.0pt>
+Package pdftex.def Info: ../figs/timeline.png used on input line 121.
+(pdftex.def)             Requested size: 223.07211pt x 148.68745pt.
+ <../figs/bar.png, id=157, 4215.75pt x 2409.0pt>
 File: ../figs/bar.png Graphic file (type png)
  <use ../figs/bar.png>
-Package pdftex.def Info: ../figs/bar.png used on input line 130.
-(pdftex.def)             Requested size: 195.1881pt x 130.1245pt.
- <../figs/wordcount.png, id=129, 2409.0pt x 1204.5pt>
+Package pdftex.def Info: ../figs/bar.png used on input line 126.
+(pdftex.def)             Requested size: 223.07211pt x 127.44113pt.
+ <../figs/wordcount.png, id=159, 2409.0pt x 1204.5pt>
 File: ../figs/wordcount.png Graphic file (type png)
  <use ../figs/wordcount.png>
-Package pdftex.def Info: ../figs/wordcount.png used on input line 142.
-(pdftex.def)             Requested size: 398.3386pt x 199.15665pt.
- (./tables/wordcount.tex [5 <../figs/timeline.png> <../figs/bar.png> <../figs/wordcount.png>]) <../figs/wordcloud.png, id=142, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcount.png used on input line 138.
+(pdftex.def)             Requested size: 455.24411pt x 227.60759pt.
+ [5 <../figs/timeline.png> <../figs/bar.png>] (./tables/wordcount.tex) <../figs/wordcloud.png, id=174, 481.8pt x 481.8pt>
 File: ../figs/wordcloud.png Graphic file (type png)
  <use ../figs/wordcloud.png>
-Package pdftex.def Info: ../figs/wordcloud.png used on input line 155.
-(pdftex.def)             Requested size: 278.83578pt x 278.84135pt.
- [6 <../figs/wordcloud.png>] <../figs/wordcloud_Bild.png, id=155, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud.png used on input line 151.
+(pdftex.def)             Requested size: 318.66948pt x 318.68002pt.
+ [6 <../figs/wordcount.png>] <../figs/wordcloud_Bild.png, id=187, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_Bild.png Graphic file (type png)
  <use ../figs/wordcloud_Bild.png>
-Package pdftex.def Info: ../figs/wordcloud_Bild.png used on input line 172.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- <../figs/wordcloud_DIEWELT.png, id=156, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud_Bild.png used on input line 168.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ <../figs/wordcloud_DIEWELT.png, id=188, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_DIEWELT.png Graphic file (type png)
  <use ../figs/wordcloud_DIEWELT.png>
-Package pdftex.def Info: ../figs/wordcloud_DIEWELT.png used on input line 176.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- <../figs/wordcloud_FOCUSONLINE.png, id=157, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud_DIEWELT.png used on input line 172.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ <../figs/wordcloud_FOCUSONLINE.png, id=189, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_FOCUSONLINE.png Graphic file (type png)
  <use ../figs/wordcloud_FOCUSONLINE.png>
-Package pdftex.def Info: ../figs/wordcloud_FOCUSONLINE.png used on input line 180.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- <../figs/wordcloud_SPIEGELONLINE.png, id=158, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud_FOCUSONLINE.png used on input line 176.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ <../figs/wordcloud_SPIEGELONLINE.png, id=190, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_SPIEGELONLINE.png Graphic file (type png)
  <use ../figs/wordcloud_SPIEGELONLINE.png>
-Package pdftex.def Info: ../figs/wordcloud_SPIEGELONLINE.png used on input line 184.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- <../figs/wordcloud_stern.png, id=159, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud_SPIEGELONLINE.png used on input line 180.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ <../figs/wordcloud_stern.png, id=191, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_stern.png Graphic file (type png)
  <use ../figs/wordcloud_stern.png>
-Package pdftex.def Info: ../figs/wordcloud_stern.png used on input line 188.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- <../figs/wordcloud_Tagesschau.png, id=160, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud_stern.png used on input line 184.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ <../figs/wordcloud_Tagesschau.png, id=192, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_Tagesschau.png Graphic file (type png)
  <use ../figs/wordcloud_Tagesschau.png>
-Package pdftex.def Info: ../figs/wordcloud_Tagesschau.png used on input line 192.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- <../figs/wordcloud_ZEITONLINE.png, id=161, 481.8pt x 481.8pt>
+Package pdftex.def Info: ../figs/wordcloud_Tagesschau.png used on input line 188.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ <../figs/wordcloud_ZEITONLINE.png, id=193, 481.8pt x 481.8pt>
 File: ../figs/wordcloud_ZEITONLINE.png Graphic file (type png)
  <use ../figs/wordcloud_ZEITONLINE.png>
-Package pdftex.def Info: ../figs/wordcloud_ZEITONLINE.png used on input line 196.
-(pdftex.def)             Requested size: 119.50279pt x 119.50133pt.
- [7] [8 <../figs/wordcloud_Bild.png> <../figs/wordcloud_DIEWELT.png> <../figs/wordcloud_FOCUSONLINE.png> <../figs/wordcloud_SPIEGELONLINE.png> <../figs/wordcloud_stern.png> <../figs/wordcloud_Tagesschau.png> <../figs/wordcloud_ZEITONLINE.png>] [9]
-Overfull \hbox (2.90428pt too wide) in paragraph at lines 240--241
-[]\T1/cmr/m/n/12 where the word prob-a-bil-ity $\OML/cmm/m/it/12 ^^^[]$ \T1/cmr/m/n/12 is pa-ram-e-ter-ized in terms of log-transformed
- []
-
-
-Overfull \hbox (10.07005pt too wide) in paragraph at lines 246--247
-\T1/cmr/m/n/12 gen-er-ated by the above data-generating pro-cess us-ing an it-er-a-tive approximation-
- []
-
-[10]
-Overfull \hbox (39.19484pt too wide) in paragraph at lines 278--279
-[]\T1/cmr/m/n/12 It be-comes ap-par-ent that topic 4 about the coali-tion talks be-tween CDU/CSU/CSU
- []
-
-[11] <../figs/topic_proportion.png, id=271, 2106.87125pt x 2409.0pt>
+Package pdftex.def Info: ../figs/wordcloud_ZEITONLINE.png used on input line 192.
+(pdftex.def)             Requested size: 136.57462pt x 136.5719pt.
+ [7 <../figs/wordcloud.png>] [8 <../figs/wordcloud_Bild.png> <../figs/wordcloud_DIEWELT.png> <../figs/wordcloud_FOCUSONLINE.png> <../figs/wordcloud_SPIEGELONLINE.png> <../figs/wordcloud_stern.png> <../figs/wordcloud_Tagesschau.png> <../figs/wordcloud_ZEITONLINE.png>] [9] [10] <../figs/topic_proportion.png, id=298, 2106.87125pt x 2409.0pt>
 File: ../figs/topic_proportion.png Graphic file (type png)
  <use ../figs/topic_proportion.png>
-Package pdftex.def Info: ../figs/topic_proportion.png used on input line 283.
-(pdftex.def)             Requested size: 398.3386pt x 455.43575pt.
- [12 <../figs/topic_proportion.png>] [13] <../figs/estimates.png, id=303, 5420.25pt x 3613.5pt>
+Package pdftex.def Info: ../figs/topic_proportion.png used on input line 277.
+(pdftex.def)             Requested size: 455.24411pt x 520.498pt.
+ [11] [12 <../figs/topic_proportion.png>] [13] <../figs/estimates.png, id=339, 5420.25pt x 3613.5pt>
 File: ../figs/estimates.png Graphic file (type png)
  <use ../figs/estimates.png>
-Package pdftex.def Info: ../figs/estimates.png used on input line 322.
-(pdftex.def)             Requested size: 398.3386pt x 265.54219pt.
- [14 <../figs/estimates.png>] [15] <../figs/sentscore_monthly.png, id=329, 3914.625pt x 3011.25pt>
+Package pdftex.def Info: ../figs/estimates.png used on input line 316.
+(pdftex.def)             Requested size: 455.24411pt x 303.47679pt.
+ [14 <../figs/estimates.png>] <../figs/sentscore_monthly.png, id=352, 3914.625pt x 3011.25pt>
 File: ../figs/sentscore_monthly.png Graphic file (type png)
  <use ../figs/sentscore_monthly.png>
-Package pdftex.def Info: ../figs/sentscore_monthly.png used on input line 346.
-(pdftex.def)             Requested size: 398.3386pt x 306.3807pt.
- [16 <../figs/sentscore_monthly.png>] <../figs/sentscore_site.png, id=339, 3613.5pt x 2409.0pt>
+Package pdftex.def Info: ../figs/sentscore_monthly.png used on input line 340.
+(pdftex.def)             Requested size: 455.24411pt x 350.16907pt.
+ [15] <../figs/sentscore_site.png, id=365, 3613.5pt x 2409.0pt>
 File: ../figs/sentscore_site.png Graphic file (type png)
  <use ../figs/sentscore_site.png>
-Package pdftex.def Info: ../figs/sentscore_site.png used on input line 358.
-(pdftex.def)             Requested size: 398.3386pt x 265.54219pt.
- <../figs/sentscore_radar.png, id=341, 3613.5pt x 3011.25pt>
+Package pdftex.def Info: ../figs/sentscore_site.png used on input line 352.
+(pdftex.def)             Requested size: 455.24411pt x 303.47679pt.
+ [16 <../figs/sentscore_monthly.png>] <../figs/sentscore_radar.png, id=374, 3613.5pt x 3011.25pt>
 File: ../figs/sentscore_radar.png Graphic file (type png)
- <use ../figs/sentscore_radar.png>
-Package pdftex.def Info: ../figs/sentscore_radar.png used on input line 368.
-(pdftex.def)             Requested size: 318.67209pt x 265.533pt.
- [17 <../figs/sentscore_site.png>] [18 <../figs/sentscore_radar.png>] [19] <../figs/ccf2.png, id=377, 10840.5pt x 7227.0pt>
+
+<use ../figs/sentscore_radar.png>
+Package pdftex.def Info: ../figs/sentscore_radar.png used on input line 362.
+(pdftex.def)             Requested size: 364.19667pt x 303.48598pt.
+ [17 <../figs/sentscore_site.png>] [18 <../figs/sentscore_radar.png>] [19] <../figs/ccf2.png, id=411, 10840.5pt x 7227.0pt>
 File: ../figs/ccf2.png Graphic file (type png)
  <use ../figs/ccf2.png>
-Package pdftex.def Info: ../figs/ccf2.png used on input line 399.
-(pdftex.def)             Requested size: 398.3386pt x 265.54219pt.
+Package pdftex.def Info: ../figs/ccf2.png used on input line 393.
+(pdftex.def)             Requested size: 455.24411pt x 303.47679pt.
  [20 <../figs/ccf2.png>] [21]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 420.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 414.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-Overfull \hbox (5.90141pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/n/12 United Na-tions Gen-eral De-bate 1970-2016^^Q. In: \T1/cmr/m/it/12 arXiv:1708.05873 [cs]\T1/cmr/m/n/12 . arXiv:
- []
-
-
-Overfull \hbox (16.37273pt too wide) in paragraph at lines 421--421
-[][]\T1/cmr/m/n/12 Erosheva, Elena, Stephen Fien-berg, and John Laf-ferty (2004). ^^P  Mixed-membership
- []
-
-
-Overfull \hbox (7.27454pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/n/12 mod-els of sci-en-tific pub-li-ca-tions^^Q. en. In: \T1/cmr/m/it/12 Pro-ceed-ings of the Na-tional Academy
- []
-
-[22]
-Overfull \hbox (0.82446pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/it/12 Jour-nal of In-ter-na-tional Eco-nomics\T1/cmr/m/n/12 . 38th An-nual NBER In-ter-na-tional Sem-
- []
-
-
-Overfull \hbox (2.85794pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/n/12 i-nar on Macroe-co-nomics 99, S114^^US133. \T1/cmr/m/sc/12 url\T1/cmr/m/n/12 : []$\T1/cmtt/m/n/12 http : / / www . sciencedirect .
- []
-
-
-Overfull \hbox (2.04276pt too wide) in paragraph at lines 421--421
-[]$\T1/cmtt/m/n/12 https : / / de . statista . com / statistik / daten / studie / 183128 / umfrage /
- []
-
-
-Overfull \hbox (43.15553pt too wide) in paragraph at lines 421--421
-\T1/cmtt/m/n/12 nachrichten -[] und -[] informationen -[]-[]-[] internetnutzung/$[] \T1/cmr/m/n/12 (vis-ited on 03/12/2018). 
- []
-
-
-Overfull \hbox (18.11754pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/sc/12 url\T1/cmr/m/n/12 : []$\T1/cmtt/m/n/12 https : / / papers . ssrn . com / abstract = 2843535$[] \T1/cmr/m/n/12 (vis-ited on 11/09/2017). 
- []
-
-
-Overfull \hbox (2.04276pt too wide) in paragraph at lines 421--421
-\T1/cmtt/m/n/12 Publications / ViewPaper ? Volume = 3 & Issue = 11 & Code = IJARAI & SerialNo =
+) [22]
+Overfull \hbox (26.7094pt too wide) in paragraph at lines 415--415
+\T1/cmr/m/n/12 S133. \T1/cmr/m/sc/12 url\T1/cmr/m/n/12 : []$\T1/cmtt/m/n/12 http : / / www . sciencedirect . com / science / article / pii / S0022199615001828$[]
  []
 
 [23]
-Overfull \hbox (44.95308pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/it/12 i-can Jour-nal of Po-lit-i-cal Sci-ence \T1/cmr/m/n/12 58.4, pp. 1064^^U1082. \T1/cmr/m/sc/12 url\T1/cmr/m/n/12 : []$\T1/cmtt/m/n/12 http : / / onlinelibrary .
+Overfull \hbox (13.04565pt too wide) in paragraph at lines 415--415
+\T1/cmtt/m/n/12 researchgate . net / publication / 215776042 _ Predicting _ Elections _ with _ Twitter _
  []
 
 
-Overfull \hbox (18.40771pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/n/12 In: \T1/cmr/m/it/12 The Jour-nal of Fi-nance \T1/cmr/m/n/12 63.3, pp. 1437^^U1467. \T1/cmr/m/sc/12 url\T1/cmr/m/n/12 : []$\T1/cmtt/m/n/12 http : / / onlinelibrary .
+Overfull \hbox (8.44398pt too wide) in paragraph at lines 415--415
+\T1/cmtt/m/n/12 What _ 140 _ Characters _ Reveal _ about _ Political _ Sentiment$[] \T1/cmr/m/n/12 (vis-ited on 03/17/2018). 
  []
 
-
-Overfull \hbox (18.11754pt too wide) in paragraph at lines 421--421
-\T1/cmr/m/sc/12 url\T1/cmr/m/n/12 : []$\T1/cmtt/m/n/12 / / www . springer . com / de / book / 9783658153083$[] \T1/cmr/m/n/12 (vis-ited on 11/26/2017). 
- []
-
-[24] <../figs/plotquote1.png, id=460, 301.125pt x 702.625pt>
+<../figs/plotquote1.png, id=479, 301.125pt x 702.625pt>
 File: ../figs/plotquote1.png Graphic file (type png)
  <use ../figs/plotquote1.png>
-Package pdftex.def Info: ../figs/plotquote1.png used on input line 431.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote2.png, id=461, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote1.png used on input line 424.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote2.png, id=480, 301.125pt x 702.625pt>
 File: ../figs/plotquote2.png Graphic file (type png)
  <use ../figs/plotquote2.png>
-Package pdftex.def Info: ../figs/plotquote2.png used on input line 434.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote4.png, id=462, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote2.png used on input line 427.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ [24] <../figs/plotquote4.png, id=492, 301.125pt x 702.625pt>
 File: ../figs/plotquote4.png Graphic file (type png)
  <use ../figs/plotquote4.png>
-Package pdftex.def Info: ../figs/plotquote4.png used on input line 443.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote10.png, id=463, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote4.png used on input line 436.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote10.png, id=493, 301.125pt x 702.625pt>
 File: ../figs/plotquote10.png Graphic file (type png)
  <use ../figs/plotquote10.png>
-Package pdftex.def Info: ../figs/plotquote10.png used on input line 446.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- [25 <../figs/plotquote1.png> <../figs/plotquote2.png>] <../figs/plotquote13.png, id=472, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote10.png used on input line 439.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ [25 <../figs/plotquote1.png> <../figs/plotquote2.png>] <../figs/plotquote13.png, id=501, 301.125pt x 702.625pt>
 File: ../figs/plotquote13.png Graphic file (type png)
  <use ../figs/plotquote13.png>
-Package pdftex.def Info: ../figs/plotquote13.png used on input line 455.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote17.png, id=473, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote13.png used on input line 448.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote17.png, id=502, 301.125pt x 702.625pt>
 File: ../figs/plotquote17.png Graphic file (type png)
  <use ../figs/plotquote17.png>
-Package pdftex.def Info: ../figs/plotquote17.png used on input line 458.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- [26 <../figs/plotquote4.png> <../figs/plotquote10.png>] <../figs/plotquote20.png, id=481, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote17.png used on input line 451.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ [26 <../figs/plotquote4.png> <../figs/plotquote10.png>] <../figs/plotquote20.png, id=510, 301.125pt x 702.625pt>
 File: ../figs/plotquote20.png Graphic file (type png)
  <use ../figs/plotquote20.png>
-Package pdftex.def Info: ../figs/plotquote20.png used on input line 467.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote23.png, id=482, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote20.png used on input line 460.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote23.png, id=511, 301.125pt x 702.625pt>
 File: ../figs/plotquote23.png Graphic file (type png)
  <use ../figs/plotquote23.png>
-Package pdftex.def Info: ../figs/plotquote23.png used on input line 470.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- [27 <../figs/plotquote13.png> <../figs/plotquote17.png>] <../figs/plotquote26.png, id=490, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote23.png used on input line 463.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ [27 <../figs/plotquote13.png> <../figs/plotquote17.png>] <../figs/plotquote26.png, id=519, 301.125pt x 702.625pt>
 File: ../figs/plotquote26.png Graphic file (type png)
  <use ../figs/plotquote26.png>
-Package pdftex.def Info: ../figs/plotquote26.png used on input line 479.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote27.png, id=491, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote26.png used on input line 472.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote27.png, id=520, 301.125pt x 702.625pt>
 File: ../figs/plotquote27.png Graphic file (type png)
  <use ../figs/plotquote27.png>
-Package pdftex.def Info: ../figs/plotquote27.png used on input line 482.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- [28 <../figs/plotquote20.png> <../figs/plotquote23.png>] <../figs/plotquote30.png, id=499, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote27.png used on input line 475.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ [28 <../figs/plotquote20.png> <../figs/plotquote23.png>] <../figs/plotquote30.png, id=528, 301.125pt x 702.625pt>
 File: ../figs/plotquote30.png Graphic file (type png)
  <use ../figs/plotquote30.png>
-Package pdftex.def Info: ../figs/plotquote30.png used on input line 491.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote32.png, id=500, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote30.png used on input line 484.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote32.png, id=529, 301.125pt x 702.625pt>
 File: ../figs/plotquote32.png Graphic file (type png)
  <use ../figs/plotquote32.png>
-Package pdftex.def Info: ../figs/plotquote32.png used on input line 494.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- [29 <../figs/plotquote26.png> <../figs/plotquote27.png>] <../figs/plotquote37.png, id=508, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote32.png used on input line 487.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ [29 <../figs/plotquote26.png> <../figs/plotquote27.png>] <../figs/plotquote37.png, id=537, 301.125pt x 702.625pt>
 File: ../figs/plotquote37.png Graphic file (type png)
  <use ../figs/plotquote37.png>
-Package pdftex.def Info: ../figs/plotquote37.png used on input line 503.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
- <../figs/plotquote46.png, id=509, 301.125pt x 702.625pt>
+Package pdftex.def Info: ../figs/plotquote37.png used on input line 496.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
+ <../figs/plotquote46.png, id=538, 301.125pt x 702.625pt>
 File: ../figs/plotquote46.png Graphic file (type png)
  <use ../figs/plotquote46.png>
-Package pdftex.def Info: ../figs/plotquote46.png used on input line 506.
-(pdftex.def)             Requested size: 195.1881pt x 455.45718pt.
+Package pdftex.def Info: ../figs/plotquote46.png used on input line 499.
+(pdftex.def)             Requested size: 223.07211pt x 520.52402pt.
  [30 <../figs/plotquote30.png> <../figs/plotquote32.png>] (./tables/coeff1.tex) (./tables/coeff2.tex) (./tables/corr.tex) [31 <../figs/plotquote37.png> <../figs/plotquote46.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 518.
- [32] [33]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 518.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 511.
+ [32] [33] [34]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 511.
  (/Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 518.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 518.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 511.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 511.
 Package rerunfilecheck Info: File `structure.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package logreq Info: Writing requests to 'structure.run.xml'.
 \openout1 = `structure.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36097 strings out of 493089
- 796887 string characters out of 6134842
- 1355476 words of memory out of 5000000
- 38720 multiletter control sequences out of 15000+600000
+ 36106 strings out of 493089
+ 797116 string characters out of 6134842
+ 1355466 words of memory out of 5000000
+ 38723 multiletter control sequences out of 15000+600000
  29660 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,18n,92p,2137b,1557s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,18n,92p,2319b,1557s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (34 pages, 7625849 bytes).
+Output written on /Users/Franzi/GitHub/textmining/paper/writing/.texpadtmp/structure.pdf (35 pages, 7650473 bytes).
 PDF statistics:
- 645 PDF objects out of 1000 (max. 8388607)
- 516 compressed objects within 6 object streams
- 152 named destinations out of 1000 (max. 500000)
- 261 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 677 PDF objects out of 1000 (max. 8388607)
+ 547 compressed objects within 6 object streams
+ 155 named destinations out of 1000 (max. 500000)
+ 293 words of extra memory for PDF output out of 10000 (max. 10000000)
 
