@@ -204,70 +204,6 @@
       \endverb
       \keyw{Statistics - Machine Learning,Statistics - Computation,Statistics - Methodology}
     \endentry
-    \entry{cage_information_2017}{book}{}
-      \name{author}{3}{}{%
-        {{uniquename=0,hash=45da8b501bcfb51ffdb6f7397ff8c8ed}{Cagé}{C\bibinitperiod}{Julia}{J\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=0445d78c0525c264d604079564ea9d09}{Hervé}{H\bibinitperiod}{Nicolas}{N\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=ad7d91101b9b6c93fcf9157183847745}{Viaud}{V\bibinitperiod}{Marie-Luce}{M\bibinithyphendelim L\bibinitperiod}{}{}{}{}}%
-      }
-      \list{language}{1}{%
-        {fr}%
-      }
-      \list{publisher}{1}{%
-        {Éditions de l’INA}%
-      }
-      \strng{namehash}{db20148cfa742caab017c4dd2718740f}
-      \strng{fullhash}{db20148cfa742caab017c4dd2718740f}
-      \field{sortinit}{C}
-      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
-      \field{labelyear}{2017}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{L'information à tout prix}
-      \field{year}{2017}
-      \verb{file}
-      \verb Snapshot:/Users/Franzi/Zotero/storage/E5Z7FALC/Lire-L-information-a-tout-prix-de-Julia-Cage.html:text/html
-      \endverb
-    \endentry
-    \entry{ellman_what_2009}{article}{}
-      \name{author}{2}{}{%
-        {{uniquename=0,hash=6006fd7bc066752b7c919011c3fca1fd}{Ellman}{E\bibinitperiod}{Matthew}{M\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=769733eeaf5e204f949bd0d4dfdf7654}{Germano}{G\bibinitperiod}{Fabrizio}{F\bibinitperiod}{}{}{}{}}%
-      }
-      \list{language}{1}{%
-        {en}%
-      }
-      \strng{namehash}{02befb007fe157c4a70a42daca3df201}
-      \strng{fullhash}{02befb007fe157c4a70a42daca3df201}
-      \field{sortinit}{E}
-      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
-      \field{labelyear}{2009}
-      \field{labelmonth}{04}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{We model the market for news as a two-sided market where newspapers sell news to readers who value accuracy and sell space to advertisers who value advert-receptive readers. In this setting, monopolistic newspapers under-report or bias news that sufficiently reduces advertiser profits. Paradoxically, increasing the size of advertising eventually leads competing newspapers to reduce advertiser bias. Nonetheless, advertisers can counter this effect if able to commit to news-sensitive cut-off strategies, potentially inducing as much bias as in the monopoly case. We use these results to explain contrasting historical and recent evidence on commercial bias and influence in the media.}
-      \field{issn}{1468-0297}
-      \field{journaltitle}{The Economic Journal}
-      \field{month}{04}
-      \field{number}{537}
-      \field{shorttitle}{What do the {Papers} {Sell}?}
-      \field{title}{What do the {Papers} {Sell}? {A} {Model} of {Advertising} and {Media} {Bias}*}
-      \field{volume}{119}
-      \field{year}{2009}
-      \field{pages}{680\bibrangedash 704}
-      \range{pages}{25}
-      \verb{doi}
-      \verb 10.1111/j.1468-0297.2009.02218.x
-      \endverb
-      \verb{file}
-      \verb Full Text PDF:/Users/Franzi/Zotero/storage/ESUGMQCA/Ellman und Germano - 2009 - What do the Papers Sell A Model of Advertising an.pdf:application/pdf;Snapshot:/Users/Franzi/Zotero/storage/E87BHVVH/abstract.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://onlinelibrary.wiley.com/doi/10.1111/j.1468-0297.2009.02218.x/abstract
-      \endverb
-    \endentry
     \entry{erosheva_mixed-membership_2004}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=9ab2f429b3fa892e63ea518d4517a630}{Erosheva}{E\bibinitperiod}{Elena}{E\bibinitperiod}{}{}{}{}}%
@@ -388,43 +324,6 @@
       \verb{url}
       \verb http://online.liebertpub.com/doi/abs/10.1089/cyber.2012.0375
       \endverb
-    \endentry
-    \entry{gabszewicz_press_2001}{article}{}
-      \name{author}{3}{}{%
-        {{uniquename=0,hash=0ff52fb4fc31707f07048f765f218a05}{Gabszewicz}{G\bibinitperiod}{Jean\bibnamedelima J.}{J\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=3dc34d97ce8983a5eac651034aee62be}{Laussel}{L\bibinitperiod}{Dider}{D\bibinitperiod}{}{}{}{}}%
-        {{uniquename=0,hash=85cf28b2c687a05950531494787ba53d}{Sonnac}{S\bibinitperiod}{Nathalie}{N\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{4920434d090f87b70be86b90c83f8df2}
-      \strng{fullhash}{4920434d090f87b70be86b90c83f8df2}
-      \field{sortinit}{G}
-      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
-      \field{labelyear}{2001}
-      \field{labelmonth}{05}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{The press industry depends in a crucial way on the possibility of financing an important fraction of its activities by advertising receipts. We show that this induces the editors of newspapers to moderate, in several cases, the political message they display to their readers, compared with the political opinions they would have expressed otherwise. To this end, we consider a three-stage game in which editors select sequentially their political image, the price of their newspaper and the advertising tariff they oppose to the advertisers. The intuition of the result lies in the fact that editors have to sell tasteless political messages to their readers in order to sell a larger audience to the advertisers.}
-      \field{issn}{0014-2921}
-      \field{journaltitle}{European Economic Review}
-      \field{month}{05}
-      \field{number}{4}
-      \field{series}{15th {Annual} {Congress} of the {European} {Economic} {Association}}
-      \field{title}{Press advertising and the ascent of the ‘{Pensée} {Unique}’}
-      \field{volume}{45}
-      \field{year}{2001}
-      \field{pages}{641\bibrangedash 651}
-      \range{pages}{11}
-      \verb{doi}
-      \verb 10.1016/S0014-2921(01)00139-8
-      \endverb
-      \verb{file}
-      \verb ScienceDirect Full Text PDF:/Users/Franzi/Zotero/storage/8RHUZD5J/Gabszewicz et al. - 2001 - Press advertising and the ascent of the ‘Pensée Un.pdf:application/pdf;ScienceDirect Snapshot:/Users/Franzi/Zotero/storage/JH6EJC28/S0014292101001398.html:text/html
-      \endverb
-      \verb{url}
-      \verb http://www.sciencedirect.com/science/article/pii/S0014292101001398
-      \endverb
-      \keyw{advertising,TV-broadcasting,Channels-program diversity}
     \endentry
     \entry{gentzkow_text_2017}{report}{}
       \name{author}{3}{}{%
@@ -1044,34 +943,6 @@
       \field{year}{2013}
       \verb{file}
       \verb The Structural Topic Model and Applied Social Science | Brandon Stewart:/Users/Franzi/Zotero/storage/69G2KU2F/structural-topic-model-and-applied-social-science.html:text/html
-      \endverb
-    \endentry
-    \entry{steiner_program_1952}{article}{}
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=8aa281950e4bbbbb16f6507c8ec27694}{Steiner}{S\bibinitperiod}{Peter\bibnamedelima O.}{P\bibinitperiod\bibinitdelim O\bibinitperiod}{}{}{}{}}%
-      }
-      \strng{namehash}{8aa281950e4bbbbb16f6507c8ec27694}
-      \strng{fullhash}{8aa281950e4bbbbb16f6507c8ec27694}
-      \field{sortinit}{S}
-      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
-      \field{labelyear}{1952}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{I. Criteria for the appraisal of workability, 195.--II. The one period model, 197.--III. The model over time, 207.--IV. Relevance of the model to the market structure of the industry, 217.--V. Some suggestions for further analysis, 222.}
-      \field{issn}{0033-5533}
-      \field{journaltitle}{The Quarterly Journal of Economics}
-      \field{number}{2}
-      \field{title}{Program {Patterns} and {Preferences}, and the {Workability} of {Competition} in {Radio} {Broadcasting}}
-      \field{volume}{66}
-      \field{year}{1952}
-      \field{pages}{194\bibrangedash 223}
-      \range{pages}{30}
-      \verb{doi}
-      \verb 10.2307/1882942
-      \endverb
-      \verb{url}
-      \verb http://www.jstor.org/stable/1882942
       \endverb
     \endentry
     \entry{tetlock_giving_2007}{article}{}

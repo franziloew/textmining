@@ -4,7 +4,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Background on the federal election in Germany (2017)}{3}{section.2}
+\contentsline {section}{\numberline {2}Background on the federal election in Germany (2017)}{2}{section.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Dataset and data preparation}{4}{section.3}
 \defcounter {refsection}{0}\relax 
