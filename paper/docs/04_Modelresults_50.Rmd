@@ -29,11 +29,12 @@ library(psych)
 library(xtable)
 library(quanteda)
 
+library(ggridges)
 library(igraph)
 library(corrplot)
-library(patchwork)
+#library(patchwork)
 library(ggpmisc)
-library(ggraph)
+#library(ggraph)
 library(ggiraph)
 library(tidygraph)
 library(RColorBrewer) 
@@ -160,15 +161,15 @@ btw <- btw %>% group_by(site) %>%
 
 ggsave(plot = {
   btw %>%
-    ggplot(aes(as.numeric(text_length.cut),
-                       group = site)) +
-    geom_histogram(alpha=.8, fill = col[3]) + 
-    scale_x_continuous(labels = c(seq(0,1500,500), ">2000")) +
-    facet_wrap(~site, ncol = 4) +
-    labs(x = "Word count", color = "") +
-    theme(axis.title = element_text(size = 8),
-          axis.text = element_text(size = 6))
-  
+    ggplot(aes(as.numeric(text_length.cut), site)) +
+    geom_density_ridges(scale = 4,
+                        fill = col[3], alpha = .8,
+                        color = "white") +
+    theme_ridges() +
+    labs(x = "Word count", y = "") +
+    scale_x_continuous(expand = c(0,0), 
+                       labels = c(seq(0,1500,500), ">2000"))
+
 }, filename = "../figs/wordcount.png", width = 8, height = 4)
 ```
 
