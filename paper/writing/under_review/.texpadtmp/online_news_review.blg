@@ -1,0 +1,15 @@
+[0] Config.pm:324> INFO - This is Biber 2.1
+[0] Config.pm:327> INFO - Logfile is '/Users/Franzi/GitHub/textmining/paper/writing/under_review/.texpadtmp/online_news_review.blg'
+[69] biber-darwin:276> INFO - === Tue May  8, 2018, 23:21:28
+[69] Biber.pm:333> INFO - Reading '/Users/Franzi/GitHub/textmining/paper/writing/under_review/.texpadtmp/online_news_review.bcf'
+[188] Biber.pm:645> INFO - Found 32 citekeys in bib section 0
+[237] Biber.pm:2977> INFO - Processing section 0
+[267] Biber.pm:3115> INFO - Looking for bibtex format file '/Users/Franzi/GitHub/textmining/paper/writing/under_review/Textmining.bib' for section 0
+[297] bibtex.pm:1021> INFO - Decoding LaTeX character macros into UTF-8
+[324] bibtex.pm:895> INFO - Found BibTeX data source '/Users/Franzi/GitHub/textmining/paper/writing/under_review/Textmining.bib'
+[893] UCollate.pm:66> INFO - Overriding locale 'de_DE' defaults 'variable = shifted' with 'variable = non-ignorable'
+[893] UCollate.pm:66> INFO - Overriding locale 'de_DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[893] Biber.pm:2854> INFO - Sorting list 'nyt' of type 'entry' with scheme 'nyt' and locale 'de_DE'
+[893] Biber.pm:2858> INFO - No sort tailoring available for locale 'de_DE'
+[989] bbl.pm:505> INFO - Writing '/Users/Franzi/GitHub/textmining/paper/writing/under_review/.texpadtmp/online_news_review.bbl' with encoding 'UTF-8'
+[999] bbl.pm:596> INFO - Output to /Users/Franzi/GitHub/textmining/paper/writing/under_review/.texpadtmp/online_news_review.bbl

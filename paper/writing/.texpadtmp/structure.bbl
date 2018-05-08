@@ -25,7 +25,7 @@
         {{uniquename=0,hash=a719af3389f793475d4ed187e86eb68e}{Dasandi}{D\bibinitperiod}{Niheer}{N\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=0de7ddd99e6a67d61d3edadfd9e2f82c}{Mikhaylov}{M\bibinitperiod}{Slava\bibnamedelima J.}{S\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
       }
-      \strng{namehash}{30527974675fbc7fa5e4af86cd9e505b}
+      \strng{namehash}{fb47144cfa7efe543dfb6a6d39a9790c}
       \strng{fullhash}{30527974675fbc7fa5e4af86cd9e505b}
       \field{sortinit}{B}
       \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
@@ -115,12 +115,12 @@
       \endverb
     \endentry
     \entry{blei_latent_2003}{article}{}
-      \name{author}{3}{}{%
+      \name{author}{3}{uniquelist=1}{%
         {{uniquename=0,hash=7441e4d372e854fc6d24d0d5a16a1687}{Blei}{B\bibinitperiod}{David\bibnamedelima M.}{D\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=799b172b8d02b7acdf21d0cc48934fca}{Ng}{N\bibinitperiod}{Andrew\bibnamedelima Y}{A\bibinitperiod\bibinitdelim Y\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=996ffb9cb286a8b4b0fc16793c54cc31}{Jordan}{J\bibinitperiod}{Michael\bibnamedelima I}{M\bibinitperiod\bibinitdelim I\bibinitperiod}{}{}{}{}}%
       }
-      \strng{namehash}{13f77d37f259c2a8748aa9d2b92fb157}
+      \strng{namehash}{83382933b7a4ed308bef1d911969697f}
       \strng{fullhash}{13f77d37f259c2a8748aa9d2b92fb157}
       \field{sortinit}{B}
       \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
@@ -149,7 +149,7 @@
       \list{publisher}{1}{%
         {Wiley}%
       }
-      \strng{namehash}{1dcfa80011a9fb7e0cb755811f68fde2}
+      \strng{namehash}{22571cb5ce4bb9997a73818b2cfb8353}
       \strng{fullhash}{1dcfa80011a9fb7e0cb755811f68fde2}
       \field{sortinit}{B}
       \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
@@ -204,6 +204,27 @@
       \endverb
       \keyw{Statistics - Machine Learning,Statistics - Computation,Statistics - Methodology}
     \endentry
+    \entry{dewenter_can_2018}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=ff4ecf694d2adc3bb76289eecde5c611}{Dewenter}{D\bibinitperiod}{Ralf}{R\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=6dfff0babf3674c2cdccda4ad6fd818a}{Linder}{L\bibinitperiod}{Melissa}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=acf2ad90d9b7783572ed47495a5a2709}{Thomas}{T\bibinitperiod}{Tobias}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{313b7ce720527661d79a76ddd9aa577d}
+      \strng{fullhash}{cc2e1d99de4b42300eec5460260a50d8}
+      \field{sortinit}{D}
+      \field{sortinithash}{78f7c4753a2004675f316a80bdb31742}
+      \field{labelyear}{2018}
+      \field{labelmonth}{04}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Working Paper Series, Helmut Schmidt University Hamburg, Department of Economics}
+      \field{month}{04}
+      \field{title}{Can {Media} {Drive} the {Electorate}? {The} {Impact} of {Media} {Coverage} on {Party} {Affiliation} and {Voting} {Intentions}}
+      \field{volume}{179}
+      \field{year}{2018}
+    \endentry
     \entry{erosheva_mixed-membership_2004}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=9ab2f429b3fa892e63ea518d4517a630}{Erosheva}{E\bibinitperiod}{Elena}{E\bibinitperiod}{}{}{}{}}%
@@ -213,7 +234,7 @@
       \list{language}{1}{%
         {en}%
       }
-      \strng{namehash}{ce720897b3ac7fcaf15c99004fd6d209}
+      \strng{namehash}{b11ac6a6104dbe1afc49e6fc2e6cacf2}
       \strng{fullhash}{ce720897b3ac7fcaf15c99004fd6d209}
       \field{sortinit}{E}
       \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
@@ -334,7 +355,7 @@
       \list{institution}{1}{%
         {National Bureau of Economic Research}%
       }
-      \strng{namehash}{5934917cfad5b80fd98330f02a679eb9}
+      \strng{namehash}{300bb1d59239c5d8ae741096e3c6cc08}
       \strng{fullhash}{5934917cfad5b80fd98330f02a679eb9}
       \field{sortinit}{G}
       \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
@@ -521,36 +542,6 @@
       \verb http://doi.acm.org/10.1145/312624.312649
       \endverb
     \endentry
-    \entry{vuma_arbeitsgemeinschaft_verbrauchs-_und_medienanalyse_verbrauchs-_2017}{report}{}
-      \name{editor}{1}{}{%
-        {{uniquename=0,hash=201db4c585f44193eea08cbc995cc82d}{Medienanalyse)}{M\bibinitperiod}{VuMA\bibnamedelimb (Arbeitsgemeinschaft\bibnamedelima Verbrauchs-}{V\bibinitperiod\bibinitdelim (\bibinitperiod\bibinitdelim V\bibinithyphendelim \bibinitperiod}{und}{u\bibinitperiod}{}{}}%
-      }
-      \list{language}{1}{%
-        {de}%
-      }
-      \strng{namehash}{201db4c585f44193eea08cbc995cc82d}
-      \strng{fullhash}{201db4c585f44193eea08cbc995cc82d}
-      \field{sortinit}{M}
-      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
-      \field{labelyear}{2017}
-      \field{labelmonth}{11}
-      \field{datelabelsource}{}
-      \field{labelnamesource}{editor}
-      \field{labeltitlesource}{title}
-      \field{month}{11}
-      \field{title}{Verbrauchs- und {Medienanalyse} - {VuMA} 2018}
-      \field{type}{techreport}
-      \field{urlday}{12}
-      \field{urlmonth}{03}
-      \field{urlyear}{2018}
-      \field{year}{2017}
-      \verb{file}
-      \verb Snapshot:/Users/Franzi/Zotero/storage/MLZDKCVD/nachrichten-und-informationen---internetnutzung.html:text/html
-      \endverb
-      \verb{url}
-      \verb https://de.statista.com/statistik/daten/studie/183128/umfrage/nachrichten-und-informationen---internetnutzung/
-      \endverb
-    \endentry
     \entry{mimno_optimizing_2011}{inproceedings}{}
       \name{author}{5}{}{%
         {{uniquename=0,hash=d0b37f86f34b5267e38b3e2defce4051}{Mimno}{M\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
@@ -713,7 +704,7 @@
       \list{language}{1}{%
         {en}%
       }
-      \strng{namehash}{0f534f9fd5a414a56af786a0ab35860c}
+      \strng{namehash}{906b7e112462ce4f48898e442d8cc9ba}
       \strng{fullhash}{0f534f9fd5a414a56af786a0ab35860c}
       \field{sortinit}{P}
       \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
@@ -769,7 +760,7 @@
       \list{language}{1}{%
         {eng}%
       }
-      \strng{namehash}{391b6675f85eae256c6b96f32453a1a6}
+      \strng{namehash}{f7e032b58e0580cf986b22ec57411363}
       \strng{fullhash}{391b6675f85eae256c6b96f32453a1a6}
       \field{sortinit}{P}
       \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
@@ -791,7 +782,7 @@
       \keyw{Algorithms,Cluster Analysis,Genetics,Population,Genotype,Humans,Models,Genetic}
     \endentry
     \entry{roberts_model_2016}{article}{}
-      \name{author}{3}{}{%
+      \name{author}{3}{uniquelist=3}{%
         {{uniquename=1,hash=b343d62ffd0b37ed2fb0a93ec2006251}{Roberts}{R\bibinitperiod}{Margaret\bibnamedelima E.}{M\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
         {{uniquename=1,hash=e78e606c2fa81b1917fd46933f49b33e}{Stewart}{S\bibinitperiod}{Brandon\bibnamedelima M.}{B\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
         {{uniquename=1,hash=753c42f9b69830f9410ef84fd6e88ab1}{Airoldi}{A\bibinitperiod}{Edoardo\bibnamedelima M.}{E\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
@@ -870,7 +861,7 @@
       \endverb
     \endentry
     \entry{roberts_navigating_2016}{incollection}{}
-      \name{author}{3}{}{%
+      \name{author}{3}{uniquelist=3}{%
         {{uniquename=1,hash=345cf5be67770c8243af00b474877364}{Roberts}{R\bibinitperiod}{Margaret}{M\bibinitperiod}{}{}{}{}}%
         {{uniquename=1,hash=e427af7d6363f6b3a00d558044c534c5}{Stewart}{S\bibinitperiod}{Brandon}{B\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=0e9a50476b4db979d3b603e83a05e919}{Tingley}{T\bibinitperiod}{Dustin}{D\bibinitperiod}{}{}{}{}}%
@@ -898,7 +889,7 @@
       \endverb
     \endentry
     \entry{roberts_stm:_2016}{article}{}
-      \name{author}{3}{}{%
+      \name{author}{3}{uniquelist=3}{%
         {{uniquename=1,hash=345cf5be67770c8243af00b474877364}{Roberts}{R\bibinitperiod}{Margaret}{M\bibinitperiod}{}{}{}{}}%
         {{uniquename=1,hash=e427af7d6363f6b3a00d558044c534c5}{Stewart}{S\bibinitperiod}{Brandon}{B\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=0e9a50476b4db979d3b603e83a05e919}{Tingley}{T\bibinitperiod}{Dustin}{D\bibinitperiod}{}{}{}{}}%
@@ -983,7 +974,7 @@
       \endverb
     \endentry
     \entry{tetlock_more_2008}{article}{}
-      \name{author}{3}{}{%
+      \name{author}{3}{uniquelist=1}{%
         {{uniquename=0,hash=43e620292c04ccd0b1bb834cc476d39f}{Tetlock}{T\bibinitperiod}{Paul\bibnamedelima C.}{P\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=c8d3795e2f790e26a58220f89db9371a}{Saar-Tsechansky}{S\bibinithyphendelim T\bibinitperiod}{Maytal}{M\bibinitperiod}{}{}{}{}}%
         {{uniquename=0,hash=4be2ffd1242472b4b91610680460f71d}{Macskassy}{M\bibinitperiod}{Sofus}{S\bibinitperiod}{}{}{}{}}%
@@ -991,7 +982,7 @@
       \list{language}{1}{%
         {en}%
       }
-      \strng{namehash}{bc27662581efcfb0f2ef4623105a667a}
+      \strng{namehash}{308a0d8cc355ab44ff0076b49874628c}
       \strng{fullhash}{bc27662581efcfb0f2ef4623105a667a}
       \field{sortinit}{T}
       \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
