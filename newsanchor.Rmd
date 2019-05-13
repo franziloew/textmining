@@ -1,0 +1,34 @@
+---
+title: "News Api"
+output: html_notebook
+---
+
+```{r}
+library(newsanchor)
+library(tidyverse)
+library(tidytext)
+```
+
+```{r}
+afd <- get_everything(query = "AfD", language = "de")
+
+afd_df <- afd$results_df %>% as_tibble()
+```
+
+```{r}
+afd_df %>%
+  group_by(name) %>%
+  tally() %>%
+  ggplot(aes(reorder(name, n),n)) +
+  geom_col() +
+  coord_flip() +
+  ggthemes::theme_hc() +
+  labs(x=NULL, y=NULL)
+```
+
+```{r}
+afd_df$title
+```
+
+
+
